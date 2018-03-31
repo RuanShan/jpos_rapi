@@ -34,6 +34,9 @@ gem 'spree_api',   path: './spree/api'
   #add it for window
   #gem 'bcrypt-ruby', '3.1.5', :require => 'bcrypt', platforms: [:ruby]
   gem 'devise'
+  #spree_auth_devise spree_user required
+  gem 'devise-encryptable', '0.1.2'
+
   #gem 'cancancan'
   #gem 'classy_enum', '~> 3.4'
   # spree require 5.1.0

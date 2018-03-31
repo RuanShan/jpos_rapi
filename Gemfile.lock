@@ -153,6 +153,8 @@ GEM
       railties (>= 4.1.0, < 6.0)
       responders
       warden (~> 1.2.3)
+    devise-encryptable (0.1.2)
+      devise (>= 2.1.0)
     domain_name (0.5.20170404)
       unf (>= 0.0.5, < 1.0.0)
     equalizer (0.0.11)
@@ -442,6 +444,7 @@ DEPENDENCIES
   ckeditor!
   coffee-rails (~> 4.2)!
   devise!
+  devise-encryptable (= 0.1.2)!
   font-awesome-rails!
   httparty!
   jbuilder (~> 2.0)!

@@ -9,10 +9,12 @@
 #
 # In order to initialize a setting do:
 # config.setting_name = 'new value'
-#Spree.config do |config|
+Spree.config do |config|
   # Example:
   # Uncomment to stop tracking inventory levels in the application
   # config.track_inventory_levels = false
-#end
+end
 
-#Spree.user_class = "Spree::LegacyUser"
+Spree.user_class = "Spree::User"
+
+Spree::Api::Config.requires_authentication = false
