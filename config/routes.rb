@@ -141,9 +141,66 @@ scope module: 'spree' do
   }, via: [:get, :post, :put, :patch, :delete]
 end
 end
+
 ################################################################################
 # wechatmore game
 ################################################################################
+
+
+# For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+namespace :api do
+    namespace :v1 do
+      ##############################################################################
+      # wechat open
+      ##############################################################################
+      post  'wechat_opens/notify', to: 'wechat_opens#notify'
+      get 'wechat_opens/auth', to: 'wechat_opens#auth'
+
+      resource :sessions, only: [:create]
+      resource :wechat, only: [:show, :create]
+
+      resources :campaigns
+      resources :game_awards, only: [:create, :show, :update, :destroy] do
+        resources :players, only:[:index ], controller: :game_award_players  do
+        end
+      end
+
+      resources :game_rounds do
+        member do
+          post :reset
+          post :start
+          post :restart_award
+        end
+        resources :awards, only:[:index ], controller: :game_awards
+
+        resources :players, only:[:index ], controller: :game_players  do
+          collection do
+            get :next_by_position
+            get :noaward
+            get :awarded
+          end
+        end
+      end
+
+      resources :game_players, only: [:create, :show, :update, :destroy] do
+      end
+
+      resources :game_award_players, only: [:create, :show, :update, :destroy] do
+
+      end
+
+      #scope path: '/game_round/:game_round_id' do
+      #  resources :game_awards, only:[:index ]
+      #  resources :game_players, only:[:index ]  do
+      #    collection do
+      #      get :next_by_position
+      #      get :noaward
+      #    end
+      #  end
+      #end
+    end
+  end
+
 
   resources :game_round_assets
   resources :game_results
@@ -206,12 +263,12 @@ end
   get '/dashboard' => 'dashboard#index'
   get '/help' => 'help#index'
 
-  #devise_for :users, controllers: {
-  #  sessions: 'local_devise/sessions',
-  #  confirmations: 'local_devise/confirmations',
-  #  registrations: 'local_devise/registrations',
-  #  unlocks: 'local_devise/unlocks',
-  #  passwords: 'local_devise/passwords'}
+  devise_for :users, controllers: {
+    sessions: 'local_devise/sessions',
+    confirmations: 'local_devise/confirmations',
+    registrations: 'local_devise/registrations',
+    unlocks: 'local_devise/unlocks',
+    passwords: 'local_devise/passwords'}
 
   root to: 'visitors#index'
 
@@ -230,65 +287,6 @@ end
     resources :wechat_accounts
   end
 
-
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
-  namespace :api do
-    namespace :v1 do
-      ##############################################################################
-      # wechat open
-      ##############################################################################
-      post  'wechat_opens/notify', to: 'wechat_opens#notify'
-      get 'wechat_opens/auth', to: 'wechat_opens#auth'
-
-      #match '/service/:code' => 'weixin#service', via: [:post, :get]
-      #match '/message/:app_id/notify' => 'weixin#service', via: [:post, :get]
-
-      resources :campaigns
-
-      resources :users, only: [:index, :create, :show, :update, :destroy]
-      resource :sessions, only: [:create]
-      resource :wechat, only: [:show, :create]
-
-      resources :game_awards, only: [:create, :show, :update, :destroy] do
-        resources :players, only:[:index ], controller: :game_award_players  do
-        end
-      end
-
-      resources :game_rounds do
-        member do
-          post :reset
-          post :start
-          post :restart_award
-        end
-        resources :awards, only:[:index ], controller: :game_awards
-
-        resources :players, only:[:index ], controller: :game_players  do
-          collection do
-            get :next_by_position
-            get :noaward
-            get :awarded
-          end
-        end
-      end
-
-      resources :game_players, only: [:create, :show, :update, :destroy] do
-      end
-
-      resources :game_award_players, only: [:create, :show, :update, :destroy] do
-
-      end
-
-      #scope path: '/game_round/:game_round_id' do
-      #  resources :game_awards, only:[:index ]
-      #  resources :game_players, only:[:index ]  do
-      #    collection do
-      #      get :next_by_position
-      #      get :noaward
-      #    end
-      #  end
-      #end
-    end
-  end
 
 
   ##############################################################################

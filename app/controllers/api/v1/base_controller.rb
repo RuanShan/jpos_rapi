@@ -97,7 +97,7 @@ class Api::V1::BaseController < ApplicationController
   end
 
   def invalid_resource!( resource)
-Rails.logger.debug " resource.errors=#{resource.errors.inspect}"
+    Rails.logger.debug " resource.errors=#{resource.errors.inspect}"
     api_error(status: :unprocessable_entity, errors: resource.errors)
   end
 

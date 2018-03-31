@@ -1,8 +1,4 @@
 class LocalDevise::SessionsController < Devise::SessionsController
+  respond_to :html, :json
 
-
-
-  def after_sign_in_path_for( resource_or_scope )
-    case_root_path
-  end
 end
