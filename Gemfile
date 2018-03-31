@@ -37,7 +37,7 @@ gem 'spree_api',   path: './spree/api'
   #gem 'cancancan'
   #gem 'classy_enum', '~> 3.4'
   # spree require 5.1.0
-  gem 'paperclip', '~> 6.0.0'
+  gem 'paperclip', '~> 5.2.0'
   #gem "friendly_id"
   #gem 'figaro'
 
