@@ -41,9 +41,5 @@ module RailsStarter
     config.i18n.load_path += Dir[Rails.root.join('config', 'locales', '**', '*.{rb,yml}')]
     config.i18n.default_locale = :"zh-CN"
 
-    #config.wechat_open = config_for(:wechat_open)
-    SpreeCalculators = Struct.new(:shipping_methods, :tax_rates, :promotion_actions_create_adjustments, :promotion_actions_create_item_adjustments)
-    config.spree = Spree::Core::Environment.new(SpreeCalculators.new, Spree::AppConfiguration.new)
-
   end
 end
