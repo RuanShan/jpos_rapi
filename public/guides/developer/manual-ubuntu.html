@@ -1,0 +1,1236 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>    <html class="lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>    <html class="lt-ie9"> <![endif]-->
+<!--[if IE 9]>    <html class="ie9"> <![endif]-->
+<!--[if gt IE 9]><!--> <html lang="en" > <!--<![endif]-->
+<head>
+  <title>Deploying to Ubuntu - Developer Guide | Spree - Ruby on Rails e-commerce platform</title>
+
+  <meta charset="utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta name="section" content="deployment" />
+
+<link href="/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+<link href="/shared/css/icons.css" media="screen" rel="stylesheet" type="text/css">
+<link href="/shared/css/icons-codes.css" media="screen" rel="stylesheet" type="text/css">
+
+<link href="/shared/css/skeleton.css" media="screen" rel="stylesheet" type="text/css">
+<link href="/shared/css/documentation.css" media="screen" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="/assets/stylesheets/guides.css" media="screen" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/docsearch.js/2/docsearch.min.css" />
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-migrate/1.1.1/jquery-migrate.min.js"></script>
+<script src="/assets/javascripts/css_browser_selector_dev.js" type="text/javascript"></script>
+<script src="/assets/javascripts/jquery.toc.js" type="text/javascript"></script>
+<script src="/assets/javascripts/documentation.js" type="text/javascript"></script>
+
+
+</head>
+<body class="developer">
+  
+  <header id="header">
+    <div id="top-header">
+  <div class="container">
+    <div class="row">
+      <div class="two columns">
+  <a class="logo" href="http://spreecommerce.org">
+    <img src='/images/logo.png' alt="Spree Commerce - Ruby on Rails e-commerce platform" />
+  </a>
+</div>
+
+      <div class="three columns">
+  <input type="text" id="search-field" placeholder="Search..." />
+</div>
+
+      <nav id="main-menu" class="eleven columns">
+  <ul class="inline">
+    <li><a href="../api/">API</a></li>
+    <li><a href="../developer/">Developer</a></li>
+    <li><a href="../user/">User</a></li>
+    <li><a href="../release_notes/">Release Notes</a></li>
+    <li>
+      <a href="http://slack.spreecommerce.org" target="_blank">Slack</a>
+    </li>
+    <li>
+      <a href="https://heroku.com/deploy?template=https://github.com/spree/spree" target="_blank" rel="nofollow">Demo</a>
+    </li>
+  </ul>
+</nav>
+
+    </div>
+  </div>
+</div>
+
+
+    <div id="subheader">
+      <div class="container">
+        <div class="sixteen columns">
+          <h1 class="page-title">Deploying to Ubuntu - Developer Guide | Spree - Ruby on Rails e-commerce platform</h1>
+        </div>
+      </div>
+    </div>
+
+  </header>
+
+  <div class="container" id="main">
+    <section id="main-content">
+
+      <div class="twelve columns">
+        <div id="content">
+          
+<h2 id="overview">Overview</h2>
+
+<p>This guide will walk you through configuring and deploying your Spree
+application to an environment on Ubuntu 13.04.</p>
+
+<p>This guide assumes an absolutely clean-slate Ubuntu 13.04 Server install, and
+covers setting up the following things:</p>
+
+<ul>
+  <li>A user for the application</li>
+  <li>Operating system dependencies required for Ruby, Rails and Spree</li>
+  <li>Ruby 2.3.0</li>
+  <li>Rails 5.0.2</li>
+  <li>PostgreSQL</li>
+  <li>Unicorn + nginx (with SSL)</li>
+  <li>Seed data for your store</li>
+</ul>
+
+<h2 id="initial-server-setup">Initial Server Setup</h2>
+
+<p>The first thing you will need on your server is a user account on the server
+which will be responsible for providing a container for your application’s
+install.</p>
+
+<h3 id="a-user-account">A user account</h3>
+
+<div class="note"><p>For the purposes of this guide, the user’s account on the system will be
+called “spree”, but you may choose to call it whatever you wish.</p>
+</div>
+
+<p>To set up this new user, run these commands on the server:</p>
+
+<div class="language-bash highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>$ useradd -d /home/spree -m -s /bin/bash spree
+$ passwd spree
+
+</pre></div>
+</div>
+</div>
+
+<p>Set a new password for the user and remember it, as you will require it in just a moment.</p>
+
+<h3 id="key-based-authentication">Key-based authentication</h3>
+
+<p>The next thing to set up is secure key-based authentication on the server. This
+will involve setting up a private key on your system, copying over the related
+public key to the server, asserting that you can now login without providing a
+password, and then disabling password authentication on the server to increase
+security.</p>
+
+<p>On the remote server, set up an <code>.ssh</code> directory to contain the new public key
+for a user by running these commands:</p>
+
+<div class="language-bash highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>$ mkdir /home/spree/.ssh
+$ chown spree:spree /home/spree/.ssh
+$ chmod 700 /home/spree/.ssh
+
+</pre></div>
+</div>
+</div>
+
+<p>This directory is used to authenticate key-based authentication when using SSH.</p>
+
+<p>On your local machine, generate a private key using <code>ssh-keygen</code> like this:</p>
+
+<div class="language-bash highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>$ ssh-keygen -t rsa
+
+</pre></div>
+</div>
+</div>
+
+<p>Set the filename to be [your home directory]/.ssh/spree_rsa.</p>
+
+<p>You can choose to enter a password if you wish. All that would mean is that you would need to provide that password to use the key.</p>
+
+<div class="note"><p>If you already have a private key, you can use that one.</p>
+</div>
+
+<p>Once you’ve finished generating this key, you will need to copy the public
+version of this key over to the new server. To do this, run this command:</p>
+
+<div class="language-bash highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>$ scp ~/.ssh/spree_rsa.pub spree@[your server's address]:~/.ssh/authorized_keys
+
+</pre></div>
+</div>
+</div>
+
+<p>The password you will need to enter here is the password for the user account on
+the remote server.</p>
+
+<p>Once you’ve set this up, you will then be able to use key-based authentication
+to connect to the server:</p>
+
+<div class="language-bash highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>$ ssh spree@[your server's address] -i [your home directory]/.ssh/spree_rsa
+
+</pre></div>
+</div>
+</div>
+
+<p>To save having to use the <code>-i</code> option here, you can place the following lines
+inside <code>.ssh/config</code> on your local machine:</p>
+
+<pre><code>Host [your server's address]
+  IdentityFile ~/.ssh/spree_rsa
+</code></pre>
+
+<p>You should now follow the same steps for the <code>root</code> user on your server as well,
+so that you can authenticate with the same key to access both the deployment
+user and root accounts. You may choose to use a completely different key if you
+wish.</p>
+
+<p>Once you have verified – by connecting via SSH to the remote server – that
+both accounts work without password authentication, you can now disable
+password-based authentication.</p>
+
+<p>To disable password-based authentication, you will need to uncomment this line
+within <code>/etc/ssh/ssh_config</code> and change the “yes” value to “no”:</p>
+
+<pre><code>#PasswordAuthentication yes
+</code></pre>
+
+<p>It should be this when you’re done:</p>
+
+<pre><code>PasswordAuthentication no
+</code></pre>
+
+<p>Then you will need to restart the SSH daemon on the server, by running this
+command:</p>
+
+<div class="language-bash highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>$ service ssh restart
+
+</pre></div>
+</div>
+</div>
+
+<p>After this, if you attempt to run <code>ssh spree@localhost</code> from within the server
+itself, it will return “Permission denied (publickey)”, indicating that it has
+not attempted to authenticate with a password, but instead with a publickey,
+which the server does not have configured.</p>
+
+<p>Now that the user is set up on your system and access to it and root’s account
+are locked down a bit tighter, it’s time to set up Ruby.</p>
+
+<h2 id="operating-system-dependencies-and-ruby">Operating System Dependencies and Ruby</h2>
+
+<p>To install Ruby, you are going to use the “RVM”:http://rvm.io tool. This tool
+provides a simple way of installing a version of Ruby onto your server.</p>
+
+<p>To install it, run these commands:</p>
+
+<div class="language-bash highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>$ curl -L https://get.rvm.io | bash -s stable
+$ . ~/.bashrc
+
+</pre></div>
+</div>
+</div>
+
+<p>Next, you will need to install the operating system dependencies required for
+Ruby. Run this command to install the dependencies:</p>
+
+<div class="language-bash highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>rvm requirements
+
+</pre></div>
+</div>
+</div>
+
+<p>You will also need to install a JavaScript runtime. You can install the <code>nodejs</code>
+package from <code>apt-get</code>:</p>
+
+<div class="language-bash highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>$ apt-get install -y nodejs
+
+</pre></div>
+</div>
+</div>
+
+<p>Or, you can put a dependency for <code>therubyracer</code> gem into your <code>Gemfile</code>:</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>group <span class="symbol">:production</span> <span class="keyword">do</span>
+ gem <span class="string"><span class="delimiter">'</span><span class="content">therubyracer</span><span class="delimiter">'</span></span>
+<span class="keyword">end</span>
+
+</pre></div>
+</div>
+</div>
+
+<p>You will also need the <code>imagemagick</code> package, which is used to handle image
+manipulation which is used when you upload product images in your store:</p>
+
+<div class="language-bash highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>$ apt-get install -y imagemagick
+
+</pre></div>
+</div>
+</div>
+
+<p>Once these dependencies are installed, switch back into the <code>spree</code> user and
+install Ruby 2.3.0 by running this command:</p>
+
+<div class="language-bash highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>$ rvm install 2.3.0
+
+</pre></div>
+</div>
+</div>
+
+<p>This command will take a couple of minutes to finish running.</p>
+
+<p>Once it’s finished running, run this command to make that version of Ruby the
+default for this user:</p>
+
+<div class="language-bash highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>$ rvm use 2.3.0 --default
+
+</pre></div>
+</div>
+</div>
+
+<p>Ensure that this version of Ruby is really the new default by running this
+command:</p>
+
+<div class="language-bash highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>ruby -v
+
+</pre></div>
+</div>
+</div>
+
+<p>It should output something similar to this:</p>
+
+<div class="language-bash highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>ruby <span class="float">2.3.0</span>p0 (<span class="float">2013-12-25</span> revision <span class="integer">44422</span>) <span class="reserved">[</span>x86_64-linux<span class="reserved">]</span>
+
+</pre></div>
+</div>
+</div>
+
+<p>You now have a version of Ruby correctly configured on your server.</p>
+
+<h3 id="deploying-to-the-server">Deploying to the server</h3>
+
+<p>The next step is to put your Spree application onto the server. To do this, you
+will use the deployment tool called
+<a href="https://github.com/capistrano/capistrano/wiki">Capistrano</a>. The instructions below describe how to do this using Capistrano version 2.x. If you wish to use version 3.x or higher, you should consult the documentation at <a href="http://capistranorb.com">http://capistranorb.com</a>.</p>
+
+<p>First add the capistrano gem to the Gemfile located in the directory containing your Spree application:</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>group <span class="symbol">:development</span> <span class="keyword">do</span>
+ gem <span class="string"><span class="delimiter">'</span><span class="content">capistrano</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">~&gt; 2.0</span><span class="delimiter">'</span></span>
+<span class="keyword">end</span>
+
+</pre></div>
+</div>
+</div>
+<p>and to install the gem run the following command from that directory:
+~~~ bash
+$ bundle install</p>
+
+<pre><code>In the same directory, run this command to set up a Capistrano deploy configuration:
+
+~~~ bash
+$ capify .
+
+</code></pre>
+
+<p>This command will create two files: a <code>Capfile</code> and a <code>config/deploy.rb</code>. The
+<code>config/deploy.rb</code> file is where you will be configuring how Capistrano chooses
+to deploy your application. Open this file now and you will see the following
+lines (comments removed):</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>set <span class="symbol">:application</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">set your application name here</span><span class="delimiter">&quot;</span></span>
+set <span class="symbol">:repository</span>,  <span class="string"><span class="delimiter">&quot;</span><span class="content">set your repository location here</span><span class="delimiter">&quot;</span></span>
+
+set <span class="symbol">:scm</span>, <span class="symbol">:subversion</span>
+<span class="comment"># Or: `accurev`, `bzr`, `cvs`, `darcs`, `git`, `mercurial`, `perforce`, `subversion` or `none`</span>
+
+role <span class="symbol">:web</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">your web-server here</span><span class="delimiter">&quot;</span></span> <span class="comment"># Your HTTP server, Apache/etc</span>
+role <span class="symbol">:app</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">your app-server here</span><span class="delimiter">&quot;</span></span> <span class="comment"># This may be the same as your `Web` server</span>
+role <span class="symbol">:db</span>,  <span class="string"><span class="delimiter">&quot;</span><span class="content">your primary db-server here</span><span class="delimiter">&quot;</span></span>, <span class="key">primary</span>: <span class="predefined-constant">true</span> <span class="comment"># This is where Rails migrations will run</span>
+role <span class="symbol">:db</span>,  <span class="string"><span class="delimiter">&quot;</span><span class="content">your slave db-server here</span><span class="delimiter">&quot;</span></span>
+
+</pre></div>
+</div>
+</div>
+
+<p>The contents of this file tell Capistrano about the deployment of your
+application.</p>
+
+<p>The <code>application</code> variable tells Capistrano the name of your application, and
+the <code>repository</code> variable tells it where it can find the source of your
+application. The <code>scm</code> variable tells Capistrano the type of source control
+system you’re using. If you’re using Spree, there’s a high chance that’s going
+to be <code>:git</code>, so change that over now. Change the <code>application</code> and <code>repository</code>
+now to accurately reflect your application.</p>
+
+<p>The next batch of things to configure in this file are the different “roles”.
+These tell Capistrano which servers play which roles within your server
+architecture. Within this guide, you’ve been working with a single server and
+will continue to do so. Therefore, these roles should look like this:</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>server = <span class="string"><span class="delimiter">&quot;</span><span class="content">[your server's address]</span><span class="delimiter">&quot;</span></span>
+role <span class="symbol">:web</span>, server
+role <span class="symbol">:app</span>, server
+role <span class="symbol">:db</span>,  server, <span class="key">primary</span>: <span class="predefined-constant">true</span>
+
+</pre></div>
+</div>
+</div>
+
+<p>After this, you will need to tell Capistrano the account name to use for
+deploying to your server. In this guide, we’ve used “spree” so far, but you may
+have chosen to use something different. To tell Capistrano the user to use, put
+this line inside your <code>config/deploy.rb</code>:</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>set <span class="symbol">:user</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">spree</span><span class="delimiter">&quot;</span></span>
+
+</pre></div>
+</div>
+</div>
+
+<p>You will also need to tell it the path to deploy at. By default in Capistrano,
+this path is <code>/u/apps/[application_name]</code>. There is probably no <code>/u/</code> directory on the
+server, so that won’t work for you immediately. You already have a
+self-contained user account on the server, so deploying the application to that
+user’s home directory would make better sense. Add this line to
+<code>config/deploy.rb</code> to do that:</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>set <span class="symbol">:deploy_to</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">/home/spree/</span><span class="inline"><span class="inline-delimiter">#{</span>application<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>
+
+</pre></div>
+</div>
+</div>
+
+<p>You will also need to tell Capistrano to never use sudo, since you’re going to
+be operating as a user without sudo permission:</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>set <span class="symbol">:use_sudo</span>, <span class="predefined-constant">false</span>
+
+</pre></div>
+</div>
+</div>
+
+<p>Along with this, you will also need to tell it to use the <code>bash</code> shell, as you
+will need access to the commands for gems such as <code>bundler</code>, which are provided
+by RVM.</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>default_run_options[<span class="symbol">:shell</span>] = <span class="string"><span class="delimiter">'</span><span class="content">/bin/bash --login</span><span class="delimiter">'</span></span>
+
+</pre></div>
+</div>
+</div>
+
+<p>And because all the Rails-specific commands are going to need to run on the
+production environment, it’d be a great idea to add this to the configuration as
+well:</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>default_environment[<span class="string"><span class="delimiter">&quot;</span><span class="content">RAILS_ENV</span><span class="delimiter">&quot;</span></span>] = <span class="string"><span class="delimiter">'</span><span class="content">production</span><span class="delimiter">'</span></span>
+
+</pre></div>
+</div>
+</div>
+
+<p>With that configuration, your <code>config/deploy.rb</code> should look like this:</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>set <span class="symbol">:application</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">[name]</span><span class="delimiter">&quot;</span></span>
+set <span class="symbol">:repository</span>,  <span class="string"><span class="delimiter">&quot;</span><span class="content">[repository]</span><span class="delimiter">&quot;</span></span>
+set <span class="symbol">:scm</span>, <span class="symbol">:git</span>
+server = <span class="string"><span class="delimiter">&quot;</span><span class="content">[your server's address]</span><span class="delimiter">&quot;</span></span>
+
+role <span class="symbol">:web</span>, server
+role <span class="symbol">:app</span>, server
+role <span class="symbol">:db</span>,  server, <span class="key">primary</span>: <span class="predefined-constant">true</span> <span class="comment"># This is where Rails migrations will run</span>
+
+set <span class="symbol">:user</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">spree</span><span class="delimiter">&quot;</span></span>
+
+set <span class="symbol">:deploy_to</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">/home/spree/</span><span class="inline"><span class="inline-delimiter">#{</span>application<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>
+set <span class="symbol">:use_sudo</span>, <span class="predefined-constant">false</span>
+
+default_run_options[<span class="symbol">:shell</span>] = <span class="string"><span class="delimiter">'</span><span class="content">/bin/bash --login</span><span class="delimiter">'</span></span>
+default_environment[<span class="string"><span class="delimiter">&quot;</span><span class="content">RAILS_ENV</span><span class="delimiter">&quot;</span></span>] = <span class="string"><span class="delimiter">'</span><span class="content">production</span><span class="delimiter">'</span></span>
+
+</pre></div>
+</div>
+</div>
+
+<p>To set up the server for Capistrano, run <code>cap deploy:setup</code>. This will create
+the required Capistrano directories for your application inside
+<code>/home/spree/[name]</code>.</p>
+
+<p>You will need to add another two lines to the top of this file as well so that
+the application’s gem dependencies are installed onto the server with Bundler,
+and the assets are precompiled. These two lines are this:</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>require <span class="string"><span class="delimiter">&quot;</span><span class="content">bundler/capistrano</span><span class="delimiter">&quot;</span></span>
+load <span class="string"><span class="delimiter">&quot;</span><span class="content">deploy/assets</span><span class="delimiter">&quot;</span></span>
+
+</pre></div>
+</div>
+</div>
+
+<p>To attempt to deploy the actual application to the server, run <code>cap deploy</code>. If
+the <code>repository</code> option points to GitHub, this will fail because the server has
+never verified GitHub’s host key.</p>
+
+<pre><code>[[your server's address]] executing command
+** [[your server's address] :: err] Host key verification failed.
+** [[your server's address] :: err] fatal: The remote end hung up unexpectedly
+</code></pre>
+
+<p>To verify this, run this command:</p>
+
+<div class="language-bash highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>$ ssh github.com
+
+</pre></div>
+</div>
+</div>
+
+<p>This will ask you to verify that GitHub’s RSA key fingerprint is
+<code>16:27:ac:a5:76:28:2d:36:63:1b:56:4d:eb:df:a6:48</code>. If that’s correct, type “yes”
+to the prompt and GitHub’s host key will now be verified.</p>
+
+<p>When you run <code>cap deploy</code> again, you’ll see this error:</p>
+
+<pre><code>[[your server's address]] executing command
+** [[your server's address] :: err] Permission denied (publickey).
+** [[your server's address] :: err] fatal: The remote end hung up unexpectedly
+</code></pre>
+
+<p>This means that your application does not have a deploy key setup for it on
+GitHub. To set up a deploy key for the application, run this command as the
+“spree” user on the server:</p>
+
+<div class="language-bash highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>$ ssh-keygen -t rsa
+
+</pre></div>
+</div>
+</div>
+
+<div class="warning"><p>Do not enter a password for this key. Otherwise you will need to use it
+every time you deploy.</p>
+</div>
+
+<p>Run <code>cat ~/.ssh/id_rsa.pub</code> on the server to get the deploy key. Go to your
+application’s repository on GitHub and go to “Settings”, then “Deploy Keys” and
+enter the whole key into the form there, giving it a memorable name if you ever
+need it again.</p>
+
+<p>When you run <code>cap deploy</code> again, Capistrano will clone your application’s code
+from GitHub to your server into a directory such as <code>/home/spree/[application's
+name]/releases/[timestamp]</code>. Inside this directory – because you’re requiring
+the <code>bundler/capistrano</code> tasks at the top of the <code>config/deploy.rb</code> file –
+Capistrano will run <code>bundle install</code> with a couple of options, pointing Bundler
+at the application’s gemfile and placing the gems into a shared directory at
+<code>/home/spree/[application]/shared/bundle</code>. This is so that every release of your
+application can use the same bundle. This <code>bundle install</code> command will also not
+install the development and test dependencies for your application, as you won’t
+need them on your production server.</p>
+
+<p>The <code>cap deploy</code> command this time will also run an asset precompilation step,
+thanks to the <code>deploy/assets</code> loading at the top of <code>config/deploy.rb</code>. This
+step will compile the assets to the <code>public/assets</code> directory in the current
+release’s directory.</p>
+
+<p>The next step is to set up a database server for the data for your Rails app.</p>
+
+<h2 id="setting-up-a-database-server">Setting up a database server</h2>
+
+<p>The database server we will be using in this guide will be the
+“PostgreSQL”:http://postgresql.org database server. Once this is setup, you will
+be able to tell capistrano to run the migrations on your application, creating
+the necessary tables for your Spree store.</p>
+
+<p>To install PostgreSQL, run this command:</p>
+
+<div class="language-bash highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>$ apt-get install -y postgresql
+
+</pre></div>
+</div>
+</div>
+
+<p>You will also need to install its development headers, which the <code>pg</code> gem will
+use to connect to the database:</p>
+
+<div class="language-bash highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>$ apt-get install -y libpq-dev
+
+</pre></div>
+</div>
+</div>
+
+<p>Once those two packages are installed, you will need to create a new database
+for your application to use. This database should have the same name as the
+server’s deploy user account, which in this guide has been “spree” so far. Yours
+could be different. To set up this database, run this command as <code>root</code>:</p>
+
+<div class="language-bash highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>$ sudo -u postgres createdb spree
+$ sudo -u postgres createuser spree
+
+</pre></div>
+</div>
+</div>
+
+<p>To get your application to connect to this database, you will need to set up a
+<code>database.yml</code> file on the server. This file needs to be kept on the server in a
+common location where it can be copied over into the latest deployed version of
+the application, and so you should place it at <code>/home/spree/[application's
+name]/shared/config/database.yml</code>. Inside this file, put this content:</p>
+
+<div class="language-yaml highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="key">production</span>:
+  <span class="key">adapter</span>: <span class="string"><span class="content">postgresql</span></span>
+  <span class="key">database</span>: <span class="string"><span class="content">spree</span></span>
+  
+</pre></div>
+</div>
+</div>
+
+<p>If you’re not already using the PostgreSQL adapter on your application, as
+specified by <code>gem 'pg'</code> in your <code>Gemfile</code>, you’ll need to add this gem to your
+<code>Gemfile</code> now, inside a <code>production</code> group:</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>group <span class="symbol">:production</span> <span class="keyword">do</span>
+  gem <span class="string"><span class="delimiter">'</span><span class="content">pg</span><span class="delimiter">'</span></span>
+<span class="keyword">end</span>
+
+</pre></div>
+</div>
+</div>
+
+<div class="note"><p>If you need to add this gem, you will need to run <code>bundle install</code> on your
+server and commit/push your <code>Gemfile</code> and <code>Gemfile.lock</code> to Git.</p>
+</div>
+
+<div class="warning"><p>You should always develop and deploy on the same database adapter! If you don’t,
+you may run into incompatibility issues between your development and deployment
+setups which can be difficult to track down.</p>
+</div>
+
+<p>Now when you run <code>cap deploy</code>, you will need Capistrano to automatically copy
+over the <code>database.yml</code> file from the shared directory into the current deploy
+path. To make Capistrano do this, put these lines into <code>config/deploy.rb</code> for
+your application:</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>task <span class="symbol">:symlink_database_yml</span> <span class="keyword">do</span>
+  run <span class="string"><span class="delimiter">&quot;</span><span class="content">rm </span><span class="inline"><span class="inline-delimiter">#{</span>release_path<span class="inline-delimiter">}</span></span><span class="content">/config/database.yml</span><span class="delimiter">&quot;</span></span>
+  run <span class="string"><span class="delimiter">&quot;</span><span class="content">ln -sfn </span><span class="inline"><span class="inline-delimiter">#{</span>shared_path<span class="inline-delimiter">}</span></span><span class="content">/config/database.yml </span><span class="inline"><span class="inline-delimiter">#{</span>release_path<span class="inline-delimiter">}</span></span><span class="content">/config/database.yml</span><span class="delimiter">&quot;</span></span>
+<span class="keyword">end</span>
+after <span class="string"><span class="delimiter">&quot;</span><span class="content">bundle:install</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">symlink_database_yml</span><span class="delimiter">&quot;</span></span>
+
+</pre></div>
+</div>
+</div>
+
+<p>After <code>bundle install</code> has finished running on the server, Capistrano will now
+copy over the <code>config/database.yml</code> into the current path. In order for
+Capistrano to deploy <em>and</em> run your migrations, you will need to run <code>cap deploy</code>
+and then <code>cap deploy:migrate</code>. Run those commands now. You should see
+the migrations run on the server.</p>
+
+<p>The next step is to set up the web server to serve requests for your
+application.</p>
+
+<h2 id="setting-up-a-web-server">Setting up a web server</h2>
+
+<p>The web server you’ll be using here will be the Unicorn web server which will
+run the Rails application instances, and then those instances will have an nginx
+frontend which will serve the requests coming from the people who are visiting
+your store.</p>
+
+<h3 id="setting-up-unicorn">Setting up Unicorn</h3>
+
+<p>To set up unicorn for your application, add the <code>unicorn</code> gem to your <code>Gemfile</code>,
+inside the <code>production</code> group:</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>group <span class="symbol">:production</span> <span class="keyword">do</span>
+  gem <span class="string"><span class="delimiter">'</span><span class="content">pg</span><span class="delimiter">'</span></span>
+  gem <span class="string"><span class="delimiter">'</span><span class="content">unicorn</span><span class="delimiter">'</span></span>
+<span class="keyword">end</span>
+
+</pre></div>
+</div>
+</div>
+
+<p>Unicorn requires some configuration in order to work, which belongs in
+<code>config/unicorn.rb</code>. This is the content required for Unicorn:</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="comment"># config/unicorn.rb</span>
+<span class="comment"># Set environment to development unless something else is specified</span>
+env = <span class="predefined-constant">ENV</span>[<span class="string"><span class="delimiter">&quot;</span><span class="content">RAILS_ENV</span><span class="delimiter">&quot;</span></span>] || <span class="string"><span class="delimiter">&quot;</span><span class="content">development</span><span class="delimiter">&quot;</span></span>
+
+<span class="comment"># See http://unicorn.bogomips.org/Unicorn/Configurator.html for complete documentation.</span>
+worker_processes <span class="integer">4</span>
+
+<span class="comment"># listen on both a Unix domain socket and a TCP port,</span>
+<span class="comment"># we use a shorter backlog for quicker failover when busy</span>
+listen <span class="string"><span class="delimiter">&quot;</span><span class="content">/tmp/[application's name].socket</span><span class="delimiter">&quot;</span></span>, <span class="key">backlog</span>: <span class="integer">64</span>
+
+<span class="comment"># Preload our app for more speed</span>
+preload_app <span class="predefined-constant">true</span>
+
+<span class="comment"># nuke workers after 30 seconds instead of 60 seconds (the default)</span>
+timeout <span class="integer">30</span>
+
+pid <span class="string"><span class="delimiter">&quot;</span><span class="content">/tmp/unicorn.[application's name].pid</span><span class="delimiter">&quot;</span></span>
+
+<span class="comment"># Production specific settings</span>
+<span class="keyword">if</span> env == <span class="string"><span class="delimiter">&quot;</span><span class="content">production</span><span class="delimiter">&quot;</span></span>
+  <span class="comment"># Help ensure your application will always spawn in the symlinked</span>
+  <span class="comment"># &quot;current&quot; directory that Capistrano sets up.</span>
+  working_directory <span class="string"><span class="delimiter">&quot;</span><span class="content">/home/spree/[application's name]/current</span><span class="delimiter">&quot;</span></span>
+
+  <span class="comment"># feel free to point this anywhere accessible on the filesystem user 'spree'</span>
+  shared_path = <span class="string"><span class="delimiter">&quot;</span><span class="content">/home/spree/[application's name]/shared</span><span class="delimiter">&quot;</span></span>
+
+  stderr_path <span class="string"><span class="delimiter">&quot;</span><span class="inline"><span class="inline-delimiter">#{</span>shared_path<span class="inline-delimiter">}</span></span><span class="content">/log/unicorn.stderr.log</span><span class="delimiter">&quot;</span></span>
+  stdout_path <span class="string"><span class="delimiter">&quot;</span><span class="inline"><span class="inline-delimiter">#{</span>shared_path<span class="inline-delimiter">}</span></span><span class="content">/log/unicorn.stdout.log</span><span class="delimiter">&quot;</span></span>
+<span class="keyword">end</span>
+
+before_fork <span class="keyword">do</span> |server, worker|
+  <span class="comment"># the following is highly recomended for Rails + &quot;preload_app true&quot;</span>
+  <span class="comment"># as there's no need for the master process to hold a connection</span>
+  <span class="keyword">if</span> <span class="keyword">defined?</span>(<span class="constant">ActiveRecord</span>::<span class="constant">Base</span>)
+    <span class="constant">ActiveRecord</span>::<span class="constant">Base</span>.connection.disconnect!
+  <span class="keyword">end</span>
+
+  <span class="comment"># Before forking, kill the master process that belongs to the .oldbin PID.</span>
+  <span class="comment"># This enables 0 downtime deploys.</span>
+  old_pid = <span class="string"><span class="delimiter">&quot;</span><span class="content">/tmp/unicorn.[application's name].pid.oldbin</span><span class="delimiter">&quot;</span></span>
+  <span class="keyword">if</span> <span class="constant">File</span>.exists?(old_pid) &amp;&amp; server.pid != old_pid
+    <span class="keyword">begin</span>
+      <span class="constant">Process</span>.kill(<span class="string"><span class="delimiter">&quot;</span><span class="content">QUIT</span><span class="delimiter">&quot;</span></span>, <span class="constant">File</span>.read(old_pid).to_i)
+    <span class="keyword">rescue</span> <span class="constant">Errno</span>::<span class="constant">ENOENT</span>, <span class="constant">Errno</span>::<span class="constant">ESRCH</span>
+      <span class="comment"># someone else did our job for us</span>
+    <span class="keyword">end</span>
+  <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+after_fork <span class="keyword">do</span> |server, worker|
+  <span class="comment"># the following is *required* for Rails + &quot;preload_app true&quot;</span>
+  <span class="keyword">if</span> <span class="keyword">defined?</span>(<span class="constant">ActiveRecord</span>::<span class="constant">Base</span>)
+    <span class="constant">ActiveRecord</span>::<span class="constant">Base</span>.establish_connection
+  <span class="keyword">end</span>
+
+  <span class="comment"># if preload_app is true, then you may also want to check and</span>
+  <span class="comment"># restart any other shared sockets/descriptors such as Memcached,</span>
+  <span class="comment"># and Redis.  TokyoCabinet file handles are safe to reuse</span>
+  <span class="comment"># between any number of forked children (assuming your kernel</span>
+  <span class="comment"># correctly implements pread()/pwrite() system calls)</span>
+<span class="keyword">end</span>
+
+</pre></div>
+</div>
+</div>
+
+<p>Remember to replace <code>[application's name]</code> above with your actual application
+name. Run <code>bundle install</code> and commit and push your <code>Gemfile</code>, <code>Gemfile.lock</code>
+and <code>config/unicorn.rb</code> files to Git.</p>
+
+<p>Next, you will need to add tasks to Capistrano to ensure that the Unicorn
+workers are restarted after a <code>cap deploy</code>. To do this, put these lines into
+your <code>config/deploy.rb</code>:</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>namespace <span class="symbol">:unicorn</span> <span class="keyword">do</span>
+  desc <span class="string"><span class="delimiter">&quot;</span><span class="content">Zero-downtime restart of Unicorn</span><span class="delimiter">&quot;</span></span>
+  task <span class="symbol">:restart</span>, <span class="key">except</span>: { <span class="key">no_release</span>: <span class="predefined-constant">true</span> } <span class="keyword">do</span>
+    run <span class="string"><span class="delimiter">&quot;</span><span class="content">kill -s USR2 `cat /tmp/unicorn.[application's name].pid`</span><span class="delimiter">&quot;</span></span>
+  <span class="keyword">end</span>
+
+  desc <span class="string"><span class="delimiter">&quot;</span><span class="content">Start unicorn</span><span class="delimiter">&quot;</span></span>
+  task <span class="symbol">:start</span>, <span class="key">except</span>: { <span class="key">no_release</span>: <span class="predefined-constant">true</span> } <span class="keyword">do</span>
+    run <span class="string"><span class="delimiter">&quot;</span><span class="content">cd </span><span class="inline"><span class="inline-delimiter">#{</span>current_path<span class="inline-delimiter">}</span></span><span class="content"> ; bundle exec unicorn_rails -c config/unicorn.rb -D</span><span class="delimiter">&quot;</span></span>
+  <span class="keyword">end</span>
+
+  desc <span class="string"><span class="delimiter">&quot;</span><span class="content">Stop unicorn</span><span class="delimiter">&quot;</span></span>
+  task <span class="symbol">:stop</span>, <span class="key">except</span>: { <span class="key">no_release</span>: <span class="predefined-constant">true</span> } <span class="keyword">do</span>
+    run <span class="string"><span class="delimiter">&quot;</span><span class="content">kill -s QUIT `cat /tmp/unicorn.[application's name].pid`</span><span class="delimiter">&quot;</span></span>
+  <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+after <span class="string"><span class="delimiter">&quot;</span><span class="content">deploy:restart</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">unicorn:restart</span><span class="delimiter">&quot;</span></span>
+
+</pre></div>
+</div>
+</div>
+
+<p>Commit your <code>config/deploy.rb</code> to Git, push the changes to GitHub and run <code>cap
+deploy</code> again to ensure the latest code is available on your server. This will
+include the <code>unicorn</code> gem which will be vital for the next step: setting up
+nginx and getting it to serve requests from your application.</p>
+
+<h3 id="setting-up-nginx">Setting up nginx</h3>
+
+<p>To install nginx, run this command as <code>root</code>:</p>
+
+<div class="language-bash highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>$ apt-get install nginx
+
+</pre></div>
+</div>
+</div>
+
+<p>Once this command is installed, you will then need to configure nginx to serve
+requests from your unicorn workers. To do this, put this content inside
+<code>/etc/nginx/nginx.conf</code>:</p>
+
+<pre><code>user spree;
+
+# Change this depending on your hardware
+worker_processes 4;
+pid /var/run/nginx.pid;
+
+events {
+  worker_connections 1024;
+  multi_accept on;
+ }
+
+http {
+  types_hash_bucket_size 512;
+  types_hash_max_size 2048;
+
+  sendfile on;
+  tcp_nopush on;
+  tcp_nodelay off;
+
+  include /etc/nginx/mime.types;
+  default_type application/octet-stream;
+
+  access_log /var/log/nginx/access.log;
+  error_log /var/log/nginx/error.log;
+
+  gzip on;
+  gzip_disable "msie6";
+
+  gzip_proxied any;
+  gzip_min_length 500;
+  gzip_types text/plain text/css application/json application/x-javascript
+    text/xml application/xml application/xml+rss text/javascript;
+
+  ## # Virtual Host Configs ##
+  include /etc/nginx/conf.d/*.conf;
+  include /etc/nginx/sites-enabled/*;
+}
+</code></pre>
+
+<p>This file sets up nginx-specific settings. You will need another file to tell
+nginx where your application is. Create another file at
+<code>/etc/nginx/sites-enabled/[your application's name]</code>, and fill it with this
+content:</p>
+
+<pre><code>upstream [your server's address] {
+  # fail_timeout=0 means we always retry an upstream even if it failed
+  # to return a good HTTP response (in case the Unicorn master nukes a
+  # single worker for timing out).
+  server unix:/tmp/[your application's name].socket fail_timeout=0;
+}
+
+server {
+  # if you're running multiple servers, instead of "default" you should
+  # put your main domain name here
+  listen 80 default;
+
+  # you could put a list of other domain names this application answers
+  server_name [your server's address];
+
+  root /home/spree/[your application's name]/current/public;
+  access_log /var/log/nginx/[your server's address]_access.log;
+  rewrite_log on;
+
+  location / {
+    #all requests are sent to the UNIX socket
+    proxy_pass http://[your server's address];
+    proxy_redirect off;
+
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+
+    client_max_body_size 10m;
+    client_body_buffer_size 128k;
+
+    proxy_connect_timeout 90;
+    proxy_send_timeout 90;
+    proxy_read_timeout 90;
+
+    proxy_buffer_size 4k;
+    proxy_buffers 4 32k;
+    proxy_busy_buffers_size 64k;
+    proxy_temp_file_write_size 64k;
+  }
+
+  # if the request is for a static resource, nginx should serve it directly
+  # and add a far future expires header to it, making the browser
+  # cache the resource and navigate faster over the website
+  location ~ ^/(system|assets|spree)/  {
+    root /home/spree/[application's name]/current/public;
+    expires max;
+    break;
+  }
+}
+</code></pre>
+
+<div class="note"><p>The final <code>location</code> block here tells nginx to serve asset requests for three
+separate paths from the <code>public</code> directory: <code>system</code>, <code>assets</code> and <code>spree</code>.</p>
+
+<p>The <code>system</code> directory is where Paperclip typically would store assets. Spree’s
+assets are located separately, under <code>spree</code>.</p>
+
+<p>The <code>assets</code> directory will contain the other assets for your application from
+the <a href="http://guides.rubyonrails.org/asset_pipeline.html">asset pipeline</a>.</p>
+</div>
+
+<p>With these settings in place, you can start up nginx by running <code>service nginx
+start</code> as root on the remote server. Next, you can start the unicorn processes
+by running <code>cap unicorn:start</code> from your local machine. Once these are running,
+you will be able to access your site at [your server’s address]. You should see
+your store’s homepage here if everything is correctly set up.</p>
+
+<h3 id="setting-up-ssl">Setting up SSL</h3>
+
+<div class="note"><p>This part of the guide assumes you have the relevant SSL certificate files
+(a file ending in <code>.crt</code>, and another in <code>.key</code>) already and just need to know
+where to put them.</p>
+</div>
+
+<p>The <code>*.crt</code> file belongs in <code>/etc/ssl/certs</code>, and the <code>*.key</code> file belongs in
+<code>/etc/ssl/private</code>. Put these files there now.</p>
+
+<p>To get nginx to work with SSL, you will need to edit
+<code>/etc/nginx/sites-enabled/[application's name]</code> and inside the <code>server {</code> block,
+put these lines:</p>
+
+<pre><code>listen 443 ssl;
+
+ssl_certificate /etc/ssl/certs/[your certificate's name].crt;
+ssl_certificate_key /etc/ssl/private/[your key's name].key;
+</code></pre>
+
+<p>Take this time to ensure that you definitely have this line inside this file as
+well:</p>
+
+<pre><code>proxy_set_header X-Forwarded-Proto $scheme;
+</code></pre>
+
+<p>Without this line, you would get a redirect loop when you attempted to sign in
+to your Spree store.</p>
+
+<p>That is all the SSL configuration you will need for your server. To verify that
+it works, attempt to visit the login page for your application, or the admin
+area.</p>
+
+<h2 id="loading-seed-data">Loading seed data</h2>
+
+<p>Now with the database and web servers set up for your Spree store correctly, the
+final thing you will need is seed data. This data contains things such as
+countries, states, zones, zone members and an admin role.</p>
+
+<p>To install this data, run this command on the server, inside the current
+directory:</p>
+
+<div class="language-bash highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="instance-variable">RAILS_ENV</span>=production bundle <span class="function">exec</span> rake db<span class="reserved">:</span>seed
+
+</pre></div>
+</div>
+</div>
+
+<p>If you have <code>spree_auth_devise</code> installed, this command will also prompt you for
+a username and password for your admin user. If you’re not using
+<code>spree_auth_devise</code>, then you will need to set up a new user account manually in
+the console and assign it the admin role, like this:</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>user = <span class="constant">User</span>.create!(<span class="key">email</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">email@example.com</span><span class="delimiter">&quot;</span></span>, <span class="key">password</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">topsekret</span><span class="delimiter">&quot;</span></span>)
+user.spree_roles &lt;&lt; <span class="constant">Spree</span>::<span class="constant">Role</span>.find_by(<span class="key">name</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">admin</span><span class="delimiter">&quot;</span></span>)
+user.save!
+
+</pre></div>
+</div>
+</div>
+
+<p>Note that your <code>User</code> model may require additional attributes before it can be
+created.</p>
+
+<p>Once you have the data seeded by the <code>rake db:seed</code> command, you will need to
+log into the admin interface and create a shipping method and a payment method
+so that orders can be delivered and paid for.</p>
+
+<h3 id="symlinking-images">Symlinking images</h3>
+
+<div class="note"><p>You don’t need to follow the steps in this section if you’re using S3 or another
+cloud hosting provider. This section is only necessary for local file storage.</p>
+</div>
+
+<p>The final step in configuring the server is symlinking the images so that on
+subsequent deploys they don’t disappear. To do this, you can create a new <code>spree</code>
+directory within the <code>shared</code> directory by using this command:</p>
+
+<div class="language-bash highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>mkdir -p /home/spree/<span class="reserved">[</span>application<span class="string">'s name]/shared/spree
+
+</span></pre></div>
+</div>
+</div>
+
+<p>This is the directory where all the uploads for the application will live. This
+directory should be symlinked over to the application upon every deployment, and
+to do that you can add this content to your <code>config/deploy.rb</code>:</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>namespace <span class="symbol">:images</span> <span class="keyword">do</span>
+  task <span class="symbol">:symlink</span>, <span class="key">except</span>: { <span class="key">no_release</span>: <span class="predefined-constant">true</span> } <span class="keyword">do</span>
+    run <span class="string"><span class="delimiter">&quot;</span><span class="content">rm -rf </span><span class="inline"><span class="inline-delimiter">#{</span>release_path<span class="inline-delimiter">}</span></span><span class="content">/public/spree</span><span class="delimiter">&quot;</span></span>
+    run <span class="string"><span class="delimiter">&quot;</span><span class="content">ln -nfs </span><span class="inline"><span class="inline-delimiter">#{</span>shared_path<span class="inline-delimiter">}</span></span><span class="content">/spree </span><span class="inline"><span class="inline-delimiter">#{</span>release_path<span class="inline-delimiter">}</span></span><span class="content">/public/spree</span><span class="delimiter">&quot;</span></span>
+  <span class="keyword">end</span>
+<span class="keyword">end</span>
+after <span class="string"><span class="delimiter">&quot;</span><span class="content">bundle:install</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">images:symlink</span><span class="delimiter">&quot;</span></span>
+
+</pre></div>
+</div>
+</div>
+
+<p>Now upon every deploy, Capistrano will symlink the <code>spree</code> directory in the <code>shared</code>
+directory into the current version of the app so that the product images are
+persisted across releases.</p>
+
+        </div>
+      </div>
+
+    </section>
+
+    <aside id="sidebar" class="four columns">
+  <nav id="sidebar-menu">
+    <ul>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-tutorial-menu"><i class="icon-right-open"></i></a>
+          <a href='/developer/getting_started_tutorial.html'>Tutorials</a>
+        </h3>
+        <ul class="js-guides">
+          <li><i class="icon-dot"></i><a href='/developer/getting_started_tutorial.html'>Getting Started</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/extensions_tutorial.html'>Extensions</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/deface_overrides_tutorial.html'>Deface Overrides</a> <div class="toc"></div> </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-source-code-menu"><i class="icon-right-open"></i></a>
+          <a href='/developer/about.html'>Source Code</a>
+        </h3>
+        <ul class="js-guides">
+          <li><i class="icon-dot"></i><a href='/developer/about.html'>About</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/navigating.html'>Navigating</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/getting_help.html'>Getting Help</a> <div class="toc"></div> </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href="https://github.com/spree/spree/blob/master/.github/CONTRIBUTING.md" target="_blank" rel="nofollow">
+              Contributing
+            </a>
+            <div class="toc"></div>
+          </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-core-menu"><i class="icon-right-open"></i></a>
+          <a href='/developer/addresses.html'>The Core</a>
+        </h3>
+        <ul class="js-guides">
+          <li><i class="icon-dot"></i><a href='/developer/addresses.html'>Addresses</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/adjustments.html'>Adjustments</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/calculators.html'>Calculators</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/inventory.html'>Inventory</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/orders.html'>Orders</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/payments.html'>Payments</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/preferences.html'>Preferences</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/products.html'>Products</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/promotions.html'>Promotions</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/shipments.html'>Shipments</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/taxation.html'>Taxation</a> <div class="toc"></div> </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-customization-menu"><i class="icon-right-open"></i></a>
+          <a href='/developer/authentication.html'>Customization</a>
+        </h3>
+        <ul class="js-guides">
+          <li><i class="icon-dot"></i><a href='/developer/authentication.html'>Authentication</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/i18n.html'>Internationalization (i18n)</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/view.html'>View</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/asset.html'>Asset</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/logic.html'>Logic</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/s3_storage.html'>Use S3</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/checkout.html'>Checkout</a> <div class="toc"></div> </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-deployment-menu"><i class="icon-right-open"></i></a>
+          <a href='/developer/deployment_tips.html'>Deployment</a>
+        </h3>
+        <ul class="js-guides">
+          <li><i class="icon-dot"></i><a href='/developer/heroku.html'>Heroku</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/ansible-ubuntu.html'>Ansible Ubuntu Deployment</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/manual-ubuntu.html'>Manual Ubuntu Deployment</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/deployment_options.html'>Deployment Options</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/deployment_tips.html'>Deployment Tips</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/requesting_and_configuring_ssl.html'>Requesting/Configuring SSL</a> <div class="toc"></div> </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-advanced-menu"><i class="icon-right-open"></i></a>
+          <a href='/developer/seo.html'>Advanced Topics</a>
+        </h3>
+        <ul class="js-guides">
+          <li><i class="icon-dot"></i><a href='/developer/developer_tips.html'>Developer Tips</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/gateway_specific_information.html'>Gateway Specific Information</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/migration.html'>Migrating to Spree</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/seo.html'>Search Engine Optimization</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/security.html'>Security</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/testing.html'>Testing Spree Applications</a> <div class="toc"></div> </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-upgrades-menu"><i class="icon-right-open"></i></a>
+          <a href='/developer/upgrade_guides.html'>Upgrade Guides</a>
+        </h3>
+        <ul class="js-guides">
+          <li><i class="icon-dot"></i><a href='/developer/point-sixty-to-point-seventy.html'>0.60.x to 0.70.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/point-seventy-to-one-dot-oh.html'>0.70.x to 1.0.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/one-dot-oh-to-one-dot-one.html'>1.0.x to 1.1.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/one-dot-one-to-one-dot-two.html'>1.1.x to 1.2.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/one-dot-two-to-one-dot-three.html'>1.2.x to 1.3.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/one-dot-three-to-two-dot-oh.html'>1.3.x to 2.0.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/two-dot-oh-to-two-dot-one.html'>2.0.x to 2.1.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/two-dot-one-to-two-dot-two.html'>2.1.x to 2.2.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/two-dot-two-to-two-dot-three.html'>2.2.x to 2.3.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/two-dot-three-to-two-dot-four.html'>2.3.x to 2.4.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/three-dot-oh-to-three-dot-one.html'>3.0.x to 3.1.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/three-dot-one-to-three-dot-two.html'>3.1.x to 3.2.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/three-dot-two-to-three-dot-three.html'>3.2.x to 3.3.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/three-dot-three-to-three-dot-four.html'>3.3.x to 3.4.x</a> <div
+          class="toc"></div></li>
+        </ul>
+      </li>
+    </ul>
+  </nav>
+</aside>
+
+  </div>
+
+  <footer id="main-footer">
+
+  <div class="footer-top">
+    <div class="container">
+      <div id="link-blocks" class="row">
+        <div class="link-block six columns">
+          <h3 class="block-title">Developers</h3>
+          <ul>
+            <li><a href="https://slack.spreecommerce.org" target="_blank" rel="nofollow">Slack</a></li>
+            <li><a href="https://github.com/spree-contrib" target="_blank">Extensions</a></li>
+            <li><a href="https://github.com/spree/spree/blob/master/license.md" target="_blank">License</a></li>
+          </ul>
+        </div>
+        <div class="link-block seven columns">
+          <h3 class="block-title">About Spree</h3>
+          <p>
+            <strong><a href="https://spreecommerce.org">Spree Commerce</a></strong>
+            is a complete modular, API-driven open source e-commerce solution
+            built with Ruby on Rails.
+          </p>
+          <p>
+            Guides are hosted and maintained by
+            <a href="http://sparksolutions.co" target="_blank">Spark Solutions</a>
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</footer>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-104990445-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/docsearch.js/2/docsearch.min.js"></script>
+<script type="text/javascript"> docsearch({
+apiKey: 'fb697cd2d04591b036ea172259c05ba8',
+indexName: 'spreecommerce',
+inputSelector: '#search-field',
+debug: false // Set debug to true if you want to inspect the dropdown
+});
+</script>
+
+
+  </body>
+</html>

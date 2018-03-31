@@ -1,0 +1,2 @@
+class WxFollower < ApplicationRecord
+end

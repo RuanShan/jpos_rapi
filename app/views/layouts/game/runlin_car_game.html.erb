@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no,minimal-ui">
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+<meta name="format-detection" content="telephone=no" />
+<%= stylesheet_link_tag "game/runlin_car_game/all.css" %>
+<%= csrf_meta_tags %>
+<title><%= @game_round.name %></title>
+<%= yield :game_asset_js %>
+</head>
+<body>
+<%= audio_tag 'game/runlin_car_game/bg.mp3','game/runlin_car_game/bg.ogg' , id: "Jaudio", class: "media-audio", preload: true, loop: 'loop' %>
+<script>
+function audioAutoPlay(id){
+    var game_audio = document.getElementById(id);
+    game_audio.play();
+    document.addEventListener("WeixinJSBridgeReady", function () {
+      game_audio.play();
+    }, false);
+}
+audioAutoPlay('Jaudio');
+</script>
+<div id="legend" class="legend m_porA"></div>
+
+<div class="m_porA tk tk1 m_dn">
+	<h2 class="tkH2 tkH2a"><a href="javascript:;" class="m_fr m_h100 b-close1 tkGb"></a></h2>
+	<div id="focus" class="focus">
+		<div class="hd">
+			<ul></ul>
+		</div>
+		<div class="bd">
+			<ul>
+				<li><a href="#"><%= image_tag 'game/runlin_car_game/blank.png', width: '100%', _src: image_path('game/runlin_car_game/focusImg1.png') %></a></li>
+				<li><a href="#"><%= image_tag 'game/runlin_car_game/blank.png', width: '100%', _src: image_path('game/runlin_car_game/focusImg2.png') %></a></li>
+        <li><a href="#"><%= image_tag 'game/runlin_car_game/blank.png', width: '100%', _src: image_path('game/runlin_car_game/focusImg3.png') %></a></li>
+        <li><a href="#"><%= image_tag 'game/runlin_car_game/blank.png', width: '100%', _src: image_path('game/runlin_car_game/focusImg4.png') %></a></li>
+			</ul>
+		</div>
+	</div>
+</div>
+<div class="m_porA tk tk2 m_dn">
+	<h2 class="tkH2 tkH2b"><a href="#" class="m_fr m_h100 b-close2 tkGb"></a></h2>
+	<div class="m_mAuto shareArea">
+		<a href="#" class="m_fl"><%= image_tag 'game/runlin_car_game/share1.png', width: '100%' %> </a>
+		<a href="#" class="m_fl"><%= image_tag 'game/runlin_car_game/share2.png', width: '100%' %> </a>
+		<!--<a href="#" class="m_fl"><img src="images/share3.png" width="100%" /></a>-->
+	</div>
+</div>
+<div class="m_porA tkb tk3 m_dn" style="">
+	<div class="qrcodeWrap" >
+		<a class="closeBtn"> &nbsp; </a>
+		<%= image_tag 'game/runlin_car_game/qrcode.jpg' %>
+	</div>
+
+  <div class="contactWrap" >
+		<p > 活动结束后，<br/>会根据排行榜成绩进行派奖。<br/>
+    填写你的联系方式，<br/>以便我们及时联系您进行兑奖。<br/> </p>
+    <%= form_for @game_player,  url: game_player_path( @game_player) , method:'patch', html: { class: 'form-horizontal', id:'j-game-player-form' } do |f|%>
+      <p class="game_player_message"> </p>
+     <div class="form-group">
+         <label for="game_player_realname" class="fieldname ">姓名</label>
+         <input class="" type="text" value=""   required name="game_player[realname]" id="game_player_realname">
+     </div>
+     <div class="form-group">
+         <label for="game_player_cellphone" class="fieldname">电话 </label>
+         <input class="" type="number" pattern="[0-9]*" value=""  required  name="game_player[cellphone]" id="game_player_cellphone">
+     </div>
+     <div class="m_w100 m_clear">
+        <div class="m_wp50 m_fl">
+          <a class="closeBtn scoreBtn" href="javascript:;"> 关闭 </a>
+       </div>
+       <div class="m_wp50 m_fl">
+         <a id="j-player-contact" class="scoreBtn" href="javascript:;"> 提交 </a>
+       </div>
+     </div>
+
+   <% end %>
+	</div>
+
+	<div class="avatarWrap">
+		<%= tag('img', src: @game_player.avatar, width: 'auto', height:'100%') %>
+		<div class="mask">
+		</div>
+	</div>
+  <div class="m_mAuto scoreAreaLoad">
+		<%= image_tag 'game/runlin_car_game/loading1.png', width: '100%' %>
+	</div>
+	<div class="m_w100 scoreArea m_dn">
+		<div class="m_mAuto m_tac scoreBox m_oh"> 恭喜你获得 <span class="playerScore">X</span> 分</div>
+		<div class="m_mAuto m_tac scoreBox m_oh"> 成功击败了全国 <span class="playerPercentPosition">X</span>%的玩家 </div>
+		<div class="m_mAuto m_tac scoreBox m_oh"> 最佳成绩为 <span class="playerMaxScore">X</span> 分 </div>
+    <div class="m_w100 optionBox saBot">
+      <a id="contactBtn"  class="scoreBtn"> 赢取礼品 </a>
+	    <a id="reStartBtn" class="scoreBtn" href="javascript:;">再玩一次</a>
+			<a id="subscribeBtn" class="scoreBtn" href="javascript:;"> 关注我们 </a>
+    </div>
+
+		<div class="m_w100 m_clear linkBox">
+      <div class="m_wp50 m_fl" style="display: none;">
+				<a id="goRanking"  class="m_fr scoreBtn" > 排行榜 </a>
+			</div>
+			<div class="m_wp50 m_fl" style="width: 100%;">
+				<a id="goHome" class="scoreBtn" href="javascript:;"> 返回首页 </a>
+			</div>
+		</div>
+
+	</div>
+</div>
+<div class="m_porA rotating m_dn" style="margin-top: 8%;">
+    <%= image_tag 'game/runlin_car_game/rotating.png', width: '100%' %>
+</div>
+
+<%= yield :game_info %>
+<%= javascript_include_tag 'game/runlin_car_game/all.js' %>
+</body>
+</html>

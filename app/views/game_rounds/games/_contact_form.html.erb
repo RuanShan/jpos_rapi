@@ -1,0 +1,33 @@
+<div id="contact_info" class="" style="height: 100%">
+  <div class="container p-2" style="height: 100%">
+    <div class="row" style="height: 100%">
+      <div class="col align-self-center">
+        <p class="h3 text-center"> <%= @game_round.name %></p>
+        <p class="text-center">
+            <img class="touxiang" src="<%=@game_player.avatar%>" >
+        <p>
+         <%= simple_form_for @game_player, class: 'form-horizontal' do |f|%>
+         <%= hidden_field_tag 'id', @game_player.id, id: 'player_id' %>
+          <div class="form-group ">
+            <div class="input-group ">
+              <div class="input-group-addon">
+                <%= fa_icon "user" %>
+              </div>
+              <input class="form-control string" type="text" value="" placeholder="姓名" required name="game_player[realname]" id="game_player_realname">
+            </div>
+          </div>
+          <div class="form-group ">
+            <div class="input-group ">
+              <div class="input-group-addon">  <%= fa_icon "phone-square" %>        </div>
+              <input class="form-control string tel" type="tel" value="" placeholder="电话" required name="game_player[cellphone]" id="game_player_cellphone">
+            </div>
+          </div>
+          <div class="form-group ">
+            <%= f.button :button, '签到', class:'btn btn-primary btn-block', id:'b-player-contact', type: 'button' %>
+          </div>
+        <% end %>
+
+      </div>
+    </div>
+  </div>
+</div>

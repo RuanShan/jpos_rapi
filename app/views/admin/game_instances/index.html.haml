@@ -1,0 +1,29 @@
+%h1 Listing game_rounds
+
+%table
+  %thead
+    %tr
+      %th Game
+      %th Name
+      %th Start at
+      %th End at
+      %th Preferences
+      %th
+      %th
+      %th
+
+  %tbody
+    - @game_rounds.each do |game_round|
+      %tr
+        %td= game_round.game
+        %td= game_round.name
+        %td= game_round.start_at
+        %td= game_round.end_at
+        %td= game_round.preferences
+        %td= link_to 'Show', game_round
+        %td= link_to 'Edit', edit_game_round_path(game_round)
+        %td= link_to 'Destroy', game_round, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New Game instance', new_game_round_path

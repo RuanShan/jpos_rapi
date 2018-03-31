@@ -1,0 +1,30 @@
+<% content_for :game_asset_js do %>
+<%= javascript_include_tag "game/check_in/all" %>
+<% end %>
+
+<div class="Panel Lottery game check_in" style="display: block; opacity: 1;">
+      <div class="tuchu ">
+        <div class="tuchug">
+          <%= image_tag 'icon/bbb.png' %>
+        </div>
+        <div class="tuchuk">
+          <img class="tx" id="qdtx" src="http://wx.qlogo.cn/mmopen/ctSue0WnfibLR4ponCgXLv4G9Y43YFEXv5UboZuvHbvwkz6QXEYvw4RyuktMxhicq22efPTnwhPRhT67FIia2dmKDlIb4falNbN/132">
+          <p class="pm">第
+            <span class="red" id="qdnums">0</span>位签到</p>
+        </div>
+      </div>
+
+      <div id="b_players_container" class="qiandao players" style="">
+        <ul id="b_players" class="">
+          <% @game_players.each{ |user| %>
+           <li id="dh<%= user.position%>">
+            <img class="qiaodaotx" id="hd<%= user.position%>" src="<%= user.avatar%>">
+            <p class="qiaodaoxm" id="nc<%= user.position%>"><%= user.nickname%> </p>
+            <p id="qd<%= user.position%>" class="qiaodaopm"><%= user.position%></p>
+          </li>
+          <% } %>
+        </ul>
+      </div>
+ </div>
+
+<%= render "custom_top" %>

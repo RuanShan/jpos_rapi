@@ -1,0 +1,36 @@
+<p id="notice"><%= notice %></p>
+
+<h1> 活动</h1>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>活动名称	</th>
+      <th>访问量（PV）	</th>
+      <th>访问人数（UV）	</th>
+      <th>创建人	</th>
+      <th>创建时间	</th>
+      <th>状态	</th>
+      <th colspan="2">操作</th>
+    </tr>
+  </thead>
+
+  <tbody class="table-hover">
+    <% @campaigns.each do |campaign| %>
+      <tr>
+        <td><%= campaign.name %></td>
+        <td><%= campaign.pv %></td>
+        <td><%= campaign.uv %></td>
+        <td><%= campaign.creator.try :username %></td>
+        <td><%= campaign.display_created_at %></td>
+        <td><%= campaign.status %></td>
+          <td><%= link_to '编辑', edit_case_campaign_path(campaign) %></td>
+        <td><%= link_to '删除', case_campaign_path(campaign ), method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to '新建活动', new_case_campaign_path %>

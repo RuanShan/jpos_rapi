@@ -1,0 +1,35 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Wechat Accounts</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Account</th>
+      <th>Key</th>
+      <th>Secret</th>
+      <th>Access token</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @wechat_accounts.each do |wechat_account| %>
+      <tr>
+        <td><%= wechat_account.name %></td>
+        <td><%= wechat_account.account %></td>
+        <td><%= wechat_account.key %></td>
+        <td><%= wechat_account.secret %></td>
+        <td><%= wechat_account.access_token %></td>
+        <td><%= link_to 'Show', wechat_account %></td>
+        <td><%= link_to 'Edit', edit_wechat_account_path(wechat_account) %></td>
+        <td><%= link_to 'Destroy', wechat_account, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Wechat Account', new_wechat_account_path %>

@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>    <html class="lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>    <html class="lt-ie9"> <![endif]-->
+<!--[if IE 9]>    <html class="ie9"> <![endif]-->
+<!--[if gt IE 9]><!--> <html lang="en" > <!--<![endif]-->
+<head>
+  <title>Shipments - Developer Guide | Spree - Ruby on Rails e-commerce platform</title>
+
+  <meta charset="utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta name="section" content="core" />
+
+<link href="/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+<link href="/shared/css/icons.css" media="screen" rel="stylesheet" type="text/css">
+<link href="/shared/css/icons-codes.css" media="screen" rel="stylesheet" type="text/css">
+
+<link href="/shared/css/skeleton.css" media="screen" rel="stylesheet" type="text/css">
+<link href="/shared/css/documentation.css" media="screen" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="/assets/stylesheets/guides.css" media="screen" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/docsearch.js/2/docsearch.min.css" />
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-migrate/1.1.1/jquery-migrate.min.js"></script>
+<script src="/assets/javascripts/css_browser_selector_dev.js" type="text/javascript"></script>
+<script src="/assets/javascripts/jquery.toc.js" type="text/javascript"></script>
+<script src="/assets/javascripts/documentation.js" type="text/javascript"></script>
+
+
+</head>
+<body class="developer">
+  
+  <header id="header">
+    <div id="top-header">
+  <div class="container">
+    <div class="row">
+      <div class="two columns">
+  <a class="logo" href="http://spreecommerce.org">
+    <img src='/images/logo.png' alt="Spree Commerce - Ruby on Rails e-commerce platform" />
+  </a>
+</div>
+
+      <div class="three columns">
+  <input type="text" id="search-field" placeholder="Search..." />
+</div>
+
+      <nav id="main-menu" class="eleven columns">
+  <ul class="inline">
+    <li><a href="../api/">API</a></li>
+    <li><a href="../developer/">Developer</a></li>
+    <li><a href="../user/">User</a></li>
+    <li><a href="../release_notes/">Release Notes</a></li>
+    <li>
+      <a href="http://slack.spreecommerce.org" target="_blank">Slack</a>
+    </li>
+    <li>
+      <a href="https://heroku.com/deploy?template=https://github.com/spree/spree" target="_blank" rel="nofollow">Demo</a>
+    </li>
+  </ul>
+</nav>
+
+    </div>
+  </div>
+</div>
+
+
+    <div id="subheader">
+      <div class="container">
+        <div class="sixteen columns">
+          <h1 class="page-title">Shipments - Developer Guide | Spree - Ruby on Rails e-commerce platform</h1>
+        </div>
+      </div>
+    </div>
+
+  </header>
+
+  <div class="container" id="main">
+    <section id="main-content">
+
+      <div class="twelve columns">
+        <div id="content">
+          
+<h2 id="overview">Overview</h2>
+
+<p>This guide explains how Spree represents shipping options and how it calculates expected costs, and shows how you can configure the system with your own shipping methods. After reading it you should know:</p>
+
+<ul>
+  <li>how shipments and shipping are implemented in Spree</li>
+  <li>how to specify your shipping structure</li>
+  <li>how split shipments work</li>
+  <li>how to configure products for special shipping treatment</li>
+  <li>how to capture shipping instructions</li>
+</ul>
+
+<p>Spree uses a very flexible and effective system to calculate shipping, accommodating the full range of shipment pricing: from simple flat rate to complex product-type- and weight-dependent calculations.</p>
+
+<p>The Shipment model is used to track how items are delivered to the buyer.</p>
+
+<p>Shipments have the following attributes:</p>
+
+<ul>
+  <li><code>number</code>: The unique identifier for this shipment. It begins with the letter H and ends in an 11-digit number. This number is shown to the users, and can be used to find the order by calling <code>Spree::Shipment.find_by(number: number)</code>.</li>
+  <li><code>tracking</code>: The identifier given for the shipping provider (i.e. FedEx, UPS, etc).</li>
+  <li><code>shipped_at</code>: The time when the shipment was shipped.</li>
+  <li><code>state</code>: The current state of the shipment.</li>
+  <li><code>stock_location_id</code>: The ID of the Stock Location where the items for this shipment will be sourced from.</li>
+</ul>
+
+<p>A shipment can go through many different states, as illustrated below.</p>
+
+<p><img src="/images/developer/core/shipment_flow.jpg" alt="Shipment flow" /></p>
+
+<p>An explanation of the different states:</p>
+
+<ul>
+  <li><code>pending</code>: The shipment has backordered inventory units and/or the order is not paid for.</li>
+  <li><code>ready</code>: The shipment has <em>no</em> backordered inventory units and the order is paid for.</li>
+  <li><code>shipped</code>: The shipment is on its way to the buyer.</li>
+  <li><code>canceled</code>: When an order is cancelled, all of its shipments will also be cancelled. When this happens, all items in the shipment will be restocked. If an order is “resumed”, then the shipment will also be resumed.</li>
+</ul>
+
+<p>Explaining each piece of the shipment world inside of Spree separately and how each piece fits together can be a cumbersome task. Fortunately, using a few simple examples makes it much easier to grasp. In that spirit, the examples are shown first in this guide.</p>
+
+<h2 id="examples">Examples</h2>
+
+<h3 id="simple-setup">Simple Setup</h3>
+
+<p>Consider you sell T-shirts to the US and Europe and ship from a single location, and you work with 2 deliverers:</p>
+
+<ul>
+  <li>USPS Ground (to US)</li>
+  <li>FedEx (to EU)</li>
+</ul>
+
+<p>and their pricing is as follow:</p>
+
+<ul>
+  <li>USPS charges $5 for one T-shirt and $2 for each additional one</li>
+  <li>FedEx charges $10 each, regardless of the quantity</li>
+</ul>
+
+<p>To achieve this setup you need the following configuration:</p>
+
+<ul>
+  <li>Shipping Categories: All your products are the same, so you only need to define one default shipping category. Each of your products would then need to be assigned to this shipping category.</li>
+  <li>1 Stock Location: You are shipping all items from the same location, so you can use the default.</li>
+  <li>2 Shipping Methods (Configuration-&gt;Shipping Methods) as follows:</li>
+</ul>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: right">Name</th>
+      <th style="text-align: right">Zone</th>
+      <th style="text-align: right">Calculator</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: right">USPS Ground</td>
+      <td style="text-align: right">US</td>
+      <td style="text-align: right">Flexi Rate($5,$2)</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">FedEx</td>
+      <td style="text-align: right">EU_VAT</td>
+      <td style="text-align: right">FlatRate-per-item($10)</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="advanced-setup">Advanced Setup</h3>
+
+<p>Consider you sell products to a single zone (US) and you ship from 2 locations (Stock Locations):</p>
+
+<ul>
+  <li>New York</li>
+  <li>Los Angeles</li>
+</ul>
+
+<p>and you work with 3 deliverers (Shipping Methods):</p>
+
+<ul>
+  <li>FedEx</li>
+  <li>DHL</li>
+  <li>US postal service</li>
+</ul>
+
+<p>and your products can be classified into 3 Shipping Categories:</p>
+
+<ul>
+  <li>Light</li>
+  <li>Regular</li>
+  <li>Heavy</li>
+</ul>
+
+<p>and their pricing is as follow:</p>
+
+<p>FedEx charges:</p>
+
+<ul>
+  <li>$10 for all light items regardless of how many you have</li>
+  <li>$2 per regular item</li>
+  <li>$20 for the first heavy item and $15 for each additional one</li>
+</ul>
+
+<p>DHL charges:</p>
+
+<ul>
+  <li>$5 per item if it’s light or regular</li>
+  <li>$50 per item if it’s heavy</li>
+</ul>
+
+<p>USPS charges:</p>
+
+<ul>
+  <li>$8 per item if it’s light or regular</li>
+  <li>$20 per item if it’s heavy</li>
+</ul>
+
+<p>To achieve this setup you need the following configuration:</p>
+
+<ul>
+  <li>4 Shipping Categories: Default, Light, Regular and Heavy</li>
+  <li>3 Shipping Methods (Configuration-&gt;Shipping Methods): FedEx, DHL, USPS</li>
+  <li>2 Stock Locations (Configuration-&gt;Stock Locations): New York, Los Angeles</li>
+</ul>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: right">S. Category / S. Method</th>
+      <th style="text-align: right">DHL</th>
+      <th style="text-align: right">FedEx</th>
+      <th style="text-align: right">USPS</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: right">Light</td>
+      <td style="text-align: right">Per Item ($5)</td>
+      <td style="text-align: right">Flat Rate ($10)</td>
+      <td style="text-align: right">Per Item ($8)</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">Regular</td>
+      <td style="text-align: right">Per Item ($5)</td>
+      <td style="text-align: right">Per Item ($2)</td>
+      <td style="text-align: right">Per Item ($8)</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">Heavy</td>
+      <td style="text-align: right">Per Item ($50)</td>
+      <td style="text-align: right">Flexi Rate($20,$15)</td>
+      <td style="text-align: right">Per Item ($20)</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="design--functionality">Design &amp; Functionality</h2>
+
+<p>To properly leverage Spree’s shipping system’s flexibility you must understand a few key concepts:</p>
+
+<ul>
+  <li>Shipping Methods</li>
+  <li>Zones</li>
+  <li>Shipping Categories</li>
+  <li>Calculators (through Shipping Rates)</li>
+</ul>
+
+<h3 id="shipping-methods">Shipping Methods</h3>
+
+<p>Shipping methods are the actual services used to send the product. For example:</p>
+
+<ul>
+  <li>UPS Ground</li>
+  <li>UPS One Day</li>
+  <li>FedEx 2Day</li>
+  <li>FedEx Overnight</li>
+  <li>DHL International</li>
+</ul>
+
+<p>Each shipping method is only applicable to a specific <code>Zone</code>. For example, you wouldn’t be able to get a package delivered internationally using a domestic-only shipping method. You can’t ship from Dallas, USA to Rio de Janeiro, Brazil using UPS Ground (a US-only carrier).</p>
+
+<p>If you are using shipping categories, these can be used to qualify or disqualify a given shipping method.</p>
+
+<div class="note"><p><strong>Note</strong>: Shipping methods can now have multiple shipping categories assigned to them. This allows the shipping methods available to an order to be determined by the shipping categories of the items in a shipment.</p>
+</div>
+
+<h3 id="zones">Zones</h3>
+
+<p>Zones serve as a mechanism for grouping geographic areas together into a single entity. You can read all about how to configure and use Zones in the <a href="addresses.html#zones">Zones Guide</a>.</p>
+
+<p>The Shipping Address entered during checkout will define the zone the customer is in and limit the Shipping Methods available to him.</p>
+
+<h3 id="shipping-categories">Shipping Categories</h3>
+
+<p>Shipping Categories are useful if you sell products whose shipping pricing vary depending on the type of product (TVs and Mugs, for instance).</p>
+
+<div class="note"><p>For simple setups, where shipping for all products is priced the same (ie. T-shirt-only shop), all products would be assigned to the default shipping category for the store.</p>
+</div>
+
+<p>Some examples of Shipping Categories would be:</p>
+
+<ul>
+  <li>Light (for lightweight items like stickers)</li>
+  <li>Regular</li>
+  <li>Heavy (for items over a certain weight)</li>
+</ul>
+
+<p>Shipping Categories are created in the admin interface (“Configuration” -&gt; “Shipping Categories”) and then assigned to products (“Products” -&gt; “Edit”).</p>
+
+<p>**************** TODO ****************</p>
+<p>Follow up: on a clean install + seed data I ended up with two Shipping Categories - “Default Shipping” and “Default”</p>
+<p>**************************************</p>
+
+<p>During checkout, the shipping categories of the products in your order will determine which calculator will be used to price its shipping for each Shipping Method.</p>
+
+<h3 id="calculators">Calculators</h3>
+
+<p>A Calculator is the component responsible for calculating the shipping price for each available Shipping Method.</p>
+
+<p>Spree ships with 5 default Calculators:</p>
+
+<ul>
+  <li>Flat rate (per order)</li>
+  <li>Flat rate (per item/product)</li>
+  <li>Flat percent</li>
+  <li>Flexible rate</li>
+  <li>Price sack</li>
+</ul>
+
+<p>Flexible rate is defined as a flat rate for the first product, plus a different flat rate for each additional product.</p>
+
+<p>You can define your own calculator if you have more complex needs. In that case, check out the <a href="calculators.html">Calculators Guide</a>.</p>
+
+<h2 id="ui">UI</h2>
+
+<h3 id="what-the-customer-sees">What the Customer Sees</h3>
+
+<p>In the standard system, there is no mention of shipping until the checkout phase.</p>
+
+<p>After entering a shipping address, the system displays the available shipping options and their costs for each shipment in the order. Only the shipping options whose zones include the <em>shipping</em> address are presented.</p>
+
+<p>The customer must choose a shipping method for each shipment before proceeding to the next stage. At the confirmation step, the shipping cost will be shown and included in the order’s total.</p>
+
+<div class="note"><p>You can enable collection of extra <em>shipping instructions</em> by setting the option <code>Spree::Config.shipping_instructions</code> to <code>true</code>. This is set to <code>false</code> by default. See <a href="#shipping-instructions">Shipping Instructions</a> below.</p>
+</div>
+
+<h3 id="what-the-orders-administrator-sees">What the Order’s Administrator Sees</h3>
+
+<p><code>Shipment</code> objects are created during checkout for an order. Initially each records just the shipping method and the order it applies to. The administrator can update the record with the actual shipping cost and a tracking code, and may also (once only) confirm the dispatch. This confirmation causes a shipping date to be set as the time of confirmation.</p>
+
+<h2 id="advanced-shipping-methods">Advanced Shipping Methods</h2>
+
+<p>Spree comes with a set of calculators that should fit most of the shipping situations that may arise. If the calculators that come with Spree are not enough for your needs, you might want to use an extension - if one exists to meet your needs - or create a custom one.</p>
+
+<h3 id="extensions">Extensions</h3>
+
+<p>There are a few Spree extensions which provide additional shipping methods, including special support for fees imposed by common carriers, or support for bulk orders. See the <a href="https://github.com/spree-contrib">Spree Extension Registry</a> for the latest information.</p>
+
+<h3 id="writing-your-own">Writing Your Own</h3>
+
+<p>For more detailed information, check out the section on <a href="calculators.html">Calculators</a>.</p>
+
+<p>Your calculator should accept an array of <code>LineItem</code> objects and return a cost. It can look at any reachable data, but typically uses the address, the order and the information from variants which are contained in the line_items.</p>
+
+<h2 id="product-configuration">Product Configuration</h2>
+
+<p>Store administrators can assign products to specific ShippingCategories or include extra information in variants to enable the calculator to determine results.</p>
+
+<p>Each product has a <code>ShippingCategory</code>, which adds product-specific information to the calculations beyond the standard information from the shipment. Standard information includes:</p>
+
+<ul>
+  <li>Destination address</li>
+  <li>Variants and quantities</li>
+  <li>Weight and dimension information, if given, for a variant</li>
+</ul>
+
+<p><code>ShippingCategory</code> is basically a wrapper for a string. One use is to code up specific rates, eg. “Fixed $20” or “Fixed $40”, from which a calculator could extract imposed prices (and not go through its other calculations).</p>
+
+<h3 id="variant-configuration">Variant Configuration</h3>
+
+<p>Variants can be specified with weight and dimension information. Some shipping method calculators will use this information if it is present.</p>
+
+<h2 id="shipping-instructions">Shipping Instructions</h2>
+
+<p>The option <code>Spree::Config[:shipping_instructions]</code> controls collection of additional shipping instructions. This is turned off (set to <code>false</code>) by default. If an order has any shipping instructions attached, they will be shown in an order’s shipment admin page and can also be edited at that stage. Observe that instructions are currently attached to the <em>order</em> and not to actual <em>shipments</em>.</p>
+
+<h2 id="the-active-shipping-extension">The Active Shipping Extension</h2>
+
+<p>The popular <code>spree_active_shipping</code> extension harnesses the <code>active_shipping</code> gem to interface with carrier APIs such as USPS, Fedex and UPS, ultimately providing Spree-compatible calculators for the different delivery services of those carriers.</p>
+
+<p>To install the <code>spree-active-shipping</code> extension add the following to your <code>Gemfile</code>:</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>gem <span class="string"><span class="delimiter">'</span><span class="content">spree_active_shipping</span><span class="delimiter">'</span></span>
+gem <span class="string"><span class="delimiter">'</span><span class="content">active_shipping</span><span class="delimiter">'</span></span>, <span class="key">git</span>: <span class="string"><span class="delimiter">'</span><span class="content">git://github.com/Shopify/active_shipping.git</span><span class="delimiter">'</span></span>
+
+</pre></div>
+</div>
+</div>
+
+<p>and run <code>bundle install</code> from the command line.</p>
+
+<p>As an example of how to use the <a href="https://github.com/spree/spree_active_shipping">spree_active_shipping extension</a> we’ll demonstrate how to configure it to work with the USPS API. The other carriers follow a very similar pattern.</p>
+
+<p>For each USPS delivery service you want to offer (e.g. “USPS Media Mail”), you will need to create a <code>ShippingMethod</code> with a descriptive name (“Configuration” -&gt; “Shipping Methods”) and a <code>Calculator</code> (registered in the <code>active_shipping</code> extension) that ties the delivery service and the shipping method together.</p>
+
+<h3 id="default-calculators">Default Calculators</h3>
+
+<p>The <code>spree_active_shipping</code> extension comes with several pre-configured calculators out of the box. For example, here are the ones provided for the USPS carrier:</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="keyword">def</span> <span class="function">activate</span>
+  [
+    <span class="comment">#... calculators for Fedex and UPS not shown ...</span>
+    <span class="constant">Calculator</span>::<span class="constant">Usps</span>::<span class="constant">MediaMail</span>,
+    <span class="constant">Calculator</span>::<span class="constant">Usps</span>::<span class="constant">ExpressMail</span>,
+    <span class="constant">Calculator</span>::<span class="constant">Usps</span>::<span class="constant">PriorityMail</span>,
+    <span class="constant">Calculator</span>::<span class="constant">Usps</span>::<span class="constant">PriorityMailSmallFlatRateBox</span>,
+    <span class="constant">Calculator</span>::<span class="constant">Usps</span>::<span class="constant">PriorityMailRegularMediumFlatRateBoxes</span>,
+    <span class="constant">Calculator</span>::<span class="constant">Usps</span>::<span class="constant">PriorityMailLargeFlatRateBox</span>
+  ].each(&amp;<span class="symbol">:register</span>)
+<span class="keyword">end</span>
+
+</pre></div>
+</div>
+</div>
+
+<p>Each USPS delivery service you want to make available at checkout has to be associated with a corresponding shipping method. Which shipping methods are made available at checkout is ultimately determined by the zone of the customer’s shipping address. The USPS’ basic shipping categories are domestic and international, so we’ll set up zones to mimic this distinction. We need to set up two zones then - a domestic one, consisting of the USA and its territories; and an international one, consisting of all other countries.</p>
+
+<p>With zones in place, we can now start adding some shipping methods through the admin panel. The only other essential requirement to calculate the shipping total at checkout is that each product and variant be assigned a weight.</p>
+
+<p>The <code>spree_active_shipping</code> gem needs some configuration variables set in order to consume the carrier web services.</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>  <span class="comment"># these can be set in an initializer in your site extension</span>
+  <span class="constant">Spree</span>::<span class="constant">ActiveShipping</span>::<span class="constant">Config</span>.set(<span class="key">usps_login</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">YOUR_USPS_LOGIN</span><span class="delimiter">&quot;</span></span>)
+  <span class="constant">Spree</span>::<span class="constant">ActiveShipping</span>::<span class="constant">Config</span>.set(<span class="key">fedex_login</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">YOUR_FEDEX_LOGIN</span><span class="delimiter">&quot;</span></span>)
+  <span class="constant">Spree</span>::<span class="constant">ActiveShipping</span>::<span class="constant">Config</span>.set(<span class="key">fedex_password</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">YOUR_FEDEX_PASSWORD</span><span class="delimiter">&quot;</span></span>)
+  <span class="constant">Spree</span>::<span class="constant">ActiveShipping</span>::<span class="constant">Config</span>.set(<span class="key">fedex_account</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">YOUR_FEDEX_ACCOUNT</span><span class="delimiter">&quot;</span></span>)
+  <span class="constant">Spree</span>::<span class="constant">ActiveShipping</span>::<span class="constant">Config</span>.set(<span class="key">fedex_key</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">YOUR_FEDEX_KEY</span><span class="delimiter">&quot;</span></span>)
+
+</pre></div>
+</div>
+</div>
+
+<h3 id="adding-additional-calculators">Adding Additional Calculators</h3>
+
+<p>Additional delivery services that are not pre-configured as a calculator in the <code>spree_active_shipping</code> extension can be easily added. Say, for example, you need First Class International Parcels via the US Postal Service.</p>
+
+<p>First, create a calculator class that inherits from <code>Calculator::Usps::Base</code> and implements a description class method:</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="keyword">class</span> <span class="class">Calculator::Usps::FirstClassMailInternationalParcels</span> &lt; <span class="constant">Calculator</span>::<span class="constant">Usps</span>::<span class="constant">Base</span>
+  <span class="keyword">def</span> <span class="predefined-constant">self</span>.<span class="function">description</span>
+    <span class="string"><span class="delimiter">&quot;</span><span class="content">USPS First-Class Mail International Package</span><span class="delimiter">&quot;</span></span>
+  <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+</pre></div>
+</div>
+</div>
+
+<div class="warning"><p>Note that, unlike calculators that you write yourself, these calculators do not have to implement a <code>compute</code> instance method that returns a shipping amount. The superclasses take care of that requirement.</p>
+</div>
+
+<p>There is one gotcha to bear in mind: the string returned by the <code>description</code> method must <em>exactly</em> match the name of the USPS delivery service. To determine the exact spelling of the delivery service, you’ll need to examine what gets returned from the API:</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="keyword">class</span> <span class="class">Calculator::ActiveShipping</span> &lt; <span class="constant">Calculator</span>
+  <span class="keyword">def</span> <span class="function">compute</span>(line_items)
+    <span class="comment">#....</span>
+    rates = retrieve_rates(origin, destination, packages(order))
+    <span class="comment"># the key of this hash is the name you need to match</span>
+    <span class="comment"># raise rates.inspect</span>
+
+    <span class="keyword">return</span> <span class="predefined-constant">nil</span> <span class="keyword">unless</span> rates
+    rate = rates[<span class="predefined-constant">self</span>.description].to_f + (<span class="constant">Spree</span>::<span class="constant">ActiveShipping</span>::<span class="constant">Config</span>[<span class="symbol">:handling_fee</span>].to_f || <span class="float">0.0</span>)
+    <span class="keyword">return</span> <span class="predefined-constant">nil</span> <span class="keyword">unless</span> rate
+    <span class="comment"># divide by 100 since active_shipping rates are expressed as cents</span>
+
+    <span class="keyword">return</span> rate/<span class="float">100.0</span>
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">retrieve_rates</span>(origin, destination, packages)
+    <span class="comment">#....</span>
+    <span class="comment"># carrier is an instance of ActiveMerchant::Shipping::USPS</span>
+    response = carrier.find_rates(origin, destination, packages)
+    <span class="comment"># turn this beastly array into a nice little hash</span>
+    h = <span class="constant">Hash</span>[*response.rates.collect { |rate| [rate.service_name, rate.price] }.flatten]
+    <span class="comment">#....</span>
+  <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+</pre></div>
+</div>
+</div>
+
+<p>As you can see in the code above, the <code>spree_active_shipping</code> gem returns an array of services with their corresponding prices, which the <code>retrieve_rates</code> method converts into a hash. Below is what would get returned for an order with an international destination:</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>{
+  <span class="string"><span class="delimiter">&quot;</span><span class="content">USPS Priority Mail International Flat Rate Envelope</span><span class="delimiter">&quot;</span></span>=&gt;<span class="integer">1345</span>,
+  <span class="string"><span class="delimiter">&quot;</span><span class="content">USPS First-Class Mail International Large Envelope</span><span class="delimiter">&quot;</span></span>=&gt;<span class="integer">376</span>,
+  <span class="string"><span class="delimiter">&quot;</span><span class="content">USPS USPS GXG Envelopes</span><span class="delimiter">&quot;</span></span>=&gt;<span class="integer">4295</span>,
+  <span class="string"><span class="delimiter">&quot;</span><span class="content">USPS Express Mail International Flat Rate Envelope</span><span class="delimiter">&quot;</span></span>=&gt;<span class="integer">2895</span>,
+  <span class="string"><span class="delimiter">&quot;</span><span class="content">USPS First-Class Mail International Package</span><span class="delimiter">&quot;</span></span>=&gt;<span class="integer">396</span>,
+  <span class="string"><span class="delimiter">&quot;</span><span class="content">USPS Priority Mail International Medium Flat Rate Box</span><span class="delimiter">&quot;</span></span>=&gt;<span class="integer">4345</span>,
+  <span class="string"><span class="delimiter">&quot;</span><span class="content">USPS Priority Mail International</span><span class="delimiter">&quot;</span></span>=&gt;<span class="integer">2800</span>,
+  <span class="string"><span class="delimiter">&quot;</span><span class="content">USPS Priority Mail International Large Flat Rate Box</span><span class="delimiter">&quot;</span></span>=&gt;<span class="integer">5595</span>,
+  <span class="string"><span class="delimiter">&quot;</span><span class="content">USPS Global Express Guaranteed Non-Document Non-Rectangular</span><span class="delimiter">&quot;</span></span>=&gt;<span class="integer">4295</span>,
+  <span class="string"><span class="delimiter">&quot;</span><span class="content">USPS Global Express Guaranteed Non-Document Rectangular</span><span class="delimiter">&quot;</span></span>=&gt;<span class="integer">4295</span>,
+  <span class="string"><span class="delimiter">&quot;</span><span class="content">USPS Global Express Guaranteed (GXG)</span><span class="delimiter">&quot;</span></span>=&gt;<span class="integer">4295</span>,
+  <span class="string"><span class="delimiter">&quot;</span><span class="content">USPS Express Mail International</span><span class="delimiter">&quot;</span></span>=&gt;<span class="integer">2895</span>,
+  <span class="string"><span class="delimiter">&quot;</span><span class="content">USPS Priority Mail International Small Flat Rate Box</span><span class="delimiter">&quot;</span></span>=&gt;<span class="integer">1345</span>
+}
+
+</pre></div>
+</div>
+</div>
+
+<p>From all of the viable shipping services in this hash, the <code>compute</code> method selects the one that matches the description of the calculator. At this point, an optional flat handling fee (set via preferences) can be added:</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>rate = rates[<span class="predefined-constant">self</span>.description].to_f + (<span class="constant">Spree</span>::<span class="constant">ActiveShipping</span>::<span class="constant">Config</span>[<span class="symbol">:handling_fee</span>].to_f || <span class="float">0.0</span>)
+
+</pre></div>
+</div>
+</div>
+
+<p>Finally, don’t forget to register the calculator you added. In extensions, this is accomplished with the <code>activate</code> method:</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="keyword">def</span> <span class="function">activate</span>
+  <span class="constant">Calculator</span>::<span class="constant">Usps</span>::<span class="constant">FirstClassMailInternationalParcels</span>.register
+<span class="keyword">end</span>
+
+</pre></div>
+</div>
+</div>
+
+<h2 id="filtering-shipping-methods-on-criteria-other-than-the-zone">Filtering Shipping Methods On Criteria Other Than the Zone</h2>
+
+<p>Ordinarily, it is the zone of the shipping address that determines which shipping methods are displayed to a customer at checkout. Here is how the availability of a shipping method is determined:</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="keyword">class</span> <span class="class">Spree::Stock::Estimator</span>
+  <span class="keyword">def</span> <span class="function">shipping_methods</span>(package)
+    shipping_methods = package.shipping_methods
+    shipping_methods.delete_if { |ship_method| !ship_method.calculator.available?(package.contents) }
+    shipping_methods.delete_if { |ship_method| !ship_method.include?(order.ship_address) }
+    shipping_methods.delete_if { |ship_method| !(ship_method.calculator.preferences[<span class="symbol">:currency</span>].nil? || ship_method.calculator.preferences[<span class="symbol">:currency</span>] == currency) }
+    shipping_methods
+  <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+</pre></div>
+</div>
+</div>
+
+<p>Unless overridden, the calculator’s <code>available?</code> method returns <code>true</code> by default. It is, therefore, the zone of the destination address that filters out the shipping methods in most cases. However, in some circumstances it may be necessary to filter out additional shipping methods.</p>
+
+<p>Consider the case of the USPS First Class domestic shipping service, which is not offered if the weight of the package is greater than 13oz. Even though the USPS API does not return the option for First Class in this instance, First Class will appear as an option in the checkout view with an unfortunate value of 0, since it has been set as a Shipping Method.</p>
+
+<p>To ensure that First Class shipping is not available for orders that weigh more than 13oz, the calculator’s <code>available?</code> method must be overridden as follows:</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="keyword">class</span> <span class="class">Calculator::Usps::FirstClassMailParcels</span> &lt; <span class="constant">Calculator</span>::<span class="constant">Usps</span>::<span class="constant">Base</span>
+  <span class="keyword">def</span> <span class="predefined-constant">self</span>.<span class="function">description</span>
+    <span class="string"><span class="delimiter">&quot;</span><span class="content">USPS First-Class Mail Parcel</span><span class="delimiter">&quot;</span></span>
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">available?</span>(order)
+    multiplier = <span class="float">1.3</span>
+    weight = order.line_items.inject(<span class="integer">0</span>) <span class="keyword">do</span> |weight, line_item|
+      weight + (line_item.variant.weight ? (line_item.quantity * line_item.variant.weight * multiplier) : <span class="integer">0</span>)
+    <span class="keyword">end</span>
+    <span class="comment">#if weight in ounces &gt; 13, then First Class Mail is not available for the order</span>
+      weight &gt; <span class="integer">13</span> ? <span class="predefined-constant">false</span> : <span class="predefined-constant">true</span>
+  <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+</pre></div>
+</div>
+</div>
+
+<h2 id="split-shipments">Split Shipments</h2>
+
+<h3 id="introduction">Introduction</h3>
+
+<p>Split shipments are a new feature as of Spree 2.0 that addresses the needs of complex Spree stores that require sophisticated shipping and warehouse logic. This includes detailed inventory management and allows for shipping from multiple locations.</p>
+
+<p><img src="../images/developer/core/split_shipments_checkout.png" alt="image" /></p>
+
+<h3 id="creating-proposed-shipments">Creating Proposed Shipments</h3>
+
+<p>This section steps through the basics of what is involved in determining shipments for an order. There are a lot of pieces that make up this process. They are explained in detail in the <a href="#components-of-split-shipments">Components of Split Shipments</a> section of this guide.</p>
+
+<p>The process of determining shipments for an order is triggered by calling <code>create_proposed_shipments</code> on an <code>Order</code> object while transitioning to the <code>delivery</code> state during checkout. This process will first delete any existing shipments for an order and then determine the possible shipments available for that order.</p>
+
+<p><code>create_proposed_shipments</code> will initially call <code>Spree::Stock::Coordinator.new(@order).packages</code>. This will return an array of packages. In order to determine which items belong in which package when they are being built, Spree uses an object called a <code>Splitter</code>, described in more detail <a href="#the-packer">below</a>.</p>
+
+<p>After obtaining the array of available packages, they are converted to shipments on the order object. Shipping rates are determined and inventory units are created during this process as well.</p>
+
+<p>At this point, the checkout process can continue to the delivery step.</p>
+
+<h2 id="components-of-split-shipments">Components of Split Shipments</h2>
+
+<p>This section describes the four main components that power split shipments: <a href="#the-coordinator">The Coordinator</a>, <a href="#the-packer">The Packer</a>, <a href="#the-prioritizer">The Prioritizer</a>, and <a href="#the-estimator">The Estimator</a>.</p>
+
+<h3 id="the-coordinator">The Coordinator</h3>
+
+<p>The <code>Spree::Stock::Coordinator</code> is the starting point for determining shipments when calling <code>create_proposed_shipments</code> on an order. Its job is to go through each <code>StockLocation</code> available and determine what can be shipped from that location.</p>
+
+<p>The <code>Spree::Stock::Coordinator</code> will ultimately return an array of packages which can then be easily converted into shipments for an order by calling <code>to_shipment</code> on them.</p>
+
+<h3 id="the-packer">The Packer</h3>
+
+<p>A <code>Spree::Stock::Packer</code> object is an important part of the <code>create_proposed_shipments</code> process. Its job is to determine possible packages for a given StockLocation and order. It uses rules defined in classes known as <code>Splitters</code> to determine what packages can be shipped from a <code>StockLocation</code>.</p>
+
+<p>For example, we may have two splitters for a stock location. One splitter has a rule that any order weighing more than 50lbs should be shipped in a separate package from items weighing less. Our other splitter is a catch-all for any item weighing less than 50lbs. So, given one item in an order weighing 60lbs and two items weighing less, the Packer would use the rules defined in our splitters to come up with two separate packages: one containing the single 60lb item, the other containing our other two items.</p>
+
+<h4 id="default-splitters">Default Splitters</h4>
+
+<p>Spree comes with two default splitters which are run in sequence. This means that the first splitter takes the packages array from the order, and each subsequent splitter takes the output of the splitter that came before it.</p>
+
+<p>Let’s take a look at what the default splitters do:</p>
+
+<ul>
+  <li><strong>Shipping Category Splitter</strong>: Splits an order into packages based on items’ shipping categories. This means that each package will only have items that all belong to the same shipping category.</li>
+  <li><strong>Weight Splitter</strong>: Splits an order into packages based on a weight threshold. This means that each package has a mass weight. If a new item is added to the order and it causes a package to go over the weight threshold, a new package will be created so that all packages weigh less than the threshold. You can set the weight threshold by changing <code>Spree::Stock::Splitter::Weight.threshold</code> (defaults to <code>150</code>) in an initializer.</li>
+</ul>
+
+<h4 id="custom-splitters">Custom Splitters</h4>
+
+<p>Note that splitters can be customized, and creating your own can be done with relative ease. By inheriting from <code>Spree::Stock::Splitter::Base</code>, you can create your own splitter.</p>
+
+<p>For an example of a simple splitter, take a look at Spree’s <a href="https://github.com/spree/spree/blob/235e470b242225d7c75c7c4c4c033ee3d739bb36/core/app/models/spree/stock/splitter/weight.rb">weight based splitter</a>. This splitter pulls items with a weight greater than 150 into their own shipment.</p>
+
+<p>After creating your splitter, you need to add it to the array of splitters Spree
+uses. To do this, add the following to your application’s spree initializer
+<code>spree.rb</code> file:</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="constant">Rails</span>.application.config.spree.stock_splitters &lt;&lt; <span class="constant">Spree</span>::<span class="constant">Stock</span>::<span class="constant">Splitter</span>::<span class="constant">CustomSplitter</span>
+
+</pre></div>
+</div>
+</div>
+
+<p>You can also completely override the splitters used in Spree, rearrange them, etc.
+To do this, add the following to your <code>spree.rb</code> file:</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="constant">Rails</span>.application.config.spree.stock_splitters = [
+  <span class="constant">Spree</span>::<span class="constant">Stock</span>::<span class="constant">Splitter</span>::<span class="constant">CustomSplitter</span>,
+  <span class="constant">Spree</span>::<span class="constant">Stock</span>::<span class="constant">Splitter</span>::<span class="constant">ShippingCategory</span>
+]
+
+</pre></div>
+</div>
+</div>
+
+<p>Or if you don’t want to split packages just set the option above to an empty
+array. e.g. a store with the following configuration in spree.rb won’t have any
+package splitted.</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="constant">Rails</span>.application.config.spree.stock_splitters = []
+
+</pre></div>
+</div>
+</div>
+
+<p>If you want to add different splitters for each <code>StockLocation</code>, you need to decorate the <code>Spree::Stock::Coordinator</code> class and override the <code>splitters</code> method.</p>
+
+<h3 id="the-prioritizer">The Prioritizer</h3>
+
+<p>A <code>Spree::Stock::Prioritizer</code> object will decide which <code>StockLocation</code> should ship which package from an order. The prioritizer will attempt to come up with the best shipping situation available to the user.</p>
+
+<p>By default, the prioritizer will first select packages where the items are on hand. Then it will try to find packages where items are backordered. During this process, the <code>Spree::Stock::Adjuster</code> is also used to ensure each package has the correct number of items.</p>
+
+<p>The prioritizer is also a customization point. If you want to customize which packages should take priority for the order during this process, you can override the <code>sort_packages</code> method in <code>Spree::Stock::Prioritizer</code>.</p>
+
+<h4 id="customizing-the-adjuster">Customizing the Adjuster</h4>
+
+<p>The <code>Adjuster</code> visits each package in an order and ensures the correct number of items are in each package. To customize this functionality, you need to do two things:</p>
+
+<ul>
+  <li>Subclass the <a href="https://github.com/spree/spree/blob/a55db75bbebc40f5705fc3010d1e5a2190bde79b/core/app/models/spree/stock/adjuster.rb">Spree::Stock::Adjuster</a> class and override the the <code>adjust</code> method to get the desired functionality.</li>
+  <li>Decorate the <code>Spree::Stock::Coordinator</code> and override the <code>prioritize_packages</code> method, passing in your custom adjuster class to the <code>Prioritizer</code> initializer. For example, if our adjuster was called <code>Spree::Stock::CustomAdjuster</code>, we would do the following:</li>
+</ul>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="constant">Spree</span>::<span class="constant">Stock</span>::<span class="constant">Coordinator</span>.class_eval <span class="keyword">do</span>
+  <span class="keyword">def</span> <span class="function">prioritize_packages</span>(packages)
+    prioritizer = <span class="constant">Prioritizer</span>.new(order, packages, <span class="constant">Spree</span>::<span class="constant">Stock</span>::<span class="constant">CustomAdjuster</span>)
+    prioritizer.prioritized_packages
+  <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+</pre></div>
+</div>
+</div>
+
+<h3 id="the-estimator">The Estimator</h3>
+
+<p>The <code>Spree::Stock::Estimator</code> loops through the packages created by the packer in order to calculate and attach shipping rates to them. This information is then returned to the user so they can select shipments for their order and complete the checkout process.</p>
+
+        </div>
+      </div>
+
+    </section>
+
+    <aside id="sidebar" class="four columns">
+  <nav id="sidebar-menu">
+    <ul>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-tutorial-menu"><i class="icon-right-open"></i></a>
+          <a href='/developer/getting_started_tutorial.html'>Tutorials</a>
+        </h3>
+        <ul class="js-guides">
+          <li><i class="icon-dot"></i><a href='/developer/getting_started_tutorial.html'>Getting Started</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/extensions_tutorial.html'>Extensions</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/deface_overrides_tutorial.html'>Deface Overrides</a> <div class="toc"></div> </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-source-code-menu"><i class="icon-right-open"></i></a>
+          <a href='/developer/about.html'>Source Code</a>
+        </h3>
+        <ul class="js-guides">
+          <li><i class="icon-dot"></i><a href='/developer/about.html'>About</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/navigating.html'>Navigating</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/getting_help.html'>Getting Help</a> <div class="toc"></div> </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href="https://github.com/spree/spree/blob/master/.github/CONTRIBUTING.md" target="_blank" rel="nofollow">
+              Contributing
+            </a>
+            <div class="toc"></div>
+          </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-core-menu"><i class="icon-right-open"></i></a>
+          <a href='/developer/addresses.html'>The Core</a>
+        </h3>
+        <ul class="js-guides">
+          <li><i class="icon-dot"></i><a href='/developer/addresses.html'>Addresses</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/adjustments.html'>Adjustments</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/calculators.html'>Calculators</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/inventory.html'>Inventory</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/orders.html'>Orders</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/payments.html'>Payments</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/preferences.html'>Preferences</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/products.html'>Products</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/promotions.html'>Promotions</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/shipments.html'>Shipments</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/taxation.html'>Taxation</a> <div class="toc"></div> </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-customization-menu"><i class="icon-right-open"></i></a>
+          <a href='/developer/authentication.html'>Customization</a>
+        </h3>
+        <ul class="js-guides">
+          <li><i class="icon-dot"></i><a href='/developer/authentication.html'>Authentication</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/i18n.html'>Internationalization (i18n)</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/view.html'>View</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/asset.html'>Asset</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/logic.html'>Logic</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/s3_storage.html'>Use S3</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/checkout.html'>Checkout</a> <div class="toc"></div> </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-deployment-menu"><i class="icon-right-open"></i></a>
+          <a href='/developer/deployment_tips.html'>Deployment</a>
+        </h3>
+        <ul class="js-guides">
+          <li><i class="icon-dot"></i><a href='/developer/heroku.html'>Heroku</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/ansible-ubuntu.html'>Ansible Ubuntu Deployment</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/manual-ubuntu.html'>Manual Ubuntu Deployment</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/deployment_options.html'>Deployment Options</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/deployment_tips.html'>Deployment Tips</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/requesting_and_configuring_ssl.html'>Requesting/Configuring SSL</a> <div class="toc"></div> </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-advanced-menu"><i class="icon-right-open"></i></a>
+          <a href='/developer/seo.html'>Advanced Topics</a>
+        </h3>
+        <ul class="js-guides">
+          <li><i class="icon-dot"></i><a href='/developer/developer_tips.html'>Developer Tips</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/gateway_specific_information.html'>Gateway Specific Information</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/migration.html'>Migrating to Spree</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/seo.html'>Search Engine Optimization</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/security.html'>Security</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/testing.html'>Testing Spree Applications</a> <div class="toc"></div> </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-upgrades-menu"><i class="icon-right-open"></i></a>
+          <a href='/developer/upgrade_guides.html'>Upgrade Guides</a>
+        </h3>
+        <ul class="js-guides">
+          <li><i class="icon-dot"></i><a href='/developer/point-sixty-to-point-seventy.html'>0.60.x to 0.70.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/point-seventy-to-one-dot-oh.html'>0.70.x to 1.0.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/one-dot-oh-to-one-dot-one.html'>1.0.x to 1.1.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/one-dot-one-to-one-dot-two.html'>1.1.x to 1.2.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/one-dot-two-to-one-dot-three.html'>1.2.x to 1.3.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/one-dot-three-to-two-dot-oh.html'>1.3.x to 2.0.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/two-dot-oh-to-two-dot-one.html'>2.0.x to 2.1.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/two-dot-one-to-two-dot-two.html'>2.1.x to 2.2.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/two-dot-two-to-two-dot-three.html'>2.2.x to 2.3.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/two-dot-three-to-two-dot-four.html'>2.3.x to 2.4.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/three-dot-oh-to-three-dot-one.html'>3.0.x to 3.1.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/three-dot-one-to-three-dot-two.html'>3.1.x to 3.2.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/three-dot-two-to-three-dot-three.html'>3.2.x to 3.3.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/three-dot-three-to-three-dot-four.html'>3.3.x to 3.4.x</a> <div
+          class="toc"></div></li>
+        </ul>
+      </li>
+    </ul>
+  </nav>
+</aside>
+
+  </div>
+
+  <footer id="main-footer">
+
+  <div class="footer-top">
+    <div class="container">
+      <div id="link-blocks" class="row">
+        <div class="link-block six columns">
+          <h3 class="block-title">Developers</h3>
+          <ul>
+            <li><a href="https://slack.spreecommerce.org" target="_blank" rel="nofollow">Slack</a></li>
+            <li><a href="https://github.com/spree-contrib" target="_blank">Extensions</a></li>
+            <li><a href="https://github.com/spree/spree/blob/master/license.md" target="_blank">License</a></li>
+          </ul>
+        </div>
+        <div class="link-block seven columns">
+          <h3 class="block-title">About Spree</h3>
+          <p>
+            <strong><a href="https://spreecommerce.org">Spree Commerce</a></strong>
+            is a complete modular, API-driven open source e-commerce solution
+            built with Ruby on Rails.
+          </p>
+          <p>
+            Guides are hosted and maintained by
+            <a href="http://sparksolutions.co" target="_blank">Spark Solutions</a>
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</footer>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-104990445-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/docsearch.js/2/docsearch.min.js"></script>
+<script type="text/javascript"> docsearch({
+apiKey: 'fb697cd2d04591b036ea172259c05ba8',
+indexName: 'spreecommerce',
+inputSelector: '#search-field',
+debug: false // Set debug to true if you want to inspect the dropdown
+});
+</script>
+
+
+  </body>
+</html>

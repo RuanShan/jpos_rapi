@@ -1,0 +1,48 @@
+<script>
+WechatMore = {
+	time: <%==DateTime.current.to_i %>,
+	openid: <%== session[:openid].to_json %>, //当前微信openid
+	isGamePlayerExist: false, //当前openid对应的GamePlayer是否存在
+	game_code:  <%== @game_round.game_code.to_json %>,
+	game_round_id:  <%= @game_round.id %>,
+	game_rount_name:  <%== @game_round.name.to_json %>,
+	game_countdown: <%= @game_round.duration %>,
+	game_player_count: <%= @game_round.current_players.count %>,
+	game_player_id: <%== @game_player.try(:id).to_i %>,
+	game_player_votes_count: <%== @game_player.try(:votes_count).to_i %>, //积攒数量
+	game_player_age: <%== @game_player.try(:age).to_i %>,
+	game_player_by_openid: <%== @game_player_by_openid.try(:id).to_i %>,
+
+	terminal: 'screen',
+	panelState: 'opended',
+	playerState: 'unknown',
+	step: <%= @step.to_i %>,// slide index
+	routes: {},
+  assets: {},
+	shareData: {
+      "imgUrl": <%== image_url('game/yhzy_ido/share.jpg').to_json %>,
+      "link": <%== play_game_round_url(@game_round).to_json %>,
+      "title": <%== @game_round.name.to_json %>,
+      "desc": <%== @game_round.desc.to_json %>,
+  },
+	fn: {}, //扩展一些功能
+	events: (('ontouchstart' in window) ? { start: 'touchstart', move: 'touchmove', end: 'touchend'} : { start: 'mousedown', move: 'mousemove', end: 'mouseup' })
+
+};
+
+WechatMore.assets.audio_sample_path = <%== audio_path( 'game/yhzy_ido/bg.mp3').to_json %>;
+WechatMore.routes.final_rank_url = <%== final_rank_game_round_url(@game_round).to_json %>;
+
+//game_player maybe nil
+WechatMore.routes.game_players_path = <%== game_players_path.to_json %>;
+WechatMore.routes.game_results_path = <%== game_results_path.to_json %>;
+WechatMore.routes.votes_path = <%== votes_path.to_json %>;
+WechatMore.routes.photographs_path = <%== photographs_path.to_json %>;
+WechatMore.routes.ru_captcha_path = <%== ru_captcha_path.to_json %>;
+
+WechatMore.routes.build_score_game_player_path = function(game_player_id){
+	return WechatMore.routes.game_players_path+'/'+game_player_id;
+}
+// share link
+WechatMore.routes.shared_game_round_url = <%== shared_game_round_url(@game_round).to_json %>;
+</script>

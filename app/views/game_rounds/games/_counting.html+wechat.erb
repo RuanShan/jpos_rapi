@@ -1,0 +1,32 @@
+<% content_for :game_asset_css do %>
+  <%= stylesheet_link_tag  'game_round_wechat', media: 'all', 'data-turbolinks-track' => true %>
+<% end %>
+
+<% content_for :game_asset_js do %>
+  <%= javascript_include_tag 'game_round_wechat', 'data-turbolinks-track' => true %>
+<% end %>
+
+<div class="game check_in_wechat mobile">
+  <% unless @game_player.verified? %>
+    <div class="step step-1" style="z-index: 1; background-color:gray;">
+      <%= render "game_rounds/games/contact_required_form" %>
+    </div>
+  <% end %>
+  <div class="step step-2">
+    <img src="<%=@game_player['avatar']%>" width="0" height="0"   >
+    <div class="vgy_user">
+            <div class="info2">
+              <img class="touxiang" src="<%=@game_player.avatar%>">
+                  <p class="name"><%=@game_player.nickname %></p>
+            <p class="tx">恭喜你签到成功</p>
+            <div class="infotext">
+              <p>你是第<span class="red"><%=@game_player.position%></span>位签到</p>
+              <p class="time"><%=@game_player.display_updated_at%> </p>
+            </div>
+          </div>
+    </div>
+  </div>
+</div>
+<div style="position:fixed; z-index:-1;top:0; height:100%; width:100%; opacity:0.3; background:url(<%=@game_player['avatar']%>) no-repeat center top; background-size:100% auto;">
+  <div class="bgs" ><img class="bgt" src="<%=@game_player['avatar']%>"></div>
+</div>

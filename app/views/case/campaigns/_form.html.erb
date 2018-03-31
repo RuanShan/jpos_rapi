@@ -1,0 +1,24 @@
+<%= simple_form_for([:case, campaign]) do |f| %>
+  <% if campaign.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(campaign.errors.count, "error") %> prohibited this campaign from being saved:</h2>
+
+      <ul>
+      <% campaign.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <%= f.input :name %>
+  <%= f.input :host %>
+  <%= f.input :start_at %>
+  <%= f.input :end_at %>
+  <%= f.input :desc, as: :ckeditor, input_html: { ckeditor: {  }} %>
+  <%= f.input :genre, as: :select, collection: Campaign.translate_enum_collection(:genre) %>
+  <%= f.button :submit %>
+
+  <%= link_to t('button.back'), case_campaigns_path, class: 'btn btn-default' %>
+
+<% end %>

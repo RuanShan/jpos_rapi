@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" />
+<meta name="x5-orientation" content="portrait">
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+<meta name="format-detection" content="telephone=no" />
+<title>WeChatLayout</title>
+<%= stylesheet_link_tag    'game_round_wechat', media: 'all', 'data-turbolinks-track' => true %>
+<%= javascript_include_tag 'game_round_wechat', 'data-turbolinks-track' => true %>
+<%= render 'game_rounds/qian_dao_style_inline' %>
+</head>
+<body>
+  <div class="page">
+      <div class="page__bd" style="height: 100%;">
+          <div class="weui-tab">
+              <div class="weui-tab__bd">
+                <div id="tab1" class="weui-tab__bd-item weui-tab__bd-item--active">
+                  <h1>页面一</h1>
+                  <%= yield %>
+                </div>
+                <div id="tab2" class="weui-tab__bd-item">
+                  <h1>页面二</h1>
+                </div>
+                <div id="tab3" class="weui-tab__bd-item">
+                  <h1>页面3</h1>
+                </div>
+              </div>
+              <div class="weui-tabbar">
+                  <a href="#tab1" class="weui-tabbar__item weui-bar__item--on">
+                        <%= image_tag "weui/icon_tabbar.png", alt: '',class: "weui-tabbar__icon" %>
+                      <p class="weui-tabbar__label">签到</p>
+                  </a>
+                  <a href="#tab2" class="weui-tabbar__item">
+                    <%= image_tag "weui/icon_tabbar.png", alt: '',class: "weui-tabbar__icon" %>
+                      <p class="weui-tabbar__label">通讯录</p>
+                  </a>
+                  <a href="#tab3" class="weui-tabbar__item">
+                         <%= image_tag "weui/icon_tabbar.png", alt: '',class: "weui-tabbar__icon" %>
+                       <p class="weui-tabbar__label">发现</p>
+                  </a>
+                  <a href="javascript:;" class="weui-tabbar__item">
+                    <%= image_tag "weui/icon_tabbar.png", alt: '',class: "weui-tabbar__icon" %>
+                      <p class="weui-tabbar__label">我</p>
+                  </a>
+              </div>
+          </div>
+
+        </div>
+    </div>
+  </body>
+
+</html>

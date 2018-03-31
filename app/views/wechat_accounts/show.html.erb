@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @wechat_account.name %>
+</p>
+
+<p>
+  <strong>Account:</strong>
+  <%= @wechat_account.account %>
+</p>
+
+<p>
+  <strong>Key:</strong>
+  <%= @wechat_account.key %>
+</p>
+
+<p>
+  <strong>Secret:</strong>
+  <%= @wechat_account.secret %>
+</p>
+
+<p>
+  <strong>Access token:</strong>
+  <%= @wechat_account.access_token %>
+</p>
+
+<%= link_to 'Edit', edit_wechat_account_path(@wechat_account) %> |
+<%= link_to 'Back', wechat_accounts_path %>

@@ -1,0 +1,51 @@
+<script>
+WechatMore = {
+	openid:  <%== cookies.signed_or_encrypted[:we_openid].to_json %>,
+	game_code:  <%== @game_round.game_code.to_json %>,
+	game_round_id:  <%= @game_round.id %>,
+	game_rount_name:  <%== @game_round.name.to_json %>,
+	game_countdown: <%= @game_round.duration %>,
+	game_player_id: <%== @game_player.try(:id).to_i %>,
+	game_player_by_openid: <%== @game_player_by_openid.try(:id).to_i %>,
+
+	game_display_players: <%= @game_round.display_players %>,
+	game_player_count: <%= @game_round.current_players.count %>,
+	terminal: 'screen',
+	panelState: 'opended',
+	playerState: 'unknown',
+	routes: {}
+}
+
+WechatMore.routes.play_game_url = <%== play_game_round_url(@game_round).to_json %>;
+
+WechatMore.routes.check_in_game_url = <%== check_in_game_round_url(@game_round).to_json %>;
+
+WechatMore.routes.final_rank_url = <%== final_rank_game_round_url(@game_round).to_json %>;
+
+WechatMore.routes.api_v1_next_game_player_path = <%== next_by_position_api_v1_game_round_players_path(@game_round).to_json %>;
+
+WechatMore.routes.api_v1_noaward_game_player_path = <%== noaward_api_v1_game_round_players_path(@game_round).to_json %> ;
+
+WechatMore.routes.api_v1_awarded_game_player_path = <%== awarded_api_v1_game_round_players_path(@game_round).to_json %> ;
+
+WechatMore.routes.api_v1_game_round_awards_path = <%== api_v1_game_round_awards_path(@game_round).to_json %>;
+
+WechatMore.routes.api_v1_game_round_restart_award_path = <%== restart_award_api_v1_game_round_path(@game_round).to_json %>;
+
+WechatMore.routes.api_v1_game_round_reset_path = <%== reset_api_v1_game_round_path(@game_round).to_json %>;
+//WechatMore.routes.api_v1_game_player_base_path = '/api/v1/game_award_player';
+
+WechatMore.routes.api_v1_game_award_players_path = '/api/v1/game_award_players';
+
+WechatMore.routes.api_v1_game_awards_base_path = <%== api_v1_game_awards_path.to_json %>;
+
+
+WechatMore.routes.build_api_v1_game_award_players_path = function(game_award_id){
+  return WechatMore.routes.api_v1_game_awards_base_path+'/'+game_award_id+'/users';
+}
+
+WechatMore.routes.build_api_v1_game_award_player_path = function(game_award_player_id){
+  return WechatMore.routes.api_v1_game_award_players_path+'/'+game_award_player_id;
+}
+
+</script>

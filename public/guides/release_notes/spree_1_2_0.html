@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>    <html class="lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>    <html class="lt-ie9"> <![endif]-->
+<!--[if IE 9]>    <html class="ie9"> <![endif]-->
+<!--[if gt IE 9]><!--> <html lang="en" > <!--<![endif]-->
+<head>
+  <title>Spree 1.2.0 - Release Notes | Spree - Ruby on Rails e-commerce platform</title>
+
+  <meta charset="utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta name="section" content="version" />
+
+<link href="/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+<link href="/shared/css/icons.css" media="screen" rel="stylesheet" type="text/css">
+<link href="/shared/css/icons-codes.css" media="screen" rel="stylesheet" type="text/css">
+
+<link href="/shared/css/skeleton.css" media="screen" rel="stylesheet" type="text/css">
+<link href="/shared/css/documentation.css" media="screen" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="/assets/stylesheets/guides.css" media="screen" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/docsearch.js/2/docsearch.min.css" />
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-migrate/1.1.1/jquery-migrate.min.js"></script>
+<script src="/assets/javascripts/css_browser_selector_dev.js" type="text/javascript"></script>
+<script src="/assets/javascripts/jquery.toc.js" type="text/javascript"></script>
+<script src="/assets/javascripts/documentation.js" type="text/javascript"></script>
+
+
+</head>
+<body class="integration">
+  
+  <header id="header">
+    <div id="top-header">
+  <div class="container">
+    <div class="row">
+      <div class="two columns">
+  <a class="logo" href="http://spreecommerce.org">
+    <img src='/images/logo.png' alt="Spree Commerce - Ruby on Rails e-commerce platform" />
+  </a>
+</div>
+
+      <div class="three columns">
+  <input type="text" id="search-field" placeholder="Search..." />
+</div>
+
+      <nav id="main-menu" class="eleven columns">
+  <ul class="inline">
+    <li><a href="../api/">API</a></li>
+    <li><a href="../developer/">Developer</a></li>
+    <li><a href="../user/">User</a></li>
+    <li><a href="../release_notes/">Release Notes</a></li>
+    <li>
+      <a href="http://slack.spreecommerce.org" target="_blank">Slack</a>
+    </li>
+    <li>
+      <a href="https://heroku.com/deploy?template=https://github.com/spree/spree" target="_blank" rel="nofollow">Demo</a>
+    </li>
+  </ul>
+</nav>
+
+    </div>
+  </div>
+</div>
+
+
+    <div id="subheader">
+      <div class="container">
+        <div class="twelve columns">
+          <h1 class="page-title">Spree 1.2.0 - Release Notes</h1>
+        </div>
+      </div>
+    </div>
+
+  </header>
+
+  <div class="container">
+    <section id="main-content">
+
+      <div class="twelve columns">
+        <div id="content">
+          
+<p>Spree 1.2.0 introduces some fairly major changes in the basic
+architecture of Spree, as well as minor alterations and bugfixes.</p>
+
+<p>Due to the long development cycle of Spree 1.2 in parallel with
+continuing development of the 1.1 branch, there may be features released
+in 1.2 that are already present in 1.1.</p>
+
+<h1 id="summary">Summary</h1>
+
+<p>There were two major topics addressed within this release of Spree:
+custom authentication and better checkout customization.</p>
+
+<p>The first was the ability to use Spree in conjunction with an
+application that already provided its own way to authenticate users. Due
+to how Spree was architected in the past, this was not as easy as it
+could have been. In this release of Spree, the auth component of Spree
+has been removed completely and placed into a separate extension called
+<a href="https://github.com/spree/spree_auth_devise">spree_auth_devise</a>. If
+you wish to continue using this component of Spree, you will need to
+specify this extension as a dependency in your Gemfile. See <a href="https://github.com/spree/spree/pull/1512">Issue
+#1512</a> for more detail about
+the customization.</p>
+
+<p>The checkout process has always been hard to customize within Spree, and
+that has generated complaints in the past. We are pleased to report in
+the 1.2 release of Spree that this has been substaintially easier with a
+new checkout DSL that allows you to re-define the checkout steps in a
+simple manner. For more information about this, please see <a href="https://github.com/spree/spree/pull/1418">Issue
+#1418</a> and <a href="https://github.com/spree/spree/pull/1743">Issue
+#1743</a>.</p>
+
+<p>Along with these two major issues, there were also a ton of minor
+improvements and bug fixes, explained in detail below.</p>
+
+<h1 id="major-changes-backwards-incompatibility">Major changes (backwards incompatibility)</h1>
+
+<h2 id="spreeauth-removal">spree_auth removal</h2>
+
+<p>Authentication is disabled by default within Spree as of this release,
+with the application supposed to be providing its own authentication. If
+you are upgrading an existing Spree installation or just want it to
+work, you can achieve the behaviour of a 1.1 installation by adding
+“spree_auth_devise” to your Gemfile.</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>gem <span class="string"><span class="delimiter">'</span><span class="content">spree_auth_devise</span><span class="delimiter">'</span></span>, <span class="key">git</span>:
+<span class="string"><span class="delimiter">&quot;</span><span class="content">git://github.com/spree/spree_auth_devise</span><span class="delimiter">&quot;</span></span>
+</pre></div>
+</div>
+</div>
+
+<p>For more information on how to customize authentication, please see the
+<a href="http://guides.spreecommerce.org/authentication.html">Authentication
+guide</a>.</p>
+
+<h2 id="state-machine-customizations">State machine customizations</h2>
+
+<p>Customizing the state machine within Spree now does not require you to
+override the entire <em>state_machine</em> definition within Spree’s <em>Order</em>
+model. Instead, you are provided with the ability to define the “next”
+events for <em>Order</em> objects like this:</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="constant">Spree</span>::<span class="constant">Order</span>.class_eval <span class="keyword">do</span>
+  checkout_flow <span class="keyword">do</span>
+    go_to_state <span class="symbol">:address</span>
+    go_to_state <span class="symbol">:delivery</span>
+    go_to_state <span class="symbol">:payment</span>, <span class="key">if</span>: lambda { payment_required? }
+    go_to_state <span class="symbol">:confirm</span>, <span class="key">if</span>: lambda { confirmation_required? }
+    go_to_state <span class="symbol">:complete</span>
+    remove_transition <span class="key">from</span>: <span class="symbol">:delivery</span>, <span class="key">to</span>: <span class="symbol">:confirm</span>
+  <span class="keyword">end</span>
+<span class="keyword">end</span>
+</pre></div>
+</div>
+</div>
+
+<p>For more information about customizing the checkout process within
+Spree, please see the <a href="http://guides.spreecommerce.org/checkout.html">Checkout
+guide</a>.</p>
+
+<h1 id="minor-changes">Minor changes</h1>
+
+<h2 id="hasrole-apikey-and-roles-methods-now-namespaced">has_role?, api_key and roles methods now namespaced</h2>
+
+<p>On a usr object, the <em>has_role?</em> method is now called
+<em>has_spree_role?</em>, the <em>api_key</em> method is called <em>spree_api_key</em>
+and the <em>roles</em> association is now called <em>spree_roles</em>. This allows
+for applications to define their own <em>has_role?</em>, <em>api_key</em> and
+<em>roles</em> methods without them conflicting with the methods defined within
+Spree.</p>
+
+<h2 id="introduce-spreeproductmasterimages-and-spreeproductvariantimages">Introduce Spree::Product#master_images and Spree::Product#variant_images</h2>
+
+<p><em>Spree::Product#master_images</em> and its alias <em>Spree::Product#images</em>
+only returns images belongs to master variant.</p>
+
+<p><em>Spree::Product#variant_images</em> behaviour is changed, it is no longer
+return only images belongs to master variants but now also include all
+variants’ images.</p>
+
+<h2 id="spreezonecountrylist-renamed-to-zonememberlist">Spree::Zone#country_list renamed to #zone_member_list</h2>
+
+<p>Please be noted that the underlying logics remain intact.</p>
+
+<h2 id="spreecreditcard-renamed-to-spreecreditcard">Spree::Creditcard renamed to Spree::CreditCard</h2>
+
+<p>All occurences of Creditcard are changed to CreditCard to better follow
+Rails naming conventions.</p>
+
+<h2 id="assert-that-imagemagick-is-installed-during-spree-installation">Assert that ImageMagick is installed during Spree installation</h2>
+
+<p>When installing Spree, if the ImageMagick library was not installed on
+the system, then the <em>identify</em> command that Paperclip uses would fail
+and sample product images would not appear.</p>
+
+<p>There is now a <a href="https://github.com/spree/spree/commit/a6deb62">check in
+place</a> to ensure that
+ImageMagick is installed before Spree is.</p>
+
+<h2 id="sass-variables-can-now-be-overriden">Sass variables can now be overriden</h2>
+
+<p>The variable definitions for the sass files of Spree have been moved to
+a separate file within Core called
+<em>app/assets/stylesheets/store/variables.css.scss</em>. You can override this
+file within your application in order to re-define the colors and other
+variables that Spree uses for its stylesheets.</p>
+
+<h2 id="added-support-for-serialized-preferences">Added support for serialized preferences</h2>
+
+<p>Preferences can now be defined as serialized. See
+<a href="https://github.com/spree/spree/commit/7415323">7415323</a> for more
+information.</p>
+
+<h2 id="new-ui-for-defining-taxons-and-option-types-for-a-product">New UI for defining taxons and option types for a product</h2>
+
+<p>Rather than having the taxons and option types related to a product on
+two completely separate pages, they are now included on the product edit
+form. This functionality is provided by the Select2 JavaScript plugin,
+and will fall back to a typical select box if JavaScript is not
+available.</p>
+
+<h2 id="using-the-money-gem-to-display-currencies">Using the Money gem to display currencies</h2>
+
+<p>In earlier versions of Spree, we used <em>number_to_currency</em> to display
+prices for products. This caused a problem when somebody selected a
+different I18n locale, as the prices would be displayed in their
+currency: 20 Japanese Yen, rather than 20 American Dollars, for
+instance.</p>
+
+<p>To fix this problem, we’re now parsing the prices through the Money gem
+which will display prices consistently across all I18n locales. To now
+change the currency for your site, go to Admin, then Configuration, then
+General Settings. Changing the currency will only change the currency
+symbol across all prices of your store.</p>
+
+<p>Note: After the 1.2.0 release, more options to format the currency
+output have been introduced. Specifically the position of the currency
+symbol which is fixed to :before in 1.2.0 can be adjusted. To achieve
+this in the 1.2.0, you may wish to override the Spree::Money.to_s
+function.</p>
+
+<h1 id="tiny-changes--bugfixes">Tiny changes / bugfixes</h1>
+
+<h2 id="general">General</h2>
+
+<ul>
+  <li>Replaced uses of deprecated jQuery method live with on
+(<a href="https://github.com/spree/spree/commit/273987d">273987d</a>)</li>
+</ul>
+
+<h2 id="api">API</h2>
+
+<ul>
+  <li>Added ability to make shipments ready and declare them shipped
+(<a href="https://github.com/spree/spree/commit/e933f36">e933f36</a>)</li>
+  <li>Added payments and shipments information to order data returned from
+the API (<a href="https://github.com/spree/spree/commit/8c2aaef">8c2aaef</a>)</li>
+  <li>Add ability to credit payments through the order
+(<a href="https://github.com/spree/spree/commit/320599a">320599a</a>)</li>
+  <li>Added the ability to update an order
+(<a href="https://github.com/spree/spree/commit/ab1e23b">ab1e23b</a>)</li>
+  <li>Added the ability to search for products
+(<a href="https://github.com/spree/spree/commit/024b22a">024b22a</a>)</li>
+  <li>Added zones
+(<a href="https://github.com/spree/spree/commit/b522703">b522703</a>
+<a href="https://github.com/spree/spree/issues/1615">#1615</a>)</li>
+  <li>Allow orders to be paginated
+(<a href="https://github.com/spree/spree/commit/873e9f8">873e9f8</a>)</li>
+</ul>
+
+<h2 id="core">Core</h2>
+
+<ul>
+  <li>Added more products in sample data
+(<a href="https://github.com/spree/spree/commit/6b66b3a">6b66b3a</a>)</li>
+  <li>Sample products now have product properties associated with them
+(<a href="https://github.com/spree/spree/commit/c71ef3a">c71ef3a</a>)</li>
+  <li>Product images are now sorted by their position
+(<a href="https://github.com/spree/spree/commit/5115377">5115377</a>)</li>
+  <li>The configuration menu/sidebar will now display on
+<em>/admin/shipping_categories/index</em>
+(<a href="https://github.com/spree/spree/commit/459b5d0">459b5d0</a>)</li>
+  <li>Datepickers are now localized in the admin backend
+(<a href="https://github.com/spree/spree/commit/e5f1680">e5f1680</a>)</li>
+  <li>You can now click on a product name in <em>/admin/products/</em> list to go
+to that product
+(<a href="https://github.com/spree/spree/commit/f2e9cc3">f2e9cc3</a>)</li>
+  <li>Defining of Spree::Image helper methods is done on the fly now
+(<a href="https://github.com/spree/spree/commit/ff0c837">ff0c837</a>)</li>
+  <li>Account for purchased units in stock validation
+(<a href="https://github.com/spree/spree/commit/7c4cd77">7c4cd77</a>)</li>
+  <li>Sort all order adjustments by their created_at timestamp
+(<a href="https://github.com/spree/spree/commit/aef2fd9">aef2fd9</a>)</li>
+  <li>Use <em>ransack</em> method on classes rather than <em>search</em>, as this may be
+defined by an extension
+(<a href="https://github.com/spree/spree/commit/4fabc52">4fabc52</a>)</li>
+  <li>Fix issue where redeeming a coupon code for a free product did not
+apply the coupon
+(<a href="https://github.com/spree/spree/commit/2459f75">2459f75</a>
+<a href="https://github.com/spree/spree/issues/1589">#1589</a>)</li>
+  <li>Specify class name for all <em>belongs_to</em> associations
+(<a href="https://github.com/spree/spree/commit/94a6859">94a6859</a>)</li>
+  <li>Don’t rename users table if <em>User</em> constant is defined
+(<a href="https://github.com/spree/spree/commit/c77c822">c77c822</a>)</li>
+  <li>Removed all references to link_to_function throughout Spree,
+replace with 100% JavaScript</li>
+  <li>Moved <em>get_taxonomies</em> helper method out of
+<em>Spree::Core::ControllerHelpers</em> into <em>Spree::ProductsHelper</em>
+(<a href="https://github.com/spree/spree/commit/980348a">980348a</a>)</li>
+</ul>
+
+<h2 id="promo">Promo</h2>
+
+<ul>
+  <li>Coupon code input is now displayed on the cart page
+(<a href="https://github.com/spree/spree/commit/c030671">c030671</a>)</li>
+  <li>Only acknowledge coupon codes for promos that have the
+‘spree.checkout.coupon_code_added’ event
+(<a href="https://github.com/spree/spree/commit/4158979">4158979</a>)</li>
+</ul>
+
+
+        </div>
+      </div>
+
+    </section>
+
+    <aside id="sidebar" class="four columns">
+  <nav id="sidebar-menu">
+    <ul>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-version-menu"><i class="icon-right-open"></i></a>
+          <a href='#.html'>Versions</a>
+        </h3>
+        <ul class="js-guides">
+          <li><i class="icon-dot"></i><a href='spree_3_4_0.html'>3.4.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_3_3_0.html'>3.3.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_3_2_0.html'>3.2.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_3_1_0.html'>3.1.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_3_0_0.html'>3.0.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_2_4_0.html'>2.4.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_2_3_0.html'>2.3.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_2_2_0.html'>2.2.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_2_1_0.html'>2.1.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_2_0_0.html'>2.0.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_1_3_0.html'>1.3.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_1_2_2.html'>1.2.2</a></li>
+          <li><i class="icon-dot"></i><a href='spree_1_2_0.html'>1.2.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_1_1_4.html'>1.1.4</a></li>
+          <li><i class="icon-dot"></i><a href='spree_1_1_0.html'>1.1.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_1_0_0.html'>1.0.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_0_70_0.html'>0.70.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_0_60_0.html'>0.60.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_0_50_0.html'>0.50.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_0_40_0.html'>0.40.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_0_30_0.html'>0.30.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_0_10_0.html'>0.10.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_0_9_0.html'>0.9.0</a></li>
+        </ul>
+      </li>
+    </ul>
+  </nav>
+</aside>
+
+  </div>
+
+  <footer id="main-footer">
+
+  <div class="footer-top">
+    <div class="container">
+      <div id="link-blocks" class="row">
+        <div class="link-block six columns">
+          <h3 class="block-title">Developers</h3>
+          <ul>
+            <li><a href="https://slack.spreecommerce.org" target="_blank" rel="nofollow">Slack</a></li>
+            <li><a href="https://github.com/spree-contrib" target="_blank">Extensions</a></li>
+            <li><a href="https://github.com/spree/spree/blob/master/license.md" target="_blank">License</a></li>
+          </ul>
+        </div>
+        <div class="link-block seven columns">
+          <h3 class="block-title">About Spree</h3>
+          <p>
+            <strong><a href="https://spreecommerce.org">Spree Commerce</a></strong>
+            is a complete modular, API-driven open source e-commerce solution
+            built with Ruby on Rails.
+          </p>
+          <p>
+            Guides are hosted and maintained by
+            <a href="http://sparksolutions.co" target="_blank">Spark Solutions</a>
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</footer>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-104990445-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/docsearch.js/2/docsearch.min.js"></script>
+<script type="text/javascript"> docsearch({
+apiKey: 'fb697cd2d04591b036ea172259c05ba8',
+indexName: 'spreecommerce',
+inputSelector: '#search-field',
+debug: false // Set debug to true if you want to inspect the dropdown
+});
+</script>
+
+
+  </body>
+</html>

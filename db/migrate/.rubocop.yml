@@ -1,0 +1,11 @@
+inherit_from:
+  - ../../.rubocop.yml
+
+MethodLength:
+  Max: 200
+
+SpaceBeforeFirstArg:
+  Enabled: false
+
+CyclomaticComplexity:
+  Max: 8

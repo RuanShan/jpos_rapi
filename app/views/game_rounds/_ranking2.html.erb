@@ -1,0 +1,22 @@
+<div class="ranking-wrap">
+  <p> 当前排名 <span class="playerCurrentPosition"><%= @current_player.current_position %> </span> </p>
+
+  <div class="ranking">
+    <div class="m_clear m_tac strong head">
+      <div class="width-1-4"> 排行 </div>
+      <div class="width-1-4"> 头像 </div>
+      <div class="width-1-4"> 昵称</div>
+      <div class="width-1-4"> 成绩</div>
+    </div>
+    <div class="players">
+    <% @game_players.each_with_index{ |game_player, i| %>
+      <div class="m_clear player">
+        <div class="width-1-4 rank"> <%= "No.#{i+1}"%> </div>
+        <div class="width-1-4 avatar"> <%= tag('img', src: game_player.avatar, width: 50, height: 50) %> </div>
+        <div class="width-1-4"> <%= game_player.nickname%> </div>
+        <div class="width-1-4"> <%= "#{game_player.score}分" %> </div>
+      </div>
+    <% } %>
+    </div>
+  </div>
+</div>

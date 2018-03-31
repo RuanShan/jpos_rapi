@@ -1,0 +1,103 @@
+<% content_for :game_asset_css do %>
+  <%= stylesheet_link_tag    'game/yhzy_ido/all', media: 'all', 'data-turbolinks-track' => true %>
+<% end %>
+
+<% content_for :game_asset_js do %>
+  <%= javascript_include_tag "game/yhzy_ido/all", media: 'all','data-turbolinks-track' => true %>
+<% end %>
+
+<div id="js_musicBtn" class="musicBtn" style="display: block;">
+        <div></div>
+        <div style="display: none;">
+          <%= audio_tag 'game/yhzy_ido/bg.ogg', loop: true, id: 'bgMusic' %>
+        </div>
+</div>
+
+<!-- Swiper -->
+<div class="swiper-container">
+    <div class="swiper-wrapper">
+        <div class="swiper-slide slide9 swiper-no-swiping" data-step="9">
+
+          <div class="wedding"> </div>
+          <div class="btnWrap" >
+            <a id="j-wedding-btn" class="wedding-btn next-slide-btn"> <%= image_tag 'game/yhzy_ido/start-jhj.png' %></a>
+          </div>
+        </div>
+        <div class="swiper-slide slide10 swiper-no-swiping" data-step="10">
+          <%= simple_form_for :game_player, url: game_players_path, class: 'form-horizontal', html: { id: 'j-wedding-photo-form'} do |f|%>
+
+            <%= f.hidden_field 'game_round_id', value: @game_round.id %>
+            <%= f.hidden_field 'openid', value: session[:openid] %>
+          <ul class="player-photo-upload">
+            <li class="male-image-wrap">
+              <%= image_tag 'game/yhzy_ido/ten1_03.png', class: 'z2_case', id:'j-photo-1' %>
+              <input id="file_left" type="file" name="male[image]"  accept="image/*">
+            </li>
+            <li class="female-image-wrap">
+              <%= image_tag 'game/yhzy_ido/ten1_05.png', class: 'z2_case', id:'j-photo-2' %>
+              <input id="file_right" type="file" name="female[image]" accept="image/*">
+            </li>
+          </ul>
+            <ul class="player-form-wrap">
+            <li class="lft  male-image-wrap">
+              <div class="clearfix">
+                <label for="male_realname" class="nax">姓名</label><input  id="male_realname" name="game_player[realname]" type="text" class="nax1">
+              </div>
+              <div class="clearfix">
+                <label class="nax2">出生日期</label><input id="male_birth" name="game_player[birth]" type="text" class="nax3 dpicker" readonly="readonly">
+              </div>
+
+            </li>
+            <li class="lft female-image-wrap">
+              <div class="clearfix">
+                <label for="female_realname" class="nax">姓名</label><input  id="female_realname" name="female[realname]" type="text" class="nax1">
+                <label class="nax2">出生日期</label><input id="female_birth" name="female[birth]" type="text" class="nax3 dpicker"  readonly="readonly">
+              </div>
+              <a id="j-make-photo-btn" class="make-photo "> 生成</a>
+            </li>
+          </ul>
+            <%= hidden_field_tag 'base64_image'  %>
+          <% end %>
+          <%= image_tag 'game/yhzy_ido/ten1_17.png', class:'tuu' %>
+	        <p class="ten2">I Do全城说爱--双十一让我们来一场高逼格的告白行动</p>
+        </div>
+        <div class="swiper-slide slide11 swiper-no-swiping" data-step="11">
+          <%= image_tag 'game/yhzy_ido/ten_04.jpg', id:'j-wedding-bg', style:'display:none;' %>
+          <div id="j-image-wrap" class="image-wrap">
+            <% if @game_player.try(:wedding_photo) %>
+              <img src="<%=@game_player.wedding_photo.image.url %>" id="j-wedding-image">
+            <% else %>
+              <img src="" id="j-wedding-image">
+            <% end %>
+            <a class="save-image-btn"> 长按图片<br/>保存 </a>
+          </div>
+
+          <div class="image-style-wrap">
+            <div class='image-style style1'><p>推荐-心动系列</p>
+            <%= image_tag 'game/yhzy_ido/style1.png' %>
+            </div>
+            <div class='image-style style2'><p>推荐-360°爱系列</p>
+            <%= image_tag 'game/yhzy_ido/style2.png' %>
+            </div>
+            <div class='image-style style3'><p>推荐-真爱加冕系列</p>
+            <%= image_tag 'game/yhzy_ido/style3.png' %>
+            </div>
+            <div class='image-style style4'><p>推荐-纪念日系列</p>
+            <%= image_tag 'game/yhzy_ido/style4.png' %>
+            </div>
+          </div>
+
+          <div>
+          <p class="ten2">I Do全城说爱--双十一让我们来一场高逼格的告白行动</p>
+          </div>
+
+        </div>
+    </div>
+    <!-- Add Pagination -->
+    <div class="swiper-pagination"></div>
+</div>
+<!-- Swiper JS -->
+<%= javascript_tag do %>
+WechatMore.game_player_id = <%= @game_player.try(:id).to_i %>;
+WechatMore.isGamePlayerExist = <%= !!@game_player_by_openid.try(:id) %>;
+<% end %>

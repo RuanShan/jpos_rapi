@@ -1,0 +1,195 @@
+@charset "utf-8";
+@import "weui.min";
+@import "jquery-weui.min";
+@import "game/runlin_car_game/tab";
+/* CSS Document */
+
+/* 公共 */
+* {margin:0px; padding:0px; border:0px;
+	-webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+}
+html {-ms-touch-action: none;}
+img {vertical-align: top;}
+body{padding:0px;margin:0px; font-family: "微软雅黑"; font-size: 14px; border: 0px; background:image-url('game/runlin_car_game/allBg.gif') repeat;}
+li {list-style:none;}
+a{color:#000; text-decoration:none;}
+.m_clear{zoom:1;}
+.m_clear:after{content:"";display:block;clear:both;}
+.m_porR {position: relative;}
+.m_porA {position: absolute;}
+.m_fl {float:left;}
+.m_fr {float:right;}
+.m_db {display: block;}
+.m_dn {display:none;}
+.m_oh {overflow:hidden;}
+.m_w100,.wrapper {width:100%;}
+.m_h100 {height:100%;}
+.m_wp50{ width: 50%;}
+.m_mAuto {margin: 0 auto;}
+.m_tac {text-align:center;}
+.m_bgn,.orderArea input,.orderAreaSub,.oASel {background:none;}
+.m_oN {opacity:0;}
+.cfff {color:#fff;}
+.c7b4f1a {color:#7b4f1a;}
+.c382a04 {color:#382a04;}
+.cf00 {color:#f00;}
+.m_fs10 {font-size:10px;}
+.m_fs12 {font-size:12px;}
+.m_fs14 {font-size:14px;}
+.m_fs16 {font-size:16px;}
+.m_ts1 {-webkit-transition: all ease 1s;}
+.ellipsis {  text-overflow: ellipsis;   overflow: hidden;    white-space: nowrap; }
+.legend {z-index:2;font-size:0px;}
+
+/*预约试驾*/
+.orderBgWrap {top:0;left:50%;z-index:1;}
+.orderBg {background:rgba(0, 42, 106, 0.5);}
+.oAfanhuiArea,.orderArea,.orderAreaBtn {background:image-url('game/runlin_car_game/orderImg.png') no-repeat;background-size:100%;}
+.orderArea input,.orderAreaSub {border:none;outline:medium;}
+.oASel {-webkit-appearance: none;}
+.error { text-align:center;color:#fff;}
+
+/*弹框*/
+.tk {top:0;left:0;z-index:4;background:image-url('game/runlin_car_game/tkBg.png') no-repeat;background-size:100% 100%;}
+/*最后成绩*/
+.tkb{
+
+	.qrcodeWrap{
+		background-color: #fff;
+		.closeBtn{
+			position: absolute;
+			right: -20px;
+			top: -20px;
+			width: 40px;
+			height: 40px;
+			background: image-url('game/close.png') no-repeat  #4F4644;
+			background-size: 60%;
+			background-position: center;
+			border-radius: 100%;
+		}
+		img{
+			margin: 8px 0;
+			padding: 0 8px;
+			width: 100%;
+		}
+		position: absolute;
+		top:0;
+		right: 0;
+		left: 0;
+		display: none;
+		z-index: 2;
+	}
+	.contactWrap{
+		p{ text-align: center; }
+		label.error { color: red; }
+		input.error { text-align: left; border: 1px solid red;  color: black;}
+
+		h3{ text-align: center; }
+		.game_player_message{ color: #ff0000;}
+		background-color: #fff;
+		.closeBtn{
+
+		}
+
+		position: absolute;
+		top:80px;
+		right: 0;
+		left: 0;
+		bottom: 0;
+		display: none;
+		z-index: 2;
+    padding: 20px 20px;
+		form{ margin: 10px 0;}
+		input{
+			background-color: white;
+			cursor: auto;
+			padding: 6px;
+			border: 1px solid #ccc;
+			display: inline-block;
+			width: 175px;
+		}
+		label.fieldname{
+			padding: 0 6px;
+		}
+		.form-group{
+			margin: 0 0 10px 0;
+		}
+
+		.scoreBtn {
+		    border-radius: 12px;
+				background:image-url('game/runlin_car_game/scoreBtn.png') repeat-x;background-size:contain; color:#fff;
+		    background-size: contain;
+		    color: #fff;
+		    padding: 3px 0;
+				display: block;
+				width: 100px;
+				margin: 6px auto;
+				background-color: silver;
+				text-align: center;
+		}
+	}
+	.avatarWrap
+	{
+		position: relative;
+		background-color: #4F4644;
+		border-radius: 8px 8px 0 0;
+		padding: 10px 0 15px;
+		height: 80px;
+		text-align: center;
+
+		img{
+			border-radius: 100%;
+		}
+		.mask{
+			position: absolute;
+			bottom: 0;
+			height: 25px;
+			right: 0;
+			left: 0;
+			background-image: image-url('game/runlin_car_game/avatarMask.png');
+			background-repeat: no-repeat;
+			background-size: contain;
+			background-position: center bottom;
+		}
+	}
+	.scoreArea, .scoreAreaLoad
+	{
+		background-color: #fff;
+		border-radius: 0 0 8px 8px;
+		padding: 20px 0 ;
+	}
+}
+.tkH2a {background:image-url('game/runlin_car_game/tit1.png') no-repeat;background-size:100% 100%;}
+.tkH2b {background:image-url('game/runlin_car_game/tit2.png') no-repeat;background-size:100% 100%;}
+.tkH2c {background:image-url('game/runlin_car_game/tit3.png') no-repeat;background-size:100% 100%;}
+.tkGb {width:30%;}
+.scoreArea {
+	.scoreBtn{ border-radius: 12px;
+		background:image-url('game/runlin_car_game/scoreBtn.png') repeat-x;background-size:contain; color:#fff;
+		padding: 3px 0;
+  }
+	.scoreBox{ margin-bottom: 8px ;}
+	.optionBox a{
+		display: block;		width: 200px;		margin: 6px auto;		background-color: silver; text-align: center;
+	}
+	.linkBox a{
+		display: block; width: 100px;		margin: 5px auto;		background-color: silver; text-align: center;
+	}
+}
+#noCanvas,#noCanvas p {font-size:0px;}
+.scoreAreaLoad {width:20%;margin-top:20%;}
+.saBot a {width:50%;}
+
+/*弹框轮播*/
+.focus{ width:81.25%; height:78.5%;  margin:0 auto; position:relative; overflow:hidden;   }
+.focus .hd{ width:100%; height:11px;  position:absolute; z-index:1; bottom:20px; text-align:center;  }
+.focus .hd ul{ display:inline-block; height:19px; padding:3px 5px;
+	-webkit-border-radius:5px; -moz-border-radius:5px; border-radius:5px; font-size:0; vertical-align:top;
+}
+.focus .hd ul li{ display:inline-block; width:16px; height:19px; -webkit-border-radius:5px; -moz-border-radius:5px; border-radius:5px;background:image-url('game/runlin_car_game/focusBtn.png') no-repeat;margin:0 5px;  vertical-align:top; overflow:hidden;   }
+.focus .hd ul .on{ background:image-url('game/runlin_car_game/focusBtnOn.png') no-repeat;  }
+.focus .bd{ position:relative; z-index:0; }
+.focus .bd li img{ width:100%; }
+.focus .bd li a{ -webkit-tap-highlight-color:rgba(0, 0, 0, 0); /* 取消链接高亮 */  }

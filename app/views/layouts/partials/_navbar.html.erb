@@ -1,0 +1,36 @@
+<nav class='navbar navbar-inverse navbar-toggleable-sm fixed-top bg-inverse'>
+  <button class='navbar-toggle navbar-toggler-right' data-target='.navbar-collapse' data-toggle='collapse'>
+    <i class='fa fa-reorder fa-lg'></i>
+  </button>
+   <%= link_to branding_text, case_root_path, class: 'navbar-brand' %>
+  <div class='collapse navbar-collapse' id='top-nav-content'>
+    <ul class='nav navbar-nav mr-auto'>
+      <li class='nav-item'>
+        <%= build_nav_link t('menu.home'), root_path %>
+      </li>
+      <li class='nav-item'>
+        <%= build_nav_link t('menu.help'), help_path %>
+      </li>
+    </ul>
+    <ul class='nav navbar-nav navbar-right'>
+      <% if user_signed_in? %>
+        <li class='nav-item'>
+          <%= link_to edit_user_registration_path, class: "nav-link" do %>
+            <%= image_tag(current_user.avatar_url, size: '20x20', class: 'avatar') + current_user.username + fa_icon('cog') %>
+          <% end %>
+        </li>
+        <li class='nav-item'>
+          <%= link_to t('menu.logout'), destroy_user_session_path,  data: {method: 'delete'}, class:'nav-link' %>
+        </li>
+      <% else %>
+        <li class='nav-item'>
+        <%= link_to t('menu.login'), new_user_session_path, class:'nav-link' %>
+        </li>
+        <li class='nav-item'>
+        <%= link_to t('menu.register'), new_user_registration_path, class:'nav-link' %>
+        </li>
+      <% end %>
+
+    </ul>
+  </div>
+</nav>

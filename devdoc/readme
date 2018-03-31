@@ -1,0 +1,106 @@
+
+#################################################################
+功能说明
+
+微信开放平台授权
+https://github.com/free1/omniauth-open_wechat
+
+微信公众号第三方平台SDK
+https://github.com/chunhei2008/EasyOpenWechat
+
+#debug
+http://localhost/game_rounds/1/play?openid=oK3d3s7-tR8nRvs2SUV35gPLowr8
+
+#################################################################
+bundle exec puma -e production -b unix:///tmp/wechatmore.sock -d
+ps aux|grep puma
+
+sudo kill $(cat /opt/nginx/logs/nginx.pid)
+sudo /opt/nginx/sbin/nginx
+
+##################################################################
+参考
+https://item.taobao.com/item.htm?spm=a230r.1.14.258.DHIp68&id=551460869539&ns=1&abbucket=8#detail
+http://www.wx866.com/app/index.php?i=240&c=entry&rid=1&small=0&do=lizi&m=meepo_xianchang
+
+cjx' 抽奖箱
+ddp' 缘分对对碰
+xyh 幸运号码
+zjd 砸金蛋
+redpack 红包
+xc 相册
+dm 上墙弹幕
+xysjh 幸运手机号
+lizi 粒子签到
+#################################################################
+调试常用命令
+
+
+http://simplemodal.plasm.it
+
+
+#################################################################
+
+# 数钱游戏流程
+# 大屏幕控制端                            手机游戏端
+#    点击开始                             等待开始命令
+#    开始倒计时->同步所有游戏端             开始倒计时
+#    游戏正式开始->同步所有游戏端           游戏开始，游戏时间倒计时
+#    显示游戏排行                         显示游戏得分
+#    游戏倒计时结束                       游戏倒计时结束,报告分数
+#    发送游戏结束通知
+#    显示最终结果
+
+# http://wechat-natapp.firecart.cn/api/v1/wechat
+
+# api sample
+# https://ruby-china.org/topics/25822
+
+# api 使用前提
+# 1. 創建用戶，設置用戶 api_token
+# 2.
+
+#api 使用
+
+1. 活動
+  活动列表
+  新建活动
+  删除活动
+  获取单个活动
+2. 遊戲分類
+
+3. 遊戲
+游戏列表
+新建游戏
+修改游戏
+删除游戏
+获取单个游戏信息
+
+4. 遊戲獎項
+获取游戏奖项列表
+新建游戏奖项
+删除游戏奖项
+修改游戏奖项
+获取单个游戏奖项信息
+
+5. 遊戲用戶
+获取游戏用户列表
+获取单个游戏用户信息
+
+6. 游戏获奖用户
+获取游戏获奖用户列表
+获取单个游戏获奖用户信息
+
+command
+#################################################################
+rvmsudo rails s -p80
+
+bootswatch yeti
+#################################################################
+https://github.com/thomaspark/bootswatch
+
+
+
+folder structure
+#################################################################
+app/api   外部API调用

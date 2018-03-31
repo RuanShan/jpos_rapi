@@ -1,0 +1,25 @@
+<% content_for :title do %>
+<%= t "site.name" %>
+<% end %>
+<div class="container">
+  <div class="row">
+    <div class="col-md-8">
+      <h1>
+        欢迎使用软山互动系统
+      </h1>
+      <br/>
+      <br/>
+      <p>Open source project illustrating a basic web application using Rails 4.2, Ruby 2.0, Devise and Bootstrap 3.</p>
+
+      <p>
+        <%= t('private.welcome_html', default: '') %>
+      </p>
+    </div>
+    <% unless current_user %>
+      <div class="col-md-4">
+        <%= render 'shared/login_form' %>
+      </div>
+    <% end %>
+  </div>
+
+</div>

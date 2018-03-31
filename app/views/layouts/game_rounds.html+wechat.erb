@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" />
+<meta name="x5-orientation" content="portrait">
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+<meta name="format-detection" content="telephone=no" />
+<title> <%= @game_round.name %></title>
+<%= csrf_meta_tags %>
+<%= favicon_link_tag %>
+<%= javascript_include_tag "jweixin-1.2.0" %>
+<%= yield :game_asset_css %>
+<%= render "shared/initialize_js" %>
+
+</head>
+  <body style="background-image:url(<%= mobile_background_url(@game_round)%>)">
+    <div class="page">
+      <%= yield :sidebar %>
+      <div  class="main">
+         <%= yield %>
+      </div>
+    </div>
+
+  <%= yield :game_asset_js %>
+  <%= wechat_config_js debug: false, api: %w(hideMenuItems closeWindow onMenuShareTimeline onMenuShareAppMessage chooseImage previewImage uploadImage) -%>
+  </body>
+
+</html>

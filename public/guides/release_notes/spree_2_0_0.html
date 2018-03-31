@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>    <html class="lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>    <html class="lt-ie9"> <![endif]-->
+<!--[if IE 9]>    <html class="ie9"> <![endif]-->
+<!--[if gt IE 9]><!--> <html lang="en" > <!--<![endif]-->
+<head>
+  <title>Spree 2.0.0 - Release Notes | Spree - Ruby on Rails e-commerce platform</title>
+
+  <meta charset="utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta name="section" content="version" />
+
+<link href="/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+<link href="/shared/css/icons.css" media="screen" rel="stylesheet" type="text/css">
+<link href="/shared/css/icons-codes.css" media="screen" rel="stylesheet" type="text/css">
+
+<link href="/shared/css/skeleton.css" media="screen" rel="stylesheet" type="text/css">
+<link href="/shared/css/documentation.css" media="screen" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="/assets/stylesheets/guides.css" media="screen" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/docsearch.js/2/docsearch.min.css" />
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-migrate/1.1.1/jquery-migrate.min.js"></script>
+<script src="/assets/javascripts/css_browser_selector_dev.js" type="text/javascript"></script>
+<script src="/assets/javascripts/jquery.toc.js" type="text/javascript"></script>
+<script src="/assets/javascripts/documentation.js" type="text/javascript"></script>
+
+
+</head>
+<body class="integration">
+  
+  <header id="header">
+    <div id="top-header">
+  <div class="container">
+    <div class="row">
+      <div class="two columns">
+  <a class="logo" href="http://spreecommerce.org">
+    <img src='/images/logo.png' alt="Spree Commerce - Ruby on Rails e-commerce platform" />
+  </a>
+</div>
+
+      <div class="three columns">
+  <input type="text" id="search-field" placeholder="Search..." />
+</div>
+
+      <nav id="main-menu" class="eleven columns">
+  <ul class="inline">
+    <li><a href="../api/">API</a></li>
+    <li><a href="../developer/">Developer</a></li>
+    <li><a href="../user/">User</a></li>
+    <li><a href="../release_notes/">Release Notes</a></li>
+    <li>
+      <a href="http://slack.spreecommerce.org" target="_blank">Slack</a>
+    </li>
+    <li>
+      <a href="https://heroku.com/deploy?template=https://github.com/spree/spree" target="_blank" rel="nofollow">Demo</a>
+    </li>
+  </ul>
+</nav>
+
+    </div>
+  </div>
+</div>
+
+
+    <div id="subheader">
+      <div class="container">
+        <div class="twelve columns">
+          <h1 class="page-title">Spree 2.0.0 - Release Notes</h1>
+        </div>
+      </div>
+    </div>
+
+  </header>
+
+  <div class="container">
+    <section id="main-content">
+
+      <div class="twelve columns">
+        <div id="content">
+          
+<h2 id="majornew-features">Major/new features</h2>
+
+<h3 id="general">General</h3>
+
+<h4 id="removing-support-for-ruby-187">Removing support for Ruby 1.8.7</h4>
+
+<p>Support for Ruby 1.8.7 is going away in this major release. If you are still using
+1.8.7,  it is time to upgrade.
+<a href="https://blog.engineyard.com/2012/ruby-1-8-7-and-ree-end-of-life">Ruby 1.8.7 is End of Life’d at the end of June</a></p>
+
+<p>Upgrading to Ruby 1.9.3 or higher is highly encouraged. Spree 2.0 and above supports Ruby 2.</p>
+
+<h4 id="splitting-up-core">Splitting up core</h4>
+
+<p>A lot of people have requested the ability to use either the backend or the
+frontend separately from the other. We did a lot of work toward this goal as part of
+<small><a href="https://github.com/spree/spree/issues/2225">#2225</a></small> and now Spree is split up
+into the following components:</p>
+
+<ul>
+  <li>API</li>
+  <li><strong>Backend</strong></li>
+  <li>Core</li>
+  <li>Dash</li>
+  <li><strong>Frontend</strong></li>
+  <li>Sample</li>
+</ul>
+
+<p>The <strong>Backend</strong> component provides the admin interface for Spree and the
+<strong>Frontend</strong> component provides the frontend user-facaing checkout interface. These
+components were extracted out of Core to allow for users of Spree to override the frontend
+or backend functionality of Spree as they choose. Core now contains just the very basic
+needs for Spree.</p>
+
+<p>Along with this work, the Promo engine has now been merged with Spree core. We
+saw that there was a lot of hackery going on to get promos to work with Core,
+and a lot of stores want promos anyway, and so merging them made sense.</p>
+
+<p>Additionally, as part of this work, the spree_core assets have been renamed.
+In <code>store/all.css</code> and <code>store/all.js</code>, you will need to rename the references
+from <code>spree_core</code> to <code>spree_frontend</code>. Similarly to this, in <code>admin/all.css</code>
+and <code>admin/all.js</code>, you will need to rename the references from <code>spree_core</code>
+to <code>spree_backend</code>.</p>
+
+<h4 id="split-shipments">Split shipments</h4>
+
+<p>Complex Spree stores require sophisticated shipping and warehouse logic that Spree hasn’t had a general solution for until now. Split shipments in Spree allows for multiple shipments per order and for those shipments to be shipped from multiple locations.</p>
+
+<p>There are 4 main components that make up split shipments: Stock Locations, Stock Items, Stock Movements and Stock Transfers.</p>
+
+<h5 id="stock-locations">Stock locations</h5>
+
+<p>Stock locations are the locations where your inventory is shipped from. Each stock location can have many stock items. When creating a new stock location, stock items for that location are automatically created for each variant in your store.</p>
+
+<p>Having multiple stock locations allows for more robust shipping options. For example, if an item in an order is out of stock at the location of the other items in a order, a new shipment may be created if that item is found to be in stock at another location.</p>
+
+<p>You are also able to create and manage orders that have items from multiple locations by using the improved admin interface.</p>
+
+<h5 id="stock-items">Stock items</h5>
+
+<p>Stock Items represent the inventory at a stock location for a specific variant. Stock item count on hand can be increased or decreased by creating stock movements. Because these are created automatically for each location you create, there is no need to manually manage these.</p>
+
+<h5 id="stock-movements">Stock movements</h5>
+
+<p>Stock movements allow you to manage the inventory of a stock item for a stock location. Stock movements are created in the admin interface by first navigating to the product you want to manage. Then, follow the Stock Management link in the sidebar.</p>
+
+<p>For more information on split shipments and how they pertain to inventory management, read the <a href="http://edgeguides.spreecommerce.com/developer/inventory.html">Inventory Guide</a>.</p>
+
+<p>For more information on the classes introduced by split shipments and how to work with them programmatically, see the <a href="http://edgeguides.spreecommerce.com/developer/shipments.html#split-shipments">Shipments Guide</a>.</p>
+
+<h5 id="stock-transfers">Stock transfers</h5>
+
+<p>Stock transfers allow you to move inventory in bulk from one stock location to another stock location.</p>
+
+<p>Stock transfers generally consist of a source location, a destination location, one or more variants and an optional reference number. Stock transfers can also be used as a way to track new stock, in which case only a stock location destination and variant are required.</p>
+
+<h4 id="i18n">I18n</h4>
+
+<p>Spree 2.0 now comes with namespaced translations so that translations in your application
+will no longer conflict with those within Spree. It’s recommended that if you have extension
+that uses Spree to move its translations into the Spree namespace to avoid the same problem.</p>
+
+<p>Translations within Spree views should now use the <code>Spree.t</code> helper, rather than the <code>t</code>
+helper so that they are namespaced correctly.</p>
+
+<h3 id="api">API</h3>
+
+<h4 id="new-api-endpoints">New API endpoints</h4>
+
+<p>API clients can now manage the following resources through the API:</p>
+
+<ul>
+  <li>Option Types</li>
+  <li>Option Values</li>
+  <li>Inventory Units</li>
+  <li>Shipments</li>
+  <li>Stock Items</li>
+  <li>Stock Locations</li>
+  <li>Stock Movements</li>
+</ul>
+
+<p>The documentation for these endpoints hasn’t been written yet, but will be shortly.</p>
+
+<h4 id="instance-level-permissions">Instance level permissions</h4>
+
+<p>The API now can enforce instance-level permissions on objects. This means that
+some users would be able to access a single item within a resource, rather than
+an “all or none” approach to the API.</p>
+
+<p><small><a href="https://github.com/spree/spree/commit/548dc0c58e4400501bc67cddea942fda1c7dbad3">commit 548dc0c5</a></small></p>
+
+<h4 id="custom-api-templates">Custom API templates</h4>
+
+<p>If you wish to use a custom template for an API response you can do this by
+passing in a <code>template</code> parameter to API requests.</p>
+
+<p><a href="http://edgeguides.spreecommerce.com/api/summary.html#customizing-responses">Read the documentation for more
+information</a>.</p>
+
+<h3 id="core">Core</h3>
+
+<h4 id="adjustment-state-changes">Adjustment state changes</h4>
+
+<p>Adjustments can now be open, closed or finalized, allowing for a more flexible
+ adjustments system. An ‘open’ adjustment can be modified, whereas a ‘closed’
+ adjustment cannot. Finalized adjustments are never altered.</p>
+
+<p><small><a href="https://github.com/spree/spree/commit/43a3cca49180b1572e41bc3638d3ca0f0e9116d9">commit 43a3cca4</a></small></p>
+
+<h4 id="orderpopulator">OrderPopulator</h4>
+
+<p>Order population responsibility has been moved out to its own class. This has
+been done so that the API, Core and any other extensions that wish to use the
+order population logic have an easy way to do so.</p>
+
+<p>See <small><a href="https://github.com/spree/spree/issues/2341">#2341</a></small> and <small><a href="https://github.com/spree/spree/commit/432d129c86e03597347cd223507d9386e9613d62">commit 432d129c</a></small> for more information.</p>
+
+<h4 id="couponapplicator">CouponApplicator</h4>
+
+<p>Coupon application responsibility has been moved out to its own class too. This
+has been done so that the API, Core and any other extensions that wish to apply
+coupons have an easy way to do so.</p>
+
+<p><small><a href="https://github.com/spree/spree/commit/8ac9ac1c56fe1e471dd5b0124edbe383a8c70c48">commit 8ac9ac1c</a></small></p>
+
+<h4 id="productduplicator">ProductDuplicator</h4>
+
+<p>Product duplication code has been moved out to its own class as well.</p>
+
+<p><small><a href="https://github.com/spree/spree/issues/2641">#2641</a></small></p>
+
+<h4 id="new-helpers-to-modify-checkout-flow-steps">New helpers to modify checkout flow steps</h4>
+
+<p>To add or remove steps to the checkout flow, you can now use the <code>insert_checkout_step</code>
+and <code>remove_checkout_step</code> helpers respectively. This patch has been backported
+to 1-3-stable as well, and will be available in Spree releases &gt;= 1.3.3.</p>
+
+<p>The <code>insert_checkout_step</code> takes a <code>before</code> or <code>after</code> option to determine where to
+insert the step:</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>insert_checkout_step <span class="symbol">:new_step</span>, <span class="key">before</span>: <span class="symbol">:address</span>
+<span class="comment"># or</span>
+insert_checkout_step <span class="symbol">:new_step</span>, <span class="key">after</span>: <span class="symbol">:address</span>
+</pre></div>
+</div>
+</div>
+
+<p>The <code>remove_checkout_step</code> will remove just one checkout step at a time:</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>remove_checkout_step <span class="symbol">:address</span>
+remove_checkout_step <span class="symbol">:delivery</span>
+</pre></div>
+</div>
+</div>
+
+<h3 id="dash">Dash</h3>
+
+<h2 id="minor-changes">Minor changes</h2>
+
+<h3 id="api-1">API</h3>
+
+<h4 id="checkoutscontroller">CheckoutsController</h4>
+
+<p>The Spree API now has support for “checking out” an order. This API
+functionality allows an existing order to be updated and advanced until
+it is in the complete state.</p>
+
+<p>For instance, if you have an order in the “confirm” state that you would
+like to advance to the “complete” state, make the following request:</p>
+
+<div class="language-bash highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>PUT /api/checkouts/ORDER_NUMBER
+</pre></div>
+</div>
+</div>
+
+<p>For more information on using the new CheckoutsController, please see
+the <a href="/api/checkouts.html">Checkouts API Documentation</a>.</p>
+
+<h4 id="versioned-templates">Versioned templates</h4>
+
+<p>API responses can now be versioned by the <a href="https://github.com/bwillis/versioncake">versioncake</a> gem. While this is not used in Spree at the moment, it is future-proofing the API.</p>
+
+<h3 id="core-1">Core</h3>
+
+<h4 id="auto-rotation-of-images">Auto-rotation of images</h4>
+
+<p>Images will now be auto-rotated to their correct orientation based on EXIF data from the original image. All EXIF data is then stripped from the image, resulting in a smaller final image size.</p>
+
+<p><small><a href="https://github.com/spree/spree/issues/2338">#2338</a></small></p>
+
+<h4 id="sample-data">Sample data</h4>
+
+<p>The sample data now exists within straight Ruby code. The previous YAML-backed
+configuration was confusing and led to invalid data being inserted for sample data.</p>
+
+<p><small><a href="https://github.com/spree/spree/commit/cc2f55a27a154c0bf9d67e1dbef3c4761c68f8b8">commit cc2f55a2</a></small></p>
+
+<h4 id="unique-payment-identifier">Unique payment identifier</h4>
+
+<p>Some payment gateways require payments to have a unique identifier. To solve this problem in Spree, each payment now has an <code>identifier</code> attribute which is generated when the payment is created.</p>
+
+<p><small><a href="https://github.com/spree/spree/issues/1998">#1998</a></small>
+<small><a href="https://github.com/spree/spree/commit/b543fd105c2d511cdc98f27223cd0f5b1f663e72">commit b543fd10</a></small></p>
+
+<h4 id="removal-of-checkoutcontrollerstatecallback">Removal of <code>CheckoutController#state_callback</code></h4>
+
+<p>The <code>state_callback</code> method in <code>CheckoutController</code> has been removed. Instead of this method, please use transition callbacks on the <code>Order.state_machine</code> instance instead.</p>
+
+<h4 id="tracking-url-for-shipments">Tracking URL for shipments</h4>
+
+<p>Shipping methods now have the ability to have tracking URLs. These can be used to track the shipments on external shipping providers’ websites.</p>
+
+<p><small><a href="https://github.com/spree/spree/issues/2644">#2644</a></small></p>
+
+<h4 id="mailers-now-can-take-ids-or-model-objects">Mailers now can take IDs or model objects</h4>
+
+<p>To help with potential background processing of mailers, all mailer actions can now take the ID of their respective object, or the object itself.</p>
+
+<p><small><a href="https://github.com/spree/spree/issues/2808">#2808</a></small></p>
+
+<h4 id="sslrequirement-deprecated-in-favour-of-forcessl">SSLRequirement deprecated in favour of ForceSSL</h4>
+
+<p>Spree will now use the <code>config.force_ssl</code> setting of Rails to determine whether or not to use SSL.</p>
+
+<p><small><a href="https://github.com/spree/spree/issues/2410">#2410</a></small></p>
+
+<h4 id="mailmethod-model-no-longer-exists">MailMethod model no longer exists</h4>
+
+<p>The <code>MailMethod</code> model no longer exists. Instead, it is a class and all configuration is now done through that class or through <code>Spree::Config</code> settings.</p>
+
+<p><small><a href="https://github.com/spree/spree/issues/2643">#2643</a></small></p>
+
+<h2 id="trivial-changes">Trivial changes</h2>
+
+<p>Some of these changes may have made it into 1-3-stable or 1-2-stable as well. You may wish to check that branch for commits with the same message to make sure of this.</p>
+
+<ul>
+  <li><code>ShippingMethod</code> labels can now be overriden by overriding the <code>adjustment_label</code> method. <small><a href="https://github.com/spree/spree/issues/2222">#2222</a></small></li>
+  <li>Promotion rules that respond to <code>#products</code> will have their products considered in promotion adjustments. <small><a href="https://github.com/spree/spree/issues/2363">#2363</a></small></li>
+  <li>Taxons and products are now joined with a <code>Classification</code> model. <small><a href="https://github.com/spree/spree/issues/2532">#2532</a></small> <small><a href="https://github.com/spree/spree/commit/0c594923a457d2f6050c936498d31df312d6153a">commit 0c594923</a></small></li>
+  <li>Fix call to <code>select_month</code> and <code>select_year</code> <small><a href="https://github.com/spree/spree/issues/2259">#2259</a></small></li>
+  <li>Fix issue where <code>params[:keyword]</code>, not <code>params[:keywords]</code> was acknowledged on taxons/show.html.erb. <small><a href="https://github.com/spree/spree/issues/2258">#2258</a></small> <small><a href="https://github.com/spree/spree/issues/2270">#2270</a></small></li>
+  <li>Allow overriding of a shipping address’s label <small><a href="https://github.com/spree/spree/issues/2222">#2222</a></small></li>
+  <li>Guard against false positive Jirafe conversions <small><a href="https://github.com/spree/spree/issues/2273">#2273</a></small> <small><a href="https://github.com/spree/spree/issues/2211">#2211</a></small> <small><a href="https://github.com/spree/spree/issues/2157">#2157</a></small></li>
+  <li>Add first_name and last_name aliases for Addresses <small><a href="https://github.com/spree/spree/commit/ad119f9e21af9ba6f6ada96944fc758a6144c61c">commit ad119f9e</a></small></li>
+  <li>Escape JavaScript within ecommerce tracking code <small><a href="https://github.com/spree/spree/issues/2289">#2289</a></small></li>
+  <li>Slight refactoring of how preferences are fetched from preference store <small><a href="https://github.com/spree/spree/commit/bddc49a5cf261ca9fcee45e4234bdb076eaa3feb">commit bddc49a5</a></small></li>
+  <li>Fix issue where “New State” button on country page would not link to correct country. <small><a href="https://github.com/spree/spree/issues/2281">#2281</a></small></li>
+  <li>Order#checkout_steps will now always include complete <small><a href="https://github.com/spree/spree/commit/5110e12127840fb9b2e22f8b4f4c4fbee594de23">commit 5110e121</a></small></li>
+  <li>Fix issue where <code>flash[:commerce_tracking]</code> was hanging around too long. <small><a href="https://github.com/spree/spree/issues/2287">#2287</a></small></li>
+  <li>Remove colons from translations in mail templates <small><a href="https://github.com/spree/spree/issues/2278">#2278</a></small></li>
+  <li>A payment method can now control its <code>auto_capture?</code> method. <small><a href="https://github.com/spree/spree/issues/2304">#2304</a></small></li>
+  <li>Added a preference to display a product without a price. <small><a href="https://github.com/spree/spree/issues/2302">#2302</a></small></li>
+  <li>Improve ‘out of stock’ error message. <small><a href="https://github.com/spree/spree/issues/1821">#1821</a></small></li>
+  <li>Track IP addresses for orders, for payment gateway reasons. <small><a href="https://github.com/spree/spree/issues/2216">#2216</a></small> <small><a href="https://github.com/spree/spree/issues/2257">#2257</a></small></li>
+  <li>Use protocol-specific URL for font. <small><a href="https://github.com/spree/spree/issues/2316">#2316</a></small></li>
+  <li>First order promotion will now work with guest users. <small><a href="https://github.com/spree/spree/issues/2306">#2306</a></small></li>
+  <li>Always show resend button on admin order page. <small><a href="https://github.com/spree/spree/issues/2318">#2318</a></small></li>
+  <li>Allow a shipment to be made ‘ready’ once order has been made ‘resumed’ <small><a href="https://github.com/spree/spree/issues/2317">#2317</a></small></li>
+  <li>PerItem calculator no longer fails if a rule doesn’t respond to the <code>products</code> method. <small><a href="https://github.com/spree/spree/issues/2322">#2322</a></small></li>
+  <li><code>attachment_url</code> can now be configured from the admin backend. <small><a href="https://github.com/spree/spree/issues/2344">#2344</a></small></li>
+  <li>Scale and precision have been corrected in split_prices_from_variants migration. <small><a href="https://github.com/spree/spree/issues/2358">#2358</a></small></li>
+  <li>Localize error message for email validator. <small><a href="https://github.com/spree/spree/issues/2364">#2364</a></small> <small><a href="https://github.com/spree/spree/issues/2729">#2729</a></small> <small><a href="https://github.com/spree/spree/issues/2730">#2730</a></small></li>
+  <li>Remove duplicate thumbnails on products/show. <small><a href="https://github.com/spree/spree/issues/2361">#2361</a></small></li>
+  <li>Use line item price, not variant price, in return authorization price calculation JS. <small><a href="https://github.com/spree/spree/issues/2342">#2342</a></small></li>
+  <li>Allow for a product’s description to be put to the page raw <small><a href="https://github.com/spree/spree/issues/2323">#2323</a></small> <small><a href="https://github.com/spree/spree/issues/2874">#2874</a></small> <small><a href="https://github.com/spree/spree/commit/30fdf083">commit 30fdf083</a></small>. See also <small><a href="https://github.com/spree/spree/commit/b616d84a78e426bdeb3e8e6251aaa9ce8757996d">commit b616d84a</a></small> and <small><a href="https://github.com/spree/spree/issues/2518">#2518</a></small>.</li>
+  <li>Promotions can now apply to orders which were created before the promotion. <small><a href="https://github.com/spree/spree/issues/2388">#2388</a></small> <small><a href="https://github.com/spree/spree/issues/2395">#2395</a></small></li>
+  <li>Allow Address#phone validation to be overridden. <small><a href="https://github.com/spree/spree/issues/2394">#2394</a></small></li>
+  <li>Sort properties by alphabetical order on prototype form. <small><a href="https://github.com/spree/spree/issues/2389">#2389</a></small></li>
+  <li>Introduce datepicker_field_value for displaying datepicker field values. <small><a href="https://github.com/spree/spree/issues/2405">#2405</a></small></li>
+  <li>The ‘New Product’ button now appears on the edit product page. <small><a href="https://github.com/spree/spree/issues/2407">#2407</a></small></li>
+  <li>option values in <code>Variant#options_text</code> are now sorted in a predictable order. <small><a href="https://github.com/spree/spree/issues/2432">#2432</a></small></li>
+  <li>link_to_cart can now be used outside of Spree contexts. <small><a href="https://github.com/spree/spree/issues/2441">#2441</a></small></li>
+  <li>Promotion adjustments will now be removed on orders which are not complete when the promotion is deleted. <small><a href="https://github.com/spree/spree/issues/1046">#1046</a></small> <small><a href="https://github.com/spree/spree/issues/2453">#2453</a></small></li>
+  <li>Adjustments are now displayed on the orders/show template. <small><a href="https://github.com/spree/spree/issues/2449">#2449</a></small></li>
+  <li>Variant images are displayed in place of product images in admin/images <small><a href="https://github.com/spree/spree/issues/2228">#2228</a></small></li>
+  <li>Product properties are now sortable. <small><a href="https://github.com/spree/spree/issues/2464">#2464</a></small></li>
+  <li>Returned items can now be re-shipped. <small><a href="https://github.com/spree/spree/issues/2475">#2475</a></small></li>
+  <li>LogEntry records are now saved for failed payments <small><a href="https://github.com/spree/spree/issues/1767">#1767</a></small></li>
+  <li>Show full address in order confirmation <small><a href="https://github.com/spree/spree/issues/2136">#2136</a></small> <small><a href="https://github.com/spree/spree/issues/2511">#2511</a></small></li>
+  <li>Retrieve a list of variants from an order by calling <code>Order#variants</code>. <small><a href="https://github.com/spree/spree/issues/2195">#2195</a></small></li>
+  <li>Fix group_by_products_id sometimes not being available as a scope. <small><a href="https://github.com/spree/spree/issues/1247">#1247</a></small></li>
+  <li>Allow <code>meta_description</code> on <code>Spree::Product</code> to be as long as <code>text</code> will allow, rather than <code>string</code>. <small><a href="https://github.com/spree/spree/issues/2611">#2611</a></small></li>
+  <li>Fix currency display issues when using Euro. <small><a href="https://github.com/spree/spree/issues/2634">#2634</a></small></li>
+  <li>Fix issue where orders would become “locked” when initial payment had failed. <small><a href="https://github.com/spree/spree/issues/2616">#2616</a></small> <small><a href="https://github.com/spree/spree/issues/2570">#2570</a></small> <small><a href="https://github.com/spree/spree/issues/2678">#2678</a></small> <small><a href="https://github.com/spree/spree/issues/2585">#2585</a></small> <small><a href="https://github.com/spree/spree/issues/2652">#2652</a></small></li>
+  <li>Check for unprocessed payments before transitioning to complete state <small><a href="https://github.com/spree/spree/issues/2694">#2694</a></small></li>
+  <li>Added check to prevent skipping of checkout steps. <small><a href="https://github.com/spree/spree/issues/2280">#2280</a></small></li>
+  <li>Improve the look of the coupon code on the checkout. <small><a href="https://github.com/spree/spree/issues/2720">#2720</a></small></li>
+  <li>Admin tabs are now only displayed if user is authorized to see them. <small><a href="https://github.com/spree/spree/issues/2626">#2626</a></small></li>
+  <li>Reduce minimum characters required for variant autocomplete <small><a href="https://github.com/spree/spree/issues/2774">#2774</a></small></li>
+  <li>Added helper methods to shipment to calculate shipment item and total costs <small><a href="https://github.com/spree/spree/issues/2843">#2843</a></small></li>
+  <li>Allow product scopes to be added to from an extension <small><a href="https://github.com/spree/spree/issues/2608">#2608</a></small></li>
+  <li>Fix routing error caused by routing-filter and previous ghetto implementation of taxon autocomplete. <small><a href="https://github.com/spree/spree/issues/2248">#2248</a></small></li>
+  <li>ActionMailer settings will no longer be re-configured if they’re already set. <small><a href="https://github.com/spree/spree/issues/2855">#2855</a></small></li>
+  <li>Fix issue where tax calculator computed taxes incorrectly for non-VAT taxes. <small><a href="https://github.com/spree/spree/issues/2870">#2870</a></small></li>
+  <li>The coupon code field is now hidden when there are no possible coupon codes. <small><a href="https://github.com/spree/spree/issues/2835">#2835</a></small></li>
+  <li>The <code>position</code> attribute for variants is now computed once the variant is saved. <small><a href="https://github.com/spree/spree/issues/2744">#2744</a></small></li>
+  <li>Account for situation where <code>current_order</code> might return <code>nil</code> in an <code>OrdersController#update</code> call. <small><a href="https://github.com/spree/spree/issues/2750">#2750</a></small></li>
+  <li>Fix case where ActiveMerchant would incorrectly process currencies without 2 decimal places. <small><a href="https://github.com/spree/spree/issues/2930">#2930</a></small></li>
+  <li>Add US military states to default states. <small><a href="https://github.com/spree/spree/issues/2769">#2769</a></small></li>
+  <li>Allow for specially overridden attributes for line items in the API. <small><a href="https://github.com/spree/spree/issues/2916">#2916</a></small></li>
+  <li>Transition order as far to complete as it will go after editing customer details. <small><a href="https://github.com/spree/spree/issues/2950">#2950</a></small> <small><a href="https://github.com/spree/spree/issues/2433">#2433</a></small></li>
+  <li>Fix issue where going back a step in a cart could cause a <code>undefined method run_callbacks</code> error to be raised. <small><a href="https://github.com/spree/spree/issues/2959">#2959</a></small> <small><a href="https://github.com/spree/spree/issues/2921">#2921</a></small></li>
+  <li>Use DISTINCT ON to make product <code>in_taxon</code> scope really distinct in PostgreSQL <small><a href="https://github.com/spree/spree/issues/2851">#2851</a></small></li>
+  <li>Run order update hooks when order is finalized too <small><a href="https://github.com/spree/spree/issues/2986">#2986</a></small></li>
+</ul>
+
+        </div>
+      </div>
+
+    </section>
+
+    <aside id="sidebar" class="four columns">
+  <nav id="sidebar-menu">
+    <ul>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-version-menu"><i class="icon-right-open"></i></a>
+          <a href='#.html'>Versions</a>
+        </h3>
+        <ul class="js-guides">
+          <li><i class="icon-dot"></i><a href='spree_3_4_0.html'>3.4.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_3_3_0.html'>3.3.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_3_2_0.html'>3.2.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_3_1_0.html'>3.1.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_3_0_0.html'>3.0.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_2_4_0.html'>2.4.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_2_3_0.html'>2.3.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_2_2_0.html'>2.2.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_2_1_0.html'>2.1.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_2_0_0.html'>2.0.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_1_3_0.html'>1.3.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_1_2_2.html'>1.2.2</a></li>
+          <li><i class="icon-dot"></i><a href='spree_1_2_0.html'>1.2.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_1_1_4.html'>1.1.4</a></li>
+          <li><i class="icon-dot"></i><a href='spree_1_1_0.html'>1.1.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_1_0_0.html'>1.0.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_0_70_0.html'>0.70.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_0_60_0.html'>0.60.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_0_50_0.html'>0.50.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_0_40_0.html'>0.40.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_0_30_0.html'>0.30.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_0_10_0.html'>0.10.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_0_9_0.html'>0.9.0</a></li>
+        </ul>
+      </li>
+    </ul>
+  </nav>
+</aside>
+
+  </div>
+
+  <footer id="main-footer">
+
+  <div class="footer-top">
+    <div class="container">
+      <div id="link-blocks" class="row">
+        <div class="link-block six columns">
+          <h3 class="block-title">Developers</h3>
+          <ul>
+            <li><a href="https://slack.spreecommerce.org" target="_blank" rel="nofollow">Slack</a></li>
+            <li><a href="https://github.com/spree-contrib" target="_blank">Extensions</a></li>
+            <li><a href="https://github.com/spree/spree/blob/master/license.md" target="_blank">License</a></li>
+          </ul>
+        </div>
+        <div class="link-block seven columns">
+          <h3 class="block-title">About Spree</h3>
+          <p>
+            <strong><a href="https://spreecommerce.org">Spree Commerce</a></strong>
+            is a complete modular, API-driven open source e-commerce solution
+            built with Ruby on Rails.
+          </p>
+          <p>
+            Guides are hosted and maintained by
+            <a href="http://sparksolutions.co" target="_blank">Spark Solutions</a>
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</footer>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-104990445-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/docsearch.js/2/docsearch.min.js"></script>
+<script type="text/javascript"> docsearch({
+apiKey: 'fb697cd2d04591b036ea172259c05ba8',
+indexName: 'spreecommerce',
+inputSelector: '#search-field',
+debug: false // Set debug to true if you want to inspect the dropdown
+});
+</script>
+
+
+  </body>
+</html>

@@ -1,0 +1,4 @@
+class WeddingPhoto < Photograph
+
+
+end

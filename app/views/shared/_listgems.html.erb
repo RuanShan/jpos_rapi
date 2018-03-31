@@ -1,0 +1,32 @@
+<div class="row">
+  <div class="col-md-2">
+    Rails #{Rails.version}
+    <br/>
+    Ruby #{RUBY_VERSION}
+    <br/>
+  </div>
+  <div class="col-md-3">
+    <%= @lists_of_gems.select_gem(/bootstrap/) %>
+  </div>
+  <div class="col-md-2">
+    <%= @lists_of_gems.select_gem(/devise/) %>
+    <br/>
+    <%= @lists_of_gems.select_gem(/cancan/) %>
+  </div>
+  <div class="col-md-3">
+    <button class="btn btn-sm btn-secondary" data-target="#list_gems" data-toggle="collapse" type="button" >+/- List All Gems</button>
+  </div>
+</div>
+<div class="row collapse" id="list_gems">
+  <br/>
+  <div class="row">
+    <% @lists_of_gems.columns_gems.each do |list| %>
+      <div class="col-md-3">
+        <% list.each do |gem| %>
+          <%= gem %>
+          <br/>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</div>

@@ -1,0 +1,101 @@
+// Place all the styles related to the activities controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+/*
+*= require nec/function
+*= require layer/default/layer
+*= require game/basic
+*= require game/screen_lottory_free
+*= require game/qd_inline
+*= require game/footer
+*/
+
+.Panel.Top{
+	display: none;
+}
+.Panel.Bottom{
+	.actions{
+		float: right;
+		padding-right: 40px;
+	}
+	a {
+		color: white;
+		padding: 4px 12px;
+		text-align: center;
+		text-decoration: none;
+		display: inline-block;
+		background-color: #f44336;
+		border: 2px solid #f44336;
+		line-height: 1.8em;
+		font-size: 16px;
+		border-radius: 2px;
+			-webkit-transition-duration: 0.4s; /* Safari */
+			transition-duration: 0.4s;
+	}
+
+	a:hover {
+		border: 2px solid #f44336;
+			background-color: white; /* Green */
+			color: #f44336;
+	}
+
+
+}
+.header{
+  position:absolute;
+  top:0;
+  width: 100%;
+  height:140px;
+
+  .logo{
+    position:absolute;
+    left: 0;
+    bottom: 0;
+    padding: 0 0  0 40px;
+    width: 140px;
+  }
+	.qrcode{
+		position:absolute;
+    right: 0;
+    bottom: 0;
+    padding: 0 40px  0 0;
+    width: 100px;
+	}
+	.heading-wrapper
+	{
+		position: absolute;
+    bottom: 0;
+    text-align: center;
+    font-size: 2em;
+		line-height: 2em;
+    color: #ffffff;
+    width: 100%;
+		.heading{
+			position: relative;
+			display: inline-block;
+			padding: 0 160px;
+	    background:transparent image-url('game/title_bg.png') center top no-repeat;
+			background-size: cover;
+			.icon{
+				position: absolute;
+				left: 0;
+				top: 0;
+				img{
+					height: 1.6em;
+					vertical-align: middle;
+				}
+			}
+			.players{
+				position: absolute;
+				top: 0;
+				right: 5px;
+				font-size: 14px;
+			}
+			.num{
+				font-size: 20px;
+				color: gold;
+			}
+	  }
+
+	}
+}

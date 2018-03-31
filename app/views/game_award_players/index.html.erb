@@ -1,0 +1,31 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Game Award Users</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Game round user</th>
+      <th>Award level</th>
+      <th>Award code</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @game_award_players.each do |game_award_player| %>
+      <tr>
+        <td><%= game_award_player.game_player_id %></td>
+        <td><%= game_award_player.award_level %></td>
+        <td><%= game_award_player.award_code %></td>
+        <td><%= link_to 'Show', game_award_player %></td>
+        <td><%= link_to 'Edit', edit_game_award_player_path(game_award_player) %></td>
+        <td><%= link_to 'Destroy', game_award_player, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Game Award User', new_game_award_player_path %>

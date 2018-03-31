@@ -1,0 +1,15 @@
+<%
+# 获奖名单
+# locals
+#   awards: game_awards.includes( game_award_players: :game_player )
+#
+%>
+
+<% @game_awards.each{ |award| %>
+<div class="poupSection">
+  <p class="title"> <span> <%= award.name %> </span></p>
+  <div class="desc">
+    <%=award.game_award_players.map{|gap| gap.game_player.nickname }.join('、') %>
+  </div>
+</div>
+<% } %>

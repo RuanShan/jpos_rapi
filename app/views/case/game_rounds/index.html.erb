@@ -1,0 +1,47 @@
+<section class="content-header">
+<h1><%=GameRound.model_name.human%>列表</h1>
+</section>
+<section class="content">
+  <div class="box">
+    <div class="box-body no-padding">
+      <%= render 'shared/notice' %>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>类型</th>
+            <th>名称</th>
+            <th>开始-结束(时间)</th>
+            <th>状态</th>
+            <th colspan="3"></th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <% @game_rounds.each do |game_round| %>
+            <tr>
+              <td><%= Game.translate_enum_name :code,  game_round.game.code %></td>
+              <td><%= game_round.name %></td>
+              <td><%= game_round.display_start_at %>-<%= game_round.display_end_at %></td>
+              <td><%= GameRound.translate_enum_name( 'aasm_state', game_round.aasm_state ) %> </td>
+              <td><%= link_to '数据', player_results_case_game_round_path( game_round) %></td>
+              <td>
+                <a> <%= link_to "签到大屏幕", check_in_game_round_path(game_round), target: '_blank' %>
+                <a> <%= link_to "游戏大屏幕", play_game_round_path(game_round), target: '_blank' %>
+              </td>
+              <td>
+                <%= link_to t('button.edit'), edit_case_game_round_path(game_round) %>
+                <%= link_to t('button.destroy'), case_game_round_path(game_round), method: :delete, data: { confirm: t('lable.confirm_destroy') } %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <br>
+
+  <%= link_to '新建大屏签到抽奖', new_case_game_round_path( code: Game.codes['check_in'] ), class: 'btn btn-default' %>
+  <%= link_to '新建大屏数钱游戏', new_case_game_round_path( code: Game.codes['counting'] ), class: 'btn btn-default' %>
+  <%= link_to '新建赛车游戏', new_case_game_round_path( code: Game.codes['runlin_car_game'] ), class: 'btn btn-default' %>
+  <%= link_to '新建购年货游戏', new_case_game_round_path( code: Game.codes['runlin_dumpling'] ), class: 'btn btn-default' %>
+
+</section>

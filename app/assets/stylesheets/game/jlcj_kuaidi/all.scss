@@ -1,0 +1,33 @@
+@charset "utf-8";
+@import "font-awesome";
+@import "weui.min";
+//@import "jquery-weui.min";
+@import "mycss";
+
+.game-wrapper
+{
+  font-size: 14px;
+  .weui-cells
+  {
+    font-size: 14px;
+  }
+}
+.weui-cell:before {
+  right: 15px;
+}
+
+.weui-cells:after, .weui-cells:before {
+    left: 15px;
+    right: 15px;
+}
+
+.weui-cell.memo-wrap:before
+{
+  border-top: 0 none;
+}
+
+.hint .weui-label
+{
+  width: auto;
+  height: 22px;
+}

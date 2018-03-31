@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>    <html class="lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>    <html class="lt-ie9"> <![endif]-->
+<!--[if IE 9]>    <html class="ie9"> <![endif]-->
+<!--[if gt IE 9]><!--> <html lang="en" > <!--<![endif]-->
+<head>
+  <title>Migrating to Spree - Developer Guide | Spree - Ruby on Rails e-commerce platform</title>
+
+  <meta charset="utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta name="section" content="advanced" />
+
+<link href="/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+<link href="/shared/css/icons.css" media="screen" rel="stylesheet" type="text/css">
+<link href="/shared/css/icons-codes.css" media="screen" rel="stylesheet" type="text/css">
+
+<link href="/shared/css/skeleton.css" media="screen" rel="stylesheet" type="text/css">
+<link href="/shared/css/documentation.css" media="screen" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="/assets/stylesheets/guides.css" media="screen" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/docsearch.js/2/docsearch.min.css" />
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-migrate/1.1.1/jquery-migrate.min.js"></script>
+<script src="/assets/javascripts/css_browser_selector_dev.js" type="text/javascript"></script>
+<script src="/assets/javascripts/jquery.toc.js" type="text/javascript"></script>
+<script src="/assets/javascripts/documentation.js" type="text/javascript"></script>
+
+
+</head>
+<body class="developer">
+  
+  <header id="header">
+    <div id="top-header">
+  <div class="container">
+    <div class="row">
+      <div class="two columns">
+  <a class="logo" href="http://spreecommerce.org">
+    <img src='/images/logo.png' alt="Spree Commerce - Ruby on Rails e-commerce platform" />
+  </a>
+</div>
+
+      <div class="three columns">
+  <input type="text" id="search-field" placeholder="Search..." />
+</div>
+
+      <nav id="main-menu" class="eleven columns">
+  <ul class="inline">
+    <li><a href="../api/">API</a></li>
+    <li><a href="../developer/">Developer</a></li>
+    <li><a href="../user/">User</a></li>
+    <li><a href="../release_notes/">Release Notes</a></li>
+    <li>
+      <a href="http://slack.spreecommerce.org" target="_blank">Slack</a>
+    </li>
+    <li>
+      <a href="https://heroku.com/deploy?template=https://github.com/spree/spree" target="_blank" rel="nofollow">Demo</a>
+    </li>
+  </ul>
+</nav>
+
+    </div>
+  </div>
+</div>
+
+
+    <div id="subheader">
+      <div class="container">
+        <div class="sixteen columns">
+          <h1 class="page-title">Migrating to Spree - Developer Guide | Spree - Ruby on Rails e-commerce platform</h1>
+        </div>
+      </div>
+    </div>
+
+  </header>
+
+  <div class="container" id="main">
+    <section id="main-content">
+
+      <div class="twelve columns">
+        <div id="content">
+          
+<h2 id="overview">Overview</h2>
+
+<p>This section explains how to convert existing sites or data sets for
+use with Spree. It is a mix of tips and information about the relevant
+APIs, and so is definitely intended for developers. After reading it you
+should know:</p>
+
+<ul>
+  <li>techniques for programmatic import of products</li>
+  <li>tips for migrating themes</li>
+  <li>examples of the API in use.</li>
+</ul>
+
+<div class="warning"><p>This documentation on this topic is out of date and we’re
+working to update it. In the meantime if you see things in here that are
+confusing it’s possible that they no longer apply, etc.</p>
+</div>
+
+<h2 id="overview-1">Overview</h2>
+
+<p>This guide is a mix of tips and information about the relevant APIs,
+intended to help simplify the process of getting a new site set up -
+whether you’re developing a fresh site or moving from an existing
+commerce platform.</p>
+
+<p>The first section discusses various formats of data. Then we look in
+detail at import of the product catalogue. Sometimes you may want to
+import legacy order details, so there’s a short discussion on this.</p>
+
+<p>Finally, there are some tips about how to ease the theme development
+process.</p>
+
+<h2 id="data-import-format">Data Import Format</h2>
+
+<p>This part discusses some options for getting data into the system,
+including some discussion of using relevant formats.</p>
+
+<h3 id="direct-sql-import">Direct SQL import</h3>
+
+<p>Can we just format our data as SQL tables and import it directly? In
+principle yes, but it takes effort to get the format right,
+particularly
+when dealing with associations between tables, and you need to ensure
+that the new data meets the system’s validation rules. It’s probably
+easier to go the code route.</p>
+
+<p>There are cases where direct import is useful. One key case is when
+moving between hosting platforms. Another is when cloning some project:
+collaborators can just import a database dump prepared by someone else,
+and save the time of the code import.</p>
+
+<h3 id="rails-fixtures">Rails Fixtures</h3>
+
+<p>Spree uses fixtures to load up the sample data. It’s a convenient
+format for small collections of data, but can be tricky when working with
+large data sets, especially if there are many interconnections and if you
+need to be careful with validation.</p>
+
+<p>Note that Rails can dump slices of the database in fixture format. This
+is sometimes useful.</p>
+
+<h3 id="sql-or-xml-legacy-data">SQL or XML legacy data</h3>
+
+<p>This is the case where you are working with legacy data in formats like
+SQL or XML, and the question is more how to get the useful data out.</p>
+
+<p>Some systems may be able to export their data in various standard
+spreadsheet formats - it’s worth checking for this.</p>
+
+<p>Tools like REXML or Nokogiri can be used to parse XML and either build
+a spreadsheet representation or execute product-building actions
+directly.</p>
+
+<p>For SQL, you can try to build a Rails interface to the data (eg. search
+for help with legacy mappings) and dump a simplified format. It might
+help
+to use views or complex queries to flatten multi-table data into a
+single table - which can then be treated like a spreadsheet.</p>
+
+<h3 id="spreadsheet-format">Spreadsheet format</h3>
+
+<p>Most of the information about products can be flattened into
+spreadsheet
+form, and a 2D table is convenient to work with. Clients are often
+comfortable with the format too, and able to supply their inventories
+in this format.</p>
+
+<p>For example, your spreadsheet could have the following columns:</p>
+
+<h3 id="fixed-details">Fixed Details</h3>
+
+<ul>
+  <li>product name</li>
+  <li>master price</li>
+  <li>master sku</li>
+  <li>taxon membership</li>
+  <li>shipping category</li>
+  <li>tax category</li>
+  <li>dimensions and weight</li>
+  <li>list of images</li>
+  <li>description</li>
+</ul>
+
+<h3 id="several-properties">Several Properties</h3>
+<ul>
+  <li>one column for each property type used in your catalogue</li>
+</ul>
+
+<h3 id="variant-specifications">Variant Specifications</h3>
+<ul>
+  <li>option types for the product</li>
+  <li>one variant per column, each listing the option values and the price/sku</li>
+</ul>
+
+<p>Note that if you know how many fixed columns and properties to expect,
+then it’s easy to determine which columns represent variants etc.</p>
+
+<p>Some of these columns might have simple punctuation etc. to add structure
+to the field. For example, we’ve used:</p>
+
+<ul>
+  <li>Html tags in the description</li>
+  <li>WxHxD for a shorthand for the dimensions</li>
+  <li>“green &amp; small = small_green_shirt @ $10.00” to code up a variant which is small and green, has sku <em>small_green_shirt</em> and costs $10.</li>
+  <li>“foo\nbar” in the taxons column to encode membership of two taxons</li>
+  <li>“alpha &gt; beta &gt; gamma” in the taxons column to encode membership a particular nesting.</li>
+</ul>
+
+<p>The taxon nesting notation is useful for when ‘gamma’ doesn’t uniquely
+identify a taxon (and so you need some context, ie a few ancestor
+taxons), or for when the taxon structure isn’t fixed in advance and so is
+dynamically created as the products are entered.</p>
+
+<p>Another possibility for coding variants is to have each variant on a
+separate row, and to leave the fixed fields empty when a row is a variant of the
+last-introduced product. This is easier to read.</p>
+
+<h3 id="seed-code">Seed code</h3>
+
+<p>This is more a technique for getting the data loaded at the right time.
+Technically, the product catalogue is <em>seed data</em>, standard data which
+is needed for the app to work properly.</p>
+
+<p>Spree has several options for loading seed data, but perhaps the easiest
+to use here is to put ruby files in <em>site/db/default/</em>. These files are
+processed when <em>rake db:seed</em> is called, and will be processed in the order of the
+migration timestamps.</p>
+
+<p>Your ruby script can use one of the XLS or CSV format reading libraries
+to read an external file, or if the data set is not too big, you could
+embed the CSV text in the script itself, eg. using the <strong>END</strong> convention.</p>
+
+<div class="note"><p>If the order of loading is important, choose names for the files
+so that alphabetical order gives the correct load order…</p>
+</div>
+
+<h3 id="important-system-wide-settings">Important system-wide settings</h3>
+
+<p>A related but important topic is the Spree core settings that your app
+will need to function correctly, eg to disable backordering or to
+configure the mail subsystem. You can (mostly) set these from the admin
+interface, but we recommend using initializers for these. See the
+<a href="preferences.html#persisting-modifications-to-preferences">preferences
+guide</a> for
+more info.</p>
+
+<h2 id="catalog-creation">Catalog creation</h2>
+
+<p>This section covers everything relating to import of a product set,
+including the product details, variants, properties and options,
+images, and taxons.</p>
+
+<h3 id="preliminaries">Preliminaries</h3>
+
+<p>Let’s assume that you are working from a CSV-compatible format, and so
+are reading one product per row, and each row contains values for the fixed
+details, properties, and variants configuration.</p>
+
+<p>We won’t always explicitly save changes to records: we assume that your
+upload scripts will call <em>save</em> at appropriate times or use
+*update_attribute+
+etc.</p>
+
+<h3 id="products">Products</h3>
+
+<p>Products must have at least a name and a price in order to pass
+validation, and we set the description too.</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>p = <span class="constant">Spree</span>::<span class="constant">Product</span>.create <span class="key">name</span>: <span class="string"><span class="delimiter">'</span><span class="content">some product</span><span class="delimiter">'</span></span>, <span class="key">price</span>: <span class="float">10.0</span>,
+<span class="key">description</span>: <span class="string"><span class="delimiter">'</span><span class="content">some text here</span><span class="delimiter">'</span></span>
+
+</pre></div>
+</div>
+</div>
+
+<p>Observe that the permalink and timestamps are added automatically.
+You may want to set the ‘meta’ fields for SEO purposes.</p>
+
+<div class="note"><p>It’s important to set the <em>available_on</em> field. Without this
+being a date in the past, the product won’t be listed in the standard
+displays.</p>
+</div>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>p.available_on = <span class="constant">Time</span>.current
+
+</pre></div>
+</div>
+</div>
+
+<h4 id="the-master-variant">The Master variant</h4>
+
+<p>Every product has a master variant, and this is created automatically
+when the product is created. It is accessible via <em>p.master</em>, but note that many
+of its fields are accessible through the product via delegation. Example:
+<em>p.price</em> does the same as <em>p.master.price</em>. Delegation also allows field
+modification, so <em>p.price = 2 * p.price</em> doubles the product’s (master) price.</p>
+
+<p>The dimensions and weight fields should be self-explanatory.
+The <em>sku</em> field holds the product’s stock code, and you will want to set
+this if the product does not have option variants.</p>
+
+<h4 id="stock-levels">Stock levels</h4>
+
+<p>If you don’t have option variants, then you may also need to register
+some stock for the master variant. The exact steps depend on how you
+have configured Spree’s <a href="inventory.html">inventory system</a>, but most sites
+will just need to assign to <em>p.on_hand</em>, eg <em>p.on_hand = 100</em>.</p>
+
+<h4 id="shipping-category">Shipping category</h4>
+
+<p>A product’s <a href="shipments.html#shipping-categories">shipping category</a> field
+provides product-specific information for the shipping
+calculators, eg to indicate that a product requires additional insurance
+or can only be surface shipped. If no special conditions are needed, you
+can leave this field as nil.
+The <em>Spree::ShippingCategory</em> model is effectively a wrapper for a
+string. You can either generate the list of categories in advance, or use
+<em>where.first_or_create</em> to reuse previous objects or create new ones
+when required.</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>p.shipping_category = <span class="constant">Spree</span>::<span class="constant">ShippingCategory</span>.where(<span class="key">name</span>: <span class="string"><span class="delimiter">'</span><span class="content">Type A</span><span class="delimiter">'</span></span>).first_or_create
+
+</pre></div>
+</div>
+</div>
+
+<h4 id="tax-category">Tax category</h4>
+
+<p>This is a similar idea to the shipping category, and guides the
+calculation of product taxes, eg to distinguish clothing items from electrical
+goods.
+The model wraps a name <em>and</em> a description (both strings), and you can
+leave the field as nil if no special treatment is needed.</p>
+
+<p>You can use the <em>where.first_or_create</em> technique, though you probably
+want to set up the entire <a href="taxation.html">tax configuration</a> before you start
+loading products.</p>
+
+<p>You can also fill in this information automatically at a <em>later</em> date,
+e.g. use the taxon information to decide which tax categories something
+belongs in.</p>
+
+<h3 id="taxons">Taxons</h3>
+
+<p>Adding a product to a particular taxon is easy: just add the taxon to
+the list of taxons for a product.</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>p.taxons &lt;&lt; some_taxon
+
+</pre></div>
+</div>
+</div>
+
+<p>Recall that taxons work like subclassing in OO languages, so a product
+in taxon T is also contained in T’s ancestors, so you should usually assign a
+product to the most specific applicable taxon - and do not need to assign it to
+all of the taxon’s ancestors.\
+However, you can assign products to as many taxons as you want,
+including ancestor taxons. This feature is more useful with sibling taxons, e.g.
+assigning a red and green shirt to both ‘red clothes’ and ‘green
+clothes’.</p>
+
+<div class="note"><p>Yes, this also means that child taxons don’t have to be distinct, ie
+they can overlap.</p>
+</div>
+
+<p>When uploading from a spreadsheet, you might have one or more taxons
+listed for a product, and these taxons will be identified by name.
+Individual taxon names don’t have to be unique, e.g. you could have
+‘shirts’ under ‘male clothing’, and ‘shirts’ under ‘female clothing’.
+In this case, you need some context, eg ‘male clothing &gt; shirts’ vs.
+‘female clothing &gt; shirts’.</p>
+
+<p>Do you need to create the taxon structure in advance? Not always: as the
+code below shows, it is possible to create taxons as and when they are
+needed, but this can be cumbersome for deep hierarchies. One compromise is to
+create the top levels (say the top 2 or 3 levels) in advance, then use
+the taxon information column to do some product-specific fine tuning.</p>
+
+<p>The following code uses a list of (newline-separated) taxon descriptions-
+possibly using ‘A &gt; B &gt; C’ style of context to assign the taxons for a product. Notice the use of
+<em>where.first_or_create</em>.</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="comment"># create outside of loop</span>
+  main_taxonomy = <span class="constant">Spree</span>::<span class="constant">Taxonomy</span>.where(<span class="key">name</span>: <span class="string"><span class="delimiter">'</span><span class="content">Products</span><span class="delimiter">'</span></span>).first_or_create
+
+<span class="comment"># inside of main loop</span>
+the_taxons = []
+taxon_col.split(<span class="regexp"><span class="delimiter">/</span><span class="content">[</span><span class="char">\r</span><span class="char">\n</span><span class="content">]*</span><span class="delimiter">/</span></span>).each <span class="keyword">do</span> |chain|
+  taxon = <span class="predefined-constant">nil</span>
+  names = chain.split
+  names.each <span class="keyword">do</span> |name|
+    taxon = <span class="constant">Spree</span>::<span class="constant">Taxon</span>.where.first_or_create
+  <span class="keyword">end</span>
+  the_taxons &lt;&lt; taxon
+<span class="keyword">end</span>
+p.taxons = the_taxons
+
+
+</pre></div>
+</div>
+</div>
+
+<p>You can use similar code to set up other taxonomies, e.g. to have a
+taxonomy for brands and product ranges, like ‘Guitars’ with child
+‘Acoustic’. You could use various property or option values to drive the
+creation of such taxonomies.</p>
+
+<h3 id="product-properties">Product Properties</h3>
+
+<p>The first step is to create the property ‘types’. These should be
+known in advance so you can define these at the start of the script. You
+should give the internal name and presentation name. For simplicity, the code
+examples have these names as the same string.</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>size_prop = <span class="constant">Spree</span>::<span class="constant">Property</span>.where(<span class="key">name</span>: <span class="string"><span class="delimiter">'</span><span class="content">size</span><span class="delimiter">'</span></span>, <span class="key">presentation</span>: <span class="string"><span class="delimiter">'</span><span class="content">Size</span><span class="delimiter">'</span></span>).first_or_create
+
+</pre></div>
+</div>
+</div>
+
+<p>Then you just set the value for the property-product pair.
+Assuming value*size_info+ which is derived from the relevant
+column, this means:</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="constant">Spree</span>::<span class="constant">ProductProperty</span>.create <span class="key">property</span>: size_prop, <span class="key">product</span>: p, <span class="key">value</span>: size_info
+
+</pre></div>
+</div>
+</div>
+
+<h4 id="product-prototypes">Product prototypes</h4>
+
+<p>The admin interface uses a system of ‘prototypes’ to speed up data
+entry, which seeds a product with a given set of option types and (empty)
+property values. It probably isn’t so useful when creating products
+programmatically, since the code will need to do the hard work of
+creating variants and setting properties anyway. However, we mention it
+here for completeness.</p>
+
+<h3 id="variants">Variants</h3>
+
+<p>Variants allow different versions of a product to be offered, e.g.
+allowing variations in size and color for clothing. If a product comes in only
+one configuration, you don’t need to use variants - the master variant,
+already created, is sufficient.</p>
+
+<p>Otherwise, you need to declare what the allowed option types are (e.g.
+size, color, quality rating, etc) for your product, and then create variants
+which (usually) have a single option value for each of the product’s option
+types (e.g. ‘small’ and ‘red’ etc).</p>
+
+<div class="note"><p>Spree’s core generally assumes that each variant has exactly one
+option value for each of the product’s option types, but the current
+code is tolerant of missing values. Certain extensions may be more
+strict, e.g. ones for providing advanced variant selection.</p>
+</div>
+
+<h4 id="creating-variants">Creating variants</h4>
+
+<p>New variants require only a product to be associated with, but it is
+useful to set an identifying <em>sku</em> code too. The price field is optional: if it is not
+explicitly set, the new variant will use the master variant’s price (the same applies to
+<em>cost_price</em> too). You can also set the <em>weight</em>, <em>width</em>, <em>height</em>, and <em>depth</em> too.</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>v = <span class="constant">Spree</span>::<span class="constant">Variant</span>.create <span class="key">product</span>: p, <span class="key">sku</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">some_sku_code</span><span class="delimiter">&quot;</span></span>, <span class="key">price</span>: <span class="constant">NNNN</span>
+
+</pre></div>
+</div>
+</div>
+
+<div class="note"><p>The price is only copied at creation, so any subsequent changes to
+a product’s price will need to be copied to all of its variants.</p>
+</div>
+
+<p>Next, you may also want to register some stock for this variant.
+The exact steps depend on how you have configured Spree’s
+<a href="inventory.html">inventory system</a>, but most sites
+will just need to assign to <em>v.on_hand</em>, eg <em>v.on_hand = 100</em>.</p>
+
+<p>You now need to set some option types and values, so customers can
+choose between the variants.</p>
+
+<h4 id="option-types">Option types</h4>
+
+<p>The option types to use will vary from product to product, so you will
+need to give this information for each product - or assume a default
+and only use different names when this column is empty.</p>
+
+<p>You can probably declare most of the option types in advance, and so
+just look up the names when required, though for fine control, you can
+use the <em>where.first_or_create</em> technique, with something like this:</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>p.option_types = option_names_col.map <span class="keyword">do</span> |name|
+  <span class="constant">Spree</span>::<span class="constant">OptionType</span>.where(<span class="key">name</span>: name, <span class="key">presentation</span>: name).first_or_create
+<span class="keyword">end</span>
+
+</pre></div>
+</div>
+</div>
+
+<h4 id="option-values">Option values</h4>
+
+<p>Option values represent the choices possible for some option type.
+Again, you could declare them in advance, or use <em>where.first_or_create</em>. You’ll
+probably find it easier to create/retrieve the option values as you create each variant.</p>
+
+<p>Suppose you are using a notation like <em>“Green &amp; Small = small_green_shirt @ $10.00”</em>
+to encode each variant in the spreadsheet, and this is stored in the variable
+<em>opt_info</em>. The following extracts the three key pieces of information and sets
+the option values for the new variant (see below for variant creation).</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>*, opts, sku, price = opt_info.match(<span class="regexp"><span class="delimiter">/</span><span class="content">(.+)</span><span class="char">\s</span><span class="content">=</span><span class="char">\s</span><span class="content">(</span><span class="char">\w</span><span class="content">+)</span><span class="char">\s</span><span class="content">@</span><span class="char">\s</span><span class="char">\$</span><span class="content">(.+)</span><span class="delimiter">/</span></span>).to_a
+v = <span class="constant">Spree</span>::<span class="constant">Variant</span>.create <span class="key">product</span>: p, <span class="key">sku</span>: sku, <span class="key">price</span>: price
+v.option_values = opts.split(<span class="string"><span class="delimiter">'</span><span class="content">&amp;</span><span class="delimiter">'</span></span>).map <span class="keyword">do</span> |nm|
+  <span class="constant">Spree</span>::<span class="constant">OptionValue</span>.where.first_or_create nm.strip
+<span class="keyword">end</span>
+
+</pre></div>
+</div>
+</div>
+
+<hr />
+<p>You don’t have to stick with system-wide option types: you can
+create types specifically for groups of products such as a product range from a single
+manufacturer. In such cases, the range might have a particular color
+scheme and there can be advantages to isolating the scheme’s options in its
+own type and set of values, rather than trying to work with a more general
+setup. It also avoids filling up a type with lots of similar options -
+and so reduces the number of options when using faceted search etc. You can
+also attach resources like color swatches to the more specific values.</p>
+
+<h4 id="ordering-of-option-values">Ordering of option values</h4>
+<p>You might want option values to appear in a certain order, such as by
+increasing size or by alphabetical order. The <em>Spree::OptionValue</em> model uses
+<em>acts_as_list</em> for setting the order, and option types will use the <em>position</em> field when retrieving
+their associated values. The position is scoped to the relevant option type.</p>
+
+<p>If you create option values in advance, just create them in the required
+order and the plugin will set the <em>position</em> automatically.</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>color_type = <span class="constant">Spree</span>::<span class="constant">OptionType</span>.create <span class="key">name</span>: <span class="string"><span class="delimiter">'</span><span class="content">Color</span><span class="delimiter">'</span></span>, <span class="key">presentation</span>: <span class="string"><span class="delimiter">'</span><span class="content">Color</span><span class="delimiter">'</span></span>
+color_options = <span class="string"><span class="delimiter">%w[</span><span class="content">Red Blue Green</span><span class="delimiter">]</span></span>.split.map { |n|
+  <span class="constant">Spree</span>::<span class="constant">OptionValue</span>.create <span class="key">name</span>: n, <span class="key">presentation</span>: n,
+  <span class="key">option_type</span>: color_type }
+
+</pre></div>
+</div>
+</div>
+
+<p>Otherwise, you could enforce the ordering*after_ loading up all of the
+variants, using something like this:</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>color_type.option_values.sort_by(&amp;<span class="symbol">:name</span>).each_with_index <span class="keyword">do</span> |val,pos|
+  val.update_attribute(<span class="symbol">:position</span>, pos + <span class="integer">1</span>)
+<span class="keyword">end</span>
+
+</pre></div>
+</div>
+</div>
+
+<h4 id="further-reading">Further reading</h4>
+
+<p><a href="https://github.com/stephskardal">Steph Skardal</a> has produced a useful
+blog post on <a href="http://blog.endpoint.com/2010/01/rails-ecommerce-spree-hooks-comments.html">product
+optioning</a>.
+This discusses how the variant option representation works and how she
+used it to build an extension for enhanced product option selection.</p>
+
+<h3 id="product-and-variant-images">Product and Variant images</h3>
+
+<p>Spree uses <a href="https://github.com/thoughtbot/paperclip">paperclip</a> to
+manage image attachments and their various size formats. (See the <a href="logic.html#product-images">Customization Guide</a> for info on altering the image formats.)
+You can attach images to products and to variants - the mechanism is
+polymorphic. Given some local image file, the following will associate the image and
+create all of the size formats.</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="comment">#for image for product (all variants) represented by master variant</span>
+img = <span class="constant">Spree</span>::<span class="constant">Image</span>.create(<span class="key">attachment</span>: <span class="constant">File</span>.open(path), <span class="key">viewable</span>: product.master)
+
+<span class="comment">#for image for single variant</span>
+img = <span class="constant">Spree</span>::<span class="constant">Image</span>.create(<span class="key">attachment</span>: <span class="constant">File</span>.open(path), <span class="key">viewable</span>: variant)
+
+</pre></div>
+</div>
+</div>
+
+<p>Paperclip also supports external <a href="https://github.com/thoughtbot/paperclip/blob/master/lib/paperclip/storage.rb">storage of images in S3</a></p>
+
+        </div>
+      </div>
+
+    </section>
+
+    <aside id="sidebar" class="four columns">
+  <nav id="sidebar-menu">
+    <ul>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-tutorial-menu"><i class="icon-right-open"></i></a>
+          <a href='/developer/getting_started_tutorial.html'>Tutorials</a>
+        </h3>
+        <ul class="js-guides">
+          <li><i class="icon-dot"></i><a href='/developer/getting_started_tutorial.html'>Getting Started</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/extensions_tutorial.html'>Extensions</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/deface_overrides_tutorial.html'>Deface Overrides</a> <div class="toc"></div> </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-source-code-menu"><i class="icon-right-open"></i></a>
+          <a href='/developer/about.html'>Source Code</a>
+        </h3>
+        <ul class="js-guides">
+          <li><i class="icon-dot"></i><a href='/developer/about.html'>About</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/navigating.html'>Navigating</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/getting_help.html'>Getting Help</a> <div class="toc"></div> </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href="https://github.com/spree/spree/blob/master/.github/CONTRIBUTING.md" target="_blank" rel="nofollow">
+              Contributing
+            </a>
+            <div class="toc"></div>
+          </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-core-menu"><i class="icon-right-open"></i></a>
+          <a href='/developer/addresses.html'>The Core</a>
+        </h3>
+        <ul class="js-guides">
+          <li><i class="icon-dot"></i><a href='/developer/addresses.html'>Addresses</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/adjustments.html'>Adjustments</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/calculators.html'>Calculators</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/inventory.html'>Inventory</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/orders.html'>Orders</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/payments.html'>Payments</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/preferences.html'>Preferences</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/products.html'>Products</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/promotions.html'>Promotions</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/shipments.html'>Shipments</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/taxation.html'>Taxation</a> <div class="toc"></div> </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-customization-menu"><i class="icon-right-open"></i></a>
+          <a href='/developer/authentication.html'>Customization</a>
+        </h3>
+        <ul class="js-guides">
+          <li><i class="icon-dot"></i><a href='/developer/authentication.html'>Authentication</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/i18n.html'>Internationalization (i18n)</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/view.html'>View</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/asset.html'>Asset</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/logic.html'>Logic</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/s3_storage.html'>Use S3</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/checkout.html'>Checkout</a> <div class="toc"></div> </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-deployment-menu"><i class="icon-right-open"></i></a>
+          <a href='/developer/deployment_tips.html'>Deployment</a>
+        </h3>
+        <ul class="js-guides">
+          <li><i class="icon-dot"></i><a href='/developer/heroku.html'>Heroku</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/ansible-ubuntu.html'>Ansible Ubuntu Deployment</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/manual-ubuntu.html'>Manual Ubuntu Deployment</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/deployment_options.html'>Deployment Options</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/deployment_tips.html'>Deployment Tips</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/requesting_and_configuring_ssl.html'>Requesting/Configuring SSL</a> <div class="toc"></div> </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-advanced-menu"><i class="icon-right-open"></i></a>
+          <a href='/developer/seo.html'>Advanced Topics</a>
+        </h3>
+        <ul class="js-guides">
+          <li><i class="icon-dot"></i><a href='/developer/developer_tips.html'>Developer Tips</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/gateway_specific_information.html'>Gateway Specific Information</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/migration.html'>Migrating to Spree</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/seo.html'>Search Engine Optimization</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/security.html'>Security</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/testing.html'>Testing Spree Applications</a> <div class="toc"></div> </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-upgrades-menu"><i class="icon-right-open"></i></a>
+          <a href='/developer/upgrade_guides.html'>Upgrade Guides</a>
+        </h3>
+        <ul class="js-guides">
+          <li><i class="icon-dot"></i><a href='/developer/point-sixty-to-point-seventy.html'>0.60.x to 0.70.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/point-seventy-to-one-dot-oh.html'>0.70.x to 1.0.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/one-dot-oh-to-one-dot-one.html'>1.0.x to 1.1.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/one-dot-one-to-one-dot-two.html'>1.1.x to 1.2.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/one-dot-two-to-one-dot-three.html'>1.2.x to 1.3.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/one-dot-three-to-two-dot-oh.html'>1.3.x to 2.0.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/two-dot-oh-to-two-dot-one.html'>2.0.x to 2.1.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/two-dot-one-to-two-dot-two.html'>2.1.x to 2.2.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/two-dot-two-to-two-dot-three.html'>2.2.x to 2.3.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/two-dot-three-to-two-dot-four.html'>2.3.x to 2.4.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/three-dot-oh-to-three-dot-one.html'>3.0.x to 3.1.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/three-dot-one-to-three-dot-two.html'>3.1.x to 3.2.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/three-dot-two-to-three-dot-three.html'>3.2.x to 3.3.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/three-dot-three-to-three-dot-four.html'>3.3.x to 3.4.x</a> <div
+          class="toc"></div></li>
+        </ul>
+      </li>
+    </ul>
+  </nav>
+</aside>
+
+  </div>
+
+  <footer id="main-footer">
+
+  <div class="footer-top">
+    <div class="container">
+      <div id="link-blocks" class="row">
+        <div class="link-block six columns">
+          <h3 class="block-title">Developers</h3>
+          <ul>
+            <li><a href="https://slack.spreecommerce.org" target="_blank" rel="nofollow">Slack</a></li>
+            <li><a href="https://github.com/spree-contrib" target="_blank">Extensions</a></li>
+            <li><a href="https://github.com/spree/spree/blob/master/license.md" target="_blank">License</a></li>
+          </ul>
+        </div>
+        <div class="link-block seven columns">
+          <h3 class="block-title">About Spree</h3>
+          <p>
+            <strong><a href="https://spreecommerce.org">Spree Commerce</a></strong>
+            is a complete modular, API-driven open source e-commerce solution
+            built with Ruby on Rails.
+          </p>
+          <p>
+            Guides are hosted and maintained by
+            <a href="http://sparksolutions.co" target="_blank">Spark Solutions</a>
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</footer>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-104990445-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/docsearch.js/2/docsearch.min.js"></script>
+<script type="text/javascript"> docsearch({
+apiKey: 'fb697cd2d04591b036ea172259c05ba8',
+indexName: 'spreecommerce',
+inputSelector: '#search-field',
+debug: false // Set debug to true if you want to inspect the dropdown
+});
+</script>
+
+
+  </body>
+</html>

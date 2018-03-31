@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>    <html class="lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>    <html class="lt-ie9"> <![endif]-->
+<!--[if IE 9]>    <html class="ie9"> <![endif]-->
+<!--[if gt IE 9]><!--> <html lang="en" > <!--<![endif]-->
+<head>
+  <title>Spree 0.30.0 - Release Notes | Spree - Ruby on Rails e-commerce platform</title>
+
+  <meta charset="utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta name="section" content="version" />
+
+<link href="/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+<link href="/shared/css/icons.css" media="screen" rel="stylesheet" type="text/css">
+<link href="/shared/css/icons-codes.css" media="screen" rel="stylesheet" type="text/css">
+
+<link href="/shared/css/skeleton.css" media="screen" rel="stylesheet" type="text/css">
+<link href="/shared/css/documentation.css" media="screen" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="/assets/stylesheets/guides.css" media="screen" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/docsearch.js/2/docsearch.min.css" />
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-migrate/1.1.1/jquery-migrate.min.js"></script>
+<script src="/assets/javascripts/css_browser_selector_dev.js" type="text/javascript"></script>
+<script src="/assets/javascripts/jquery.toc.js" type="text/javascript"></script>
+<script src="/assets/javascripts/documentation.js" type="text/javascript"></script>
+
+
+</head>
+<body class="integration">
+  
+  <header id="header">
+    <div id="top-header">
+  <div class="container">
+    <div class="row">
+      <div class="two columns">
+  <a class="logo" href="http://spreecommerce.org">
+    <img src='/images/logo.png' alt="Spree Commerce - Ruby on Rails e-commerce platform" />
+  </a>
+</div>
+
+      <div class="three columns">
+  <input type="text" id="search-field" placeholder="Search..." />
+</div>
+
+      <nav id="main-menu" class="eleven columns">
+  <ul class="inline">
+    <li><a href="../api/">API</a></li>
+    <li><a href="../developer/">Developer</a></li>
+    <li><a href="../user/">User</a></li>
+    <li><a href="../release_notes/">Release Notes</a></li>
+    <li>
+      <a href="http://slack.spreecommerce.org" target="_blank">Slack</a>
+    </li>
+    <li>
+      <a href="https://heroku.com/deploy?template=https://github.com/spree/spree" target="_blank" rel="nofollow">Demo</a>
+    </li>
+  </ul>
+</nav>
+
+    </div>
+  </div>
+</div>
+
+
+    <div id="subheader">
+      <div class="container">
+        <div class="twelve columns">
+          <h1 class="page-title">Spree 0.30.0 - Release Notes</h1>
+        </div>
+      </div>
+    </div>
+
+  </header>
+
+  <div class="container">
+    <section id="main-content">
+
+      <div class="twelve columns">
+        <div id="content">
+          
+<h1 id="summary">Summary</h1>
+
+<p>Spree 0.30.0 is the first official release to support Rails 3.x. It has
+been several months in the making but we’re finally here. Unfortunately
+we haven’t had the time to write up detailed release notes and the
+documentation is still a work in progress. We’ll try to mention the
+highlights here and we’ll continue to update the documentation in the
+coming weeks.</p>
+
+<div class="note"><p>We’re always looking for more help with the Spree documentation.
+If you’d like to offer assistance please contact us on the spree-user
+mailing list and we can give you commit access to the
+<a href="https://github.com/spree/spree-guides">spree-guides</a> documentation
+project.</p>
+</div>
+
+<h1 id="rails-engines">Rails Engines</h1>
+
+<p>Spree is now heavily reliant upon the concept of Rails Engines. This
+represents a significant architectural shift from previous versions of
+Spree. This will likely be the most time consuming upgrade of Spree
+you’ll ever have to make. The change is the result of a major change in
+Rails itself so the difficulties are unavoidable. The good news is that
+Rails has adopted many of the ideas used in Spree (Engines are now
+equivalent to Spree Extensions and visa versa.) This means that there is
+very little non-standard Rails behavior left in Spree.</p>
+
+<h2 id="no-more-site-extension">No More Site Extension</h2>
+
+<p>Previous versions of Spree required a <a href="http://spreecommerce.com/legacy/0-30-x/extensions.html#thesiteextension">site
+extension</a>
+in order to customize the look and feel of the site. One major
+improvement in Spree is that this is no longer necessary. All of the
+content that normally goes in your site extension can now be moved to to
+<em>Rails.root</em>.</p>
+
+<h2 id="extensions-are-now-gems">Extensions are Now Gems</h2>
+
+<p>Extensions are now installed as Rubygems. They are also no longer
+deployed to <em>vendor/extensions</em>. You need to add the required extensions
+to you <em>Gemfile</em>. There is a comprehensive <a href="/developer/extensions_tutorial.html">Extension Guide</a> in the
+online documentation which can assist you.</p>
+
+<p>As of the time of this release there are only a limited number of
+extensions that are currently compatible with Spree 0.30.x. It is
+suggested that you check the <a href="https://github.com/spree-contrib">Extension
+Registry</a> for more information on
+which extensions are 0.30.x compatible. Check back often because the
+Spree core team will be working on updating the more critical ones
+immediately after the release.</p>
+
+<div class="note"><p>Its relatively easy to convert an existing extension into a gem.
+Its suggested you find a 0.30.x compatible extension and study the
+source code for a better idea on how to do this.</p>
+</div>
+
+<h1 id="improvements-to-payments">Improvements to Payments</h1>
+
+<p>Payments have been significantly improved in this version of Spree. One
+of the most important changes is the addition of a <a href="https://github.com/pluginaweek/state_machine">state
+machine</a> for payments.
+Payments that are submitted to a payment gateway for processing are in
+the “processing state.” This will help to prevent additional attempts to
+process the payment through customer refreshing, etc. Failed payments
+are also recorded and given a “failed” state.</p>
+
+<p>We have abandoned the concept of payment transactions and now record
+most of the information directly in the payment record. When in comes
+time to calculate the payment total, only payments in the “completed”
+state are counted.</p>
+
+<h1 id="simplification-of-adjustments">Simplification of Adjustments</h1>
+
+<p>Adjustments have also been dramatically simplified. Instead of having
+the concept of <em>Charge</em> and <em>Credit</em> we just have the single
+<em>Adjustment</em>. What used to be called a <em>Credit</em> is now just a negative
+adjustment. Adjustments also now have a <em>mandatory</em> attribute. When this
+attribute is <em>true</em> the adjustment is always shown when displaying the
+order total, even if the value is zero. All non-mandatory adjustments
+are removed from the order if their value is ever equal to zero.</p>
+
+<div class="note"><p>Mandatory adjustments make it easy to show $0 for tax or shipping
+when those cases apply. The thinking is we don’t want customers to
+wonder what the shipping cost because its not present - better to show a
+$0 value explicitly.</p>
+</div>
+
+<h1 id="new-promotion-functionality">New Promotion Functionality</h1>
+
+<p>Promotion functionality in Spree has been greatly improved. There is a
+new <em>spree_promo</em> gem which is included by default when you install
+Spree.</p>
+
+<h2 id="creating-a-promotion">Creating a Promotion</h2>
+
+<p>A new promotion requires a <em>name</em> and <em>code</em> attribute. The <em>code</em>
+attribute can be used by customers when checking out to “activate” a
+particular promotion.</p>
+
+<div class="note"><p>This is standard “coupon code” functionality but you’re not
+required to have customers enter codes in order to utilize promotions.</p>
+</div>
+
+<h2 id="promotion-rules">Promotion Rules</h2>
+
+<p>Once a new promotion is created you can create one or more rules for the
+promotion. You can require that all rules for the promotion be satisfied
+or just one of the rules.</p>
+
+<p>Each of the rules is based on a Ruby class that extends <em>PromotionRule</em>.
+There are four built in rule types for Spree but others can be added via
+extension or directly through your Spree application code.</p>
+
+<ul>
+  <li><strong>Item Total:</strong> Limit to orders with an item total above a specified
+amount</li>
+  <li><strong>Product:</strong> Limit to orders containing one or all of the specified
+products</li>
+  <li><strong>User:</strong> Limit to orders made by specific users</li>
+  <li><strong>First Order:</strong> Limit to the first order by a user</li>
+</ul>
+
+<h1 id="no-more-vendor-mode">No More “Vendor Mode”</h1>
+
+<p>Spree is deployed as a Rubygem now so the previous system of different
+“boot modes” has been simplified. Spree never needs to be deployed
+inside of your application, even if you’re using edge or a custom fork.
+Thanks to Bundler you can reference any version of Spree source directly
+via <em>Gemfile</em> and either a physical directory location or a git
+repository location.</p>
+
+<div class="note"><p>See the <a href="http://guides.spreecommerce.org/legacy/0-30-x/source_code.html">Source Guide</a> for a complete
+understanding of all the changes to the organization of the source code.</p>
+</div>
+
+<h1 id="upgrading">Upgrading</h1>
+
+<h2 id="before-you-upgrade">Before You Upgrade</h2>
+
+<h3 id="upgrade-to-the-previous-version">Upgrade to the Previous Version</h3>
+
+<p>It is recommended that you upgrade to Spree 0.11.x (the previous latest
+stable version) first. The upgrade process should go much smoother if
+you upgrade incrementally.</p>
+
+<h3 id="backup-your-database">Backup Your Database</h3>
+
+<p>It is always recommended that you backup your database before upgrading.
+You should also test the upgrade process locally and/or on a staging
+server before attempting on your live production system.</p>
+
+<div class="warning"><p>The Spree 0.30.0 upgrade will delete any in progress orders
+which should generally considered to be a safe thing to do since these
+are typically just abandoned orders. There are also non trivial changes
+to payments and other tables. Hang on to your database backup until
+you’re sure the upgrade has gone smoothly.</p>
+</div>
+
+<h2 id="create-a-new-rails-application">Create a New Rails Application</h2>
+
+<p>It is suggested that you create a brand new Rails 3.x application and
+then make the necessary changes to that application. We’ll briefly walk
+you through the steps to do this.</p>
+
+<div class="warning"><p>There have been major changes to how Rails applications (and
+consequently Spree) are configured and initialized. You will have an
+easier time if you start with a new Rails application and migrate your
+stuff over to it rather than trying to make changes to an existing Spree
+application so that its Rails 3 compliant.</p>
+</div>
+
+<h3 id="copy-your-legacy-files">Copy Your Legacy Files</h3>
+
+<p>Spree no longer requires that you have a “site” extension. This means
+that you should copy all of the files in <em>vendor/extensions/site</em> into
+the <em>app</em> directory of your new Rails application. This includes the
+contents of the <em>public</em> directory.</p>
+
+<h3 id="add-spree-to-the-gemfile">Add Spree to the <em>Gemfile</em></h3>
+
+<p>So now you have a new Rails 3.x application and you’ve moved over your
+custom files. Its time to add the Spree gem into the mix. Edit your
+<em>Gemfile</em> and add the following entry:</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>gem <span class="string"><span class="delimiter">'</span><span class="content">spree</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">0.30.0</span><span class="delimiter">'</span></span>
+
+</pre></div>
+</div>
+</div>
+
+<p>Then install the Spree gem using the familiar Bundler approach:</p>
+
+<div class="language-bash highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>$ bundle install
+
+</pre></div>
+</div>
+</div>
+
+<h2 id="upgrade-migrations-and-assets">Upgrade Migrations and Assets</h2>
+
+<p>The gems that comprise Spree contain various public assets (images,
+stylesheets, etc.) as well as database migrations that are needed in
+order to run Spree. There is a Rake tasks designed to copy over the
+necessary files.</p>
+
+<div class="language-bash highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>$ bundle exec rake spree:install
+
+</pre></div>
+</div>
+</div>
+
+<p>Once the migrations are copied over you can migrate using the familiar
+Rake task for this.</p>
+
+<div class="language-bash highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>$ bundle exec rake db:migrate
+
+</pre></div>
+</div>
+</div>
+
+        </div>
+      </div>
+
+    </section>
+
+    <aside id="sidebar" class="four columns">
+  <nav id="sidebar-menu">
+    <ul>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-version-menu"><i class="icon-right-open"></i></a>
+          <a href='#.html'>Versions</a>
+        </h3>
+        <ul class="js-guides">
+          <li><i class="icon-dot"></i><a href='spree_3_4_0.html'>3.4.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_3_3_0.html'>3.3.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_3_2_0.html'>3.2.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_3_1_0.html'>3.1.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_3_0_0.html'>3.0.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_2_4_0.html'>2.4.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_2_3_0.html'>2.3.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_2_2_0.html'>2.2.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_2_1_0.html'>2.1.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_2_0_0.html'>2.0.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_1_3_0.html'>1.3.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_1_2_2.html'>1.2.2</a></li>
+          <li><i class="icon-dot"></i><a href='spree_1_2_0.html'>1.2.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_1_1_4.html'>1.1.4</a></li>
+          <li><i class="icon-dot"></i><a href='spree_1_1_0.html'>1.1.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_1_0_0.html'>1.0.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_0_70_0.html'>0.70.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_0_60_0.html'>0.60.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_0_50_0.html'>0.50.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_0_40_0.html'>0.40.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_0_30_0.html'>0.30.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_0_10_0.html'>0.10.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_0_9_0.html'>0.9.0</a></li>
+        </ul>
+      </li>
+    </ul>
+  </nav>
+</aside>
+
+  </div>
+
+  <footer id="main-footer">
+
+  <div class="footer-top">
+    <div class="container">
+      <div id="link-blocks" class="row">
+        <div class="link-block six columns">
+          <h3 class="block-title">Developers</h3>
+          <ul>
+            <li><a href="https://slack.spreecommerce.org" target="_blank" rel="nofollow">Slack</a></li>
+            <li><a href="https://github.com/spree-contrib" target="_blank">Extensions</a></li>
+            <li><a href="https://github.com/spree/spree/blob/master/license.md" target="_blank">License</a></li>
+          </ul>
+        </div>
+        <div class="link-block seven columns">
+          <h3 class="block-title">About Spree</h3>
+          <p>
+            <strong><a href="https://spreecommerce.org">Spree Commerce</a></strong>
+            is a complete modular, API-driven open source e-commerce solution
+            built with Ruby on Rails.
+          </p>
+          <p>
+            Guides are hosted and maintained by
+            <a href="http://sparksolutions.co" target="_blank">Spark Solutions</a>
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</footer>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-104990445-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/docsearch.js/2/docsearch.min.js"></script>
+<script type="text/javascript"> docsearch({
+apiKey: 'fb697cd2d04591b036ea172259c05ba8',
+indexName: 'spreecommerce',
+inputSelector: '#search-field',
+debug: false // Set debug to true if you want to inspect the dropdown
+});
+</script>
+
+
+  </body>
+</html>

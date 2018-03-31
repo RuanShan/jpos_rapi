@@ -1,0 +1,107 @@
+<% content_for :game_asset_css do %>
+  <%= stylesheet_link_tag 'game/screen_money', media: 'all', 'data-turbolinks-track' => true %>
+<% end %>
+
+<% content_for :game_asset_js do %>
+<%= javascript_include_tag "game_play", media: 'all', 'data-turbolinks-track' => true %>
+<% end %>
+
+<div class="Panel Lottery  counting_play" style=" display: block; opacity: 1;">
+
+  <!--start:开始游戏-->
+  <div class="game game-before" id="waiting">
+      <div class="screen-desk">
+          <div class="btn-begin">
+              <a id="b-start-game" href="javascript:void(0);"></a>
+          </div>
+      </div>
+  </div>
+  <!--end:开始游戏-->
+  <!--start:游戏界面-->
+  <div class="b_game game game-ing hide" id="game">
+      <div class="">
+          <div class="game-box">
+              <ul class="clearfix" id="gold-rank"></ul>
+          </div>
+          <div class="rank-list">
+              <ul class="clearfix" id="user-rank">
+                <!--
+                <li> <p class="rank"> 0 </p>
+                  <div class="ava"> <img /></div>
+                  <p class="name"> nickname </p>
+                </li>
+                -->
+              </ul>
+          </div>
+      </div>
+  </div>
+  <!--end:游戏界面-->
+  <!--start:游戏结果-->
+  <div class="game game-result hide" id="game-result">
+      <div class="result-box2">
+
+        <% if @game_players.count > 0 %>
+
+          <% if @game_round.display_players < 6 || @game_players.length<6 %>
+          <table class="table">
+            <tr><th class="rank">排名 </th> <th class="avatar">  </th> <th class="nickname">昵称 </th><th class="score">分数 </th>   </tr>
+             <% @game_players.first( @game_round.display_players ).each_with_index{ |player, i|%>
+              <tr>
+                <td class="player<%=i %>"> <%= content_tag :span, player.rank, class: "rank rank-#{player.rank}"  %> </td>
+                <td class="avatar player<%=i %>"> <%= tag :img, src: player.avatar, class: 'avatar' %>   </td>
+                <td class="nickname player<%=i %>"> <span class="nickname"> <%= player.nickname  %></span>  </td>
+                <td class="player<%=i %>"> <span class="score">  <%= player.score  %></span>  </td>
+              </tr>
+            <% } %>
+          </table>
+          <% else %>
+          <table class="table">
+            <tr><th class="rank">排名 </th>  <th class="avatar">  </th> <th class="nickname">昵称 </th><th class="score">分数 </th>
+            <th class="rank">排名 </th>  <th class="avatar">  </th> <th class="nickname">昵称 </th><th class="score">分数 </th>   </tr>
+              <% @game_players.each_with_index{ |player, i| break if i>4;  %>
+                <tr>
+                  <td class="player<%=i %>"> <%= content_tag :span, player.rank, class: "rank rank-#{player.rank}"  %> </td>
+                  <td class="avatar player<%=i %>"> <%= tag :img, src: player.avatar, class: 'avatar' %>   </td>
+                  <td class="nickname player<%=i %>">  <span class="nickname"> <%= player.nickname  %></span>  </td>
+                  <td class="player<%=i %>"> <span class="score">  <%= player.score  %></span>  </td>
+                  <% j=i+5; player2 = @game_players[j]; %>
+                  <td class="player<%=j %>"> <%= content_tag( :span, player2.rank, class: "rank rank-#{player2.rank}") if player2  %> </td>
+                  <td class="avatar player<%=j %>"> <%= tag( :img, src: player2.avatar, class: 'avatar') if player2 %>   </td>
+                  <td class="nickname player<%=j %>">  <span class="nickname"> <%= player2.nickname  if player2 %></span>  </td>
+                  <td class="player<%=j %>"> <span class="score">  <%= player2.score if player2  %></span>  </td>
+                </tr>
+              <% } %>
+
+
+            </table>
+          <% end %>
+        <% end %>
+      </div>
+  </div>
+  <!--end:游戏结果-->
+</div>
+
+<div id="cover" class="b_cover"> </div>
+<div id="countdown" class="b_countdown">    5 </div>
+<div id="final" class="b_final">
+  <div class="lft"> </div>
+  <div class="rgt"> </div>
+  <div class="player final_player0">
+    <div>
+      <img class="avatar" />
+    </div>
+    <span class="nickname" >1</span>
+  </div>
+  <div class="player final_player1">
+    <div><img class="avatar" /></div>
+    <span class="nickname" >2</span>
+  </div>
+  <div class="player final_player2">
+    <div><img class="avatar" /></div>
+    <span class="nickname" >3</span>
+  </div>
+
+  <div class="final_close">
+    <a id="b_final_close" href="javascript:void(0)" > 关闭 </a>
+  </div>
+</div>

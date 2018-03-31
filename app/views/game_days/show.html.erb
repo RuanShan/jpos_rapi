@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Game player:</strong>
+  <%= @game_day.game_player_id %>
+</p>
+
+<p>
+  <strong>Day:</strong>
+  <%= @game_day.day %>
+</p>
+
+<p>
+  <strong>Play count:</strong>
+  <%= @game_day.play_count %>
+</p>
+
+<p>
+  <strong>Share count:</strong>
+  <%= @game_day.share_count %>
+</p>
+
+<%= link_to 'Edit', edit_game_day_path(@game_day) %> |
+<%= link_to 'Back', game_days_path %>

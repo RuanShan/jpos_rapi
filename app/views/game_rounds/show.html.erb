@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Game:</strong>
+  <%= @game_round.game %>
+</p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @game_round.name %>
+</p>
+
+<p>
+  <strong>Start at:</strong>
+  <%= @game_round.start_at %>
+</p>
+
+<p>
+  <strong>End at:</strong>
+  <%= @game_round.end_at %>
+</p>
+
+<p>
+  <strong>Preferences:</strong>
+  <%= @game_round.preferences %>
+</p>
+
+<%= link_to 'Edit', edit_game_round_path(@game_round) %> |
+<%= link_to 'Back', game_rounds_path %>

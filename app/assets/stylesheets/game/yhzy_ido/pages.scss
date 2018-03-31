@@ -1,0 +1,748 @@
+/*http://www.17sucai.com/preview/159322/2015-03-20/%E6%B0%94%E7%90%83%E6%B5%AE%E5%8A%A8/index.html*/
+
+
+@keyframes qiqiuFloat
+{
+  from {bottom: 280px;}
+  to {bottom: 800px;}
+}
+@keyframes qiqiuFloat1
+{
+  from {bottom: 400px;}
+  to {bottom: 800px;}
+}
+@keyframes qiqiuFloat2
+{
+  from {bottom: 300px;}
+  to {bottom: 800px;}
+}
+@keyframes qiqiuFloat3
+{
+  from {bottom: 30px;}
+  to {bottom: 800px;}
+}
+@keyframes qiqiuFloat4
+{
+  from {bottom: 80px;}
+  to {bottom: 800px;}
+}
+
+@keyframes cheMove
+{
+  from { left: -140px;}
+  to { left: 100%;}
+}
+
+
+@media(max-width: 640px){
+  *{
+    margin:auto 0px;padding:0px; box-sizing: border-box;
+  }
+  h1,h2,h3,h4,h5,h6, b,i {color: #a39f86;line-height: 30px;}
+  h4{
+    line-height: 24px;
+  }
+  a{
+    line-height: 20px;
+  }
+  li,ol{list-style: none;}
+  p{ color: #a39f86; font-size: 14px; line-height: 20px;}
+  body{
+    width: 100%;
+    color: #a39f86;
+  }
+  input[type="text"],input[type="tel"],input[type="number"]
+  {
+    padding: 2px 4px;
+  }
+  label{
+    font-size: 14px;    color: #a39f86;
+  }
+  .btnWrap{
+    position: absolute;
+    bottom: 0;
+    left:0;
+    right: 0;
+    padding: 8px;
+  }
+    .two_head{
+      background: #f9dfde;
+      height: auto;
+      h2{
+        img{
+          height: 40px;
+          padding: 8px;
+        }
+      }
+    }
+  .two_body{
+    padding: 8px 30px;
+    text-align: center;
+  }
+
+  .obg{ background: #f9dfde;width: 100%;height: 100%;overflow: hidden}
+
+  .onebg{
+    text-align: center;
+  }
+  .onebgbai{
+    width: 84%;
+    background: #fdf3f2;
+    position: absolute;
+    top: 18%;
+    bottom: 0;
+    left: 8%;
+    padding:12px;
+    overflow: hidden;
+    p{
+      margin:12px 0;
+    }
+
+    img{
+      height: 30px;
+      margin: 0 auto;
+    }
+  }
+
+  .one_tou{
+    margin-top: 10px;
+    width: 40px;
+  }
+  .zhengming{
+    display: inline-block;
+    width: 100px;
+    height: 30px;
+    background: #a39f86;
+    color: #fff;
+    text-align: center;
+    line-height: 30px;
+    margin: 4px auto;
+    border: 0px;
+  }
+  .slide1{
+    .onehead {
+      background-image:image-url('game/yhzy_ido/one_01.png');
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: 0 -60px;
+      height: 220px;
+    }
+  }
+  /*第二页*/
+  .slide2.swiper-slide
+  {
+    background-color: #fff;
+
+    .two_xian{
+      width: 100%;
+      height: 1px;
+      background: #a39f86;
+      margin: 24px 0;
+    }
+    .two_woyao{
+      color: #fff;
+      background: #a39f86;
+      padding: 8px 30px;
+      margin: 8px auto;
+      display: inline-block;
+    }
+    .two_body img{
+      width: 200px;
+      margin: 20px auto;
+    }
+    .two_body p{
+      text-align: left;
+    }
+  }
+  /*第三页*/
+  .slide3.swiper-slide{
+    background-color: #fff;
+
+    .stores{
+      margin: 12px auto 6px;
+      width: 88%;
+      text-align: center;
+      overflow-y: auto;
+      .store.selected{
+        .er{
+          background: #f9dfde;
+        }
+      }
+      li{
+        margin:0 0 8px;
+      }
+      a, span{
+        float: left;
+        font-size: 12px;
+        text-align: center;
+        overflow: hidden;
+        line-height: 26px;
+      }
+    }
+    .wu{
+      width: 56%;
+      border: 1px solid #a39f86;
+      border-right: 0px!important;
+    }
+    .san{
+      width: 24%;
+      border: 1px solid #a39f86;
+      border-right: 0px!important;
+    }
+    .er{
+      width: 19%;
+      border: 1px solid #a39f86;
+      background: #a39f86;
+      color: #fff;
+
+    }
+
+    .car{
+      position: absolute;
+      bottom: 0;
+      left: -140px;
+      height: 85px;
+    }
+    .move{ animation: cheMove 20s linear infinite; animation-delay:0s;-webkit-animation: cheMove 20s linear infinite; -webkit-animation-delay:0s; }
+    .car-tips{
+      position: absolute;
+      left:50%;
+      top:50%;
+      margin: -165px 0 0 -140px;
+      width: 280px;
+      background-color: #fff;
+      border: 1px solid  #a39f86;
+      padding: 6px 16px 8px;
+      border-radius: 10px;
+      h3{
+      }
+    }
+  }
+
+  /*第四页*/
+  .slide4
+  {
+    .head{
+      height: 290px;
+      img{
+        height: 100%;
+      }
+    }
+    .biao{
+      overflow: hidden;
+      margin: auto;
+      width: 84%;
+      margin-top: 20px;
+      text-align: center;
+    }
+    .form-group{
+      margin-top: 10px;
+    }
+    .chang{
+      border-top: 1px solid #a39f86;
+      border-left: 1px solid #a39f86;
+      border-bottom: 1px solid #a39f86;
+      background: #f9dfde;
+      color:#a39f86;
+      width: 20%;
+      text-align: center;
+      float: left;
+      height: 30px;
+      line-height: 30px;
+      font-size: 14px;
+    }
+    .changin{
+      float: left;
+      height: 30px;
+      background: #f9dfde;
+      border: 1px solid #a39f86;
+      line-height: 30px;
+      width: 80%;
+    }
+    .duan{
+      border:1px solid #a39f86;
+      background: #a39f86;
+      color:#f9dfde;
+      width: 12%;
+      text-align: center;
+      float: left;
+      height: 30px;
+      line-height: 30px;
+      font-size: 14px;
+    }
+    .duanin{
+      float: left;
+      height: 30px;
+      background: #f9dfde;
+      border: 1px solid #a39f86;
+      line-height: 30px;
+      width: 20%;
+    }
+    .submit{
+      color: #fff;
+      background: #a39f86;
+      padding: 8px 30px;
+      margin: auto;
+      border: 0px;
+      margin-top: 20px;
+      color: #f9dfde
+    }
+    .ido{
+      width: 100%;
+      text-align: center;
+      margin:20px 0;
+    }
+
+  }
+
+  /*第五个*/
+  .slide5
+  {
+    .qiqiu{ position:absolute; width:250px; height:200px;}
+    .qiqiu div{ width:70px; height:65px; background:image-url('game/yhzy_ido/qiqiubg.png') no-repeat center center; padding:15px 5px 0; text-align:center; margin:0 auto; background-size:100% auto;}
+    .qiqiu img{ width:100%; height:auto; display:block;}
+
+    .qiqiu-wrap.up
+    {
+      .qiqiu0{ animation: qiqiuFloat 20s linear infinite; animation-delay:0s;-webkit-animation: qiqiuFloat 20s linear infinite; z-index:2222;-webkit-animation-delay:0s; }
+      .qiqiu1{ animation: qiqiuFloat1 20s linear infinite; animation-delay:0s;-webkit-animation: qiqiuFloat1 20s linear infinite; z-index:2222;-webkit-animation-delay:0s; }
+      .qiqiu2{ animation: qiqiuFloat2 20s linear infinite; animation-delay:0s;-webkit-animation: qiqiuFloat2 20s linear infinite; z-index:2222;-webkit-animation-delay:0s; }
+      .qiqiu3{ animation: qiqiuFloat3 20s linear infinite; animation-delay:0s;-webkit-animation: qiqiuFloat3 20s linear infinite; z-index:2222;-webkit-animation-delay:0s; }
+      .qiqiu4{ animation: qiqiuFloat4 20s linear infinite; animation-delay:0s;-webkit-animation: qiqiuFloat4 20s linear infinite; z-index:2222;-webkit-animation-delay:0s; }
+
+
+    }
+    background-image: image-url('game/yhzy_ido/bg.jpg');
+    background-size: cover;
+    overflow: hidden;
+    .obg{ background: transparent;}
+    .qqbg{
+      position:absolute;
+      text-align: center;
+      bottom:280px; left:80px;
+    }
+    .realname{
+      padding: 14px;
+      background-image: image-url('game/yhzy_ido/namebg.png');
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: contain;
+      color: #fff;
+    }
+    .qqbg img{
+      width: 100%
+    }
+    .qqbg1{
+      width: 130px;
+      text-align: center;
+      opacity: .5;
+      position: absolute;
+      left: 0px;
+      bottom:400px;
+    }
+    .qqbg1 img{
+      width: 100%
+    }
+    .qqbg2{
+      width: 130px;
+      text-align: center;
+      opacity: 0.5;
+      position: absolute;
+      right: 10px;
+      bottom: 300px;
+    }
+    .qqbg2 img{
+      width: 100%
+    }
+
+    .qqbg3{
+      width: 130px;
+      text-align: center;
+      opacity: 0.5;
+      position: absolute;
+      left: 0px;
+      bottom: 30px;
+    }
+    .qqbg3 img{
+      width: 100%
+    }
+    .qqbg4{
+      width: 130px;
+      text-align: center;
+      opacity: 0.5;
+      position: absolute;
+      right: 10px;
+      bottom: 80px;
+
+    }
+    .qqbg4 img{
+      width: 100%
+    }
+
+  }
+
+
+  /*第六页*/
+  .slide6.swiper-slide{
+    overflow: hidden;
+    background-color: #fff;
+    .two_body{
+      h3{    font-size: 15px;
+    line-height: 20px;}
+    }
+
+    .game-player
+    {
+      border-bottom: 1px solid #a39f86;
+      margin: 4px 30px 0;
+    }
+    .lipin{
+      text-align: center!important;
+      width: 100%;
+    }
+    .jiek{
+      position: relative;
+      border: 1px solid #a39f86;
+      margin-top: 8px;
+      padding: 2px;
+      height: 71px;
+      &.unlock .js img{
+        display: none;
+      }
+    }
+
+    .js{
+      position: absolute;
+      left: 2px;
+      top: 2px;
+      width: 65px;
+      height: 65px;
+      img{
+        padding: 12px 0 0 0;
+        width: 30px;
+      }
+    }
+    .js1{
+      background: image-url('game/yhzy_ido/six_03.png');
+      background-size: 65px 65px;
+    }
+    .js2{
+      background: image-url('game/yhzy_ido/six_06.png');
+      background-size: 65px 65px;
+    }
+
+    .js3{
+      background: image-url('game/yhzy_ido/six_09.png');
+      background-size: 65px 65px;
+    }
+
+    .j{
+      padding: 0 0 0 70px ;
+    }
+    .progressbar{
+      position: relative;
+      padding: 8px 0;
+      .bg {
+        height: 10px;
+        border-radius: 5px;
+        background-color: #EDEDED;
+      }
+      .progress{
+        position: absolute;
+        height: 10px;
+        border-radius: 5px;
+        background-color: #a39f86;
+      }
+    }
+    .jjwz{
+      font-size: 12px;
+      margin-left: 0px;
+      line-height:16px;
+      text-align: center;
+    }
+    .yu{
+      width: 80px!important;
+      position: relative;
+      bottom: 0px;
+      margin: 0px!important
+    }
+  }
+  /*第七个*/
+  .votes_count{
+    color: #a39f86;
+    float: left;
+    font-size: 14px;
+  }
+  .woye{
+    background: #a39f86;
+    color: #fff;
+    font-size: 14px;
+    padding: 2px 10px;
+    float:right;
+    line-height: 16px;
+  }
+
+  .slide8
+  {
+    /*第八个*/
+    .tu1{
+      background: image-url('game/yhzy_ido/eight_01.png');
+      height: 145px;
+      background-size: cover;
+      background-position: center;
+
+    }
+    .video-wrap
+    {
+      position: relative;
+      .tu2{
+        position: absolute;
+        left: 230px;
+        right: 0;
+        top:0;
+        bottom: 0;
+        background: #fff image-url('game/yhzy_ido/eight_03.png');
+        background-size: contain;
+        background-position: center;
+        background-repeat: no-repeat;
+      }
+      .video{
+        height: 200px;
+        width: 100%;
+        background-color: #fff;
+      }
+    }
+    .tu3{
+      text-align: center;
+      margin-top: 8px;
+      line-height: 18px;
+    }
+    .tu4{
+      width: 95%;
+      margin: auto;
+      margin-top: 8px;
+      text-align: center;
+      line-height: 18px;
+      font-size: 13px;
+    }
+    .zhengming a{
+      color: #fff;
+    }
+  }
+  .slide9{
+    .wedding
+    {
+      position: absolute;
+      top:0;
+      left: 35px;
+      right: 35px;
+      bottom: 200px;
+      background-image: image-url('game/yhzy_ido/wedding-bg2.jpg');
+      background-size: cover;
+    }
+    .wedding-btn
+    {
+      width:180px;
+      margin: 0 auto 100px;
+      display: inline-block;
+      img{ width: 100%; }
+    }
+  }
+  /*第十个*/
+  .ten{
+    background: #f9dfde;
+    width: 100%;
+    height: 100%;
+  }
+  .er1{
+    width: 90%;
+    margin-top: 80px;
+    padding: 0 5%;
+
+  }
+  .ten2{
+    padding: 8px 5%;
+  }
+
+
+
+  /*第十一个*/
+  .slide10{
+    .ten9{
+      background: #f9dfde;
+      width: 80%;
+      height: 100%;
+      padding: 10%;
+      text-align: center;
+    }
+    .t1{
+      width: 100%;
+      padding: 2%;
+
+    }
+    .na{
+      width: 48%;
+      float: left;
+      margin: 1%
+    }
+    .player-form-wrap
+    {
+      line-height: 26px;
+
+      .nax{
+        border-top: 1px solid #a39f86;
+        border-bottom: 1px solid #a39f86;
+        border-left: 1px solid #a39f86;
+        padding: 0px 5px;
+        text-align: center;
+        float: left;
+        height: 26px;
+        margin-top: 10px;
+      }
+      .nax1{
+        height: 26px;
+        background: #f9dfde;
+        border: 1px solid #a39f86;
+        width: 110px;
+        margin-top: 10px;
+        float: left;
+      }
+      .nax2{
+        border-top: 1px solid #a39f86;
+        border-bottom: 1px solid #a39f86;
+        border-left: 1px solid #a39f86;
+        padding: 0px 5px;
+        text-align: center;
+        float: left;
+        height: 26px;
+        margin-top: 10px;
+      }
+      .nax3{
+        height: 26px;
+        background: #f9dfde;
+        border: 1px solid #a39f86;
+        width: 82px;
+        margin-top: 10px;
+        float: left;
+      }
+    }
+    .nn{
+      width:30px;
+      margin-top: 10px;
+    }
+    .tuu{
+      height: 130px;
+      margin: 0 auto;
+    }
+    .player-photo-upload {
+      position: relative;
+      width: 310px;
+      height: 220px;
+      margin: 30px auto 0;
+      li {
+        width: 150px;
+        height: 220px;
+        background: white;
+        position: absolute;
+        top: 0;
+        overflow: hidden;
+        -webkit-transition: all 0.5s cubic-bezier(0.165, 0.840, 0.440, 1.000) 0.25s;
+        &:nth-of-type(2) {
+          right: 0;
+        }
+        input {
+          width: 100%;
+          height: 100%;
+          position: absolute;
+          left: 0;
+          top: 0;
+          background: transparent;
+          border: 0;
+          opacity: 0;
+          -webkit-tap-highlight-color: rgba(255,255,255,0);
+        }
+        .z2_case {
+          width: 100%;
+          position: absolute;
+          left: 50%;
+          top: 50%;
+          -webkit-transform: translate(-50%,-50%);
+        }
+      }
+    }
+    .player-form-wrap {
+      width: 310px;
+      height: 120px;
+      position: relative;
+      margin: auto;
+      li.lft {
+        width: 150px;
+        height: 160px;
+        position: absolute;
+        top: 0;
+        overflow: hidden;
+        -webkit-transition: all 0.5s cubic-bezier(0.165, 0.840, 0.440, 1.000) 0.25s;
+        &:nth-of-type(2) {
+          right: 0;
+        }
+      }
+      .make-photo{
+        display: inline-block;
+        background: #a39f86;
+        color: #fff;
+        text-align: center;
+        margin: 10px auto 0;
+        border: 0px;
+        height: 26px;
+        font-size: 14px;
+        padding: 0px 18px;
+        line-height: 26px;
+      }
+    }
+  }
+  .slide11{
+    .image-wrap{
+      position: relative;
+      margin: 60px 10px 0;
+      min-height: 1px;
+      .save-image-btn
+      {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        width: 60px;
+        height: 60px;
+        border-radius: 100%;
+        color: transparent;
+        background-color: transparent;
+        font-size: 12px;
+        line-height: 20px;
+        padding: 10px 0 0 0;
+        background-image: image-url('game/yhzy_ido/save.png');
+        background-size: contain;
+        background-repeat: no-repeat;
+      }
+      img{
+        width: 100%;
+      }
+    }
+    .image-style-wrap
+    {
+      .image-style{
+        height: 170px;
+        display: none;
+        text-align: center;
+        p{font-size:16px;}
+        img{
+          height: 150px;
+          width: auto;
+        }
+      }
+      .image-style.selected
+      {
+        display: block;
+      }
+    }
+
+  }
+}

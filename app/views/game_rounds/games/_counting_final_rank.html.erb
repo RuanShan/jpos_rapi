@@ -1,0 +1,36 @@
+<% if @game_players.count > 0 %>
+
+  <% if @game_round.display_players < 6 || @game_players.length<6 %>
+  <table class="table">
+    <tr><th class="rank">排名 </th> <th class="avatar">  </th> <th class="nickname">昵称 </th><th class="score">分数 </th>   </tr>
+     <% @game_players.first( @game_round.display_players ).each_with_index{ |player, i|%>
+      <tr>
+        <td class="player<%=i %>"> <%= content_tag :span, player.rank, class: "rank rank-#{player.rank}"  %> </td>
+        <td class="avatar player<%=i %>"> <%= tag :img, src: player.avatar, class: 'avatar' %>   </td>
+        <td class="nickname player<%=i %>"> <span class="nickname"> <%= player.nickname  %></span>  </td>
+        <td class="player<%=i %>"> <span class="score">  <%= player.score  %></span>  </td>
+      </tr>
+    <% } %>
+  </table>
+  <% else %>
+  <table class="table">
+    <tr><th class="rank">排名 </th>  <th class="avatar">  </th> <th class="nickname">昵称 </th><th class="score">分数 </th>
+    <th class="rank">排名 </th>  <th class="avatar">  </th> <th class="nickname">昵称 </th><th class="score">分数 </th>   </tr>
+      <% @game_players.each_with_index{ |player, i| break if i>4;  %>
+        <tr>
+          <td class="player<%=i %>"> <%= content_tag :span, player.rank, class: "rank rank-#{player.rank}"  %> </td>
+          <td class="avatar player<%=i %>"> <%= tag :img, src: player.avatar, class: 'avatar' %>   </td>
+          <td class="nickname player<%=i %>">  <span class="nickname"> <%= player.nickname  %></span>  </td>
+          <td class="player<%=i %>"> <span class="score">  <%= player.score  %></span>  </td>
+          <% j=i+5; player2 = @game_players[j] if j<@game_round.display_players; %>
+          <td class="player<%=j %>"> <%= content_tag( :span, player2.rank, class: "rank rank-#{player2.rank}") if player2  %> </td>
+          <td class="avatar player<%=j %>"> <%= tag( :img, src: player2.avatar, class: 'avatar') if player2 %>   </td>
+          <td class="nickname player<%=j %>">  <span class="nickname"> <%= player2.nickname  if player2 %></span>  </td>
+          <td class="player<%=j %>"> <span class="score">  <%= player2.score if player2  %></span>  </td>
+        </tr>
+      <% } %>
+
+
+    </table>
+  <% end %>
+<% end %>

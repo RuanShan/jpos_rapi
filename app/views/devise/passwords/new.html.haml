@@ -1,0 +1,21 @@
+= form_for(resource, as: resource_name, url: password_path(resource_name), html: {method: :post, role: 'form'}) do |f|
+  .container
+    .row
+      .col-md-offset-3.col-md-6
+        .card.card-block.round-box.devise
+          %h4.card-header.devise= t('button.forgot_password')
+
+          .card-body.devise
+            = devise_error_messages!
+
+            .row.form-group
+              .col-sm-12
+                = f.email_field :email, class: 'form-control form-control-sm', id: 'inputEmail1',
+                                        placeholder: t('label.email_example').downcase,
+                                        type: 'email'
+
+            .row.form-group
+              .col-sm-12
+                = f.submit t('button.send_email'), class: 'btn btn-success'
+          .card-footer.text-sm-right.devise
+            = render 'devise/shared/links'

@@ -1,0 +1,31 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Game Lucky Users</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Game round user</th>
+      <th>Award level</th>
+      <th>Award code</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @game_lucky_users.each do |game_lucky_user| %>
+      <tr>
+        <td><%= game_lucky_user.game_player_id %></td>
+        <td><%= game_lucky_user.award_level %></td>
+        <td><%= game_lucky_user.award_code %></td>
+        <td><%= link_to 'Show', game_lucky_user %></td>
+        <td><%= link_to 'Edit', edit_game_lucky_user_path(game_lucky_user) %></td>
+        <td><%= link_to 'Destroy', game_lucky_user, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Game Lucky User', new_game_lucky_user_path %>

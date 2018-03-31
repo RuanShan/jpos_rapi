@@ -1,0 +1,52 @@
+<%= form_for(resource, as: resource_name, url: session_path(resource_name), html: {role: 'form'}) do |f| %>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-offset-3 col-md-7">
+        <div class="card card-block round-box devise">
+          <h4 class="card-header devise">
+            <%= t('menu.login') %>
+          </h4>
+          <div class="card-body devise">
+            <%= devise_error_messages! %>
+            <div class="row form-group">
+              <label class="col-sm-4 form-control-label text-sm-right devise">
+                <%= t('label.username') %>
+              </label>
+              <div class="col-sm-8">
+                <%= f.text_field :username, class: 'form-control form-control-sm', id: 'inputUsername1', placeholder: t('label.username').downcase%>
+
+               </div>
+            </div>
+            <div class="row form-group devise">
+              <label class="col-sm-4 form-control-label text-sm-right devise" for="inputPassword1">
+                <%= t('label.password') %>
+              </label>
+              <div class="col-md-8">
+                <%= f.password_field :password, class: 'form-control form-control-sm', id: 'inputPassword1', placeholder: t('label.password').downcase%>
+
+               </div>
+            </div>
+            <div class="row form-group">
+              <div class="col-sm-offset-4 col-sm-8">
+                <div class="checkbox">
+                  <label class="form-control-label devise normal">
+                    <%= f.check_box :remember_me %>
+                    <%= t('label.remember_me') %>
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div class="row form-group">
+              <div class="col-sm-offset-4 col-sm-8">
+                <%= f.submit t('button.login'), class: 'btn btn-success' %>
+              </div>
+            </div>
+          </div>
+          <div class="card-footer text-sm-right devise">
+            <%= render 'devise/shared/links' %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>

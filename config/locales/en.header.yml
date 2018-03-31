@@ -1,0 +1,69 @@
+en:
+  header:
+    fix_me: "Missing %{thing}. Fix me!"
+    branding: "rails4-example"
+
+    default:
+      h1: "H1 text not found. Fix me!"
+      title: "%{branding}"
+      meta_desc: "Ruby on Rails 4 example."
+      meta_keywords: "rails4 example starter rails ruby"
+      robots: "noopd"
+
+  help:
+    index:
+      title: "Help - %{branding}"
+      meta_desc: "Help page for %{branding}"
+      h1: "Help"
+
+  dashboard:
+    index:
+      title: "Dashboard - %{branding}"
+      meta_desc: "Dashboard for %{branding}"
+      h1: "Rails4 Example Application"
+
+  admin:
+    index:
+      title: "Administration - %{branding}"
+      meta_desc: "User maintenance and other admin functions for %{branding}"
+      h1: "Administration"
+
+  profiles:
+    edit:
+      h1: "Edit User Information"
+
+# devise
+
+  unlocks:
+    new:
+      robots: "noindex,nofollow"
+      title: "Unlock Account: %{branding}"
+      meta_desc: "Unlock account for  %{branding}"
+  confirmations:
+    new:
+      robots: "noindex,nofollow"
+      title: "Account Confirmation: %{branding}"
+      meta_desc: "Account confirmation for  %{branding}"
+  sessions:
+    new:
+      robots: "noindex,nofollow"
+      title: "Sign In: %{branding}"
+      meta_desc: "Sign-In to %{branding}"
+  registrations:
+    new:
+      robots: "noindex,nofollow"
+      title: "Sign Up: %{branding}"
+      meta_desc: "Sign-up and register on %{branding}"
+    edit:
+      robots: "noindex,nofollow"
+      title: "Edit account information: %{branding}"
+      meta_desc: "Edit private account information on %{branding}"
+  passwords:
+    new:
+      robots: "noindex,nofollow"
+      title: "Reset Password: %{branding}"
+      meta_desc: "Reset password on %{branding}"
+    edit:
+      robots: "noindex,nofollow"
+      title: "Change Password: %{branding}"
+      meta_desc: "Change password on %{branding}"

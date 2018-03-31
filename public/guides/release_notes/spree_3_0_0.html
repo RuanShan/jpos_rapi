@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>    <html class="lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>    <html class="lt-ie9"> <![endif]-->
+<!--[if IE 9]>    <html class="ie9"> <![endif]-->
+<!--[if gt IE 9]><!--> <html lang="en" > <!--<![endif]-->
+<head>
+  <title>Spree 3.0.0 - Release Notes | Spree - Ruby on Rails e-commerce platform</title>
+
+  <meta charset="utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta name="section" content="version" />
+
+<link href="/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+<link href="/shared/css/icons.css" media="screen" rel="stylesheet" type="text/css">
+<link href="/shared/css/icons-codes.css" media="screen" rel="stylesheet" type="text/css">
+
+<link href="/shared/css/skeleton.css" media="screen" rel="stylesheet" type="text/css">
+<link href="/shared/css/documentation.css" media="screen" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="/assets/stylesheets/guides.css" media="screen" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/docsearch.js/2/docsearch.min.css" />
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-migrate/1.1.1/jquery-migrate.min.js"></script>
+<script src="/assets/javascripts/css_browser_selector_dev.js" type="text/javascript"></script>
+<script src="/assets/javascripts/jquery.toc.js" type="text/javascript"></script>
+<script src="/assets/javascripts/documentation.js" type="text/javascript"></script>
+
+
+</head>
+<body class="integration">
+  
+  <header id="header">
+    <div id="top-header">
+  <div class="container">
+    <div class="row">
+      <div class="two columns">
+  <a class="logo" href="http://spreecommerce.org">
+    <img src='/images/logo.png' alt="Spree Commerce - Ruby on Rails e-commerce platform" />
+  </a>
+</div>
+
+      <div class="three columns">
+  <input type="text" id="search-field" placeholder="Search..." />
+</div>
+
+      <nav id="main-menu" class="eleven columns">
+  <ul class="inline">
+    <li><a href="../api/">API</a></li>
+    <li><a href="../developer/">Developer</a></li>
+    <li><a href="../user/">User</a></li>
+    <li><a href="../release_notes/">Release Notes</a></li>
+    <li>
+      <a href="http://slack.spreecommerce.org" target="_blank">Slack</a>
+    </li>
+    <li>
+      <a href="https://heroku.com/deploy?template=https://github.com/spree/spree" target="_blank" rel="nofollow">Demo</a>
+    </li>
+  </ul>
+</nav>
+
+    </div>
+  </div>
+</div>
+
+
+    <div id="subheader">
+      <div class="container">
+        <div class="twelve columns">
+          <h1 class="page-title">Spree 3.0.0 - Release Notes</h1>
+        </div>
+      </div>
+    </div>
+
+  </header>
+
+  <div class="container">
+    <section id="main-content">
+
+      <div class="twelve columns">
+        <div id="content">
+          
+<h2 id="majornew-features">Major/New Features</h2>
+
+<h3 id="bootstrap-backend--frontend">Bootstrap Backend &amp; Frontend</h3>
+
+<p>The most visible change will be the use of Bootstrap to replace the previous
+Skeleton framework. We’ve redesigned the frontend, and backend while keeping
+much of the previous structure to the site. We hope this will make upgrades
+slightly easier to port to the new Bootstrap markup.  Now that we’ve updated
+the default css/js framework we’re hoping to begin implementing usability
+improvements &amp; improved mobile support.</p>
+
+<h3 id="rails-42-support">Rails 4.2 Support</h3>
+
+<p>We’ve added Rails 4.2 support laying the groundwork for further improvements.
+Rails 4.2 comes with ActiveJob a background job API, which we will leverage in
+the future to send long running tasks to Sidekiq, DelayedJob or Resque if you
+set them up.  We’ve also already updated mailers to use the deliver later
+functionality so your confirmation emails will be sent in the background.</p>
+
+<h3 id="google-analytics-enhanced-ecommerce">Google Analytics Enhanced Ecommerce</h3>
+
+<p>With the change to <a href="https://developers.google.com/analytics/devguides/collection/analyticsjs/enhanced-ecommerce">enhanced ecommerce</a> tracking you should make sure to <a href="https://developers.google.com/analytics/devguides/collection/upgrade/reference/gajs-analyticsjs#overview">upgrade your Google Analytics account to Universal Analytics</a>.  If you use Spree’s default google analytics implementation you should be fine, but if you’ve customized these make sure to update to <a href="https://developers.google.com/analytics/devguides/collection/analyticsjs/">Universal Analytics</a>.</p>
+
+<h2 id="upgrade-tips">Upgrade Tips</h2>
+
+<h3 id="first-read-rails-42-release-notes--upgrade-guide">First Read Rails 4.2 Release Notes &amp; Upgrade Guide</h3>
+
+<p><a href="http://edgeguides.rubyonrails.org/4_2_release_notes.html">Release Notes</a></p>
+
+<p><a href="http://edgeguides.rubyonrails.org/upgrading_ruby_on_rails.html#upgrading-from-rails-4-1-to-rails-4-2">Upgrade Guide</a></p>
+
+<h3 id="spree-upgrade">Spree Upgrade</h3>
+
+<p>If you have extensions that your store depends on, you will need to manually
+verify that each of those extensions work within your 3.0.x store once this
+upgrade is complete. Typically, extensions that are compatible with this
+version of Spree will have a 3-0-stable branch.</p>
+
+<p>For this Spree release, you will need to upgrade your Rails version to at least 4.2.0.</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>gem <span class="string"><span class="delimiter">'</span><span class="content">rails</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">~&gt; 4.2.0</span><span class="delimiter">'</span></span>
+
+</pre></div>
+</div>
+</div>
+
+<p>For best results, use the 3-0-stable branch from GitHub:</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>gem <span class="string"><span class="delimiter">'</span><span class="content">spree</span><span class="delimiter">'</span></span>, <span class="key">github</span>: <span class="string"><span class="delimiter">'</span><span class="content">spree/spree</span><span class="delimiter">'</span></span>, <span class="key">branch</span>: <span class="string"><span class="delimiter">'</span><span class="content">3-0-stable</span><span class="delimiter">'</span></span>
+
+</pre></div>
+</div>
+</div>
+
+<p>Run <code>bundle update spree</code>.</p>
+
+<p>Copy over the migrations from Spree (and any other engine) and run them using
+these commands:</p>
+
+<pre><code>rake railties:install:migrations
+rake db:migrate
+</code></pre>
+
+<p>Verify that everything is OK. Manually test your store, and make sure it’s performing
+as normal. Fix any deprecation warnings you see.</p>
+
+<h3 id="other-gotchas">Other Gotchas</h3>
+
+<h4 id="ssl">SSL</h4>
+
+<p>SSLRequirement controller concern was removed in favor of using Rails built in <a href="http://api.rubyonrails.org/classes/ActionController/ForceSSL/ClassMethods.html">ForceSSL</a>.</p>
+
+<p>It is recommended that you enable config.force_ssl = true within your production.rb file which will enforce SSL on every page.</p>
+
+<p>If you were previously using ssl_required in any controllers you should now use force_ssl at the controller level if you’re not going to use force_ssl at the application level.
+<strong>This includes if you were previously relying on Spree’s built in use of ssl_required so make sure your checkout process properly handles SSL connections.</strong></p>
+
+<h4 id="paymentmethods-and-trackers-are-no-longer-based-on-environment">PaymentMethods and Trackers are no longer based on environment.</h4>
+
+<p>Previously payment methods and google analytics trackers could be assigned an environment,
+such as, production/staging/development etc.. This is no longer the case.  If you previously
+relied on importing data from production to a development or staging environment you should
+ensure to sanitize and/or update these credentials to prevent submitting payments or analytics
+information to your production account credentials.</p>
+
+<p>We recommend that you begin to <a href="http://www.gotealeaf.com/blog/managing-environment-configuration-variables-in-rails">manage your credentials with environment variables</a> instead.</p>
+
+<h4 id="noteable-changes">Noteable Changes</h4>
+
+<p>Also please review each of the noteable changes, and ensure your customizations
+or extensions are not effected. If you are affected by a change, and have any
+of your own tips please submit a PR to help the next person!</p>
+
+<h2 id="full-changelog">Full Changelog</h2>
+
+<p>You can view the full changes using <a href="https://github.com/spree/spree/compare/2-4-stable...3-0-stable">Github Compare</a>.</p>
+
+<h2 id="noteable-changes-1">Noteable Changes</h2>
+
+<ul>
+  <li>
+    <p>Switched to Bootstrap.</p>
+
+    <p>Jeff Dutil &amp; <a href="https://github.com/200Creative/spree_bootstrap_frontend/graphs/contributors">Other Contributors</a></p>
+  </li>
+  <li>
+    <p>Moved Core’s helpers into Frontend.</p>
+
+    <p>Jeff Dutil</p>
+  </li>
+  <li>
+    <p>Use Google Analytics Enhanced ecommerce.</p>
+
+    <p>https://github.com/erikaxel</p>
+  </li>
+  <li>
+    <p>PaymentMethod’s and Tracker’s are no longer based on environment.</p>
+
+    <p>Clarke Brunsdon</p>
+  </li>
+  <li>
+    <p>Removed promo code field from cart page. This prevents issues with promos
+attempting to be used before the order is ready. e.g. Free Shipping before shipments.</p>
+
+    <p>Jeff Dutil</p>
+  </li>
+  <li>
+    <p>Removed order token usage during guest checkout.</p>
+
+    <p>https://github.com/spree/spree/pull/6072</p>
+  </li>
+  <li>
+    <p>Replace outdated Spree::Config[:mails_from] with Spree::Store.current.mail_from_address</p>
+
+    <p>https://github.com/spree/spree/pull/6097</p>
+  </li>
+  <li>
+    <p>Moved current_currency helper from Spree::Core::ControllerHelpers::Order to Spree::Core::ControllerHelpers::Store.</p>
+  </li>
+  <li>
+    <p>The line items order population endpoint used to accept a hash, it now accepts an array. When submitting a Post request to <code>/api/line_items</code> you will receive this deprecation warning:</p>
+
+    <p>Ben A. Morgan</p>
+
+    <p>```text
+  Passing a hash is now deprecated and will be removed in Spree 3.1.
+  It is recommended that you pass it as an array instead.</p>
+
+    <p>New Syntax:</p>
+
+    <p>{
+    “order”: {
+      “line_items”: [
+        { “variant_id”: 123, “quantity”: 1 },
+        { “variant_id”: 456, “quantity”: 1 }
+      ]
+    }
+  }</p>
+
+    <p>Old Syntax:</p>
+
+    <p>{
+    “order”: {
+      “line_items”: {
+        “1”: { “variant_id”: 123, “quantity”: 1 },
+        “2”: { “variant_id”: 123, “quantity”: 1 }
+      }
+    }
+  }
+  ```</p>
+  </li>
+  <li>
+    <p>Enable configuration of <code>Carmen.i18n_backend.locale</code> at <code>seeds.rb</code></p>
+
+    <p>You can localize the <code>Country</code> and <code>State</code> seed data by adding <a href="https://github.com/jim/carmen">Carmen</a> configuration to your <code>seeds.rb</code>.<br />
+  See example below:</p>
+
+    <p>```ruby
+  # add Carmen counfiguration with the following 2 lines
+  require ‘carmen’
+  Carmen.i18n_backend.locale = :ja</p>
+
+    <p>Spree::Core::Engine.load_seed if defined?(Spree::Core)
+  Spree::Auth::Engine.load_seed if defined?(Spree::Auth)
+  ```</p>
+
+    <p>https://github.com/spree/spree/pull/6607</p>
+
+    <p>Tomoki Odaka</p>
+  </li>
+</ul>
+
+        </div>
+      </div>
+
+    </section>
+
+    <aside id="sidebar" class="four columns">
+  <nav id="sidebar-menu">
+    <ul>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-version-menu"><i class="icon-right-open"></i></a>
+          <a href='#.html'>Versions</a>
+        </h3>
+        <ul class="js-guides">
+          <li><i class="icon-dot"></i><a href='spree_3_4_0.html'>3.4.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_3_3_0.html'>3.3.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_3_2_0.html'>3.2.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_3_1_0.html'>3.1.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_3_0_0.html'>3.0.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_2_4_0.html'>2.4.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_2_3_0.html'>2.3.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_2_2_0.html'>2.2.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_2_1_0.html'>2.1.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_2_0_0.html'>2.0.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_1_3_0.html'>1.3.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_1_2_2.html'>1.2.2</a></li>
+          <li><i class="icon-dot"></i><a href='spree_1_2_0.html'>1.2.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_1_1_4.html'>1.1.4</a></li>
+          <li><i class="icon-dot"></i><a href='spree_1_1_0.html'>1.1.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_1_0_0.html'>1.0.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_0_70_0.html'>0.70.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_0_60_0.html'>0.60.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_0_50_0.html'>0.50.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_0_40_0.html'>0.40.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_0_30_0.html'>0.30.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_0_10_0.html'>0.10.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_0_9_0.html'>0.9.0</a></li>
+        </ul>
+      </li>
+    </ul>
+  </nav>
+</aside>
+
+  </div>
+
+  <footer id="main-footer">
+
+  <div class="footer-top">
+    <div class="container">
+      <div id="link-blocks" class="row">
+        <div class="link-block six columns">
+          <h3 class="block-title">Developers</h3>
+          <ul>
+            <li><a href="https://slack.spreecommerce.org" target="_blank" rel="nofollow">Slack</a></li>
+            <li><a href="https://github.com/spree-contrib" target="_blank">Extensions</a></li>
+            <li><a href="https://github.com/spree/spree/blob/master/license.md" target="_blank">License</a></li>
+          </ul>
+        </div>
+        <div class="link-block seven columns">
+          <h3 class="block-title">About Spree</h3>
+          <p>
+            <strong><a href="https://spreecommerce.org">Spree Commerce</a></strong>
+            is a complete modular, API-driven open source e-commerce solution
+            built with Ruby on Rails.
+          </p>
+          <p>
+            Guides are hosted and maintained by
+            <a href="http://sparksolutions.co" target="_blank">Spark Solutions</a>
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</footer>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-104990445-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/docsearch.js/2/docsearch.min.js"></script>
+<script type="text/javascript"> docsearch({
+apiKey: 'fb697cd2d04591b036ea172259c05ba8',
+indexName: 'spreecommerce',
+inputSelector: '#search-field',
+debug: false // Set debug to true if you want to inspect the dropdown
+});
+</script>
+
+
+  </body>
+</html>

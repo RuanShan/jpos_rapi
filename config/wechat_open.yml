@@ -1,0 +1,14 @@
+default: &default
+  hostname: "wechatmore.getstore.cn"
+  token: 44cb682582f069877356daee2de39a0a
+  base64_aes_key: winc44b9f22bcef72d2ea76b621b6f2c095160e81e6
+  encoding_aes_key: winc44b9f22bcef72d2ea76b621b6f2c095160e81e6
+  component_appid: wx76b32f516a607539
+  component_appsecret: 6595b1727a7e4c1921a5f7c68919083b
+
+development:
+  <<: *default
+test:
+  <<: *default
+production:
+  <<: *default

@@ -1,0 +1,1581 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>    <html class="lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>    <html class="lt-ie9"> <![endif]-->
+<!--[if IE 9]>    <html class="ie9"> <![endif]-->
+<!--[if gt IE 9]><!--> <html lang="en" > <!--<![endif]-->
+<head>
+  <title>Products - Storefront API | Spree - Ruby on Rails e-commerce platform</title>
+
+  <meta charset="utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+
+
+  <meta name="description" content="Use the Spree Commerce storefront API to access Product data."/>
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta name="section" content="" />
+
+<link href="/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+<link href="/shared/css/icons.css" media="screen" rel="stylesheet" type="text/css">
+<link href="/shared/css/icons-codes.css" media="screen" rel="stylesheet" type="text/css">
+
+<link href="/shared/css/skeleton.css" media="screen" rel="stylesheet" type="text/css">
+<link href="/shared/css/documentation.css" media="screen" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="/assets/stylesheets/guides.css" media="screen" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/docsearch.js/2/docsearch.min.css" />
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-migrate/1.1.1/jquery-migrate.min.js"></script>
+<script src="/assets/javascripts/css_browser_selector_dev.js" type="text/javascript"></script>
+<script src="/assets/javascripts/jquery.toc.js" type="text/javascript"></script>
+<script src="/assets/javascripts/documentation.js" type="text/javascript"></script>
+
+
+</head>
+<body class="api">
+  
+  <header id="header">
+    <div id="top-header">
+  <div class="container">
+    <div class="row">
+      <div class="two columns">
+  <a class="logo" href="http://spreecommerce.org">
+    <img src='/images/logo.png' alt="Spree Commerce - Ruby on Rails e-commerce platform" />
+  </a>
+</div>
+
+      <div class="three columns">
+  <input type="text" id="search-field" placeholder="Search..." />
+</div>
+
+      <nav id="main-menu" class="eleven columns">
+  <ul class="inline">
+    <li><a href="../api/">API</a></li>
+    <li><a href="../developer/">Developer</a></li>
+    <li><a href="../user/">User</a></li>
+    <li><a href="../release_notes/">Release Notes</a></li>
+    <li>
+      <a href="http://slack.spreecommerce.org" target="_blank">Slack</a>
+    </li>
+    <li>
+      <a href="https://heroku.com/deploy?template=https://github.com/spree/spree" target="_blank" rel="nofollow">Demo</a>
+    </li>
+  </ul>
+</nav>
+
+    </div>
+  </div>
+</div>
+
+
+    <div id="subheader">
+      <div class="container">
+        <div class="twelve columns">
+          <h1 class="page-title">Products - Storefront API</h1>
+        </div>
+      </div>
+    </div>
+
+  </header>
+
+  <div class="container">
+    <section id="main-content">
+
+      <div class="twelve columns">
+        <div id="content">
+          
+<h2 id="index">Index</h2>
+
+<p>List products visible to the authenticated user. If the user is not an admin, they will only be able to see products which have an <code>available_on</code> date in the past. If the user is an admin, they are able to see all products.</p>
+
+<div class="language-text highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>GET /api/v1/products
+</pre></div>
+</div>
+</div>
+
+<p>Products are paginated and can be iterated through by passing along a <code>page</code> parameter:</p>
+
+<div class="language-text highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>GET /api/v1/products?page=2
+</pre></div>
+</div>
+</div>
+
+<h3 id="parameters">Parameters</h3>
+
+<dl>
+  <dt>show_deleted</dt>
+  <dd><strong>boolean</strong> - <code>true</code> to show deleted products, <code>false</code> to hide them. Default: <code>false</code>. <strong>Only available to users with an admin role.</strong></dd>
+  <dt>show_discontinued</dt>
+  <dd><strong>boolean</strong> - <code>true</code> to show discontinued products, <code>false</code> to hide them. Default: <code>false</code>. <strong>Only available to users with an admin role.</strong></dd>
+  <dt>ids</dt>
+  <dd>A comma-separated list of products ids. Specifying this parameter will display the respective products.</dd>
+  <dt>page</dt>
+  <dd>The page number of products to display.</dd>
+  <dt>per_page</dt>
+  <dd>The number of products to return per page</dd>
+</dl>
+
+<h3 id="response">Response</h3>
+
+<pre class="headers"><code>Status: 200 OK</code></pre>
+
+<pre class="highlight"><code class="language-javascript">{
+  "products": [
+    {
+      "id": 1,
+      "name": "Example product",
+      "description": "Description",
+      "price": "15.99",
+      "display_price": "$15.99",
+      "available_on": "2012-10-17T03:43:57Z",
+      "slug": "example-product",
+      "meta_description": null,
+      "meta_keywords": null,
+      "shipping_category_id": 1,
+      "taxon_ids": [
+        1,
+        2,
+        3
+      ],
+      "total_on_hand": 10,
+      "master": {
+        "id": 1,
+        "name": "Ruby on Rails Tote",
+        "sku": "ROR-00011",
+        "price": "15.99",
+        "weight": null,
+        "height": null,
+        "width": null,
+        "depth": null,
+        "is_master": true,
+        "slug": "ruby-on-rails-tote",
+        "description": "A text description of the product.",
+        "track_inventory": true,
+        "cost_price": null,
+        "option_values": [
+          {
+            "id": 1,
+            "name": "Small",
+            "presentation": "S",
+            "option_type_name": "tshirt-size",
+            "option_type_id": 1,
+            "option_type_presentation": "S"
+          }
+        ],
+        "images": [
+          {
+            "id": 1,
+            "position": 1,
+            "attachment_content_type": "image/jpg",
+            "attachment_file_name": "ror_tote.jpeg",
+            "type": "Spree::Image",
+            "attachment_updated_at": null,
+            "attachment_width": 360,
+            "attachment_height": 360,
+            "alt": null,
+            "viewable_type": "Spree::Variant",
+            "viewable_id": 1,
+            "mini_url": "/spree/products/1/mini/file.png?1370533476",
+            "small_url": "/spree/products/1/small/file.png?1370533476",
+            "product_url": "/spree/products/1/product/file.png?1370533476",
+            "large_url": "/spree/products/1/large/file.png?1370533476"
+          }
+        ],
+        "display_price": "$15.99",
+        "options_text": "(Size: small, Colour: red)",
+        "in_stock": true,
+        "is_backorderable": true,
+        "is_orderable": true,
+        "total_on_hand": 10,
+        "is_destroyed": false
+      },
+      "variants": [
+        {
+          "id": 1,
+          "name": "Ruby on Rails Tote",
+          "sku": "ROR-00011",
+          "price": "15.99",
+          "weight": null,
+          "height": null,
+          "width": null,
+          "depth": null,
+          "is_master": false,
+          "slug": "ruby-on-rails-tote",
+          "description": "A text description of the product.",
+          "track_inventory": true,
+          "cost_price": null,
+          "option_values": [
+            {
+              "id": 1,
+              "name": "Small",
+              "presentation": "S",
+              "option_type_name": "tshirt-size",
+              "option_type_id": 1,
+              "option_type_presentation": "S"
+            }
+          ],
+          "images": [
+            {
+              "id": 1,
+              "position": 1,
+              "attachment_content_type": "image/jpg",
+              "attachment_file_name": "ror_tote.jpeg",
+              "type": "Spree::Image",
+              "attachment_updated_at": null,
+              "attachment_width": 360,
+              "attachment_height": 360,
+              "alt": null,
+              "viewable_type": "Spree::Variant",
+              "viewable_id": 1,
+              "mini_url": "/spree/products/1/mini/file.png?1370533476",
+              "small_url": "/spree/products/1/small/file.png?1370533476",
+              "product_url": "/spree/products/1/product/file.png?1370533476",
+              "large_url": "/spree/products/1/large/file.png?1370533476"
+            }
+          ],
+          "display_price": "$15.99",
+          "options_text": "(Size: small, Colour: red)",
+          "in_stock": true,
+          "is_backorderable": true,
+          "is_orderable": true,
+          "total_on_hand": 10,
+          "is_destroyed": false
+        }
+      ],
+      "option_types": [
+        {
+          "id": 1,
+          "name": "tshirt-size",
+          "presentation": "Size",
+          "position": 1,
+          "option_values": [
+            {
+              "id": 1,
+              "name": "Small",
+              "presentation": "S",
+              "option_type_name": "tshirt-size",
+              "option_type_id": 1,
+              "option_type_presentation": "S"
+            }
+          ]
+        }
+      ],
+      "product_properties": [
+        {
+          "id": 1,
+          "product_id": 1,
+          "property_id": 1,
+          "value": "Tote",
+          "property_name": "bag_type"
+        }
+      ],
+      "classifications": [
+        {
+          "taxon_id": 3,
+          "position": 1,
+          "taxon": {
+            "id": 2,
+            "name": "Ruby on Rails",
+            "pretty_name": "Ruby on Rails",
+            "permalink": "brands/ruby-on-rails",
+            "parent_id": 1,
+            "taxonomy_id": 1,
+            "meta_title": "Ruby on Rails",
+            "meta_description": "Ruby on Rails",
+            "taxons": [
+
+            ]
+          }
+        }
+      ],
+      "has_variants": true
+    }
+  ],
+  "count": 25,
+  "pages": 5,
+  "current_page": 1
+}</code></pre>
+
+<h2 id="search">Search</h2>
+
+<p>To search for a particular product, make a request like this:</p>
+
+<div class="language-text highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>GET /api/v1/products?q[name_cont]=Spree
+</pre></div>
+</div>
+</div>
+
+<p>The searching API is provided through the Ransack gem which Spree depends on. The <code>name_cont</code> here is called a predicate, and you can learn more about them by reading about <a href="https://github.com/ernie/ransack/wiki/Basic-Searching">Predicates on the Ransack wiki</a>.</p>
+
+<p>The search results are paginated.</p>
+
+<h3 id="response-1">Response</h3>
+
+<pre class="headers"><code>Status: 200 OK</code></pre>
+
+<pre class="highlight"><code class="language-javascript">{
+  "products": [
+    {
+      "id": 1,
+      "name": "Example product",
+      "description": "Description",
+      "price": "15.99",
+      "display_price": "$15.99",
+      "available_on": "2012-10-17T03:43:57Z",
+      "slug": "example-product",
+      "meta_description": null,
+      "meta_keywords": null,
+      "shipping_category_id": 1,
+      "taxon_ids": [
+        1,
+        2,
+        3
+      ],
+      "total_on_hand": 10,
+      "master": {
+        "id": 1,
+        "name": "Ruby on Rails Tote",
+        "sku": "ROR-00011",
+        "price": "15.99",
+        "weight": null,
+        "height": null,
+        "width": null,
+        "depth": null,
+        "is_master": true,
+        "slug": "ruby-on-rails-tote",
+        "description": "A text description of the product.",
+        "track_inventory": true,
+        "cost_price": null,
+        "option_values": [
+          {
+            "id": 1,
+            "name": "Small",
+            "presentation": "S",
+            "option_type_name": "tshirt-size",
+            "option_type_id": 1,
+            "option_type_presentation": "S"
+          }
+        ],
+        "images": [
+          {
+            "id": 1,
+            "position": 1,
+            "attachment_content_type": "image/jpg",
+            "attachment_file_name": "ror_tote.jpeg",
+            "type": "Spree::Image",
+            "attachment_updated_at": null,
+            "attachment_width": 360,
+            "attachment_height": 360,
+            "alt": null,
+            "viewable_type": "Spree::Variant",
+            "viewable_id": 1,
+            "mini_url": "/spree/products/1/mini/file.png?1370533476",
+            "small_url": "/spree/products/1/small/file.png?1370533476",
+            "product_url": "/spree/products/1/product/file.png?1370533476",
+            "large_url": "/spree/products/1/large/file.png?1370533476"
+          }
+        ],
+        "display_price": "$15.99",
+        "options_text": "(Size: small, Colour: red)",
+        "in_stock": true,
+        "is_backorderable": true,
+        "is_orderable": true,
+        "total_on_hand": 10,
+        "is_destroyed": false
+      },
+      "variants": [
+        {
+          "id": 1,
+          "name": "Ruby on Rails Tote",
+          "sku": "ROR-00011",
+          "price": "15.99",
+          "weight": null,
+          "height": null,
+          "width": null,
+          "depth": null,
+          "is_master": false,
+          "slug": "ruby-on-rails-tote",
+          "description": "A text description of the product.",
+          "track_inventory": true,
+          "cost_price": null,
+          "option_values": [
+            {
+              "id": 1,
+              "name": "Small",
+              "presentation": "S",
+              "option_type_name": "tshirt-size",
+              "option_type_id": 1,
+              "option_type_presentation": "S"
+            }
+          ],
+          "images": [
+            {
+              "id": 1,
+              "position": 1,
+              "attachment_content_type": "image/jpg",
+              "attachment_file_name": "ror_tote.jpeg",
+              "type": "Spree::Image",
+              "attachment_updated_at": null,
+              "attachment_width": 360,
+              "attachment_height": 360,
+              "alt": null,
+              "viewable_type": "Spree::Variant",
+              "viewable_id": 1,
+              "mini_url": "/spree/products/1/mini/file.png?1370533476",
+              "small_url": "/spree/products/1/small/file.png?1370533476",
+              "product_url": "/spree/products/1/product/file.png?1370533476",
+              "large_url": "/spree/products/1/large/file.png?1370533476"
+            }
+          ],
+          "display_price": "$15.99",
+          "options_text": "(Size: small, Colour: red)",
+          "in_stock": true,
+          "is_backorderable": true,
+          "is_orderable": true,
+          "total_on_hand": 10,
+          "is_destroyed": false
+        }
+      ],
+      "option_types": [
+        {
+          "id": 1,
+          "name": "tshirt-size",
+          "presentation": "Size",
+          "position": 1,
+          "option_values": [
+            {
+              "id": 1,
+              "name": "Small",
+              "presentation": "S",
+              "option_type_name": "tshirt-size",
+              "option_type_id": 1,
+              "option_type_presentation": "S"
+            }
+          ]
+        }
+      ],
+      "product_properties": [
+        {
+          "id": 1,
+          "product_id": 1,
+          "property_id": 1,
+          "value": "Tote",
+          "property_name": "bag_type"
+        }
+      ],
+      "classifications": [
+        {
+          "taxon_id": 3,
+          "position": 1,
+          "taxon": {
+            "id": 2,
+            "name": "Ruby on Rails",
+            "pretty_name": "Ruby on Rails",
+            "permalink": "brands/ruby-on-rails",
+            "parent_id": 1,
+            "taxonomy_id": 1,
+            "meta_title": "Ruby on Rails",
+            "meta_description": "Ruby on Rails",
+            "taxons": [
+
+            ]
+          }
+        }
+      ],
+      "has_variants": true
+    }
+  ],
+  "count": 25,
+  "pages": 5,
+  "current_page": 1
+}</code></pre>
+
+<h3 id="sorting-results">Sorting results</h3>
+
+<p>Results can be returned in a specific order by specifying which field to sort by when making a request.</p>
+
+<div class="language-text highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>GET /api/v1/products?q[s]=sku%20asc
+</pre></div>
+</div>
+</div>
+
+<p>It is also possible to sort results using an associated object’s field.</p>
+
+<div class="language-text highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>GET /api/v1/products?q[s]=shipping_category_name%20asc
+</pre></div>
+</div>
+</div>
+
+<h2 id="show">Show</h2>
+
+<p>To view the details for a single product, make a request using that product's permalink:</p>
+
+<div class="language-text highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>GET /api/v1/products/a-product
+</pre></div>
+</div>
+</div>
+
+<p>You may also query by the product's id attribute:</p>
+
+<div class="language-text highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>GET /api/v1/products/1
+</pre></div>
+</div>
+</div>
+
+<p>Note that the API will attempt a permalink lookup before an ID lookup.</p>
+
+<h3 id="successful-response">Successful Response</h3>
+
+<pre class="headers"><code>Status: 200 OK</code></pre>
+
+<pre class="highlight"><code class="language-javascript">{
+  "id": 1,
+  "name": "Example product",
+  "description": "Description",
+  "price": "15.99",
+  "display_price": "$15.99",
+  "available_on": "2012-10-17T03:43:57Z",
+  "slug": "example-product",
+  "meta_description": null,
+  "meta_keywords": null,
+  "shipping_category_id": 1,
+  "taxon_ids": [
+    1,
+    2,
+    3
+  ],
+  "total_on_hand": 10,
+  "master": {
+    "id": 1,
+    "name": "Ruby on Rails Tote",
+    "sku": "ROR-00011",
+    "price": "15.99",
+    "weight": null,
+    "height": null,
+    "width": null,
+    "depth": null,
+    "is_master": true,
+    "slug": "ruby-on-rails-tote",
+    "description": "A text description of the product.",
+    "track_inventory": true,
+    "cost_price": null,
+    "option_values": [
+      {
+        "id": 1,
+        "name": "Small",
+        "presentation": "S",
+        "option_type_name": "tshirt-size",
+        "option_type_id": 1,
+        "option_type_presentation": "S"
+      }
+    ],
+    "images": [
+      {
+        "id": 1,
+        "position": 1,
+        "attachment_content_type": "image/jpg",
+        "attachment_file_name": "ror_tote.jpeg",
+        "type": "Spree::Image",
+        "attachment_updated_at": null,
+        "attachment_width": 360,
+        "attachment_height": 360,
+        "alt": null,
+        "viewable_type": "Spree::Variant",
+        "viewable_id": 1,
+        "mini_url": "/spree/products/1/mini/file.png?1370533476",
+        "small_url": "/spree/products/1/small/file.png?1370533476",
+        "product_url": "/spree/products/1/product/file.png?1370533476",
+        "large_url": "/spree/products/1/large/file.png?1370533476"
+      }
+    ],
+    "display_price": "$15.99",
+    "options_text": "(Size: small, Colour: red)",
+    "in_stock": true,
+    "is_backorderable": true,
+    "is_orderable": true,
+    "total_on_hand": 10,
+    "is_destroyed": false
+  },
+  "variants": [
+    {
+      "id": 1,
+      "name": "Ruby on Rails Tote",
+      "sku": "ROR-00011",
+      "price": "15.99",
+      "weight": null,
+      "height": null,
+      "width": null,
+      "depth": null,
+      "is_master": false,
+      "slug": "ruby-on-rails-tote",
+      "description": "A text description of the product.",
+      "track_inventory": true,
+      "cost_price": null,
+      "option_values": [
+        {
+          "id": 1,
+          "name": "Small",
+          "presentation": "S",
+          "option_type_name": "tshirt-size",
+          "option_type_id": 1,
+          "option_type_presentation": "S"
+        }
+      ],
+      "images": [
+        {
+          "id": 1,
+          "position": 1,
+          "attachment_content_type": "image/jpg",
+          "attachment_file_name": "ror_tote.jpeg",
+          "type": "Spree::Image",
+          "attachment_updated_at": null,
+          "attachment_width": 360,
+          "attachment_height": 360,
+          "alt": null,
+          "viewable_type": "Spree::Variant",
+          "viewable_id": 1,
+          "mini_url": "/spree/products/1/mini/file.png?1370533476",
+          "small_url": "/spree/products/1/small/file.png?1370533476",
+          "product_url": "/spree/products/1/product/file.png?1370533476",
+          "large_url": "/spree/products/1/large/file.png?1370533476"
+        }
+      ],
+      "display_price": "$15.99",
+      "options_text": "(Size: small, Colour: red)",
+      "in_stock": true,
+      "is_backorderable": true,
+      "is_orderable": true,
+      "total_on_hand": 10,
+      "is_destroyed": false
+    }
+  ],
+  "option_types": [
+    {
+      "id": 1,
+      "name": "tshirt-size",
+      "presentation": "Size",
+      "position": 1,
+      "option_values": [
+        {
+          "id": 1,
+          "name": "Small",
+          "presentation": "S",
+          "option_type_name": "tshirt-size",
+          "option_type_id": 1,
+          "option_type_presentation": "S"
+        }
+      ]
+    }
+  ],
+  "product_properties": [
+    {
+      "id": 1,
+      "product_id": 1,
+      "property_id": 1,
+      "value": "Tote",
+      "property_name": "bag_type"
+    }
+  ],
+  "classifications": [
+    {
+      "taxon_id": 3,
+      "position": 1,
+      "taxon": {
+        "id": 2,
+        "name": "Ruby on Rails",
+        "pretty_name": "Ruby on Rails",
+        "permalink": "brands/ruby-on-rails",
+        "parent_id": 1,
+        "taxonomy_id": 1,
+        "meta_title": "Ruby on Rails",
+        "meta_description": "Ruby on Rails",
+        "taxons": [
+
+        ]
+      }
+    }
+  ],
+  "has_variants": true
+}</code></pre>
+
+<h3 id="not-found-response">Not Found Response</h3>
+
+<pre class="headers no-response"><code>Status: 404 Not Found</code></pre>
+<pre class="highlight"><code class="language-javascript">{
+  "error": "The resource you were looking for could not be found."
+}</code></pre>
+
+<h2 id="new">New</h2>
+
+<p>You can learn about the potential attributes (required and non-required) for a product by making this request:</p>
+
+<div class="language-text highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>GET /api/v1/products/new
+</pre></div>
+</div>
+</div>
+
+<h3 id="response-2">Response</h3>
+
+<pre class="headers"><code>Status: 200 OK</code></pre>
+
+<pre class="highlight"><code class="language-javascript">{
+  "attributes": [
+    "id",
+    "name",
+    "description",
+    "price",
+    "display_price",
+    "available_on",
+    "slug",
+    "meta_description",
+    "meta_keywords",
+    "shipping_category_id",
+    "taxon_ids",
+    "total_on_hand"
+  ],
+  "required_attributes": [
+    "name",
+    "shipping_category",
+    "price"
+  ]
+}</code></pre>
+
+<h2 id="create">Create</h2>
+
+<div class="warning">This action is only accessible by an admin user.</div>
+
+<p>To create a new product through the API, make this request with the necessary parameters:</p>
+
+<div class="language-text highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>POST /api/v1/products
+</pre></div>
+</div>
+</div>
+
+<p>For instance, a request to create a new product called "Headphones" with a price of $100 would look like this:</p>
+
+<div class="language-text highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>POST /api/v1/products?product[name]=Headphones&amp;product[price]=100&amp;product[shipping_category_id]=1
+</pre></div>
+</div>
+</div>
+
+<h3 id="successful-response-1">Successful response</h3>
+
+<pre class="headers no-response"><code>Status: 201 Created</code></pre>
+
+<h3 id="failed-response">Failed response</h3>
+
+<pre class="headers"><code>Status: 422 Unprocessable Entity</code></pre>
+
+<pre class="highlight"><code class="language-javascript">{
+  "error": "Invalid resource. Please fix errors and try again.",
+  "errors": {
+    "name": [
+      "can't be blank"
+    ],
+    "price": [
+      "can't be blank"
+    ],
+    "shipping_category_id": [
+      "can't be blank"
+    ]
+  }
+}</code></pre>
+
+<h2 id="update">Update</h2>
+
+<div class="warning">This action is only accessible by an admin user.</div>
+
+<p>To update a product's details, make this request with the necessary parameters:</p>
+
+<div class="language-text highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>PUT /api/v1/products/a-product
+</pre></div>
+</div>
+</div>
+
+<p>For instance, to update a product's name, send it through like this:</p>
+
+<div class="language-text highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>PUT /api/v1/products/a-product?product[name]=Headphones
+</pre></div>
+</div>
+</div>
+
+<h3 id="successful-response-2">Successful response</h3>
+
+<pre class="headers no-response"><code>Status: 201 Created</code></pre>
+
+<h3 id="failed-response-1">Failed response</h3>
+
+<pre class="headers"><code>Status: 422 Unprocessable Entity</code></pre>
+
+<pre class="highlight"><code class="language-javascript">{
+  "error": "Invalid resource. Please fix errors and try again.",
+  "errors": {
+    "name": [
+      "can't be blank"
+    ],
+    "price": [
+      "can't be blank"
+    ],
+    "shipping_category_id": [
+      "can't be blank"
+    ]
+  }
+}</code></pre>
+
+<h2 id="delete">Delete</h2>
+
+<div class="warning">This action is only accessible by an admin user.</div>
+
+<p>To delete a product, make this request:</p>
+
+<div class="language-text highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>DELETE /api/v1/products/a-product
+</pre></div>
+</div>
+</div>
+
+<p>This request, much like a typical product "deletion" through the admin interface, will not actually remove the record from the database. It simply sets the <code>deleted_at</code> field to the current time on the product, as well as all of that product's variants.</p>
+
+<pre class="headers no-response"><code>Status: 204 No Content</code></pre>
+
+
+        </div>
+      </div>
+
+    </section>
+
+    <aside id="sidebar" class="four columns">
+  <nav id="sidebar-menu">
+    <ul>
+      <li class="js-topic">
+        <h3>
+          <a href="#" class="js-expand-btn collapsed"><i class="icon-right-open"></i></a>
+          <a href='summary.html'>Summary</a>
+        </h3>
+        <ul class="js-guides">
+          <li>
+            <i class="icon-dot"></i>
+            <a href='summary.html#overview'>Overview</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='summary.html#rules'>Rules</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='summary.html#customizing-responses'>Customizing</a>
+          </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed"><i class="icon-right-open"></i></a>
+          <a href='products.html'>Products</a>
+        </h3>
+        <ul class="js-guides">
+          <li>
+            <i class="icon-dot"></i>
+            <a href='products.html#index'>Index</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='products.html#search'>Search</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='products.html#show'>Show</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='products.html#new'>New</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='products.html#create'>Create</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='products.html#update'>Update</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='products.html#delete'>Delete</a>
+          </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed"><i class="icon-right-open"></i></a>
+          <a href='product_properties.html'>Product Properties</a>
+        </h3>
+        <ul class="js-guides">
+          <li>
+            <i class="icon-dot"></i>
+            <a href='product_properties.html#index'>Index</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='product_properties.html#search'>Search</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='product_properties.html#show'>Show</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='product_properties.html#create'>Create</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='product_properties.html#update'>Update</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='product_properties.html#delete'>Delete</a>
+          </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed"><i class="icon-right-open"></i></a>
+          <a href='product_images.html'>Product Images</a>
+        </h3>
+        <ul class="js-guides">
+          <li>
+            <i class="icon-dot"></i>
+            <a href='product_images.html#index'>Index</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='product_images.html#show'>Show</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='product_images.html#new'>New</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='product_images.html#create'>Create</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='product_images.html#update'>Update</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='product_images.html#delete'>Delete</a>
+          </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed"><i class="icon-right-open"></i></a>
+          <a href='variants.html'>Variants</a>
+        </h3>
+        <ul class="js-guides">
+          <li>
+            <i class="icon-dot"></i>
+            <a href='variants.html#index'>Index</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='variants.html#search'>Search</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='variants.html#show'>Show</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='variants.html#new'>New</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='variants.html#create'>Create</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='variants.html#update'>Update</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='variants.html#delete'>Delete</a>
+          </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed"><i class="icon-right-open"></i></a>
+          <a href='option_types.html'>Option Types</a>
+        </h3>
+        <ul class="js-guides">
+          <li>
+            <i class="icon-dot"></i>
+            <a href='option_types.html#index'>Index</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='option_types.html#search'>Search</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='option_types.html#show'>Show</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='option_types.html#new'>New</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='option_types.html#create'>Create</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='option_types.html#update'>Update</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='option_types.html#delete'>Delete</a>
+          </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed"><i class="icon-right-open"></i></a>
+          <a href='option_values.html'>Option Values</a>
+        </h3>
+        <ul class="js-guides">
+          <li>
+            <i class="icon-dot"></i>
+            <a href='option_values.html#index'>Index</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='option_values.html#search'>Search</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='option_values.html#show'>Show</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='option_values.html#new'>New</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='option_values.html#create'>Create</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='option_values.html#update'>Update</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='option_values.html#delete'>Delete</a>
+          </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed"><i class="icon-right-open"></i></a>
+          <a href='orders.html'>Orders</a>
+        </h3>
+        <ul class="js-guides">
+          <li>
+            <i class="icon-dot"></i>
+            <a href='orders.html#index'>Index</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='orders.html#search'>Search</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='orders.html#show'>Show</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='orders.html#show-delivery'>Show (delivery)</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='orders.html#create'>Create</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='orders.html#update-address'>Address</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='orders.html#empty'>Empty</a>
+          </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed"><i class="icon-right-open"></i></a>
+          <a href='line_items.html'>Line Items</a>
+        </h3>
+        <ul class="js-guides">
+          <li>
+            <i class="icon-dot"></i>
+            <a href='line_items.html#create'>Create</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='line_items.html#update'>Update</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='line_items.html#delete'>Delete</a>
+          </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed"><i class="icon-right-open"></i></a>
+          <a href='checkouts.html'>Checkouts</a>
+        </h3>
+        <ul class="js-guides">
+          <li>
+            <i class="icon-dot"></i>
+            <a href='checkouts.html#introduction'>Introduction</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='checkouts.html#creating-a-blank-order'>Create</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='checkouts.html#add-line-items-to-an-order'>Line Items</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='checkouts.html#updating-an-order'>Update</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='checkouts.html#address'>Address</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='checkouts.html#delivery'>Delivery</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='checkouts.html#payment'>Payment</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='checkouts.html#confirm'>Confirm</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='checkouts.html#complete'>Complete</a>
+          </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed"><i class="icon-right-open"></i></a>
+          <a href='payments.html'>Payments</a>
+        </h3>
+        <ul class="js-guides">
+          <li>
+            <i class="icon-dot"></i>
+            <a href='payments.html#index'>Index</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='payments.html#search'>Search</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='payments.html#new'>New</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='payments.html#create'>Create</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='payments.html#show'>Show</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='payments.html#authorize'>Authorize</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='payments.html#capture'>Capture</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='payments.html#purchase'>Purchase</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='payments.html#void'>Void</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='payments.html#credit'>Credit</a>
+          </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed"><i class="icon-right-open"></i></a>
+          <a href='return_authorizations.html'>Return Authorizations</a>
+        </h3>
+        <ul class="js-guides">
+          <li>
+            <i class="icon-dot"></i>
+            <a href='return_authorizations.html#index'>Index</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='return_authorizations.html#search'>Search</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='return_authorizations.html#show'>Show</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='return_authorizations.html#create'>Create</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='return_authorizations.html#update'>Update</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='return_authorizations.html#delete'>Delete</a>
+          </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed"><i class="icon-right-open"></i></a>
+          <a href='shipments.html'>Shipments</a>
+        </h3>
+        <ul class="js-guides">
+          <li>
+            <i class="icon-dot"></i>
+            <a href='shipments.html#mine'>Mine</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='shipments.html#create'>Create</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='shipments.html#update'>Update</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='shipments.html#ready'>Ready</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='shipments.html#ship'>Ship</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='shipments.html#add-variant'>Add Variant</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='shipments.html#remove-variant'>Remove Variant</a>
+          </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed"><i class="icon-right-open"></i></a>
+          <a href='taxonomies.html'>Taxonomies</a>
+        </h3>
+        <ul class="js-guides">
+          <li>
+            <i class="icon-dot"></i>
+            <a href='taxonomies.html#index'>Index</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='taxonomies.html#search'>Search</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='taxonomies.html#show'>Show</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='taxonomies.html#create'>Create</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='taxonomies.html#update'>Update</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='taxonomies.html#delete'>Delete</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='taxonomies.html#list-taxons'>Taxon Index</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='taxonomies.html#a-single-taxon'>Taxon Show</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='taxonomies.html#taxon-create'>Taxon Create</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='taxonomies.html#taxon-update'>Taxon Update</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='taxonomies.html#taxon-delete'>Taxon Delete</a>
+          </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed"><i class="icon-right-open"></i></a>
+          <a href='addresses.html'>Addresses</a>
+        </h3>
+        <ul class="js-guides">
+          <li>
+            <i class="icon-dot"></i>
+            <a href='addresses.html#show'>Show</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='addresses.html#update'>Update</a>
+          </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed"><i class="icon-right-open"></i></a>
+          <a href='countries.html'>Countries</a>
+        </h3>
+        <ul class="js-guides">
+          <li>
+            <i class="icon-dot"></i>
+            <a href='countries.html#index'>Index</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='countries.html#search'>Search</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='countries.html#show'>Show</a>
+          </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed"><i class="icon-right-open"></i></a>
+          <a href='stock_locations.html'>Stock Locations</a>
+        </h3>
+        <ul class="js-guides">
+          <li>
+            <i class="icon-dot"></i>
+            <a href='stock_locations.html#index'>Index</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='stock_locations.html#search'>Search</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='stock_locations.html#show'>Show</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='stock_locations.html#create'>Create</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='stock_locations.html#update'>Update</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='stock_locations.html#delete'>Delete</a>
+          </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed"><i class="icon-right-open"></i></a>
+          <a href='stock_items.html'>Stock Items</a>
+        </h3>
+        <ul class="js-guides">
+          <li>
+            <i class="icon-dot"></i>
+            <a href='stock_items.html#index'>Index</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='stock_items.html#search'>Search</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='stock_items.html#show'>Show</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='stock_items.html#create'>Create</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='stock_items.html#update'>Update</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='stock_items.html#delete'>Delete</a>
+          </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed"><i class="icon-right-open"></i></a>
+          <a href='stock_movements.html'>Stock Movements</a>
+        </h3>
+        <ul class="js-guides">
+          <li>
+            <i class="icon-dot"></i>
+            <a href='stock_movements.html#index'>Index</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='stock_movements.html#search'>Search</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='stock_movements.html#show'>Show</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='stock_movements.html#create'>Create</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='stock_movements.html#update'>Update</a>
+          </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed"><i class="icon-right-open"></i></a>
+          <a href='zones.html'>Zones</a>
+        </h3>
+        <ul class="js-guides">
+          <li>
+            <i class="icon-dot"></i>
+            <a href='zones.html#index'>Index</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='zones.html#search'>Search</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='zones.html#show'>Show</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='zones.html#create'>Create</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='zones.html#update'>Update</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='zones.html#delete'>Delete</a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </nav>
+</aside>
+
+  </div>
+
+  <footer id="main-footer">
+
+  <div class="footer-top">
+    <div class="container">
+      <div id="link-blocks" class="row">
+        <div class="link-block six columns">
+          <h3 class="block-title">Developers</h3>
+          <ul>
+            <li><a href="https://slack.spreecommerce.org" target="_blank" rel="nofollow">Slack</a></li>
+            <li><a href="https://github.com/spree-contrib" target="_blank">Extensions</a></li>
+            <li><a href="https://github.com/spree/spree/blob/master/license.md" target="_blank">License</a></li>
+          </ul>
+        </div>
+        <div class="link-block seven columns">
+          <h3 class="block-title">About Spree</h3>
+          <p>
+            <strong><a href="https://spreecommerce.org">Spree Commerce</a></strong>
+            is a complete modular, API-driven open source e-commerce solution
+            built with Ruby on Rails.
+          </p>
+          <p>
+            Guides are hosted and maintained by
+            <a href="http://sparksolutions.co" target="_blank">Spark Solutions</a>
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</footer>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-104990445-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/docsearch.js/2/docsearch.min.js"></script>
+<script type="text/javascript"> docsearch({
+apiKey: 'fb697cd2d04591b036ea172259c05ba8',
+indexName: 'spreecommerce',
+inputSelector: '#search-field',
+debug: false // Set debug to true if you want to inspect the dropdown
+});
+</script>
+
+
+  </body>
+</html>

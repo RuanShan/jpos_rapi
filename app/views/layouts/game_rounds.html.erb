@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <title> <%=@game_round.name %></title>
+    <%= render "layouts/partials/game_head" %>
+    <%= yield :game_asset_css %>
+  </head>
+
+  <body class="FUN WALL" style="background-image:url(<%= screen_background_url(@game_round)%>)">
+    <%= javascript_tag defer: 'defer' do -%>
+      WechatMore.api_key = <%== current_user.try(:api_token).to_json %>
+    <% end -%>
+    <%= render "top_panel" %>
+    <%= yield %>
+    <div class="Panel Bottom"  >
+      <div class="actions">
+      <%= link_to "签到界面", check_in_game_round_path( @game_round ) %>
+      <%= link_to "游戏界面", play_game_round_path( @game_round ) %>
+      <%= link_to "结束报名", check_over_game_round_path( @game_round ), id: 'b_check_over_game' , href:"javascript:void(0);" %>
+      <%= link_to "重新开始", restart_game_round_path( @game_round ), id: 'b_restart_game' , href:"javascript:void(0);", class:'hide' %>
+      <%= link_to "开始游戏", start_game_round_path( @game_round ), id: 'b_start_game' , href:"javascript:void(0);" %>
+      <%= link_to "重置", reset_game_round_path( @game_round ), id: 'b_reset_game' , href:"javascript:void(0);" %>
+      <div id="b_debug_msg"> </div>
+      </div>
+    </div>
+    <div id="show_hide_nav"><%= image_tag 'wall/opened.png', class: 'b_opened_image' %> <%= image_tag 'wall/closed.png' , class: 'b_closed_image hide'%> </div>
+    <div class="loader" style="display: block;">      <div class="icon"></div>    </div>
+
+    <%= yield :game_asset_js %>
+
+  </body>
+</html>

@@ -1,0 +1,36 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Activities</h1>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>活动名称	</th>
+      <th>访问量（PV）	</th>
+      <th>访问人数（UV）	</th>
+      <th>创建人	</th>
+      <th>创建时间	</th>
+      <th>状态	</th>
+      <th colspan="2">操作</th>
+    </tr>
+  </thead>
+
+  <tbody class="table-hover">
+    <% @games.each do |game| %>
+      <tr>
+        <td><%= game.name %></td>
+        <td><%= game.pv %></td>
+        <td><%= game.uv %></td>
+        <td><%= game.creator %></td>
+        <td><%= game.display_created_at %></td>
+        <td><%= game.status %></td>
+          <td><%= link_to 'Edit', edit_game_path(game) %></td>
+        <td><%= link_to 'Destroy', game, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New game', new_game_path %>

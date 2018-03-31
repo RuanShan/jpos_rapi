@@ -1,0 +1,9 @@
+FeatureEnvy:
+  enabled: false
+
+UtilityFunction:
+  enabled: false
+
+ControlParameter:
+  exclude:
+  - active_tab

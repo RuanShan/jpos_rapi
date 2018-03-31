@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <%= favicon_link_tag %>
+  <title><%= content_for?(:title) ? yield(:title) : "后台系统-软山互动" %> </title>
+
+    <%= stylesheet_link_tag    'case', media: 'all', 'data-turbolinks-track' => true %>
+    <%= javascript_include_tag 'case', 'data-turbolinks-track' => true %>
+
+    <%= csrf_meta_tags %>
+    <!--[if lt IE 9]>
+    <%= javascript_include_tag 'html5', 'data-turbolinks-track' => true %>
+    <![endif]-->
+  </head>
+
+  <body class="skin-blue sidebar-mini">
+    <div class="wrapper" class="height: auto; min-height: 100%;">
+      <header class="main-header">
+        <%= render 'layouts/partials/case_navbar' %>
+      </header>
+
+      <aside class="main-sidebar">
+        <%= render "shared/campaign_sidenav" %>
+      </aside>
+
+      <div class="content-wrapper" style="min-height: 976px;">
+          <%= yield %>
+      </div>
+      <footer class="main-footer">
+        <!-- To the right -->
+        <div class="pull-right hidden-xs">
+        </div>
+        <!-- Default to the left -->
+        <strong>Copyright © 2017 <a href="#">RuanShan</a>.</strong> All rights reserved.
+      </footer>
+    </div>
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <%= javascript_include_tag 'ie/ie10-viewport-bug-workaround', 'data-turbolinks-track' => true %>
+
+  </body>
+</html>

@@ -1,0 +1,16 @@
+<% content_for :game_asset_css do %>
+<%= stylesheet_link_tag    'game_round_wechat', media: 'all', 'data-turbolinks-track' => true %>
+<% end %>
+
+<div class="game check_in_wechat mobile">
+
+  <div class="step step-2">
+    <div class="vgy_user">
+          <div class="info2">
+          	<img class="touxiang" src="<%=@game_player.avatar%>">
+            <p class="name"><%=@game_player.nickname %></p>
+    				<p class="tx"> <%= @msg %></p>
+        	</div>
+    </div>
+  </div>
+</div>

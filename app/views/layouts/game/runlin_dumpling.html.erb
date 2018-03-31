@@ -1,0 +1,2292 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="referrer" content="always">
+<meta content="application/xhtml+xml;charset=UTF-8" http-equiv="Content-Type">
+<meta content="no-cache,must-revalidate" http-equiv="Cache-Control">
+<meta content="no-cache" http-equiv="pragma">
+<meta content="0" http-equiv="expires">
+<meta name="referrer" content="always">
+<meta content="telephone=no, address=no" name="format-detection">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" />
+<meta name="apple-mobile-web-app-capable" content="yes" /> <!-- apple devices fullscreen -->
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<%= stylesheet_link_tag "game/rl_dumpling/all.css" %>
+<%= csrf_meta_tags %>
+<title><%= @game_round.name %></title>
+
+<%= yield :game_asset_js %>
+
+<script type='text/javascript'>
+
+//(function(){
+//    var element = new Image();
+//    var hdGameHost = '';
+//    Object.defineProperty(element,'id',{get:function(){window.location.href="https://hd.getstore.cn/empty.jsp?aid=7020498&gameId=18&openId=o1ueSjkZq2LGhu-hAkzOT9fnvcIg"}});
+//    console.log('%c'+g_rem, element);
+//})();
+
+var fromCanal = '-1';
+if(false){
+    parent = top = window;
+}
+
+    var g_serverTime = <%=(DateTime.current.to_f*1000).to_i%>;
+    var g_timeDeviation = g_serverTime - new Date().getTime(); //服务器时间与系统时间偏差
+    var g_rem = 20;
+    (function(win){
+        var orientationX = false; //是否横屏进来
+        if(win.orientation==90||win.orientation==-90){
+            orientationX = true;
+        }
+        var docEl = win.document.documentElement,tid;
+        function refreshRem1(){
+            g_rem = docEl.getBoundingClientRect().width/16;
+            !g_rem && (g_rem = 20);
+            docEl.style.fontSize = g_rem + 'px';
+        }
+        function refreshRem2(){
+            g_rem = docEl.getBoundingClientRect().width/16;
+            if(!g_rem){
+                return refreshRem1();
+            }
+            var width = docEl.getBoundingClientRect().width;
+            var d = win.document.createElement('div');
+            d.style.width = '1rem';
+            d.style.display = "none";
+            docEl.firstElementChild.appendChild(d);
+            var defaultFontSize = parseFloat(window.getComputedStyle(d, null).getPropertyValue('width'));
+            docEl.firstElementChild.removeChild(d);
+            docEl.style.fontSize = (g_rem/defaultFontSize)*100 + '%';
+        }
+        var refreshRem = /HUAWEI TIT-TL00/i.test(navigator.userAgent) ? refreshRem2 : refreshRem1;
+        try{
+            win.addEventListener("orientationchange", function() {//触发手机横屏竖屏事件
+                if(orientationX){
+                    location.reload();
+                }
+            }, false);
+        }catch(e){}
+        win.addEventListener('pageshow', function(e) {
+            if (e.persisted) {
+                clearTimeout(tid);
+                tid = setTimeout(refreshRem, 100);
+            }
+        }, false);
+        refreshRem();
+    })(window);
+    function loadGamePreAssets(){}
+</script>
+
+
+<script type="text/javascript" src="//res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+
+
+<script charset="utf-8" src="https://map.qq.com/api/js?v=2.exp&libraries=geometry"></script>
+
+</head>
+<body class="gameTpl_-1">
+
+
+<!-- loading页面 -->
+<div id="preloadPage" class="bg">
+
+    <div class="spinner">
+      <div class="spinner-container container1">
+        <div class="circle1"></div>
+        <div class="circle2"></div>
+        <div class="circle3"></div>
+        <div class="circle4"></div>
+      </div>
+      <div class="spinner-container container2">
+        <div class="circle1"></div>
+        <div class="circle2"></div>
+        <div class="circle3"></div>
+        <div class="circle4"></div>
+      </div>
+      <div class="spinner-container container3">
+        <div class="circle1"></div>
+        <div class="circle2"></div>
+        <div class="circle3"></div>
+        <div class="circle4"></div>
+      </div>
+    </div>
+
+    <div class="info"><span id="loadPercent">0</span>%</div>
+    <div id="userPreload" data-src=""></div>
+</div>
+
+<!-- 广告页 -->
+
+
+    <div id="advertising" class="bgfix editTarget-advertising hideImp">
+    <div class="skipTips"><span class="seconds">3</span>秒跳过</div>
+</div>
+	<div class="ajaxLoadBg">
+		<div class="ajaxLoadBar "></div>
+	</div>
+	<div class="body">
+		<div class="home">
+			<div id="homeBgBox">
+        <%=image_tag "game/rl_dumpling/2/bg.jpg", id: 'homeBg' %>
+			</div>
+			<div class="gameInfoBox">
+				<div class="titleImg imgContainer absCenter">
+          <%=image_tag "game/rl_dumpling/4/game.png", id: 'titleImg', class:'slaveImg abs', style:"width:14rem;height:9.2rem;top:1.8rem;left:1rem;" %>
+				</div>
+			</div>
+
+
+	<div id='joinNumLine' class='joinNumLine absCenter' style='top:22rem;left:3.6rem;color:rgb(255, 255, 255);font-size:0.7rem; text-shadow:none;'>
+	已有 <span id='joinNum' class="specil" style="color:rgb(255, 247, 153);font-size:0.8rem;text-shadow:none;"><%= @game_player_count %></span> 人参加活动</div>
+
+
+<div id="playInfo" class="abs editTarget-playInfo hide" style="width:9rem;text-align:center;">
+	<div class="dayPlayHint">您今天还有 <span id="count" class="specil todayPlayCount"></span> 次参与机会</div>
+	<div class="totalPlayHint">您还有 <span class="totalPlayCount specil"></span> 次参与机会</div>
+	<div class="dayPlayHint4Total">今天有 <span class="count specil todayPlayCount"></span> 次</div>
+</div>
+			<div id="startBtn" class="startBtn imgContainer absCenter" style="top:0rem;">
+        <%=image_tag "game/rl_dumpling/4/18/ksyx.png", id: 'startBtnImg', class:'slaveImg abs', style:"width:9.05rem;height:3.55rem;top:19.15rem;left:3.45rem;" %>
+			</div>
+		</div>
+		<div class="gameBox hide gameBgBox">
+			<div id="gameBgBox">
+        <%=image_tag "game/rl_dumpling/2/play-bg.jpg", id: 'gameBg', style: "width:100%;height:auto;" %>
+			</div>
+
+      <div id="gameTopBar" class="gameTopBar" style="color:rgb(255, 255, 255);background-color:rgba(255, 255, 255, 0)">
+      	<div class="userInfoBox">
+      		<div  class="userImgBox" style="border-color:rgb(255, 255, 255)">
+            <img src="<%=@game_player.avatar%>" class="userImg" />
+          </div>
+
+      			<div id="grade" class="grade">0</div>
+
+      	</div>
+      	<div class="timeBox">
+      		时间<br><span class="time">0</span>
+      	</div>
+      </div>
+			<div id="gameLayerBox">
+
+			</div>
+            <div id="tishi1" class="tishi"></div>
+            <div id="tishi2" class="tishi"></div>
+            <div class="timeUpImg hide"></div>
+		</div>
+
+<div id="spxdPage"></div>
+<div id='_hdOpenIdDiv' class='hide'>o1ueSjkZq2LGhu-hAkzOT9fnvcIg</div><!-- 存放openId的节点 -->
+<div id="pageMusic" style="position:absolute;top:0;height:0;"></div>
+<div class="ruleImg imgContainer absCenter" _mouseIn="0" onclick="showRule(isAnimation=false);">
+    <div id="ruleImg" class="slaveImg abs notNeedFatherChage outSpecialDivAutoFit" style='width:3rem;height:3rem;top:19.15rem;left:12.85rem;'></div>
+</div>
+
+
+<div id="poupInfoBox">
+    <div class="poupHead">
+        <div class="poupTitleBox">
+            <div id="actionExpBtn" class="poupTitleMune checked" _flag="2">
+                <div class="item">活动说明</div>
+            </div>
+
+            <div id="ranBtn" class="poupTitleMune " _flag="1">
+                <div class="item">排行榜</div>
+            </div>
+
+            <div id="prizeBtn" class="poupTitleMune hide" _flag="3">
+                <div class="item">我的奖品<span id='Award_Round_Dot' class='redDot hide'></span></div>
+            </div>
+            <div id="winnerBtn" class="poupTitleMune hide" _flag="4">
+                <div class="item">获奖名单</div>
+            </div>
+            <div  class="poupTitleMune " _flag="6">
+                <div class="item">游戏玩法</div>
+            </div>
+            <div class="poupSlideBar">
+                <div class="slideBarTip transitionPanel"></div>
+            </div>
+        </div>
+        <div class="poupClose"></div>
+        <div style="clear:both; height:0"></div>
+    </div>
+    <div id="popTabBox" class="popTabBox transitionPanel" style="left:0">
+      <div id="ruleBox" class="poupMain" _flag="2" style="-webkit-overflow-scrolling:touch;">
+			<div class="poupMainInfo">
+				<div id="awardLine" class="poupLine" data-sortKey="a" >
+					<div class="mainTitle">活动奖品</div>
+					<div id="awardLineBox">
+					<div class='unComfortLine awardItem '><span class='awardStyle'>一等奖</span> : <span class='award'>奥迪原厂精品-移动式意式浓咖啡机（共5个名额）</span></div>
+          <div class='unComfortLine awardItem '><span class='awardStyle'>二等奖</span> : <span class='award'>奥迪原厂精品-蓝牙耳机（共10个名额）</span></div>
+          <div class='unComfortLine awardItem '><span class='awardStyle'>三等奖</span> : <span class='award'>奥迪原厂精品-LED手电筒（共30个名额）</span></div>
+          <div class='unComfortLine awardItem hide'><span class='awardStyle'>四等奖</span> : <span class='award'>优惠券</span></div>
+          <div class='unComfortLine awardItem hide'><span class='awardStyle'>五等奖</span> : <span class='award'>优惠券</span></div>
+          <div class='unComfortLine awardItem hide'><span class='awardStyle'>六等奖</span> : <span class='award'>优惠券</span></div>
+          <div class='unComfortLine awardItem hide'><span class='awardStyle'>七等奖</span> : <span class='award'>优惠券</span></div>
+          <div class='unComfortLine awardItem hide'><span class='awardStyle'>八等奖</span> : <span class='award'>优惠券</span></div>
+          <div class='awardItem anwei'><span class='awardStyle'>幸运参与奖</span> : <span class='award'>玻璃清洗剂（防冻）2瓶（共1000个名额）</span></div>
+
+					</div>
+					<div id="selfAwardLine" class="hide" style="word-wrap: break-word;"></div>
+				</div>
+				<div id="gameDateTime" class="poupLine" data-sortKey="b">
+					<div class="mainTitle">活动时间</div>
+					<p><span id="startDate">2018年2月13日0时</span>&nbsp;-&nbsp;<span id="endDate"> 2018年2月22日24时</span></p>
+				</div>
+				<div class="hostLine poupLine hide" data-sortKey="c">
+					<div class="mainTitle">主办单位</div>
+					<p>本次活动主办单位为 <a class="hostName"  href="http://" />fkhdjr</a></p>
+				</div>
+
+				<div id="skillLine" class="skillLine poupLine hide" data-sortKey="d">
+					<div class="skillCont">
+					</div>
+				</div>
+
+				<div id="explainBox" class="poupLine" data-sortKey="e">
+					<div class="mainTitle">活动规则</div>
+
+          <p id="explaiDrawInfoBox" class="">
+            <span> 1.本次活动仅限奥迪品牌车主俱乐部会员参与；</span> <br>
+            <span> 2.会员在登录状态下，每天仅需消耗1积分，即可参与游戏挑战，且每天不限挑战次数；</span> <br>
+            <span> 3.活动期间，会员挑战分数达到50分，可获得一次抽奖机会且每天仅可抽奖一次，即抽即开；</span> <br>
+            <span> 4.活动期间，将会员挑战分数最高记录与所有玩家分数进行排名，实时更新排名情况；</span> <br>
+            <span> 5.活动截止后，依据游戏排行榜得分情况分别发放一、二、三等奖，中奖名单将在公众号推文公布，敬请关注；</span> <br>
+            <span> 6.游戏排名得分相同情况下，以得分挑战用时最短者优先排名；如游戏得分及挑战时间相同，以先到达者优先排名；</span> <br>
+
+						</p>
+
+					<p id="explainPlayInfoBox" class="hide">
+
+						<span id="rankPlayInfoBox">
+							<span class="playTotalFont">活动期间总参与机会共 <span class="playTotalLimit">10</span> 次，1天只能参与</span><span class="everyOneFont hide">每人<span class="dayFont">每日</span>有</span> <span class="playTimesLimitShow">5</span> 次<span class="chanceFont hide">参与机会</span>。<br>
+						</span>
+
+					</p>
+
+				</div>
+			</div>
+			<div class='attentionBox'>
+
+        <div class='hdskillInfo skillInfo'><a class=" poupClose2" href='#'>我知道了</a></div>
+
+				<div class='holdBox'></div>
+			</div>
+        </div>
+        <div id="rankBox" class="poupMain" _flag="1" style="-webkit-overflow-scrolling:touch;" >
+	  <div class="poupMainInfo">
+		<div id="noRank" class=''>暂无排名</div>
+		<div id="rankMain" class="getRankHeight hide">
+		<div style="margin-top:0.7rem;margin-left: 0.25rem;">当前排名：<span id="rank"></span> （只显示前<span id="showRankNum">100</span>名）</div>
+		<div style="padding:0rem 0.5rem">
+		    <table class="rankTable" cellspacing="0" cellpadding="0">
+			<thead>
+			    <tr style="line-height: 1rem;">
+				<th>排行</th>
+				<th>头像</th>
+				<th>昵称</th>
+				<th>成绩</th>
+			    </tr>
+			</thead>
+		    </table>
+		</div>
+		</div>
+		<div id="rankHeight">
+		<table id="rankInfoBox" class="rankTable" cellspacing="0" cellpadding="0" style="margin-top: 0;"></table>
+		</div>
+	   </div>
+		<div class='attentionBox'>
+
+			<div class='hdskillInfo skillInfo'><a class=" poupClose2" href='#'>我知道了</a></div>
+
+			<div class='holdBox'></div>
+		</div>
+        </div>
+        <div id="awardBox" class="poupMain" _flag="3" >
+            <div id="awardInfoBox">
+                <div id="awardInfo"><div style="line-height: 2.6rem">暂无中奖纪录</div></div>
+
+                <div id="awardContactInfo" class="hide">
+                    <div class="titleLine"><span class="title">联系信息</span></div>
+                    <div class="contactGroup">
+                        <div class="contactItem contactName hide">姓名： <span>monica</span></div>
+                        <div class="contactItem contactPhone hide">电话： <span>13200000000</span></div>
+
+                        <div class="contactItem contactAddress hide">地址： <span>广东省广州市海...</span></div>
+
+                    </div>
+                    <div class="updateBtn abs">修改</div>
+                </div>
+            </div>
+            <div class='attentionBox'>
+                <div class='menuBtnBox' >
+                    <a class='menuName'>关注我们</a>
+                </div>
+
+                <div class='hdskillInfo skillInfo'> </div>
+
+                <div class='holdBox'></div>
+            </div>
+        </div>
+        <div id="regAwardBox" class="poupMain" _flag="4" style="-webkit-overflow-scrolling:touch;">
+      		<div class="poupMainInfo">
+      		    <div id="noRegAward" class="hide" style="margin-left:3px;">尚未公布获奖名单，详情请查看活动说明</div>
+      		    <div id="regAwardMain" style="display:none;">
+
+      				<div class="regAwardList">
+      				    <div class="mainTitle">一等奖</div>
+      				    <div class="playerName" style="margin-bottom:12px;"></div>
+      				</div>
+
+      				<div class="regAwardList">
+      				    <div class="mainTitle">二等奖</div>
+      				    <div class="playerName" style="margin-bottom:12px;"></div>
+      				</div>
+
+      				<div class="regAwardList">
+      				    <div class="mainTitle">三等奖</div>
+      				    <div class="playerName" style="margin-bottom:12px;"></div>
+      				</div>
+
+      			  </div>
+      		</div>
+      		<div class='attentionBox'>
+
+      			<div class='hdskillInfo skillInfo'><a class="theSpecialTarget" href='http://mp.weixin.qq.com/s?__biz=MjM5MTk5MjI3OA==&#x26;mid=209854000&#x26;idx=1&#x26;sn=82241d924839270d3ea820ad2d56c01b#rd'>我也要创建活动</a><span class='gotoFlag'></span></div>
+
+      			<div class='holdBox'></div>
+      		</div>
+        </div>
+        <div  class="poupMain" _flag="6" style="-webkit-overflow-scrolling:touch;">
+      		<div class="poupMainInfo">
+            <div class="poupLine">
+              <div class="mainTitle">玩家须知</div>
+              <div>
+                <span>页面随机出现不同道具，会员点击页面的任何位置即可控制
+                小人触碰道具（除障碍物外）赢得分数，触碰到每个道具
+                （除障碍物外）各奖励+10分。
+                </span> <br/>
+                <span>游戏不限定时间，小人碰到障碍物或者着地，游戏结束。</span>
+
+              </div>
+            </div>
+
+
+      				<div class="poupLine">
+      				    <div class="mainTitle">障碍物</div>
+      				    <div class="zawList" style="margin-bottom:12px;">
+                    <div class="zawImg zaw01"> </div>
+                    <div class="zawImg zaw02"> </div>
+                  </div>
+      				</div>
+
+
+      		</div>
+
+        </div>
+
+    </div>
+</div>
+
+<div id="activityKit" class="poupMain bg hide">
+    <div class="arrow" id="arrow"></div>
+    <div id="tip_txt">
+        <p>提示</p>
+        <p style="margin-top: 0.25rem">点击锦囊即可查看活动规则、排行榜、奖品等信息。</p>
+    </div>
+</div>
+<div id="awardUserInfoBg" class="hide" style="position:fixed; top:0; left: 0; bottom: 0; right: 0;overflow:hidden;"></div>
+<div id="validteBoxerBg" class="hide" style="position:fixed; top:0; left: 0; bottom: 0; right: 0;overflow: hidden;"></div>
+
+<div id="awardDetailBox" class="poupMain bg hide isAngular">
+    <div id="awardDetailScrollBox">
+        <div id="awardDeailBg" class="bgfix hide"></div>
+        <div class="awardCloseIcon"></div>
+        <div class="awardDetail">
+            <div class="hostName" style="padding: 0.7rem 2.2rem 1rem 0.7rem;text-align: left;color:#fff;word-break: break-word"></div>
+            <div class="awardName"></div>
+            <div class="awardSubTitle"></div>
+            <div class="awardCodeTime codeTimeFixedRange"><em>使用期限</em>：<span class="codeBgTime"></span> - <span class="codeEndTime"></span></div>
+            <div class="codeTimeFixedTerm hide">中奖后<span class="codeBgTime"></span>天生效，有效天数<span class="codeEndTime"></span>天</div>
+            <div id="awardCollectionBtn" ontouchend = "HdGame.favorite();">收藏优惠券</div>
+            <div class="awardDetailWarp"></div>
+        </div>
+        <div class="codeImgBox">
+            <div id="codeStatusBox" class="hide" style="padding-top:1.25rem;color:#777">
+                <div id="codeStatusBtn"></div>
+                <div id="codeStatusInfo">商家已将该兑奖码设置为作废<br>详情请联系商家</div>
+                <div id="codeStatusTips" class="hide"><em style="font-style: normal;">请先<span class="giftNameA">兑奖券</span>，<span class="targetDateMin">1</span>天后可用</em></div>
+            </div>
+
+            <div id="codeDetailInfoBox">
+                <img class="codeImg"/>
+                <div class='codeLine'><span id="codeName">优惠码</span>：<span style=" max-width: 8.7rem;word-wrap: break-word;display: inline-block; vertical-align: middle;"class="code selectText"></span><span class="copy">复制券码</span></div>
+                <div class="codeOptInfo"></div>
+                <div class="redPacketTip hide"></div>
+            </div>
+
+        </div>
+        <div class="awardBtnList">
+
+            <div style="height:0.4rem;"></div>
+            <div class="awardCusText awardDetailBtn"><span class="text"></span><span class="textDef hide">自定义文本（未开启）</span><span class="awardDeailIcon"></span></div>
+            <div id="awardCusTextInfo" class="awardDetailText hide"></div>
+
+            <form action=""></form>
+            <div id="useStoreBox" class="initHide">
+                <div class="storeTitle">
+                    <span class="text">适用门店</span><span class="storeNumText">（<span id="storeNum">5</span>个）</span>
+                    <span class="moreBtn">更多</span>
+                </div>
+                <div class="storeInfoBox">
+                    <div class="locationBtn" onclick="HdGame.openStoreLocation(this)"></div>
+                    <div class="info">
+                        <div class="storeNameBox"><span id="storeName"></span><span id="distance"></span></div>
+                        <div class="storeAdress"></div>
+                    </div>
+                </div>
+            </div>
+            <div style="height:0.4rem;"></div>
+            <a style="text-decoration:none;"><div class="servicePhone awardDetailBtn"><span class="text">客服电话</span><span class="phoneIcon"></span><span class="phoneText"></span></div></a>
+            <a id="awardCusBtnInfo" href="###" style="text-decoration:none;"><div class="awardCusBtn awardDetailBtn weui-cell__bd" style="border-top:none;"><span class="text">自定义按钮（未开启）</span><span class="textDef hide">自定义按钮（未开启）</span><div class="cell__ft"></div></div></a>
+            <div style="height:3.15rem;"></div>
+        </div>
+    </div>
+    <div class="hide homePoupMask codeCopyDetailMask">
+        <div class="codeCopyDetailPoup">
+            长按以下文字复制券码<br>
+            <div class="copyCode selectText"></div>
+        </div>
+    </div>
+    <div class="hide bgfix codeDetailImgBox">
+        <div class="absCenter imgBox">
+            <img class="codeImg" style="width:9rem;height:9rem;"/>
+        </div>
+    </div>
+
+    <div id="bottomCusBtnBox">
+        <a id="bottomCusBtnInfo" href="###" style="text-decoration:none;"><div class="bottomCusBtn cusBtn" style="border-top:none;"><span class="text">立即兑奖</span><span class="textDef hide">立即兑奖</span></div></a>
+        <a id="WxCusBtnInfo" href="###" style="text-decoration:none;" class="hide"><div class="awardCusBtn cusBtn" style="border-top:none;"><span class="text">自定义按钮（未开启）</span><span class="textDef hide">自定义按钮（未开启）</span><div class="cell__ft"></div></div></a>
+    </div>
+
+</div>
+<div id="storeListBox" class="bg hide">
+    <div class="list"></div>
+    <div class="refreshBtn hide">更新当前位置</div>
+    <div class="closeBtn"></div>
+</div>
+
+<div id="informBox" class="bg hide">
+    <div id="inform-reason-page">
+        <div class="weui-cells__title">请选择投诉原因</div>
+        <div class="weui-cells weui-cells_radio"  id="inform-reason-box">
+            <label class="weui-cell weui-check__label reasonItem" for="temptShare" _index="0">
+                <div class="weui-cell__bd">
+                    <p>诱导分享</p>
+                </div>
+                <div class="weui-cell__ft">
+                    <input type="radio" class="weui-check" name="radio1" id="temptShare">
+                    <span class="weui-icon-checked"></span>
+                </div>
+            </label>
+            <label class="weui-cell weui-check__label reasonItem" for="shamActive" _index="1">
+                <div class="weui-cell__bd">
+                    <p>虚假活动</p>
+                </div>
+                <div class="weui-cell__ft">
+                    <input type="radio" name="radio1" class="weui-check" id="shamActive">
+                    <span class="weui-icon-checked"></span>
+                </div>
+            </label>
+            <label class="weui-cell weui-check__label reasonItem" for="political" _index="2">
+                <div class="weui-cell__bd">
+                    <p>政治敏感</p>
+                </div>
+                <div class="weui-cell__ft">
+                    <input type="radio" class="weui-check" name="radio1" id="political">
+                    <span class="weui-icon-checked"></span>
+                </div>
+            </label>
+            <label class="weui-cell weui-check__label reasonItem" for="eroticism" _index="3">
+                <div class="weui-cell__bd">
+                    <p>色情低俗</p>
+                </div>
+                <div class="weui-cell__ft">
+                    <input type="radio" name="radio1" class="weui-check" id="eroticism">
+                    <span class="weui-icon-checked"></span>
+                </div>
+            </label>
+            <label class="weui-cell weui-check__label reasonItem" for="rumor" _index="4">
+                <div class="weui-cell__bd">
+                    <p>谣言</p>
+                </div>
+                <div class="weui-cell__ft">
+                    <input type="radio" class="weui-check" name="radio1" id="rumor">
+                    <span class="weui-icon-checked"></span>
+                </div>
+            </label>
+            <label class="weui-cell weui-check__label reasonItem" for="otherReason" _index="5">
+                <div class="weui-cell__bd">
+                    <p>其他（收集隐私信息等）</p>
+                </div>
+                <div class="weui-cell__ft">
+                    <input type="radio" name="radio1" class="weui-check" id="otherReason">
+                    <span class="weui-icon-checked"></span>
+                </div>
+            </label>
+        </div>
+        <div id="cancel-inform-btn">取消</div>
+        <div id="next-inform-btn" class="weui-btn weui-btn_primary hide">下一步</div>
+        <div id="inform-poup-tip" class="hide">投诉成功</div>
+    </div>
+    <div id="inform-desc-page" style="display: none;">
+        <div class="weui-cells__title">投诉描述</div>
+        <div class="weui-cells weui-cells_form">
+            <div class="weui-cell" id="inform-desc-box">
+                <div class="weui-cell__bd">
+                    <textarea class="weui-textarea" id="informDesc" placeholder="请输入文本" rows="4"></textarea>
+                    <div class="weui-textarea-counter" id="informDesc-counter"><span>0</span>/50</div>
+                </div>
+            </div>
+        </div>
+        <div id="submit-inform-btn" class="weui-btn weui-btn_primary">提交</div>
+    </div>
+</div>
+<div id="informResultBox" class="bg hide weui">
+    <div class="weui-msg">
+        <div class="weui-msg__icon-area"><i class="weui-icon-success weui-icon_msg"></i></div>
+        <div class="weui-msg__text-area">
+            <h2 class="weui-msg__title">投诉成功</h2>
+            <p class="weui-msg__desc">感谢你的参与，我们坚决反对色情、暴力、欺诈等违规信息，我们会认真处理你的投诉，维护绿色、健康的网络环境</p>
+        </div>
+        <div class="weui-msg__opr-area">
+            <p class="weui-btn-area">
+                <a class="confirm-btn weui-btn weui-btn_primary">确定</a>
+            </p>
+        </div>
+        <div class="weui-msg__extra-area">
+            <div class="weui-footer">
+            </div>
+        </div>
+    </div>
+</div>
+<div class="homeBtnBox specialBottom" class="hide">
+
+    <div id="myAwardBtn" onclick="HdGame.changePoup(3,'',true)" style="display:none;"><span class='redDot'></span></div>
+    <div id="informBtn" ontouchend="HdGame.changePoup(5,'',true)" style="display:none;">
+        <span>投诉</span>
+    </div>
+</div>
+<div id="logoImgBox" class="logoImgBox imgContainer absCenter hide" style="">
+  <%=image_tag "game/rl_dumpling/logo.jpg", id: 'logoImg', class: "slaveImg abs", style: "width:2rem;height:2rem;top:3.5rem;left:0.75rem;" %>
+</div>
+<div id="lots-wait-Box" style="display:none">
+    <div id="lots-wait-img" class="editRelate-lotsPot"></div>
+    <div id="lots-wait-hint">当前抽奖人数过多<br/>请稍等 <span id="lots-wait-hint-num">0</span> 秒</div>
+</div>
+<div id="helpGuideBox" style="display:none">
+
+
+            <p>你今天已经没有抽奖机会了</br>分享给好友或群聊</p>
+            <p style="margin-top:1.1rem;">
+                今天将额外获得1次抽奖机会！<br/>（仅限当天首次分享）
+            </p>
+
+
+</div>
+
+<div id="themeGameCodeImgBox" class="hide">
+	<img id="themeGameCodeImg" _src="data:image/png;base64,XdmFyIGc9IjQsZiw3LGgsMTIsdywyMix2LDI3LHIsMzEsaiIuc3BsaXQoIiwiKSxmPWdfY29uZmlnLnBUb2tlbixjPWhnLmFzc2V0cy5pbmNyZW1lbnQsaj1mdW5jdGlvbihoKXtoPSQubWQ1KGgrZikuc3BsaXQoIiIpO2Zvcih2YXIgYj0wLGs9Zy5sZW5ndGg7YjxrO2IrPTIpe2guc3BsaWNlKHBhcnNlSW50KGdbYl0pK3BhcnNlSW50KGIvMiksMCxnW2IrMV0pfXJldHVybiAkLm1kNShoLmpvaW4oIiIpKX0sZD1mdW5jdGlvbihsLGgpe2Z1bmN0aW9uIGsoYil7cmV0dXJuIGJ9dmFyIG49bC1oLG09aGcudGltZTtpZihnX2NvbmZpZy5zY29yZVR5cGUmJmwhPW0uaW5pdFRpbWUpe3ZhciBvPW0uaXNEZXNjPy0xOjE7aWYoKG0ucmFuZ2VbMF0+MCYmbypuPG0ucmFuZ2VbMF0vMjAwMCl8fChtLnJhbmdlWzFdPjAmJm8qbj5tLnJhbmdlWzFdLzUwMCkpe3JldHVybiBrKCEwKX19ZWxzZXtpZihsIT0wJiZjJiZuPmMqMil7cmV0dXJuIGsoITApfX1yZXR1cm4gayghMSl9LGUsaSxhPWZ1bmN0aW9uKGIpe2lmKGQoYixhLnQpKXtyZXR1cm59Z19jb25maWcuYXdhcmRJbmZvQj1qKGIpO2EudD1ifTthLnQ9MDtnX2NvbmZpZy5zY29yZVR5cGU/KGU9aGcudGltZSxpPSJzZXRUaW1lIik6KGU9aGcuZ3JhZGUsaT0ic2V0R3JhZGUiKSxlJiZlLm9uPyhlLm9uKGksYSksYSgwKSk6YSgiY2xtMTIzIik=" >
+</div>
+
+
+<div class="resuleBox hide">
+    <div id="resule-status-box" style="display:none">
+
+        <div id="resule-status-scrollWrap">
+            <div class="resule-bgLight " style="display:none;"></div>
+            <div id="resule-status-bird"></div>
+            <div style="height: 18.6rem; overflow-y:scroll;">
+	            <div id="resule-status-head">
+	                <div class="resule-status-userImg">
+	                    <img src="<%=@game_player.avatar%>"/>
+	                </div>
+	                <div id="resule-status-ribbon" class="resule-status-ribbon"></div>
+	            </div>
+	            <div id="resule-status-body">
+
+	                <p class="youraward"style="">您本局成绩为：<span class="resuleArg" style="font-size:0.8rem;"></span><span class="result-scoreUnit"  style="font-size:0.8rem;"><span class="gameScoreUnit">分</span></span></p>
+	                <p class="youraward special hide" style="font-size:0.8rem; line-height:1.2rem">通关并且</p>
+	                <p class="beat-Percent hide">成功击败全国<span></span>%的玩家</p>
+
+	                <p id="bestArg" style="">您最佳成绩为：<span class="resuleArg"></span><span class="result-scoreUnit"><span class="gameScoreUnit">分</span></span></p>
+	                <p id="bestRank">您目前排名为：<span class="result-scoreUnit2"></span><span class="resuleArg"></span></p>
+
+                  <p class="resule-status-minscore" style="display:none;">成绩必须达到 <span class="resuleArg resulescoreLimit"></span> <span class="gameScoreUnit">分</span>才能<span id="minscoreDrawFont">抽奖</span></p>
+                  <div class="resule-status-minscore2" ><p> 幸运参与奖共1000份，</p><p>参与游戏，且分数达到100分以上，每日可抽奖一次! </p>
+                    <p> 更有最佳排行奖等你来</p>
+                  </div>
+	                <div id="rank_showRule" style="text-decoration:underline;margin:0.7rem 0rem;" class="hide" onclick="showRule();">活动规则</div>
+	                <div id="resule-status-count" style="margin-top:0.6rem">
+	                    <p class="totalDraw">您还有 <span id="totalDrawCount" class="resuleArg"></span> 次抽奖机会</p>
+	                    <p class="dayDraw">今天还有 <span class="resuleArg dayDrawCount"></span> 次机会抽奖</p>
+	                    <p class="dayDraw4Total hide">今天可抽 <span class="resuleArg dayDrawCount"></span> 次</p>
+	                </div>
+	                <div id="resule-status-playinfo" style="margin-top:0.6rem">
+	                    <p class="dayPlayHint">今天还有 <span class="resuleArg todayPlayCount"></span> 次参与机会</p>
+	                    <p class="totalPlayHint">您还有 <span class="resuleArg totalPlayCount"></span> 次参与机会</p>
+	                    <p class="dayPlayHint4Total">今天可参与 <span class="resuleArg todayPlayCount"></span> 次</p>
+	                </div>
+	            </div>
+	            <div id="resule-status-other" class="hide">
+	                <p style="font-size:0.8rem;font-weight:bold;">通关并且</p>
+	                <p class="resule-status-minscore hide" style="margin: 10px 0px 50px;">成绩必须达到 <span class="resuleArg resuleArg-fail resulescoreLimit"></span> <span class="gameScoreUnit">分</span>才能抽奖</p>
+	            </div>
+	            <div id="resule-sucReg" class="hide" style="margin-top:0.6rem">您已经成功报名参与活动！</div>
+	            <div class="resule-foot-box">
+	                <div class="resule-foot-one">
+	                    <div class="resule-button resule-one-button resule-status-gift hide">赶紧去抽奖</div>
+	                    <div class="resule-button resule-one-button resule-status-reg hide">我要报名</div>
+	                    <div class="resule-button resule-one-button resule-status-again hide">再玩一次</div>
+	                    <div class="resule-button resule-one-button resule-status-send hide">领取礼品</div>
+	                    <div class="resule-button resule-one-button resule-status-rightNow hide">马上PK</div>
+	                </div>
+	                <div class="resule-foot-two">
+
+	                    <div class="resule-button resule-status-seeRank">排行榜</div><div class="resule-button resule-status-home">返回首页</div><div class="resule-button resule-status-again restart-again ">再玩一次</div>
+
+	                </div>
+	            </div>
+            </div>
+	    <div class='attentionBox'>
+		    <div id="drawMenuBtnBox" class='menuBtnBox hide' >
+			<a class='menuName'>关注我们</a>
+		    </div>
+
+
+		    <div class="holdBox"></div>
+	    </div>
+        </div>
+
+        <div id="resule-status-lotsBox" style="display:none">
+          <div class="cartoonWrap">
+            <div class="cartoonBox">  </div>
+          </div>
+
+            <div id="resule-status-lotsHand" class="editTarget-lotsShakeHand">
+                <div class="shakeHand"></div>
+                <div class="shakeTxt"></div>
+                <div class="waitDrawBtn" style="display:none">点击抽奖</div>
+            </div>
+        </div>
+    </div>
+    <div id="resule-gift-box" style="display:none">
+        <div id="resule-gift-scrollWrap" class="resule-gift-overflowScrolling" style="padding-top:1.2rem;position:relative;z-index:300;">
+                <div class="resule-bgLight" style="display:none;"></div>
+            <div id="luckContainer" style="position:absolute; width: 100%;z-index:250;">
+                <div class="imgContentLimit hide" style="width: 14rem; height: 30rem; position: absolute;"></div>
+                <div class="imgContainer" style="position:relative;">
+                    <%=image_tag "game/rl_dumpling/gift.png", id: 'resule-gift-sucImg', class: "slaveImg", style: "width:6rem;height:6rem" %>
+                </div>
+                <div id="resule-gift-foot">
+                    <p id="resule-gift-luck" style="text-align:center;" >恭喜获得</p>
+                    <p id="resule-gift-rank"> <span class="gifArg awardStyle"></span> </p>
+                    <p id="resule-gift-goods"> <span class="gifArg awardName"></span> </p>
+                    <p id="resule-gift-memo">*请到个人中心-我的订单中查询奖品-点击兑换-完善邮寄地址-签收礼物 </p>
+                </div>
+
+
+            </div>
+        </div>
+
+
+
+    <div id="faiImgBox">
+            <div class="cannotGetThePriceBox oldGame"></div>
+                    <img class="abs editTarget-theGetPricePic theUnPriceImg" id="theGetPricePic" />
+
+
+    </div>
+
+        <div class='attentionBox'>
+        	<div class='menuBtnBox'>
+              <a class="resule-button resule-one-button resule-status-again ">再玩一次</a>
+              <a class='resule-gift-home menuName2'>返回首页</a>
+            </div>
+            <div class='hdskillInfo skillInfo'></div>
+            <div class="holdBox"></div>
+        </div>
+    </div>
+</div>
+
+
+<div id="attentionMask" class="homePoupMask">
+    <div id="attentionPoup" class="homePoupInner attentionPoup">
+        <canvas id="QRImg_canvas1" class="QRImg_canvas"></canvas>
+        <img class="QRImg_exportImg" class="hide" src style="position: absolute; top: 0.5rem; z-index: 10; height: 16.5rem"/>
+    </div>
+</div>
+
+<div id="awardCodeLayer" class="homePoupMask hide">
+    <div id="awardCodeDetail" style="border-radius: 0.2rem;">
+        <div class='codeLine' style="margin-top:0.4rem;">请联系核销员扫码核销</div>
+        <img class="codeImg"/>
+        <div class='codeLine' style="padding-top: 0.8rem;"><span class="code selectText"></span></div>
+        <div class="codeOptInfo"></div>
+    </div>
+</div>
+<div id="newAttentionMask" class="homePoupMask hide">
+    <div id="newAttentionPoup" class="homePoupInner attentionPoup">
+        <canvas id="QRImg_canvas2" class="QRImg_canvas"></canvas>
+        <img class="QRImg_exportImg" class="hide" src style="position: absolute; top: 0.5rem; z-index: 10; height: 16.5rem"/>
+    </div>
+</div>
+<div id="plAttentionMask" class="homePoupMask hide">
+    <div id="plAttentionPoup" class="homePoupInner attentionPoup">
+        <canvas id="QRImg_canvas3" class="QRImg_canvas"></canvas>
+        <img class="QRImg_exportImg" class="hide" src style="position: absolute; top: 0.5rem; z-index: 10; height: 16.5rem"/>
+    </div>
+</div>
+
+    <div id="skillSupMask" class="homePoupMask">
+      <%=image_tag "game/rl_dumpling/hdQRcode/20170821/caewmB_1.png", style: "position:absolute;top:2rem;z-index:10;margin:auto;left:0;right:0;width:11.65rem" %>
+    </div>
+
+
+
+<div id="loadingToast" class="hide">
+    <div class="weui-mask_transparent"></div>
+    <div class="weui-toast">
+        <i class="weui-loading weui-icon_toast"></i>
+        <p class="weui-toast__content"></p>
+    </div>
+</div>
+
+
+
+
+	</div>
+
+<script type="text/javascript">
+    function loadGamePreAssets(){
+        hg.assets.add(WechatMore.assets.image_dust_sheet_url);
+    }
+</script>
+
+<script type="text/javascript">
+    var _manage = false,
+        tryPlay = false,
+        isJoinThemeGame = false,
+        m_debug = false,
+        _resRoot = '',
+        _ruleInfo = {};
+        m_isPre = false;
+        hg = {};
+	var _preview = false;
+    (function(){var _faiAjax=function(){var r=/\?/;var _o={type:"get",url:"",data:"",error:function(){},success:function(){}};var _sendRequest=function(o){var xmlhttp=null;o.type=o.type||_o.type;o.url=o.url||_o.url;o.data=o.data||_o.data;o.error=o.error||_o.error;o.success=o.success||_o.success;if(window.XMLHttpRequest){xmlhttp=new XMLHttpRequest()}else{xmlhttp=new ActiveXObject("Microsoft.XMLHTTP")}if(o.type!="post"){o.url+=(this.r.test(o.url)?"&":"?")+o.data;xmlhttp.open("GET",o.url,true);xmlhttp.onreadystatechange=function(){if(xmlhttp.readyState==4&&xmlhttp.status==200){o.success(xmlhttp.responseText)}else{if(o.error){o.error()}}};xmlhttp.send()}else{xmlhttp.open("POST",o.url,true);xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded; charset=UTF-8");xmlhttp.onreadystatechange=function(){if(xmlhttp.readyState==4&&xmlhttp.status==200){o.success(xmlhttp.responseText)}else{o.error()}};xmlhttp.send(o.data)}};return{ajax:function(option){try{_sendRequest(option)}catch(e){}}}}();hg._faiAjax=_faiAjax;var _jsErrCahche=[];window.onerror=function(sMsg,sUrl,sLine){if(sLine<1||typeof sMsg!="string"||sMsg.length<1){return}if(/WeixinJSBridge|_WXJS/.test(sMsg)){return}var log="Error:"+sMsg+";Line:"+sLine+";Url:"+sUrl;var alertLog="Error:"+sMsg+"\n"+"Line:"+sLine+"\n"+"Url:"+sUrl+"\n";var encodeUrl=function(url){return typeof url==="undefined"?"":encodeURIComponent(url)};var ajax=true;var obj={"m":sMsg,"u":sUrl,"l":sLine};for(var i=0;i<_jsErrCahche.length;i++){if(_jsErrCahche[i].m==obj.m&&_jsErrCahche[i].u==obj.u&&_jsErrCahche[i].l==obj.l){ajax=false;break}}if(ajax){_jsErrCahche.push(obj);_faiAjax.ajax({type:"post",url:"//hd.getstore.cn/ajax/logJsErr_h.jsp?cmd=jsErr",data:"msg="+encodeUrl(log)})}if(m_debug){if(HdGame&&HdGame.tlog){HdGame.tlog("err",alertLog)}else{}}}})();
+    (function(hg){var imgPaths=[],readyCallBack=[],loadCallBack=[];hg.assets={complete:false,loadComplete:false,increment:10,loadingStyle:1,loadTimeout:120000,getPath:function(){return imgPaths},setPath:function(path){imgPaths=path},add:function(src){var self=this;if(self.complete||_manage){return}if(isArray(src)){for(var i=src.length-1;i>=0;i--){self.add(src[i])}}else if(typeof src==='string'){imgPaths.push(src)}return this},onReady:function(callBack){var self=this;if(self.complete){callBack()}else{readyCallBack.push(callBack)}return self},onload:function(callBack){var self=this;if(self.loadComplete){callBack()}else{loadCallBack.push(callBack)}return self},loadPage:function(){if(_manage)return;var self=this,percent=1,numLoaded=0,$loadPercent=document.getElementById("loadPercent"),loadPallet;window.scrollTo(0,0);if(self.loadingStyle===1){loadimg(imgPaths)}else if(self.loadingStyle===3){var logoImg=document.getElementById("preloadImg");var initLogoImg=function(img){var img=logoImg;var h=img.height;var w=img.width;var bottomPageInfoDeg=-Math.atan(w/h)-Math.PI/2;var canvas=document.getElementById("preloadCanvas");var ctx=canvas.getContext("2d");var ratio=(window.devicePixelRatio||1)/(ctx.backingStorePixelRatio||ctx.webkitBackingStorePixelRatio||ctx.mozBackingStorePixelRatio||ctx.msBackingStorePixelRatio||ctx.oBackingStorePixelRatio||ctx.backingStorePixelRatio||1);var drawImg=function(){ctx.fillStyle="#fff";ctx.fillRect(0.2*g_rem*ratio,0.2*g_rem*ratio,w*ratio,h*ratio);ctx.drawImage(img,0.2*g_rem*ratio,0.2*g_rem*ratio,w*ratio,h*ratio)};if(h===w){if(h>3.5*g_rem){h=w=3.5*g_rem}drawImg=function(){ctx.save();ctx.beginPath();ctx.arc(canvas.width/2,canvas.height/2,w/2*ratio,0,2*Math.PI);ctx.clip();ctx.fillStyle="#fff";ctx.fill();ctx.drawImage(img,0.2*g_rem*ratio,0.2*g_rem*ratio,w*ratio,h*ratio);ctx.restore()}}else{if(w>h&&w>8*g_rem){h=8*g_rem*h/w;w=8*g_rem}else{if(h>w&&h>8*g_rem){w=8*g_rem*w/h;h=8*g_rem}}}canvas.width=(w+0.4*g_rem)*ratio;canvas.height=(h+0.4*g_rem)*ratio;canvas.style.width=w+0.4*g_rem+"px";canvas.style.height=h+0.4*g_rem+"px";if(h===w){ctx.beginPath();ctx.arc(canvas.width/2,canvas.height/2,canvas.width/2,0,2*Math.PI);ctx.clip()}ctx.strokeStyle="#69c5ff";ctx.lineWidth=8*g_rem*ratio;loadPallet=function(tmp){ctx.beginPath();ctx.arc(canvas.width/2,canvas.height/2,4*g_rem*ratio,bottomPageInfoDeg,bottomPageInfoDeg+tmp*(2*Math.PI/100));ctx.stroke();drawImg()};loadimg(imgPaths)};if(logoImg.complete){initLogoImg()}else{logoImg.onload=initLogoImg}}function setPercent(percent){$loadPercent.innerHTML=percent;if(percent===100){var index=0;setTimeout(function(){index++;if(index<10){loadPallet&&loadPallet(120);setTimeout(arguments.callee,17)}else{loadPallet=null}},17)}loadPallet&&loadPallet(percent)}function loading(){if(numLoaded<imgPaths.length){if(percent<100-imgPaths.length+numLoaded){percent++;setPercent(percent-1)}}else{percent+=10;percent>100&&(percent=100);setPercent(percent-1)}if(percent>=100&&typeof $!='undefined'){if(!g_config.test&&g_config.isForbidShareactivity){wx.ready(loadEnd)}else{loadEnd()}return}setTimeout(arguments.callee,10)}function loadEnd(){setPercent(100);var flag=$(window).height()/$(window).width()<1.575;var bgHeight=flag?$(window).width()*1.575:$(window).height();setTimeout(function(){!HdGame.nootNeedFixHeight&&$("#homeBgBox,.gameBgBox").css("height",bgHeight/g_rem+"rem");var theObject=g_config.style==55?$(".gameBox .bottomSkill,#bottomSkill"):$(".home .bottomSkill,#bottomSkill");flag&&theObject.css("top",(bgHeight-$(".bottomSkill").outerHeight())/g_rem+"rem");setTimeout(function(){$loadPercent=null;$("#preloadPage").hide()},500);complete();self.loadComplete=true;for(var n=loadCallBack.length,i=0;i<n;i++){loadCallBack[i]()}loadCallBack=null;logoImg=null;$loadPercent=null;$("#preloadPage").addClass("leftClose")},300)}function loadimg(arr){loading();for(var i=arr.length-1;i>=0;i--){var img=new Image();img.onload=loadCheckComplete;img.onerror=loadCheckComplete;img.src=arr[i];self[arr[i]]=img}if(self.loadTimeout){self._loadTimer=setTimeout(loadTimeout,self.loadTimeout)}}function loadTimeout(){}function loadCheckComplete(){numLoaded++;this.assets_complete=true;if(numLoaded===imgPaths.length){complete()}}function complete(){if(self.complete)return;clearTimeout(self._loadTimer);numLoaded=imgPaths.length;self.complete=true;for(var n=readyCallBack.length,i=0;i<n;i++){readyCallBack[i]()}readyCallBack=null}}}})(hg);
+    /*----------------------------可编辑元素包装------------------------------------*/
+    hg.edit = null;
+
+    hg.edit = {};
+    (function(hg){
+        var origin = [{"name":"robot","pos":{"left":"2rem","top":"11.75rem"},"size":{"width":"1.75rem","height":"2.25rem"},"path":[WechatMore.assets.image_robot_url]},
+        {"name":"zaw","pos":{"left":"3.5rem","top":"4.5rem"},"size":{"width":"1.45rem","height":"1.45rem"},"path":[WechatMore.assets.image_zaw_url]},
+        {"name":"zaw01","pos":{"left":"3.5rem","top":"4.5rem"},"size":{"width":"1.20rem","height":"1.08rem"},"path":[WechatMore.assets.image_zaw01_url]},
+        {"name":"zaw02","pos":{"left":"3.5rem","top":"4.5rem"},"size":{"width":"0.77rem","height":"1.86rem"},"path":[WechatMore.assets.image_zaw02_url]},
+        {"name":"wp01","pos":{"left":"4.5rem","top":"21rem"},"size":{"width":"2.80rem","height":"1.87rem"},"path":[WechatMore.assets.image_wp01_url]},
+        {"name":"wp02","pos":{"left":"10rem","top":"5rem"},"size":{"width":"2.80rem","height":"1.87rem"},"path":[WechatMore.assets.image_wp02_url]},
+        {"name":"wp03","pos":{"left":"11rem","top":"16rem"},"size":{"width":"2.80rem","height":"1.87rem"},"path":[WechatMore.assets.image_wp03_url]},
+        {"name":"wp04","pos":{"left":"12rem","top":"9rem"},"size":{"width":"2.80rem","height":"1.87rem"},"path":[WechatMore.assets.image_wp04_url]},
+        {"name":"wp05","pos":{"left":"4.5rem","top":"21rem"},"size":{"width":"2.80rem","height":"1.87rem"},"path":[WechatMore.assets.image_wp05_url]},
+        {"name":"wp06","pos":{"left":"10rem","top":"5rem"},"size":{"width":"2.80rem","height":"1.87rem"},"path":[WechatMore.assets.image_wp06_url]},
+        {"name":"wp07","pos":{"left":"4.5rem","top":"21rem"},"size":{"width":"2.80rem","height":"1.87rem"},"path":[WechatMore.assets.image_wp07_url]},
+        {"name":"wp08","pos":{"left":"10rem","top":"5rem"},"size":{"width":"2.80rem","height":"1.87rem"},"path":[WechatMore.assets.image_wp08_url]},
+        {"name":"wp09","pos":{"left":"11rem","top":"16rem"},"size":{"width":"2.80rem","height":"1.87rem"},"path":[WechatMore.assets.image_wp09_url]},
+        {"name":"wp10","pos":{"left":"12rem","top":"9rem"},"size":{"width":"2.80rem","height":"1.87rem"},"path":[WechatMore.assets.image_wp10_url]},
+        {"name":"wp11","pos":{"left":"4.5rem","top":"21rem"},"size":{"width":"2.09rem","height":"1.87rem"},"path":[WechatMore.assets.image_wp11_url]},
+        {"name":"wp12","pos":{"left":"10rem","top":"5rem"},"size":{"width":"1.20rem","height":"2.05rem"},"path":[WechatMore.assets.image_wp12_url]},
+        {"name":"wp13","pos":{"left":"11rem","top":"16rem"},"size":{"width":"1.20rem","height":"2.05rem"},"path":[WechatMore.assets.image_wp13_url]},
+        {"name":"wp14","pos":{"left":"12rem","top":"9rem"},"size":{"width":"1.20rem","height":"2.05rem"},"path":[WechatMore.assets.image_wp14_url]},
+        {"name":"wp15","pos":{"left":"4.5rem","top":"21rem"},"size":{"width":"1.20rem","height":"2.05rem"},"path":[WechatMore.assets.image_wp15_url]},
+        {"name":"wp16","pos":{"left":"10rem","top":"5rem"},"size":{"width":"1.20rem","height":"2.05rem"},"path":[WechatMore.assets.image_wp16_url]},
+        {"name":"wp17","pos":{"left":"4.5rem","top":"21rem"},"size":{"width":"1.20rem","height":"2.05rem"},"path":[WechatMore.assets.image_wp17_url]},
+        {"name":"wp18","pos":{"left":"10rem","top":"5rem"},"size":{"width":"2.09rem","height":"1.87rem"},"path":[WechatMore.assets.image_wp18_url]},
+        {"name":"wp19","pos":{"left":"11rem","top":"16rem"},"size":{"width":"2.80rem","height":"1.39rem"},"path":[WechatMore.assets.image_wp19_url]},
+        {"name":"wp20","pos":{"left":"12rem","top":"9rem"},"size":{"width":"2.67rem","height":"1.76rem"},"path":[WechatMore.assets.image_wp20_url]},
+        {"name":"wp21","pos":{"left":"12rem","top":"9rem"},"size":{"width":"1.76rem","height":"1.87rem"},"path":[WechatMore.assets.image_wp21_url]},
+        {"name":"wp22","pos":{"left":"12rem","top":"9rem"},"size":{"width":"2.09rem","height":"1.87rem"},"path":[WechatMore.assets.image_wp22_url]},
+        {"name":"platform","css":[{"opt":0,"val":"rgb(125, 0, 34)","defVal":"rgb(28, 182, 226)","tra":1,"defTra":1},{"opt":0,"val":"rgb(125, 0, 34)","defVal":"rgb(0, 0, 0)","tra":1,"defTra":1}]},
+        {"name":"playInfo","pos":{"left":"3.5rem","top":"13rem"},"css":[{"css":[{"opt":0,"val":14,"defVal":14},{"opt":0,"val":"#fff","defVal":"#fff","tra":-1,"defTra":-1},{"opt":0,"val":"","defVal":"","tra":-1,"defTra":-1}],"opt":0},{"css":[{"opt":0,"val":14,"defVal":14},{"opt":0,"val":"#fff799","defVal":"#fff799","tra":-1,"defTra":-1},{"opt":0,"val":"","defVal":"","tra":-1,"defTra":-1}],"opt":0}]},
+        {"name":"theGetPricePic","pos":{"left":"1.2rem","top":"1.5rem"},"size":{"width":"13.5rem","height":"16.75rem"},"path":[[WechatMore.assets.image_theGetPricePic_url]]},
+        {"name":"theGetPricePicTwo","pos":{"left":"1.2rem","top":"1.5rem"},"size":{"width":"13.5rem","height":"16.75rem"},"path":[[WechatMore.assets.image_theGetPricePicTwo_url]]},{"name":"theGetPricePicThree","pos":{"left":"0rem","top":"0rem"},"size":{"width":"4rem","height":"4rem"},"path":[[WechatMore.assets.image_theGetPricePicThree_url]]},{"name":"lotsPot","pos":{"left":"4.9rem","top":"3rem"},"size":{"width":"6.15rem","height":"12.4rem"},"path":[[WechatMore.assets.image_lotsPot_url ]]},
+        {"name":"lotsShakeHand","pos":{"left":"4.5rem","top":"17.9rem"}},
+        {"name":"advertising","path":[WechatMore.assets.image_lotsShakeHand_url]}];
+
+        var originDef = [{"name":"robot","pos":{"left":"2rem","top":"11.5rem","disable":"disable"},"size":{"width":"1.75rem","height":"2.5rem"},"path":[WechatMore.assets.image_ori_robot_url,"角色图片01","5000k"],"edit":"all"},
+        {"name":"zaw","pos":{"left":"3.5rem","top":"4.5rem","disable":"disable"},"size":{"width":"1.45rem","height":"1.275rem"},"path":[WechatMore.assets.image_ori_zaw_url,"障碍物品","5000k"],"edit":"all"},
+        {"name":"zaw01","pos":{"left":"3.5rem","top":"4.5rem","disable":"disable"},"size":{"width":"1.45rem","height":"1.275rem"},"path":[WechatMore.assets.image_ori_zaw_url,"障碍物品01","5000k"],"edit":"all"},
+        {"name":"zaw02","pos":{"left":"3.5rem","top":"4.5rem","disable":"disable"},"size":{"width":"1.45rem","height":"1.275rem"},"path":[WechatMore.assets.image_ori_zaw_url,"障碍物品02","5000k"],"edit":"all"},
+        {"name":"wp01","pos":{"left":"4.5rem","top":"21rem","disable":"disable"},"size":{"width":"1.5rem","height":"1.5rem"},"path":[WechatMore.assets.image_ori_wp01_url,"加分物品01","5000k"],"edit":"all"},
+        {"name":"wp02","pos":{"left":"10rem","top":"5rem","disable":"disable"},"size":{"width":"1.5rem","height":"1.5rem"},"path":[WechatMore.assets.image_ori_wp02_url,"加分物品02","5000k"],"edit":"all"},
+        {"name":"wp03","pos":{"left":"11rem","top":"16rem","disable":"disable"},"size":{"width":"1.5rem","height":"1.5rem"},"path":[WechatMore.assets.image_ori_wp03_url,"加分物品03","5000k"],"edit":"all"},
+        {"name":"wp04","pos":{"left":"12rem","top":"9rem","disable":"disable"},"size":{"width":"1.5rem","height":"1.5rem"},"path":[WechatMore.assets.image_ori_wp04_url,"加分物品04","5000k"],"edit":"all"},
+        {"name":"wp05","pos":{"left":"12rem","top":"9rem","disable":"disable"},"size":{"width":"1.5rem","height":"1.5rem"},"path":[WechatMore.assets.image_ori_wp04_url,"加分物品04","5000k"],"edit":"all"},
+        {"name":"wp06","pos":{"left":"12rem","top":"9rem","disable":"disable"},"size":{"width":"1.5rem","height":"1.5rem"},"path":[WechatMore.assets.image_ori_wp04_url,"加分物品06","5000k"],"edit":"all"},
+        {"name":"wp07","pos":{"left":"12rem","top":"9rem","disable":"disable"},"size":{"width":"1.5rem","height":"1.5rem"},"path":[WechatMore.assets.image_ori_wp04_url,"加分物品07","5000k"],"edit":"all"},
+        {"name":"wp08","pos":{"left":"12rem","top":"9rem","disable":"disable"},"size":{"width":"1.5rem","height":"1.5rem"},"path":[WechatMore.assets.image_ori_wp04_url,"加分物品08","5000k"],"edit":"all"},
+        {"name":"wp09","pos":{"left":"12rem","top":"9rem","disable":"disable"},"size":{"width":"1.5rem","height":"1.5rem"},"path":[WechatMore.assets.image_ori_wp04_url,"加分物品09","5000k"],"edit":"all"},
+        {"name":"wp10","pos":{"left":"12rem","top":"9rem","disable":"disable"},"size":{"width":"1.5rem","height":"1.5rem"},"path":[WechatMore.assets.image_ori_wp04_url,"加分物品10","5000k"],"edit":"all"},
+        {"name":"wp11","pos":{"left":"4.5rem","top":"21rem","disable":"disable"},"size":{"width":"1.5rem","height":"1.5rem"},"path":[WechatMore.assets.image_ori_wp01_url,"加分物品01","5000k"],"edit":"all"},
+        {"name":"wp12","pos":{"left":"10rem","top":"5rem","disable":"disable"},"size":{"width":"1.5rem","height":"1.5rem"},"path":[WechatMore.assets.image_ori_wp02_url,"加分物品02","5000k"],"edit":"all"},
+        {"name":"wp13","pos":{"left":"11rem","top":"16rem","disable":"disable"},"size":{"width":"1.5rem","height":"1.5rem"},"path":[WechatMore.assets.image_ori_wp03_url,"加分物品03","5000k"],"edit":"all"},
+        {"name":"wp14","pos":{"left":"12rem","top":"9rem","disable":"disable"},"size":{"width":"1.5rem","height":"1.5rem"},"path":[WechatMore.assets.image_ori_wp04_url,"加分物品04","5000k"],"edit":"all"},
+        {"name":"wp15","pos":{"left":"12rem","top":"9rem","disable":"disable"},"size":{"width":"1.5rem","height":"1.5rem"},"path":[WechatMore.assets.image_ori_wp04_url,"加分物品04","5000k"],"edit":"all"},
+        {"name":"wp16","pos":{"left":"12rem","top":"9rem","disable":"disable"},"size":{"width":"1.5rem","height":"1.5rem"},"path":[WechatMore.assets.image_ori_wp04_url,"加分物品06","5000k"],"edit":"all"},
+        {"name":"wp17","pos":{"left":"12rem","top":"9rem","disable":"disable"},"size":{"width":"1.5rem","height":"1.5rem"},"path":[WechatMore.assets.image_ori_wp04_url,"加分物品07","5000k"],"edit":"all"},
+        {"name":"wp18","pos":{"left":"12rem","top":"9rem","disable":"disable"},"size":{"width":"1.5rem","height":"1.5rem"},"path":[WechatMore.assets.image_ori_wp04_url,"加分物品08","5000k"],"edit":"all"},
+        {"name":"wp19","pos":{"left":"12rem","top":"9rem","disable":"disable"},"size":{"width":"1.5rem","height":"1.5rem"},"path":[WechatMore.assets.image_ori_wp04_url,"加分物品09","5000k"],"edit":"all"},
+        {"name":"wp20","pos":{"left":"12rem","top":"9rem","disable":"disable"},"size":{"width":"1.5rem","height":"1.5rem"},"path":[WechatMore.assets.image_ori_wp04_url,"加分物品10","5000k"],"edit":"all"},
+        {"name":"wp21","pos":{"left":"12rem","top":"9rem","disable":"disable"},"size":{"width":"1.5rem","height":"1.5rem"},"path":[WechatMore.assets.image_ori_wp04_url,"加分物品10","5000k"],"edit":"all"},
+        {"name":"wp22","pos":{"left":"12rem","top":"9rem","disable":"disable"},"size":{"width":"1.5rem","height":"1.5rem"},"path":[WechatMore.assets.image_ori_wp04_url,"加分物品10","5000k"],"edit":"all"},
+        {"name":"platform","css":[{"type":"color","name":"border-color","opt":0,"val":"rgb(28, 182, 226)","defVal":"rgb(28, 182, 226)","tra":1,"defTra":1},{"type":"color","name":"background-color","opt":0,"val":"rgb(0, 0, 0)","defVal":"rgb(0, 0, 0)","tra":1,"defTra":1}]},{"name":"playInfo","pos":{"left":"3.5rem","top":"13rem","forParent":"false"},"css":[{"title":"常规文字","opt":0,"from":"#playInfo","css":[{"type":"size","name":"font-size","val":14,"defVal":14,"opt":0},{"type":"color","name":"color","defVal":"#fff","val":"","tra":-1,"defTra":-1,"opt":0},{"type":"color","name":"text-shadow","val":"","defVal":"","tra":-1,"defTra":-1,"opt":0}]},{"title":"参与机会","opt":0,"from":"#playInfo .specil","css":[{"type":"size","name":"font-size","val":14,"defVal":14,"opt":0},{"type":"color","name":"color","val":"","defVal":"#fff799","tra":-1,"defTra":-1,"opt":0},{"type":"color","name":"text-shadow","val":"","defVal":"","tra":-1,"defTra":-1,"opt":0}]}],"edit":3},{"name":"theGetPricePic","pos":{"left":"2.1rem","top":"1.3rem"},"size":{"width":"11.5rem","height":"11.2rem"},"path":[[WechatMore.assets.image_ori_theGetPricePic_url,"图片01","5000k"]],"edit":"theGetPricePic","formDefaultStyle":true},{"name":"theGetPricePicTwo","pos":{"left":"2.1rem","top":"1.3rem"},"size":{"width":"11.5rem","height":"11.2rem"},"path":[[WechatMore.assets.image_ori_theGetPricePicTwo_url,"图片01","5000k"]],"edit":"theGetPricePicTwo","formDefaultStyle":true},{"name":"theGetPricePicThree","pos":{"left":"2.1rem","top":"1.3rem"},"size":{"width":"11.5rem","height":"11.2rem"},"path":[[WechatMore.assets.image_ori_theGetPricePicThree_url,"图片01","5000k"]],"edit":"theGetPricePicThree","formDefaultStyle":true},{"name":"lotsPot","pos":{"left":"4.925rem","top":"3rem"},"size":{"width":"6.15rem","height":"12.4rem"},"path":[[WechatMore.assets.image_ori_lotsPot_url ,"图片01","5000k"]],"edit":"lotsPot","formDefaultStyle":true},{"name":"lotsShakeHand","pos":{"left":"4.5rem","top":"17.9rem","forParent":"false"},"edit":"_none","formDefaultStyle":true},{"name":"advertising","rsize":{"width":"16rem","height":"40rem"},"path":[WechatMore.assets.image_ori_lotsShakeHand_url],"edit":"_background","formDefaultStyle":true}];
+        var originMod = null;
+        if(originMod && false){
+            origin = JSON.parse(JSON.stringify(originMod));
+            hg.edit.isMod = true;
+        }
+
+        origin && (delete origin[0].css);
+        originDef && (delete originDef[0].css);
+        originMod && (delete originMod[0].css);
+
+        var correct = function(list1,list2){
+            return list2.map(function(val2){
+                return list1.filter(function(val1){return val1.name === val2.name;})[0] || val2;
+            });
+        }
+        var correctPaths = function(pathDef,path){
+            if(!path || !pathDef || !isArray(pathDef[0])) return;
+            if(!isArray(path[0])){
+                path[0] = [path[0]];
+                path.length = 1;
+            }
+            if(pathDef.length > path.length){ //同步数据结构
+                pathDef.forEach(function(defv,i){
+                    if(i >= path.length){
+                        path.push(defv);
+                    }
+                });
+            }
+        }
+        originMod = originMod ? correct(originMod,originDef) : originMod;
+        origin = originMod ? correct(origin,originMod) : correct(origin,originDef);
+        for(var i=0;i < originDef.length;i++){
+            var path = origin[i].path;
+            var pathDef = originDef[i].path;
+            var pathMod = originMod ? originMod[i].path : null;
+            var notDeferPath = !originDef[i].deferPath;
+            correctPaths(pathDef,pathMod);
+            correctPaths(pathDef,path);
+            pathDef = pathMod || pathDef;
+            if(pathDef){
+                if(!path){
+                    origin[i].path = path = pathDef;
+                }
+                if(isArray(path[0])){
+                    for(var j=0;j < pathDef.length;j++){
+                        if(!path[j]) path[j] = pathDef[j];
+                        if(!path[j][0]) path[j][0] = pathDef[j][0];
+                        notDeferPath && hg.assets.add(path[j][0].replace('*_resRoot*',_resRoot));
+                    }
+                }else{
+                    if(!path[0]) path[0] = pathDef[0];
+                    notDeferPath && hg.assets.add(path[0].replace('*_resRoot*',_resRoot));
+                }
+            }
+            if(origin[i].name == 'advertising'){
+                document.getElementById('advertising').style.backgroundImage = "url("+path[0].replace('*_resRoot*',_resRoot)+")";
+            }
+        }
+
+        hg.edit.origin = origin;
+        hg.edit.originDef = originDef;
+        hg.edit.originMod = originMod;
+    })(hg);
+
+    /*-----------------------资源loading-----------------------------*/
+    ;(function(){
+        hg.assets.add([
+          WechatMore.assets.image_bg_url, WechatMore.assets.image_logo_url,
+          WechatMore.assets.image_ruleImg_url, WechatMore.assets.image_success_url,
+          WechatMore.assets.image_light_url,  WechatMore.assets.image_bird_url,
+          WechatMore.assets.image_musicOff_url,  WechatMore.assets.image_musicOn_url,
+          WechatMore.assets.image_auBg_url,   WechatMore.assets.image_qlogo_url,
+          WechatMore.assets.image_game_url,  WechatMore.assets.image_ksyx_url,
+          WechatMore.assets.image_play_bg_url,  WechatMore.assets.image_lots1_url,
+          WechatMore.assets.image_lots2_url,  WechatMore.assets.image_faiImg_url,
+          WechatMore.assets.image_play_logo_url, WechatMore.assets.image_poup_bg_url,
+          WechatMore.assets.image_wp01_url,WechatMore.assets.image_wp02_url,
+          WechatMore.assets.image_wp03_url,WechatMore.assets.image_wp04_url,
+          WechatMore.assets.image_wp05_url,WechatMore.assets.image_wp06_url,
+          WechatMore.assets.image_wp07_url,WechatMore.assets.image_wp08_url,
+          WechatMore.assets.image_wp09_url,WechatMore.assets.image_wp10_url,
+          WechatMore.assets.image_wp11_url,WechatMore.assets.image_wp12_url,
+          WechatMore.assets.image_wp13_url,WechatMore.assets.image_wp14_url,
+          WechatMore.assets.image_wp15_url,WechatMore.assets.image_wp16_url,
+          WechatMore.assets.image_wp17_url,WechatMore.assets.image_wp18_url,
+          WechatMore.assets.image_wp19_url,WechatMore.assets.image_wp20_url,
+          WechatMore.assets.image_wp21_url,WechatMore.assets.image_wp22_url
+        ]);
+        loadGamePreAssets();
+
+        hg.assets.loadPage();//开始loading页面
+    })();
+    //全局变量
+    var g_config = {"showSkillSup":false,"showSlide":false,"isOpenAreaLimit":false,"isCheckPlayTimes":true,"isCheckPayment":true, "showMenu":true,"buy":true,"isNewGame":false,"isModel":false,"test":false,"isOem":false,"scoreType":false,"showLogo":false,"flag":1073753222,"flagB":0,"countsTimeType":0,"sortType":0,"drawLimitDef":40,"scoreSet":40,"style":20,"aid":7020498,"gameId":WechatMore.game_round_id,"openId":WechatMore.openid,"playerId":WechatMore.game_player_id,"userName":WechatMore.game_player_name,"headImg":WechatMore.game_player_head_img,"pToken":WechatMore.game_player_token,"authVer":2,"scoreUnit":"分","testCMD":"","ajaxUrl":"/ajax/","startTime":"2015-12-07 15:25","$startTime":1449473100000,"$endTime":1450077900000,"setGameTimeInterval":10,"isDoubleGame":false,"awardList":[{"amount":0,"awardtype":2,"attention":1,"cashsite":"请填写您的兑奖地址或者门店地址","pot":0,"style":"一等奖","t_type":"DATE_TYPE_FIX_TIME_RANGE","cbt":1463500800000,"cet":1464105600000,"cft":30,"cfbt":0,"tlmt":"[8]","ocimg":false,"opqrc":true,"optx":false,"oct":false,"oplink":false,"genewxcard":false,"iscuscode":false,"iscancelver":false,"stl":"","opti":"","txn":"使用须知","txc":"在兑奖效期内联系商家即可兑奖","btn":"了解更多","btl":"","servicepho":"","cashinfo":"","aimg":WechatMore.assets.image_gift_url,"aimgw":"6rem","aimgh":"6rem","attentionimg":"","onlinect":1,"continfo":3,"excelName":"","hbtype":0,"hbAverage":1000,"floatBegin":500,"floatEnd":1500,"name":"100优惠券","level":1,"payment":1,"storeType":1,"offset":0},{"amount":0,"awardtype":2,"attention":1,"cashsite":"请填写您的兑奖地址或者门店地址","pot":0,"style":"二等奖","t_type":"DATE_TYPE_FIX_TIME_RANGE","cbt":1463500800000,"cet":1464105600000,"cft":30,"cfbt":0,"tlmt":"[8]","ocimg":false,"opqrc":true,"optx":false,"oct":false,"oplink":false,"genewxcard":false,"iscuscode":false,"iscancelver":false,"stl":"","opti":"","txn":"使用须知","txc":"在兑奖效期内联系商家即可兑奖","btn":"了解更多","btl":"","servicepho":"","cashinfo":"","aimg":WechatMore.assets.image_gift_url,"aimgw":"6rem","aimgh":"6rem","attentionimg":"","onlinect":1,"continfo":3,"excelName":"","hbtype":0,"hbAverage":1000,"floatBegin":500,"floatEnd":1500,"name":"50元优惠券","level":2,"payment":1,"storeType":1,"offset":0},{"amount":0,"awardtype":2,"attention":1,"cashsite":"请填写您的兑奖地址或者门店地址","pot":0,"style":"三等奖","t_type":"DATE_TYPE_FIX_TIME_RANGE","cbt":1463500800000,"cet":1464105600000,"cft":30,"cfbt":0,"tlmt":"[8]","ocimg":false,"opqrc":true,"optx":false,"oct":false,"oplink":false,"genewxcard":false,"iscuscode":false,"iscancelver":false,"stl":"","opti":"","txn":"使用须知","txc":"在兑奖效期内联系商家即可兑奖","btn":"了解更多","btl":"","servicepho":"","cashinfo":"","aimg":WechatMore.assets.image_gift_url,"aimgw":"6rem","aimgh":"6rem","attentionimg":"","onlinect":1,"continfo":3,"excelName":"","hbtype":0,"hbAverage":1000,"floatBegin":500,"floatEnd":1500,"name":"5元优惠券","level":3,"payment":1,"storeType":1,"offset":0},{"amount":0,"awardtype":2,"attention":1,"cashsite":"请填写您的兑奖地址或者门店地址","pot":0,"style":"四等奖","t_type":"DATE_TYPE_FIX_TIME_RANGE","cbt":1457452800000,"cet":1458057600000,"cft":30,"cfbt":0,"tlmt":"[8]","ocimg":false,"opqrc":true,"optx":false,"oct":false,"oplink":false,"genewxcard":false,"iscuscode":false,"iscancelver":false,"stl":"","opti":"","txn":"使用须知","txc":"在兑奖效期内联系商家即可兑奖","btn":"了解更多","btl":"","servicepho":"","cashinfo":"","aimg":WechatMore.assets.image_gift_url,"aimgw":"6rem","aimgh":"6rem","attentionimg":"","onlinect":1,"continfo":0,"excelName":"","hbtype":0,"hbAverage":1000,"floatBegin":500,"floatEnd":1500,"name":"优惠券","level":4,"payment":1,"wxcardid":"","storeType":1},{"amount":0,"awardtype":2,"attention":1,"cashsite":"请填写您的兑奖地址或者门店地址","pot":0,"style":"五等奖","t_type":"DATE_TYPE_FIX_TIME_RANGE","cbt":1457452800000,"cet":1458057600000,"cft":30,"cfbt":0,"tlmt":"[8]","ocimg":false,"opqrc":true,"optx":false,"oct":false,"oplink":false,"genewxcard":false,"iscuscode":false,"iscancelver":false,"stl":"","opti":"","txn":"使用须知","txc":"在兑奖效期内联系商家即可兑奖","btn":"了解更多","btl":"","servicepho":"","cashinfo":"","aimg":WechatMore.assets.image_gift_url,"aimgw":"6rem","aimgh":"6rem","attentionimg":"","onlinect":1,"continfo":0,"excelName":"","hbtype":0,"hbAverage":1000,"floatBegin":500,"floatEnd":1500,"name":"优惠券","level":5,"payment":1,"wxcardid":"","storeType":1},{"amount":0,"awardtype":2,"attention":1,"cashsite":"请填写您的兑奖地址或者门店地址","pot":0,"style":"六等奖","t_type":"DATE_TYPE_FIX_TIME_RANGE","cbt":1457452800000,"cet":1458057600000,"cft":30,"cfbt":0,"tlmt":"[8]","ocimg":false,"opqrc":true,"optx":false,"oct":false,"oplink":false,"genewxcard":false,"iscuscode":false,"iscancelver":false,"stl":"","opti":"","txn":"使用须知","txc":"在兑奖效期内联系商家即可兑奖","btn":"了解更多","btl":"","servicepho":"","cashinfo":"","aimg":WechatMore.assets.image_gift_url,"aimgw":"6rem","aimgh":"6rem","attentionimg":"","onlinect":1,"continfo":0,"excelName":"","hbtype":0,"hbAverage":1000,"floatBegin":500,"floatEnd":1500,"name":"优惠券","level":6,"payment":1,"wxcardid":"","storeType":1},{"amount":0,"awardtype":2,"attention":1,"cashsite":"请填写您的兑奖地址或者门店地址","pot":0,"style":"七等奖","t_type":"DATE_TYPE_FIX_TIME_RANGE","cbt":1457452800000,"cet":1458057600000,"cft":30,"cfbt":0,"tlmt":"[8]","ocimg":false,"opqrc":true,"optx":false,"oct":false,"oplink":false,"genewxcard":false,"iscuscode":false,"iscancelver":false,"stl":"","opti":"","txn":"使用须知","txc":"在兑奖效期内联系商家即可兑奖","btn":"了解更多","btl":"","servicepho":"","cashinfo":"","aimg":WechatMore.assets.image_gift_url,"aimgw":"6rem","aimgh":"6rem","attentionimg":"","onlinect":1,"continfo":0,"excelName":"","hbtype":0,"hbAverage":1000,"floatBegin":500,"floatEnd":1500,"name":"优惠券","level":7,"payment":1,"wxcardid":"","storeType":1},{"amount":0,"awardtype":2,"attention":1,"cashsite":"请填写您的兑奖地址或者门店地址","pot":0,"style":"八等奖","t_type":"DATE_TYPE_FIX_TIME_RANGE","cbt":1457452800000,"cet":1458057600000,"cft":30,"cfbt":0,"tlmt":"[8]","ocimg":false,"opqrc":true,"optx":false,"oct":false,"oplink":false,"genewxcard":false,"iscuscode":false,"iscancelver":false,"stl":"","opti":"","txn":"使用须知","txc":"在兑奖效期内联系商家即可兑奖","btn":"了解更多","btl":"","servicepho":"","cashinfo":"","aimg":WechatMore.assets.image_gift_url,"aimgw":"6rem","aimgh":"6rem","attentionimg":"","onlinect":1,"continfo":0,"excelName":"","hbtype":0,"hbAverage":1000,"floatBegin":500,"floatEnd":1500,"name":"优惠券","level":8,"payment":1,"wxcardid":"","storeType":1}],"comfort":{"comLimitNum":false,"ccc":"","comNum":0,"cc":"","comModNum":0,"comoptx":false,"cas":"安慰奖","comtxc":"在兑奖效期内联系商家即可兑奖","ca":"50元优惠券","comimgw":"6rem","comcashinfo":"","combtl":"","comfbt":0,"combtn":"了解更多","comiscuscode":false,"comimgh":"6rem","cttype":"DATE_TYPE_FIX_TIME_RANGE","comattention":1,"comiscancelver":false,"comimg":WechatMore.assets.image_gift_url,"comcbt":1457452800000,"comcontinfo":0,"comservicephone":"","comcet":1458057600000,"conlinect":1,"ctlmt":"[8]","comattentionimg":"","comOpqrc":true,"comcashsite":"请填写您的兑奖地址或者门店地址","comAwardtype":2,"comcashtype":2,"comopti":"","comtxn":"使用须知","comft":30,"comoci":false,"comoct":false,"comstl":"","comOplink":false,"comStoreType":1},"bestRankInfo":{"rank":2021,"score":"0"},"awardInfoB":"","openAwardLinkNoDraw":false,"userInfo":{"headImg":WechatMore.game_player_head_img,"ip":"175.190.80.224","ipProvince":"辽宁省","ipCity":"大连市"},"awardUsername":"","awardPhone":"","awardAddress":"","addressNum":"","status":0,"afterWxCard":false,"haveAward":false,"showHelpGuide":false,"ipInfo":{},"contactNoDraw":"[{\"name\":\"姓名\",\"key\":\"ausername\",\"isOpen\":true},{\"name\":\"联系电话\",\"key\":\"aphone\",\"isOpen\":true},{\"name\":\"联系地址\",\"key\":\"aadress\",\"isOpen\":false}]","isAOpenId":1,"linkInfoType":1,"afterLinkModify":false,"shareDeep":0,"isFromZhuliShare":false,"qrCodeUrl":WechatMore.assets.image_play_bg_url,"isAngular":true,"_preview":false,"$$awardTypeInfo":{"def":{"collect":"收藏兑奖券","showcashtype":false,"showsitebox":true,"qrcode":false,"showcopy":true,"opti":"凭券联系现场工作人员兑奖","codename":"兑奖码","details":"兑奖券详情","deadline":"兑奖期限","showwxcard":true,"notice":"兑奖须知","cuscode":true,"cashsite":"请填写您的兑奖地址或者门店地址","sitetype":"text","site":"","term":true,"btn":""},"2":{"showcashtype":true,"1":{"1":{"sitetype":"img"},"2":{"cashsite":"http://","sitetype":"url"}},"2":{"qrcode":true,"btn":""},"3":{"showsitebox":false,"sitetype":"img","opti":"复制券码发送到公众号"},"4":{"opti":"点击\u201C立即兑奖\u201D跳转到兑奖界面","cashsite":"http://","sitetype":"url","site":"网页链接"},"btn":"立即兑奖","site":"兑奖地址"},"0":{"collect":"收藏优惠券","qrcode":true,"opti":"到店后向店员出示","codename":"优惠码","details":"优惠券详情","deadline":"使用期限","notice":"使用须知","cashsite":"请填写您的门店地址","site":"门店地址"},"1":{"collect":"收藏优惠券","opti":"购物时凭优惠码联系客服兑奖","codename":"优惠码","details":"优惠券详情","deadline":"使用期限","notice":"使用须知","sitetype":"url","cashsite":"http://m.jd.com","site":"商城地址","btn":"进入商城"},"5":{"collect":"收藏口令码","showsitebox":false,"codename":"口令码","deadline":"领取期限","showwxcard":false,"notice":"领取须知","cuscode":false,"term":false,"btn":"立即领取","0":{"sitetype":"img","opti":"复制口令发送到公众号"},"1":{"sitetype":"url","opti":"点击下方\"立即领取\"进行兑奖","showcopy":false}},"4":{"collect":"放入微信卡包","opti":"到店后向店员出示","codename":"优惠码","details":"优惠券详情","deadline":"使用期限","qrcode":"auto","showwxcard":false,"notice":"使用须知","sitetype":"none","btn":""}},"areaLimitList":[],"linkInfoAll":true,"isForbidShareactivity":false,"drawType":1,"isOldZhuliGame":false,"createTime":1449473220000,"isYKY":false,"awardNum":3,"openComfort":false,"theDefaultGiftImgSrc":WechatMore.assets.image_gift_url,"storeId":0,"areaId":0,"ykyWXOpenId":"","ykyRelationId":"","redPacketUrl":"https://hd.getstore.cn/7020498/18/jumptoRedPacket.html?gameAppid=wx25367438c8ce0799","ishasAttentiosThisAPP":false,"clickTips":{"clickSrc":WechatMore.assets.image_clickView_url,"pointW":"2rem","pointH":"2rem","clickW":"3.3rem","clickH":"3.65rem"},"acctOpenId":"o1ueSjkZq2LGhu-hAkzOT9fnvcIg","achieveToken":"","isOldFaiImgGame":true,"verInfo":{"freName":"免费版","byName":"白银版","bjName":"铂金版","freClass":"ver_free","byClass":"ver_by","bjClass":"ver_biz","verName":"铂金版","verClass":"ver_biz","ver":1,"createVer":0,"authVer":2,"createAuthVer":0,"maxAuthVer":2,"gameAmountLimit":10000,"awardAmountLimit":50000,"map":{"0":{"class":"ver_free","name":"免费版"},"1":{"class":"ver_by","name":"白银版"},"2":{"class":"ver_biz","name":"铂金版"}}},"initTime":50,"initTimeSign":"2e90c169dc9f46895329664b6afbc030","urlToken":"XW6aET6Twag8uJDgLRaAPw"};
+    var isPublish = true;
+    var HdVerDef = {
+        FREE : 0,  //免费版
+        BY : 1,  //白银版
+        BJ : 2,  //铂金版
+    };
+    function isArray(arr){
+        return Object.prototype.toString.call(arr) === "[object Array]";
+    }
+    var isOldAwardPage = true;
+</script>
+<%= javascript_include_tag 'game/rl_dumpling/all.js' %>
+
+<script type="text/javascript">
+function $$(selector){
+    if(!_manage||_preview){
+        return $('#__notfound__');
+    }
+    return parent.$(selector);
+}
+HdGame.gameDomain = 'hd.getstore.cn';
+HdGame.gameDomainIgnoreStyle = 'hd.getstore.cn';
+
+HdGame.isReg = false;
+if(_manage&&!_preview){
+    if(parent != self){
+        $(function() {
+            parent.$$.fire("ready");
+        });
+        parent.$$.win = window;
+    }
+}
+/*---------------游戏函数回调--------------------*/
+HdGame.initCallBack(hg,['startGame','beforeStartGame','startGamehead','home','again','jsFootEnd','showResult','changeBottomBar','showPoup','hidePoup','timeChange','beforeDraw','updateRankList','afterDraw','editBackground']); //hdgame
+hg.register(['setGameType','hpInit','hgLoadEnd','save','changeShow','showTabByStyle']); //hdportal
+hg.showGameBox = true; //是否在开始游戏时默认显示游戏页
+/*----------------------------可编辑元素包装------------------------------------*/
+if(hg.edit){
+    HdGame.initEdit(hg.edit);
+}
+function parseRemToPx(rem){
+    if(rem.indexOf('rem') === -1){
+        return parseFloat(rem);
+    }
+    return parseFloat(rem)*g_rem;
+}
+function parsePxToRem(px){
+    if(px.indexOf('px') === -1){
+        return px;
+    }
+    return parseFloat(px)/g_rem + 'rem';
+}
+/*----------------------------------计时------------------------------------*/
+hg.time = null;
+
+(function(hg){
+    var initTime = 0;
+    if(!g_config.countsTimeType && initTime === 0){
+        if(!_manage){
+            initTime = 99999;
+        }else{
+            if(false){
+                initTime = 30;
+            }else{
+                initTime = 50;
+            }
+        }
+        $(function(){$('.timeBox').hide();});
+    }
+    hg.time = HdGame.initTime(initTime);
+})(hg);
+
+/*----------------------------------计分------------------------------------*/
+
+hg.grade = HdGame.initGrade();
+
+/*----------------------------------声音-----------------------------------*/
+hg.sound = HdGame.initSound([{"path":WechatMore.assets.audio_bgmusic_url,"fileName":"背景音乐.mp3","optFlag":0},{"path":WechatMore.assets.audio_bonus_url,"fileName":"得分音效.mp3","optFlag":2}],[{"path":WechatMore.assets.audio_bgmusic_url,"fileName":"背景音乐.mp3","optFlag":0},{"path":WechatMore.assets.audio_bonus_url,"fileName":"得分音效.mp3","optFlag":2}],null);
+
+/*----------------------------------获取ip信息-----------------------------------*/
+(function(){
+    var curFontSize = parseFloat($("html").css("font-size"));
+    if(curFontSize != g_rem) {
+        var rate = 1;
+        if((curFontSize / g_rem) < 0.9 || (curFontSize / g_rem) > 1.1) {
+            rate = curFontSize / g_rem;
+        }
+        refreshRemForSpecial(g_rem,rate);
+    }
+    function refreshRemForSpecial(rem,rate) {
+        var newFontSize = rem / rate;
+        $("html").css("font-size",newFontSize + "px");
+        HdGame.logStd("rem-special","width:" + $('html')[0].getBoundingClientRect().width + "|g_rem:" + rem + "|rate:" + rate + "|oldFontSize:" + curFontSize + "|newFontSize:" + newFontSize + "|userAgent:" + navigator.userAgent);
+    }
+})();
+</script>
+
+<script type="text/javascript">
+HdGame.initWxConfig({"isHideShareBtn":false,"isHideMenuItems":false,"fullUrl":WechatMore.routes.play_url,"plInfo":{"id":686741,"aid":7020498,"code":0,"name":"getstore.cn","awardLevel":0,"achievement":WechatMore.game_player_max_score,"gameId":18,"codeStatus":0,"info":"{\"headImg\":\"http://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTJR8XicKtnzHnBNlVDlus4ljibQtfWtgNDzgTmnHQJuMoMjmXx3jGSMNERzvl1YFvKxWy6icvBAYkwSA/132\",\"ip\":\"175.190.80.224\",\"ipProvince\":\"辽宁省\",\"ipCity\":\"大连市\"}","award":"","openId":"o1ueSjkZq2LGhu-hAkzOT9fnvcIg","zlid":0,"flag":0,"openIdB":"","drawTotal":0,"codeList":"","jointime":1516850666000,"prop":"","prop1":"","code1":"","playInfo":"{\"pttotal\":7,\"pttoday\":7,\"playdate\":\"20180125\"}","currentAchievement":"0","faiOpenId":""},"nameList":["一等奖","二等奖","三等奖","四等奖","五等奖","六等奖","七等奖","八等奖","安慰奖"],"jsSdkAppid": WechatMore.weixin_config.appid,"timestamp":WechatMore.weixin_config.timestamp,"nonce_str":WechatMore.weixin_config.nonce_str,"signature":WechatMore.weixin_config.signature,"cardTicket":"","dynamicShareUrlRootEmpty":false,"dynamicShareUrlRoot": WechatMore.routes.play_url,"fsl":"b","shareDeep":0,"checkControlLevel":0,"openStrongAttention":false,"shareImg":WechatMore.assets.image_share_url,"activeName":WechatMore.game_round_name,"wxShareText_def":"轻轻松松就能抽到大奖，积攒多年的人品终于有用了，你也赶紧来抽奖吧！！","wxShareText_award":"回家过暖冬，还能赢到<span class=\"tag\" contenteditable=\"false\">奖品名称<\/span>这种大奖！你想不想试试？","wxShareText_rank":"还差一点点，我就能领到新春大奖了！你敢来挑战吗？","addDrawTime":1})
+
+</script>
+<script type="text/javascript">
+    var _gameOver = false;
+    var _gameTouch = 0;
+    var GameArg = {
+        createTime : 0.8,
+        touchLimit : 1*g_rem,
+        first      : true
+    };
+
+
+    function resizeCanvas(){
+        LF.init(0,"gameLayerBox",0,0,initGame,LF.event.INIT);
+    }
+    function explode(wp){
+        var cWp = new LF.sprite(true);
+        var length = 100;
+        cWp.len = GameArg.explodeListLen;
+        GameArg.explodeList[GameArg.explodeListLen] = cWp;
+        GameArg.explodeListLen++
+        if(isAndroid() || isIPhone4()){
+            length = 80;
+        }
+        for(var i = 0;i < length;i++){
+            var ExBitmap = new LF.bitmap(wp.bitmapData,wp.x,wp.y,wp.width/4,wp.height/4);
+            ExBitmap.speedX = GetRandom(-1*GameArg.speed,GameArg.speed);
+            ExBitmap.speedY = GetRandom(-1*GameArg.speed,GameArg.speed);
+            LF.tweenLite.to(ExBitmap,1,{alpha:0,scale:0.8,ease:LF.easing.Quart.easeOut,onComplete:function(event){
+                event.target.remove();
+                if(cWp.childList.length === 0){
+                    cWp.die();
+                    cWp.remove();
+                    delete GameArg.explodeList[cWp.len];
+                    cWp = null;
+                }
+            }});
+            cWp.addChild(ExBitmap);
+        }
+    }
+    function updateWp(){
+      var layer = GameArg.layer[GameArg.indexList[GameArg.index]];
+      var idx = GameArg.wpIndexList[GameArg.wpLen]+1;
+        var wpInfo = hg.edit.getImgInfo( ( idx<10 ? ('wp0'+idx) : ('wp'+idx) )),
+            wpbBitmap = new LF.bitmap(new LF.bitmapData(hg.assets[wpInfo.path]),0,0,wpInfo.width,wpInfo.height),
+            limitX = LF.global.width - wpInfo.width,
+            limitY = LF.global.height - wpInfo.height;
+        console.log( 'wpInfo.width:'+ wpInfo.width+ ', wpInfo.height'+ wpInfo.height);
+        GameArg.stageLayer.addChild(wpbBitmap);
+        GameArg.wp = wpbBitmap;
+        setWpOff();
+        function setWpOff(){
+            wpbBitmap.x = GetRandom(0,limitX);
+            wpbBitmap.y = GetRandom(3.5*g_rem,limitY);
+            if(GameArg.robot && hitTestObject(GameArg.robot,wpbBitmap)){
+                    setWpOff();
+                    return
+                }
+            for(var i = 0; i < GameArg.formList.length; i++){
+                if(hitTestObject(wpbBitmap,GameArg.formList[i],true)){
+                    setWpOff();
+                    return
+                }
+            }
+            for(var i = 0; i < layer.zawRange.length; i++){
+                if(hitTestObject(wpbBitmap,layer.zawRange[i],true)){
+                    setWpOff();
+                    return
+                }
+            }
+        }
+    }
+    function setRobot(){
+        var robotLayer = new LF.sprite();
+        GameArg.stageLayer.addChild(robotLayer);
+        var robotInfo =  hg.edit.getImgInfo('robot');
+        var statusData = new LF.bitmapData(hg.assets[robotInfo.path]);
+        var robot = new LF.bitmap(statusData,0,LF.global.height-robotInfo.height-40,robotInfo.width,robotInfo.height);
+        GameArg.speed = (LF.global.width - robotInfo.width) / 2000;
+        robot.speedX = GameArg.speed;
+        robot.speedY = 0;
+        robot.aY = 0.0005;
+        robot.fps = 5/1000;
+        robot.frameInc = 0;
+        robotLayer.addChild(robot);
+        LF.global.canvasObj.addEventListener('touchstart',function(){
+            if(_gameOver){
+                return;
+            }
+
+            robot.y--;
+            robot.speedY = -0.3;
+            _gameTouch++;
+        },false);
+        robotLayer.addEventListener(LF.event.ENTER_FRAME,function(event){
+            if(_gameOver){
+                return;
+            }
+            var delta = LF.global.delta;
+            if(!GameArg.transition){
+                for(var i = 0; i < GameArg.zawList.length; i++){
+                    var zawBitmap = GameArg.zawList[i];
+                    if(hitTestObject(robot,zawBitmap,false)){
+                        //explode(zawBitmap);
+                        zawBitmap.remove();
+                        GameArg.robot.speedX = GameArg.robot.speedY = GameArg.robot.aY = 0;
+                        LF.tweenLite.to(robot,0.1,{alpha:0})
+                            .to(robot,0.1,{alpha:1})
+                            .to(robot,0.1,{alpha:0})
+                            .to(robot,0.1,{alpha:1})
+                            .to(robot,0.1,{alpha:0})
+                            .to(robot,0.1,{alpha:1})
+                            .to(robot,0.1,{alpha:0})
+                            .to(robot,0.1,{alpha:1,onComplete:endGame});
+                        return;
+                    }
+                }
+            }
+            $.each(GameArg.formList,function(index, shape) {
+                if(hitTestObject(robot,shape)){
+                  if( _gameTouch>0 ){
+                    endGame();
+                    return;
+                  }
+                    var robotx = robot.x + (robot.scaleX - 1)*robot.width/2,
+                        yd1 = Math.abs(robot.y + robot.height - shape.y),
+                        yd2 = Math.abs(robot.y - (shape.y + shape.height)),
+                        xd1 = Math.abs(robotx + robot.width - shape.x),
+                        xd2 = Math.abs(robotx - (shape.x + shape.width)),
+                        d = Math.min(yd1,yd2,xd1,xd2);
+                    switch(d){
+                        case yd1:
+                            robot.y = shape.y - robot.height;
+                            robot.speedY = 0;
+                            break;
+                        case yd2:
+                            robot.speedY = 0.1;
+                            break;
+                        case xd1:
+                            getDust(shape.x,robot.y + robot.height/2);
+                            robot.speedX = -GameArg.speed;
+                            robot.scaleX = -1;
+                            robot.x = shape.x + (robot.scaleX + 1)*robot.width/2;
+                            robot.speedY = -0.2;
+                            break;
+                        case xd2:
+                            getDust(shape.x + shape.width,robot.y + robot.height/2);
+                            robot.speedX = GameArg.speed;
+                            robot.scaleX = 1;
+                            robot.x = shape.x + shape.width + ( 1 - robot.scaleX)*robot.width/2;
+                            robot.speedY = -0.2;
+                            break;
+                    }
+                }
+            });
+            var wp = GameArg.wp;
+            for(var explodeListIndex in GameArg.explodeList){
+                var clone = GameArg.explodeList[explodeListIndex];
+                if(clone){
+                    $.each(clone.childList,function(index,wpbBitmap) {
+                        wpbBitmap.x += wpbBitmap.speedX*delta;
+                        wpbBitmap.y += wpbBitmap.speedY*delta;
+                    });
+                }
+            }
+            if(hitTestObject(robot,wp)){
+                hg.grade(10);
+                hg.sound.play(1);//音效
+                explode(wp);
+                wp.remove();
+                GameArg.wpLen++;
+                if(hg.grade.val==20 || hg.grade.val==40 || hg.grade.val==80  || hg.grade.val==160  || hg.grade.val==320){
+                  if (GameArg.wpLen === 21)
+                  {
+                    GameArg.wpLen = 0;
+                    GameArg.wpIndexList = GetRandomList(21);
+                  }
+                    // 1.2挑战分数达到40分，屏幕同时出现2个障碍物；1.3挑战分数达到60分，屏幕同时出现3个障碍物；1.4挑战分数达到80分，屏幕同时出现4个障碍物；1.5挑战分数达到100分，屏幕同时出现5个障碍物；
+                    GameArg.index++;
+                    if(GameArg.index >= GameArg.layer.length){
+                        GameArg.index = 0;
+                        GameArg.indexList = []; //GetRandomList(GameArg.layer.length);
+                        for(var i=0;i < GameArg.layer.length; i++){
+                          GameArg.indexList.push(i);
+                        }
+                    }
+                    setLayer();
+                    if(GameArg.zawList.length > 0){
+                        GameArg.transition = true;
+                        $.each(GameArg.zawList,function(index, zawBitmap) {
+                            zawBitmap.alpha = 0.3;
+                        });
+                        clearTimeout(GameArg.transitionTimer);
+                        GameArg.transitionTimer = setTimeout(function(){
+                            $.each(GameArg.zawList,function(index, zawBitmap) {
+                                zawBitmap.alpha = 1;
+                            });
+                            GameArg.transition = false;
+                        },1000);
+                    }
+                }
+                updateWp();
+            }
+            //robot.frameInc += robot.fps*delta;
+            //var frameInc = Math.floor(robot.frameInc);
+            //robot.bitmapData = statusData[frameInc % statusData.length];
+            if(robot.x < (1 - robot.scaleX)*robot.width/2){
+                getDust(0,robot.y + robot.height/2);
+                robot.speedX = GameArg.speed;
+                robot.scaleX = 1;
+                robot.x = (1 - robot.scaleX)*robot.width/2;
+                robot.speedY = -0.2;
+            }else if(robot.x + (robot.scaleX + 1)*robot.width/2 > LF.global.width){
+                getDust(LF.global.width,robot.y + robot.height/2);
+                robot.speedX = -GameArg.speed;
+                robot.scaleX = -1;
+                robot.x = LF.global.width - (robot.scaleX + 1)*robot.width/2;
+                robot.speedY = -0.2;
+            }
+            robot.x += robot.speedX*delta;
+            if(robot.y < 0){
+                robot.speedY = 0.1;
+            }else if(robot.y > LF.global.height){
+                endGame();
+                return;
+            }
+            robot.speedY += robot.aY*delta;
+            robot.y += robot.speedY*delta;
+        });
+        GameArg.robot = robot;
+    }
+    function hitTestObject(a,b,flag,tolerance){
+        tolerance = tolerance || 0;
+        var x = flag ? a.x : a.x + (a.scaleX - 1)*a.width/2;
+        return x + a.width > b.x + tolerance && x < b.x + b.width - tolerance && a.y + a.height > b.y + tolerance && a.y < b.y + b.height - tolerance;
+    }
+    function getDust(x,y){
+        var w = 1*g_rem,h = 2*g_rem;
+        var dustBitmap = new LF.bitmap(new LF.bitmapData(hg.assets[WechatMore.assets.image_dust_sheet_url]),x-w/2,y-h/2,w,h);
+        GameArg.dustLayer.addChild(dustBitmap);
+        LF.tweenLite.to(dustBitmap,0.5,{alpha:0.3,x:x-w,scaleX:2,y:y-h,scaleY:2,ease:LF.easing.Quad.easeOut,onComplete:function(event){
+            event.target.remove();
+        }});
+    }
+    function setLayer(){
+        //var i = GameArg.indexList[GameArg.index];
+        var i = Math.floor( hg.grade.val/20 );
+console.log( "layer i="+i+',grade'+hg.grade.val );
+        var layer = GameArg.layer[i];
+        var zaw = layer.zaw;
+        if(GameArg.zawList){
+            $.each(GameArg.zawList,function(index, val) {
+                val.remove();
+                LF.tweenLite.remove(val.tween);
+            });
+        }
+        GameArg.zawList = [];
+        var form = layer.form;
+        if(GameArg.formList){
+            $.each(GameArg.formList,function(index, val) {
+                val.die();
+                val.remove();
+            });
+        }
+        GameArg.formList = [];
+        $.each(zaw,function(index, val) {
+            var i = index % GameArg.zawInfos.length;
+            var zawInfo = GameArg.zawInfos[i]
+            var zawBitmap = new LF.bitmap(new LF.bitmapData(hg.assets[zawInfo.path]),val.x,val.y,zawInfo.width,zawInfo.height);
+            var duration = val.duration || 2;
+            if(val.tox){
+                val.tween = LF.tweenLite.to(zawBitmap,duration,{x:val.tox,loop:true,ease:LF.easing.Quad.easeInOut})
+                .to(zawBitmap,duration,{x:val.x,loop:true,ease:LF.easing.Quad.easeInOut});
+            }else if(val.toy){
+                var dy = (val.toy - val.y)/4;
+                val.tween = LF.tweenLite.to(zawBitmap,duration,{y:val.toy,loop:true,ease:LF.easing.Quad.easeInOut})
+                .to(zawBitmap,duration,{y:val.y,loop:true,ease:LF.easing.Quad.easeInOut});
+            }
+            GameArg.stageLayer.addChild(zawBitmap);
+            GameArg.zawList.push(zawBitmap);
+        });
+        $.each(form,function(index, val) {
+
+            var shape = new LF.shape();
+            //shape.addChild(logoBitmap);
+            shape.graphics.drawRect(1,GameArg.formBgColor, [0, 0, val.w, val.h], true, GameArg.formBdColor);
+            shape.x = val.x;
+            shape.y = val.y;
+            shape.width = val.w;
+            shape.height = val.h;
+            GameArg.stageLayer.addChild(shape);
+            GameArg.formList.push(shape);
+            if(GameArg.robot &&  hitTestObject(GameArg.robot,shape)){
+                GameArg.robot.y = shape.y - GameArg.robot.width;
+            }
+        });
+        var logoBitmapData = new LF.bitmapData(hg.assets[WechatMore.assets.image_play_logo_url]);
+        var logoBitmap = new LF.bitmap(logoBitmapData);
+        var originalWidth = logoBitmap.width;
+        logoBitmap.width = LF.global.width/6;
+        logoBitmap.height = logoBitmap.height * logoBitmap.width/originalWidth;
+        console.log( logoBitmap.width+','+logoBitmap.height);
+        logoBitmap.x = (LF.global.width - logoBitmap.width)/2;
+        logoBitmap.y = LF.global.height - logoBitmap.height;
+        GameArg.stageLayer.addChild(logoBitmap);
+
+    }
+    function initGame(){
+        var zawInfo = hg.edit.getImgInfo('zaw');
+        var zawInfo1 = hg.edit.getImgInfo('zaw01');
+        var zawInfo2 = hg.edit.getImgInfo('zaw02');
+        var platform = hg.edit.getImgInfo('platform');
+        GameArg.formBgColor = hg.edit.getRgba(platform.css[0].val,platform.css[0].tra);
+        GameArg.formBdColor = hg.edit.getRgba(platform.css[1].val,platform.css[0].tra);
+        GameArg.zawInfo = zawInfo;
+        GameArg.zawInfos = [ zawInfo1, zawInfo2 ];
+
+        var offsetx1 = zawInfo1.width/2;
+        var offsety1 = zawInfo1.height/2;
+        var offsetx2 = zawInfo1.width/2;
+        var offsety2 = zawInfo1.height/2;
+        GameArg.layer = [
+            {   zaw:[ ],
+                zawRange:[],
+                form:[{ w:LF.global.width+10,h:4.5*g_rem,x:-1,y:LF.global.height-30}]
+            },{
+                zaw:[ { x:LF.global.width/2-offsetx1, y:LF.global.height/2-offsety1}],
+                zawRange:[],
+                form:[{ w:LF.global.width+10,h:4.5*g_rem,x:-1,y:LF.global.height-30}]
+            },{
+                zaw:[ { x:LF.global.width/2-offsetx1,y:LF.global.height/3-offsety1},
+                      { x:LF.global.width/2-offsetx2,y:LF.global.height/3*2-offsety2}],
+                zawRange:[],
+                form:[{ w:LF.global.width+10,h:4.5*g_rem,x:-1,y:LF.global.height-30}]
+            },{
+                zaw:[ { x:LF.global.width/2-offsetx1, y:LF.global.height/3-offsety1},
+                  { x:LF.global.width/3-offsetx2, y:LF.global.height/3*2-offsety2},
+                  { x:LF.global.width/3*2-offsetx1, y:LF.global.height/3*2-offsety1}],
+                zawRange:[ ],
+                form:[{ w:LF.global.width+10,h:4.5*g_rem,x:-1,y:LF.global.height-30}]
+            },{
+                zaw:[ { x:LF.global.width/3-offsetx1, y:LF.global.height/3-offsety1},
+                  { x:LF.global.width/3*2-offsetx2, y:LF.global.height/3-offsety2},
+                  { x:LF.global.width/3-offsetx1, y:LF.global.height/3*2-offsety1},
+                  { x:LF.global.width/3*2-offsetx2, y:LF.global.height/3*2-offsety2}],
+                zawRange:[ ],
+                form:[{ w:LF.global.width+10,h:4.5*g_rem,x:-1,y:LF.global.height-30}]
+            },{
+                zaw:[ { x:LF.global.width/2-offsetx1, y:LF.global.height/4-offsety1},
+                    { x:LF.global.width/4-offsetx2, y:LF.global.height/4*2-offsety2},
+                    { x:LF.global.width/4*2-offsetx1, y:LF.global.height/4*2-offsety1},
+                    { x:LF.global.width/4*3-offsetx2, y:LF.global.height/4*2-offsety2},
+                    { x:LF.global.width/4*2-offsetx1, y:LF.global.height/4*3-offsety1}],
+                zawRange:[],
+                form:[{ w:LF.global.width+10,h:4.5*g_rem,x:-1,y:LF.global.height-30}]
+            },{
+                zaw:[ { x:LF.global.width/3-offsetx1, y:LF.global.height/4-offsety1},
+                    { x:LF.global.width/3*2-offsetx2, y:LF.global.height/4-offsety2},
+                    { x:LF.global.width/3-offsetx1, y:LF.global.height/4*2-offsety1},
+                    { x:LF.global.width/3*2-offsetx2, y:LF.global.height/4*2-offsety2},
+                    { x:LF.global.width/3-offsetx1, y:LF.global.height/4*3-offsety1},
+                    { x:LF.global.width/3*2-offsetx2, y:LF.global.height/4*3-offsety2}],
+                zawRange:[],
+                form:[{ w:LF.global.width+10,h:4.5*g_rem,x:-1,y:LF.global.height-30}]
+            },{
+              zaw:[{ x:LF.global.width/2-offsetx1, y:LF.global.height/2-offsety1},
+                  { x:LF.global.width/3-offsetx1, y:LF.global.height/4-offsety1},
+                  { x:LF.global.width/3*2-offsetx2, y:LF.global.height/4-offsety2},
+                  { x:LF.global.width/3-offsetx1, y:LF.global.height/4*2-offsety1},
+                  { x:LF.global.width/3*2-offsetx2, y:LF.global.height/4*2-offsety2},
+                  { x:LF.global.width/3-offsetx1, y:LF.global.height/4*3-offsety1},
+                  { x:LF.global.width/3*2-offsetx2, y:LF.global.height/4*3-offsety2}],
+                zawRange:[],
+                form:[{ w:LF.global.width+10,h:4.5*g_rem,x:-1,y:LF.global.height-30}]
+            }
+        ];
+        GameArg.stageLayer = new LF.sprite(true);
+        GameArg.explodeList = {};
+        GameArg.explodeListLen = 0;
+        startGame();
+    }
+    function endGame(){
+        _gameOver = true;
+        GameArg.robot.speedX = GameArg.robot.speedY = GameArg.robot.aY = 0;
+        hg.time.end();
+        LF.global.setPauseLoop(true);;
+        gameOver(hg.grade.val);
+        LF.tweenLite.removeAll();
+        for(var explodeListIndex in GameArg.explodeList){
+            var clone = GameArg.explodeList[explodeListIndex];
+            if(clone){
+                $.each(clone.childList,function(index,wpbBitmap) {
+                    wpbBitmap && wpbBitmap.remove();
+                });
+                clone.die();
+                clone.remove();
+            }
+        }
+        GameArg.explodeList = {};
+    }
+    function startGame(){
+        _gameOver = false;
+        _gameTouch = 0;
+        hg.grade.set(0);
+        window.scrollTo(0,0);
+        hg.time.start();
+        LF.global.setPauseLoop(false);;
+        GameArg.stageLayer.removeAllChild();
+        GameArg.dustLayer = new LF.sprite();
+        GameArg.stageLayer.addChild(GameArg.dustLayer);
+        GameArg.first = false;
+        GameArg.index = 0;
+        GameArg.indexList = [];
+        GameArg.wpLen = 0;
+        GameArg.wpIndexList = GetRandomList(22);
+        for(var i = 0; i < GameArg.layer.length; i++){
+            GameArg.indexList.push(i);
+        }
+        setLayer(0);
+        setRobot();
+        updateWp();
+    }
+    function GetRandomNum(a,b){
+        return a+Math.floor(Math.random()*(b-a+1));
+    }
+    function GetRandom(a,b){
+        return a+Math.random()*(b-a);
+    }
+    function GetRandomList(length){
+        length = length || 1;
+        var arr = [];
+        var array = [];
+        for(var i = 0; i < length; i++){
+            arr.push(i);
+        }
+        for(var i = 0; i < length; i++){
+            var random = Math.floor( Math.random()*arr.length);
+            array.push(arr[random]);
+            arr.splice(random,1);
+        }
+        arr = null;
+        return array;
+    }
+    function isIPhone6(){
+        return window.navigator.userAgent.indexOf('iPhone') !== -1&&(window.screen.availWidth === 375 || window.screen.availWidth === 414);
+    }
+    function isIPhone4(){
+        return window.navigator.userAgent.indexOf('iPhone') !== -1&&(window.screen.availHeight === 460);
+    }
+    function isAndroid(){
+        return window.navigator.userAgent.indexOf('Android') !== -1;
+    }
+
+    $(function(){
+        gameInit();
+        if(_manage){
+            $('.editTarget-robot').addResizableFn('resize',function(event,ui) {
+                $(ui.element).css('top',ui.originalPosition.top + ui.originalSize.height - parseFloat($(ui.element).css('height')));
+            });
+        }else{
+            hg.on('startGame',function(){
+                if(!_manage){
+                    if(GameArg.first){
+                        resizeCanvas();
+                    }else{
+                        startGame();
+                    }
+                }
+            });
+            hg.time.on('end',endGame);
+        }
+        $('.gameBox').on('touchmove',function(event){
+            event.preventDefault();
+            event.stopPropagation();
+        });
+    });
+
+    function gameInit() {
+        hg.time.init();
+        hg.grade.set(0);
+        GameArg.index = 0;
+        $('.timeUpImg').hide();
+    }
+    function home(){
+        $('#ruleImg').show();
+        $('.homeBtnBox').show();
+        $('.footerBox').show();
+        $('.gameBox').hide();
+        startBtnDelay();
+        $('.home').show();
+        $('#poupInfoBox').hide();
+        $('.resuleBox').hide();
+        gameInit();
+        hg.fire('home');
+    }
+    function gameRestart() {
+        $('.gameBox').show();
+        gameInit();
+        if(!_manage){
+            startGame();
+        }
+        hg.fire('again');
+    }
+    function showGamePage(){
+        $('#ruleImg').hide();
+        $('.homeBtnBox').hide();
+        $('.footerBox').hide();
+        $('.home').hide();
+        $('#poupInfoBox').hide();
+        $('.resuleBox').hide();
+        $('.gameBox').show();
+    }
+</script>
+
+<script type="text/javascript">
+    var count = 0;
+    var drawTimesLimit = 10;
+    var drawTotalLimit = 10;
+    var playTimesLimit = 5;
+    var playTotalLimit = 10;
+    var totalCount = 0;
+    var isLimitDraw = false;
+    var isLimitPlay = false;
+    var otherPlayerInfo = {};
+    var showAwardList = false;
+    var informNum = 0;
+    var playerAwardList = [];
+    var skillSupportType = 1;
+    var skillName = HdGame.decodeHtml('');
+    var skillLink = HdGame.decodeUrl(HdGame.decodeHtml('http%3A%2F%2Fmp.weixin.qq.com%2Fs%3F__biz%3DMjM5MTk5MjI3OA%3D%3D%26mid%3D209854000%26idx%3D1%26sn%3D82241d924839270d3ea820ad2d56c01b%23wechat_redirect'));
+	  var gameType = 0;
+    var rankShowNum = 100;
+    var helpType = 1;
+    var addDrawTime = 1;
+    var remainHelpNum = -1;
+	PlayInfo.initData(0,7,5,5,10,false);
+    //改版前的联系兑奖提示语
+    HdGame._awardLinkMsg = '获奖者需填写联系电话方可查看兑奖码兑奖';
+    HdGame._luckDrawFunc = luckDraw;
+    if(!_manage){
+        if(false){
+            HdGame._luckDrawFunc = luckDrawZhuli;
+        }else if(false){
+            HdGame._luckDrawFunc = luckDrawZhuliNew;
+        }
+    }
+
+
+	if(false){
+        $('#awardContactInfo').remove();
+	}
+	HdGame.initChangePoup({
+		rankUrl        : '/ajax/hdgame_h.jsp?cmd=getRankList&aid=7020498&style=20&gameId='+g_config.gameId+'&openId='+g_config.openId,
+    awardUrl       : '/ajax/hdgame_h.jsp?cmd=getGiftList&aid=7020498&style=20',
+    payUrl         : '/ajax/hdgame_h.jsp?cmd=pay&aid=7020498&style=20&gameId='+g_config.gameId+'&openId='+g_config.openId,
+		getRegAwardUrl : '//hd.getstore.cn/ajax/hdgame_h.jsp?cmd=getRegAwardList&aid=7020498&gameId=18&style=20&openId=o1ueSjkZq2LGhu-hAkzOT9fnvcIg',
+		openId         : 'o1ueSjkZq2LGhu-hAkzOT9fnvcIg',
+		gameId         : 18,
+		mhaveScore     : (true && gameType != 3),
+		informUrl      : '//hd.getstore.cn/ajax/hdgame_h.jsp?cmd=setInformNum&aid=7020498&gameId=18&openId=o1ueSjkZq2LGhu-hAkzOT9fnvcIg',
+		hasReport      : false,
+		afterWxCard    : false
+	});
+    HdGame.resulePoup.init({
+        drawType  : 1,
+        checkRegUrl:'//hd.getstore.cn/ajax/hdgame_h.jsp?cmd=checkRegNum&aid=7020498&gameId=18&openId=o1ueSjkZq2LGhu-hAkzOT9fnvcIg',
+        regUrl    : '//hd.getstore.cn/ajax/hdgame_h.jsp?cmd=setPlayerReg&aid=7020498&gameId=18&openId=o1ueSjkZq2LGhu-hAkzOT9fnvcIg&flag1=true',
+        home      : typeof home !== 'undefined' ? home : null,
+        again     : typeof gameRestart !== 'undefined' ? gameRestart : null,
+        giftInit  : HdGame._luckDrawFunc,
+    });
+   HdGame.initJsFoot({"rulesortstr":"abcde","drawType":1,"hostName":"fkhdjr","hostLink":"http://","menuLink":"","fromFav":"","openAwardExp":false,"isHideFxts":false,"supportUrl":"http://mp.weixin.qq.com/s?__biz=MjM5MTk5MjI3OA==&mid=209854000&idx=1&sn=82241d924839270d3ea820ad2d56c01b#rd","isAdverQRCode":false,"skillSupport":"凡科互动","showJoinNum":true,"showRedDot":false,"showMDRedDot":false,"showAwardBtn":false,"isSelAwardLine":false,"showSkillSup":true,"menuStyle":3,"soundIcon_l":"0.75rem","soundIcon_t":"1rem","awardImage":WechatMore.assets.image_gift_url,"titleImg_path_def":WechatMore.assets.image_xjtx_title_url,"startImg_path_def":WechatMore.assets.image_xjtx_startBtn_url,"awardIconImgPath_def":WechatMore.assets.image_ruleImg_red_url,"titleImg_w_def":"14rem","titleImg_h_def":"6rem","startBtn_w_def":"6rem","startBtn_h_def":"6rem","logoImg_w_def":"2rem","logoImg_h_def":"2rem","awardImg_w_def":"6rem","awardImg_h_def":"6rem","homeBgPath_def":WechatMore.assets.image_xjtx_homeBg_url,"gameBg2Path_def":"","gameBgPath_def":WechatMore.assets.image_xjtx_gameBg_url,"headImg2":"","headImg3":"","headImg4":"","dangerType":1,"isZhuLi":false,"getRegAwardUrl":"//hd.getstore.cn/ajax/hdgame_h.jsp?cmd=getRegAwardList&aid=7020498&gameId=18&style=20&openId=o1ueSjkZq2LGhu-hAkzOT9fnvcIg"})
+
+    function startBtnDelay(){
+        $('.titleImg').removeClass('titleDown').addClass('titleDown');
+        $('#startBtnImg').removeClass('startTada');
+
+        hg.sound.pauseAll();
+
+        setTimeout(function(){
+            $('#startBtnImg').addClass('startTada');
+        },1000);
+    }
+    function showAwardDetail4Draw(fromFav){
+        HdGame.changePoup(3,'',true);
+        home('showAward',fromFav);
+        if(g_config.isYKY){
+            $('#poupInfoBox').show();
+        }
+    }
+    function setAwardImgHeight(){
+        $('#resule-gift-foot').css("margin-top",($('#resule-gift-sucImg').height()+35)/g_rem + 'rem');
+    }
+	function showRank(){
+		HdGame.changePoup(1,'',true);
+        $('#awardDetailBox').hide();
+	}
+	function showRule(isAnimation){
+        $('#activityKit').hide();
+        if(g_config.withAwardFinish){
+            HdGame.changePoup(2,'',true);
+        }else{
+            HdGame.changePoup(2,'',isAnimation);
+        }
+        $('#awardDetailBox').hide();
+	}
+    function activateSound(){ //兼容ios下 WebAudio类型的对象无法自动播放，必须在点击事件中播放过一次，才允许播放
+        try{
+            if(HdGame.isIPhone() && hg.sound.list && hg.sound.list.length > 0 && !hg.sound._activate){
+                $.each(hg.sound.list, function(i, val) {
+                    var data = hg.sound.cache[i];
+                    if(i > 0 && data && data.soundType == "LWebAudio"){
+                        data.play();
+                        data.stop();
+                    }
+                });
+                hg.sound._activate = true;
+            }
+        }catch(e){
+            HdGame.logStd("activateSoundErr",e);
+        }
+    }
+    function paymentConfirmMsg( params ) {
+      var h = $.extend({
+        headMsg: "",
+        bodyMsg: "",
+        hasHead: false,
+        isTwoFootBtn: false,
+        primaryBtnText: "知道了",
+        defaultBtnText: "取消",
+        primaryBtnFn: null,
+        defaultBtnFn: null
+      }, params);
+
+      $("#payment-confirm-msg").remove();
+      var g = '<div class="weui-mask" style="z-index:5000"></div><div  id="payment-confirm-msg" class="weui-dialog"><div class="weui-dialog__bd"><span id="statusTip-msg">仅扣1积分<br/>当天无限畅玩</span><br/><span id="sTime"></span></div><div class="weui-dialog__ft"><a href="javascript:;" class="weui-dialog__btn_primary primaryBtn">确定</a><a href="javascript:;" class="weui-dialog__btn_default defaultBtn">取消</a></div></div>';
+      var e = $(g);
+      $("body").append(e);
+      e.fadeIn(150);
+      e.find(".weui-dialog__btn_primary").off(".primaryBtn").on("touchstart.primaryBtn", function() {
+        f = h.primaryBtnFn && h.primaryBtnFn();
+        if (f != "stop") {
+          e.fadeOut(200, function() {
+            e.remove()
+          })
+        }
+      });
+      e.find(".weui-dialog__btn_default").off(".defaultBtn").on("touchstart.defaultBtn", function() {
+        //f = h.defaultBtnFn && h.defaultBtnFn();
+        e.fadeOut(200, function() {
+          e.remove()
+        })
+      });
+
+    };
+
+	function startBtnAjax(event,data,callBack,pass){
+        var that = this;
+        if(!pass){
+            activateSound();
+            if(g_config.isOpenAreaLimit){
+                return HdGame.getAreaByWx(g_config.ipInfo,function(){
+                    if( checkAreaLimit(g_config.ipInfo,g_config.areaLimitList) != 'ok' ){ //不在限制的地区内，直接返回
+                        return rt(false);
+                    }
+                    return startBtnAjax.call(that,event,data,callBack,true);
+                });
+            }
+        }
+        if(false){
+            HdGame.statusMsg(0);
+            hg.sound.allowPlay = false;
+            hg.sound.pauseAll();
+            return rt(false);
+        }
+        if(!hg.fireWith('startGamehead',that,[event,data])){
+            return rt(false);
+        }
+        if (HdGame.getIsOutofJoinNumFlowFlag) {
+            return rt(false);
+        }
+        if (!HdGame.isGetIsOutofJoinNumFlag && !HdGame.getIsOutofJoinNumFlowFlag) {
+            HdGame.getIsOutofJoinNumFlowFlag = true;
+            return HdGame.getIsOutofJoinNumFlag(function(flag){
+                HdGame.getIsOutofJoinNumFlowFlag = false;
+                if (flag == 'error') {
+                    HdGame.statusMsg("网络错误，请稍后再试！");
+                    return rt(false);
+                }
+                HdGame.isGetIsOutofJoinNumFlag = true;
+                HdGame.isOutofJoinNum = (flag == 'true' ? true :false);
+                return startBtnAjax.call(that,event,data,callBack,true);
+            })
+        }
+        if(HdGame.isOutofJoinNum){
+            if(false || false){//报名型游戏
+                HdGame.statusMsg("本活动报名人数已达到最大限制。如有疑问，请与主办方联系。");
+            }else{
+                if(false){
+                    HdGame.statusMsg("本活动团长人数已达到最大限制。如有疑问，请与主办方联系。");
+                }else{
+                    HdGame.statusMsg("本活动参与人数已达到最大限制。如有疑问，请与主办方联系。");
+                }
+            }
+            return rt(false);
+        }
+
+        if(false){
+            HdGame.statusMsg('你有疑似作弊行为，已被列入黑名单','');
+            return rt(false);
+        }
+
+
+        if(g_config.afterLinkModify && HdGame.shouldRegInfo(2,arguments,this)){
+            return rt(false);
+        }
+
+
+        if( gameType == 3 && g_config.isCheckPlayTimes && PlayInfo.getTotalRemainTimes() <= 0 ){
+            HdGame.statusMsg(8);
+            return rt(false);
+        }
+        if( gameType == 3 && g_config.isCheckPlayTimes && PlayInfo.getTodayRemainTimes() <= 0 ){
+            HdGame.statusMsg(7);
+            return rt(false);
+        }
+        //检查是否 会员积分
+        if( g_config.isCheckPayment && !WechatMore.is_paid ){
+            paymentConfirmMsg({
+              primaryBtnFn:function(){
+                HdGame.rankAjax.payWithCredit({success:function(){
+                  if( WechatMore.is_paid )
+                  {
+                    return startBtnAjax.call(that,event,data,callBack,true);
+                  }else{
+                    HdGame.statusMsg(8);
+                  }
+                }})
+              }
+            })
+            return rt(false);
+        }
+
+
+        if(!hg.fireWith('beforeStartGame',that,[false,event,data])){
+            return rt(false);
+        }
+        hg.showGameBox && showGame();
+        console.log("showGameBox: "+hg.showGameBox);
+        //HdGame.logDog(1000002, 20);
+        //HdGame.logDog(1000179, g_config.authVer + 1);
+        if(isJoinThemeGame){
+            HdGame.logDog(1000219, 3 + g_config.isAOpenId);
+        }
+        HdGame.logObjDog(1000092, 1, 18);
+
+            HdGame.addJoinGameBehavior();
+
+        HdGame.setCookie('gps_province',HdGame.encodeUrl(g_config.ipInfo.provice),1);
+        HdGame.setCookie('gps_city', HdGame.encodeUrl(g_config.ipInfo.city),1);
+        var cookOpt = {};
+        cookOpt.domain=HdGame.gameDomain;
+        cookOpt.expires=1;
+        cookOpt.path="/";
+        $.cookie('gps_province',HdGame.encodeUrl(g_config.ipInfo.provice),cookOpt);
+        $.cookie('gps_city',HdGame.encodeUrl(g_config.ipInfo.city),cookOpt);
+        hg.fireWith('startGame',that,[false,event,data,showGame]);
+        return rt(true);
+        function rt(r){
+            callBack && callBack.call(that,r,event,data,showGame);
+            return r;
+        }
+        function showGame(){
+            if(false)return;
+            $('.homeBtnBox,.bottomSkill').hide();
+            $('.footerBox').hide();
+            $('.home,#ruleImg').hide();
+            $('.gameBox').show();
+            if(typeof hg.sound.cache[0] !== 'undefined' && typeof hg.sound.cache[0].playing !== 'undefined' && !hg.sound.cache[0].playing && g_config.style != 48 && g_config.style != 49 && g_config.style != 69){
+                hg.sound.readyPlay(0,0,'loop');
+            }
+        }
+    }
+
+
+    function gameOver(_gameScore,callBack,option,showAjaxBar){
+
+		if(_gameScore === 'fail'){
+			setTimeout(function(){
+				HdGame.resulePoup.show({
+                    isSuc:false,
+                    gameScore:"fail",//闯关失败
+                    minScore:40,
+                    bestScore:'10',
+                    isReg:HdGame.isReg, //是否报名
+                    gameType:gameType,
+                    rank:2021,
+                    count:drawTimesLimit-count<0 ? 0:(drawTimesLimit-count),
+                    isLimitDrawTotal:isLimitDraw,
+                    totalCount: drawTotalLimit - totalCount < 0 ? 0 : (drawTotalLimit - totalCount)
+                });
+			},900);
+			return;
+		}
+        if(isNaN(_gameScore) || _gameScore < 0){
+            _gameScore = 0;
+        }
+		if(false){//奥运男篮游戏没有开始按钮，点击支持直接调gameOver;
+			if(g_config.afterLinkModify && HdGame.shouldRegInfo(2,arguments,this)){
+				return;
+			}
+		}else{
+			var infoType = 1;
+			if(gameType == 3 || gameType == 1){
+				infoType = 3;
+			}
+			if(gameType != 1 && HdGame.shouldRegInfo(infoType,arguments,this)){
+				return;
+			}
+		}
+        $('.ajaxLoadBg').show();
+        $('.ajaxLoadBar').addClass('ajaxLoad');
+        HdGame.showLoadToast('数据加载中');
+        var _gameScoreStr = _gameScore + '';
+        if(false){
+            _gameScoreStr = changeTwoDecimal_f(_gameScore);
+        }
+        var info = {headImg : WechatMore.game_player_head_img};
+		g_config.awardUsername && (info.ausername = g_config.awardUsername);
+        g_config.awardPhone && (info.aphone = g_config.awardPhone);
+        g_config.awardAddress && (info.aadress = g_config.awardAddress);
+		info.ip = '175.190.80.224';
+        var params = {};
+        params['game_result[game_player_id]'] = g_config.playerId;
+        params['code'] = HdGame.encodeBase64('"'+_gameScoreStr+'"') + g_config.pToken;
+        params['game_result[score]'] =_gameScoreStr;
+
+        params.openId = g_config.openId;
+        params.name = g_config.userName;
+
+        params.info = $.toJSON(info);
+        params.awardInfoB = g_config.awardInfoB;
+		params.city_gps =  typeof g_config.ipInfo.city != 'undefined' ? g_config.ipInfo.city : '';;
+		params.province_gps =typeof g_config.ipInfo.provice != 'undefined' ? g_config.ipInfo.provice : '';;
+		if(false){
+			params.fromPlayer = "";
+		}
+		if(_ruleInfo.open){
+            params._ruleInfo = $.toJSON(_ruleInfo);
+        }
+        $.extend(params,option);
+        $.ajax({
+            type : 'post',
+            url : '/ajax/hdgame_h.jsp?cmd=setAchieve&aid=7020498&playerId='+g_config.playerId,
+            data : params,
+            error : function(){
+                HdGame.hideLoadToast();
+                HdGame.otherAjaxComplete();
+                $('#timeUpImg,.timeUpImg').removeClass('tada');
+                var rt = {
+                    rt:-999,
+                    msg:"ajax返回错误"
+                };
+                callBack && callBack(rt,rt);
+                HdGame.tlog('gameOverErr',$.toJSON(arguments));
+            },
+            success : function(data){
+                HdGame.hideLoadToast();
+                HdGame.tlog('gameOver',data);
+                var r = $.parseJSON(data);
+                var isShowPoup = true;
+                if(!showAjaxBar){
+                    HdGame.otherAjaxComplete();
+                }
+
+                if(r.rt == 0){
+                    var arg={
+                        isSuc:r.isSuc,
+                        gameScore:_gameScoreStr,
+                        minScore:40,
+                        bestScore:r.score,
+                        isReg:HdGame.isReg, //是否报名
+                        gameType:gameType,
+                        rank:r.rank,
+                        beat:r.beat,
+                        count:drawTimesLimit-count<0 ? 0:(drawTimesLimit-count),
+						            isLimitDrawTotal:isLimitDraw,
+						            totalCount:	drawTotalLimit-totalCount<0 ? 0:(drawTotalLimit-totalCount),
+						            isEqualDraw:false,
+                        hasLot: r.hasLot //是否显示抽奖
+                    };
+                    setTimeout(function(){
+                        var callBackArg = {rt:r.rt,msg:r.msg,arg:arg,pId:r.playerId,firstScore : r.firstScore};
+						g_config.playerId = r.playerId;
+                        if(false){
+                            callBackArg.infoList = r.infoList;
+                        }
+                        callBack && (isShowPoup = callBack(callBackArg,r));
+                        $('#timeUpImg,.timeUpImg').removeClass('tada');
+                        isShowPoup !== false && HdGame.resulePoup.show(arg);
+                    },300);
+					PlayInfo.addPlayTimes(1);
+					g_config.achieveToken = r.achieveToken;
+                }else if(r.rt == 11){
+					alert("已被检测到有作弊行为，再次被检测将永久禁止参与本游戏！");
+				}else if(r.rt == 12){
+					alert("由于作弊行为，该微信号已永久禁止参与本游戏！");
+				}else if(r.rt == 23){
+                    HdGame.statusMsg(3);
+                }else{
+                    callBack && (isShowPoup = callBack({rt:r.rt,msg:r.msg},r));
+                    isShowPoup !== false && HdGame.resulePoup.show({
+                        isSuc:false,
+                        gameScore:'--',
+                        minScore:40,
+                        bestScore:'--',
+                        isReg:HdGame.isReg, //是否报名
+                        gameType:gameType,
+                        rank:'--',
+                        beat:'--',
+                        count:drawTimesLimit-count<0 ? 0:(drawTimesLimit-count),
+                        isLimitDrawTotal:isLimitDraw,
+                        totalCount: drawTotalLimit-totalCount<0 ? 0:(drawTotalLimit-totalCount),
+                        isEqualDraw:false
+                    });
+                    return;
+                }
+                if(r.rt !== 0){
+                    callBack && callBack({rt:r.rt,msg:r.msg},r);
+                }
+            }
+        });
+        params = info = option = null;
+        function changeTwoDecimal_f(x) {
+            var f_x = parseFloat(x);
+            if (isNaN(f_x)) {
+                alert('function:changeTwoDecimal arguments error');
+                return x;
+            }
+            var f_x = Math.round(x * 100) / 100;
+            var s_x = f_x.toString();
+            var pos_decimal = s_x.indexOf('.');
+            if (pos_decimal < 0) {
+                pos_decimal = s_x.length;
+                s_x += '.';
+            }
+            while (s_x.length <= pos_decimal + 2) {
+                s_x += '0';
+            }
+            return s_x;
+        }
+
+    }
+
+function checkAreaLimit(ipInfo,areaLimitList,isShowMsg){
+	isShowMsg = isShowMsg !== false;
+	var now_province = ipInfo.provice;
+	var now_city = ipInfo.city;
+	if(areaLimitList.length > 0){
+		if( now_province && now_city ){ //有当前地理位置信息
+            var isLimit = true;
+            for(var i = 0; i < areaLimitList.length; i++){
+                var info = site_cityUtil.getInfo(areaLimitList[i]);
+                if(info.parentId == 1){
+                    if(info.name.indexOf(now_province) > -1 || now_province.indexOf(info.name) > -1){
+                        isLimit = false;
+                        break;
+                    }
+                }else{
+                    if(info.name.indexOf(now_city) > -1 || now_city.indexOf(info.name) > -1){
+                        isLimit = false;
+                        break;
+                    }
+                }
+            }
+            if(isLimit){
+                isShowMsg && HdGame.statusMsg('您当前所在的地区（' + now_city + '）不在可参与区域范围','');
+                return 'limit';
+            }
+		}else{ //没有查到当前ip信息，显示服务繁忙
+			isShowMsg && HdGame.statusMsg("服务繁忙，请稍候重试",'');
+			return 'busyness';
+		}
+	}
+    return 'ok';
+}
+
+hg.on('beforeDraw',function(_arguments){
+	var thisInfoType = 2;
+	if(g_config.afterLinkModify && HdGame.shouldRegInfo(thisInfoType,_arguments,this)){
+
+		return false;
+	}
+	thisInfoType = 3;
+	if(g_config.afterLinkModify && HdGame.shouldRegInfo(thisInfoType,_arguments,this)){
+
+		return false;
+	}
+});
+
+var drawStatusLuckDraw = true;
+function luckDraw(fn,option,pass){
+
+    if(g_config.isOpenAreaLimit && !pass){
+        HdGame.getAreaByWx(g_config.ipInfo,function(){
+            if( checkAreaLimit(g_config.ipInfo,g_config.areaLimitList) != 'ok' ){ //不在限制的地区内，直接返回
+                return false;
+            }
+            luckDraw(fn,option,true);
+        });
+        return false;
+    }
+	if(hg.fireWith('beforeDraw',this,[arguments]) === false){
+		return false;
+	}
+    if(!drawStatusLuckDraw){
+        return;
+    }
+    HdGame.showLoadToast('数据加载中');
+    drawStatusLuckDraw=false;
+    $('.ajaxLoadBg').show();
+    $('.ajaxLoadBar').addClass('ajaxLoad');
+    var params = {};
+    params.gameId = 18;
+    params.style = 20;
+    params.playerId = g_config.playerId;
+    params.userName = g_config.userName;
+    params.isPub = $.trim('1');
+    params.headImg = g_config.headImg;
+  	params.ip = '175.190.80.224';
+	  params.city_gps = typeof g_config.ipInfo.city != 'undefined' ? g_config.ipInfo.city : '';;
+	  params.provice_gps = typeof g_config.ipInfo.provice != 'undefined' ? g_config.ipInfo.provice : '';;
+	  if(false){
+		  params.fromPlayer = "";
+	  }
+    $.extend(params,option);
+    $.ajax({
+        type : 'post',
+        url : '/ajax/hdgame_h.jsp?cmd=getResult&aid=7020498&openId=o1ueSjkZq2LGhu-hAkzOT9fnvcIg&achieveToken='+g_config.achieveToken,
+        data : params,
+        error : function(){
+            HdGame.hideLoadToast();
+            HdGame.otherAjaxComplete();
+            drawStatusLuckDraw=true;
+			if(gameType != 4){
+				count++;
+				totalCount++;
+			}
+            clearTimeout(HdGame.lotTimer);
+            hg.fireWith('afterDraw',this,[{
+                success : false,
+                rt : -999,
+                msg : '服务繁忙，请稍候重试',
+            }]);
+        },
+        success : function(data){
+            HdGame.hideLoadToast();
+            HdGame.tlog('luckDraw',data);
+            HdGame.otherAjaxComplete();
+            drawStatusLuckDraw=true;
+            clearTimeout(HdGame.lotTimer);
+            var result = $.parseJSON(data);
+            hg.fireWith('afterDraw',this,[result]);
+console.log( result);
+            if(result.success){
+      				if(gameType != 4){
+      					count++;
+      					$(".dayDrawCount").text(drawTimesLimit-count<0 ? 0:(drawTimesLimit-count));
+      					totalCount++;
+      					$(".totalDrawCount").text(drawTotalLimit-totalCount<0 ? 0:(drawTotalLimit-totalCount));
+      				}
+              $('#resule-gift-box').attr('_level',result.awardIndex);
+				      g_config.haveAward = true;
+				      $('.resule-status-send').html("查看我的奖品");
+            }else{
+      				if(result.rt === 27 && result.op === "getGameResult"){
+      					$('.resuleBox').hide();
+      					HdGame.showLotsWait(5,function(){
+      						$('.resuleBox').show();
+      						luckDraw(fn,option);
+      					});
+      					return;
+              }else if (result.rt === 1) {
+					      count = drawTimesLimit;
+                $(".dayDrawCount").text(0);
+					      HdGame.statusMsg(4);
+					      if(!g_config.showHelpGuide){
+                        $('#resule-gift-box').hide();
+					      }
+                home('luckDraw');
+                return;
+              }else if (result.rt === 13) {
+                    HdGame.statusMsg(6);
+                    count = drawTimesLimit;
+                    totalCount = drawTotalLimit;
+                    $(".dayDrawCount").text(0);
+                    $(".totalDrawCount").text(0);
+                    $('#resule-gift-box').hide();
+                    home('luckDraw');
+                    return;
+                }else if( result.rt ===  -3 ){
+                    HdGame.statusMsg("活动不存在。");
+                    return;
+                }else if( result.rt ===  23 ){
+                    HdGame.statusMsg("游戏已结束。");
+                    return;
+                }else{
+                    if(result.rt === -2){
+                        HdGame.log("参数错误。");
+                    }else if(result.rt === -1){
+                        HdGame.log("系统错误，请刷新再试。");
+                    }
+                    count++;
+                    $(".dayDrawCount").text(drawTimesLimit-count<0 ? 0:(drawTimesLimit-count));
+                    totalCount++;
+                    $(".totalDrawCount").text(drawTotalLimit-totalCount<0 ? 0:(drawTotalLimit-totalCount));
+                    $('.resule-status-box').hide();
+                }
+            }
+            var arg={
+                isSuc:result.isSuc,
+                giftStyle:result.awardStyle,
+                giftName:result.awardName,
+                giftCode:result.awardCode,
+                awardTypeNum:result.awardTypeNum,
+                giftImage:result.awardImage,
+                awardImageW:result.awardImageW,
+                awardImageH:result.awardImageH,
+                awardIndex:result.awardIndex,
+            };
+            if(HdGame.getType(fn) === 'function'){
+                fn(arg,result);
+            }else{
+                HdGame.resulePoup.showGift(arg);
+            }
+        }
+    });
+
+}
+function luckDrawZhuliNew(fn,option){
+    if(!drawStatusLuckDraw || _manage){
+        return;
+    }
+    HdGame.showLoadToast('数据加载中');
+    drawStatusLuckDraw=false;
+    $('.ajaxLoadBg').show();
+    $('.ajaxLoadBar').addClass('ajaxLoad');
+    var params = new Array();
+    params.push("gameId=",18);
+    params.push("&zlid=",g_config.style == 61 ? zlid : -1);
+	params.city_gps = typeof g_config.ipInfo.city != 'undefined' ? g_config.ipInfo.city : '';;
+	params.province_gps = typeof g_config.ipInfo.provice != 'undefined' ? g_config.ipInfo.provice : '';;
+    $.extend(params,option);
+    $.ajax({
+        type : 'post',
+        url : '//hd.getstore.cn/ajax/hdzhuli_h.jsp?cmd=getResult&aid=7020498&openId=o1ueSjkZq2LGhu-hAkzOT9fnvcIg',
+        data : params.join(''),
+        error : function(err,errObj){
+            if(m_debug){
+                alert( '服务繁忙，请稍候重试' );
+            }
+            HdGame.hideLoadToast();
+            HdGame.otherAjaxComplete();
+            drawStatusLuckDraw=true;
+        },
+        success : function(data){
+            HdGame.hideLoadToast();
+            HdGame.tlog('luckDrawZhuliNew',data);
+            HdGame.otherAjaxComplete();
+            drawStatusLuckDraw=true;
+            var result = $.parseJSON(data);
+            setNoLiheWxShare && setNoLiheWxShare();
+            if(result.success){
+                var arg={
+                    isSuc:result.isSuc,
+                    giftStyle:result.awardStyle,
+                    giftName:result.awardName,
+                    giftCode:result.awardCode,
+                    giftImage:result.awardImage,
+                    awardImageW:result.awardImageW,
+                    awardImageH:result.awardImageH,
+                    awardIndex:result.awardIndex,
+                };
+                g_config.haveAward = true;
+
+                if(HdGame.getType(fn) === 'function'){
+                    fn(arg,result);
+                }else{
+                    HdGame.resulePoup.show(arg);
+                }
+
+            }else{
+                if( result.rt === 8 || result.rt === 23 ){
+                    HdGame.statusMsg(result.msg);
+                    return;
+                }else{
+                    var arg={
+                        isSuc:result.success
+                    };
+                    if(HdGame.getType(fn) === 'function'){
+                        fn(arg,result);
+                    }else{
+                        HdGame.resulePoup.show(arg);
+                    }
+                }
+            }
+        }
+    });
+}
+$(function(){
+    if(_manage){
+        $("#resule-gift-sucImg").parent().append('<span class="hd-left-arrow theArrowSpan hide"></span><span class="hd-right-arrow theArrowSpan hide"></span>');
+    }
+    HdGame.imgReady(WechatMore.assets.image_hdjn_url,function(){
+        var originSize = {width:$("#ruleImg").width(),height:$("#ruleImg").height()};
+        var nowSize = HdGame.Img.calcSize(this.width,this.height,originSize.width,originSize.height,HdGame.Img.MODE_SCALE_DEFLATE_FILL);
+        $("#ruleImg").css({
+            "background-size": nowSize.width+"px "+nowSize.height+"px",
+            "background-image":"url("+WechatMore.assets.image_hdjn_url+")",
+        }).attr("_src",WechatMore.assets.image_hdjn_url);
+    })
+    hg.fire('jsFootEnd');
+})
+</script>
+
+<script type="text/javascript">
+
+	$.ajaxSettings.errorCall.push(function(callbackContext, status, error){
+        if(/logAjaxErr_h\.jsp/.test(callbackContext.url) && /cmd=hdajaxErr/.test(callbackContext.url)){
+            return;
+        }
+		var faiAjax = Fai.top._faiAjax || $;
+		if( faiAjax ){
+			faiAjax.ajax({
+				type	: "post",
+				url		: "/ajax/logAjaxErr_h.jsp?cmd=hdajaxErr&error="+error+"&status="+status+"&openId=o1ueSjkZq2LGhu-hAkzOT9fnvcIg&aid=7020498&gameId=18",
+				data	: 'msg=' + HdGame.encodeHtml('ajaxUrl='+HdGame.encodeUrl(callbackContext.url)+';refer='+HdGame.encodeUrl(Fai.top.location.href))
+			});
+		}
+	});
+
+</script>
+</body>
+</html>

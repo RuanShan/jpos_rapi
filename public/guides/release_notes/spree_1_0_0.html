@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>    <html class="lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>    <html class="lt-ie9"> <![endif]-->
+<!--[if IE 9]>    <html class="ie9"> <![endif]-->
+<!--[if gt IE 9]><!--> <html lang="en" > <!--<![endif]-->
+<head>
+  <title>Spree 1.0.0 - Release Notes | Spree - Ruby on Rails e-commerce platform</title>
+
+  <meta charset="utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta name="section" content="version" />
+
+<link href="/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+<link href="/shared/css/icons.css" media="screen" rel="stylesheet" type="text/css">
+<link href="/shared/css/icons-codes.css" media="screen" rel="stylesheet" type="text/css">
+
+<link href="/shared/css/skeleton.css" media="screen" rel="stylesheet" type="text/css">
+<link href="/shared/css/documentation.css" media="screen" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="/assets/stylesheets/guides.css" media="screen" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/docsearch.js/2/docsearch.min.css" />
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-migrate/1.1.1/jquery-migrate.min.js"></script>
+<script src="/assets/javascripts/css_browser_selector_dev.js" type="text/javascript"></script>
+<script src="/assets/javascripts/jquery.toc.js" type="text/javascript"></script>
+<script src="/assets/javascripts/documentation.js" type="text/javascript"></script>
+
+
+</head>
+<body class="integration">
+  
+  <header id="header">
+    <div id="top-header">
+  <div class="container">
+    <div class="row">
+      <div class="two columns">
+  <a class="logo" href="http://spreecommerce.org">
+    <img src='/images/logo.png' alt="Spree Commerce - Ruby on Rails e-commerce platform" />
+  </a>
+</div>
+
+      <div class="three columns">
+  <input type="text" id="search-field" placeholder="Search..." />
+</div>
+
+      <nav id="main-menu" class="eleven columns">
+  <ul class="inline">
+    <li><a href="../api/">API</a></li>
+    <li><a href="../developer/">Developer</a></li>
+    <li><a href="../user/">User</a></li>
+    <li><a href="../release_notes/">Release Notes</a></li>
+    <li>
+      <a href="http://slack.spreecommerce.org" target="_blank">Slack</a>
+    </li>
+    <li>
+      <a href="https://heroku.com/deploy?template=https://github.com/spree/spree" target="_blank" rel="nofollow">Demo</a>
+    </li>
+  </ul>
+</nav>
+
+    </div>
+  </div>
+</div>
+
+
+    <div id="subheader">
+      <div class="container">
+        <div class="twelve columns">
+          <h1 class="page-title">Spree 1.0.0 - Release Notes</h1>
+        </div>
+      </div>
+    </div>
+
+  </header>
+
+  <div class="container">
+    <section id="main-content">
+
+      <div class="twelve columns">
+        <div id="content">
+          
+<h1 id="summary">Summary</h1>
+
+<p>This is the official 1.0 Release of Spree. This is a <strong>major</strong> release
+for Spree, and so backwards compatibility with extensions and
+applications is not guaranteed. Please consult the <a href="https://github.com/spree-contrib">extension
+registry</a> to see which extensions
+are compatiable with this release. If your extension is not yet
+compatible you should check back periodically since the community will
+be upgrading various extensions over time.</p>
+
+<div class="warning"><p>If you are upgrading from older versions of Spree you should
+perform a complete backup of your database before attempting. It is also
+recommended that you perform a test upgrade on a local development or
+staging server before attempting in your production environment.</p>
+</div>
+
+<h1 id="namespacing">Namespacing</h1>
+
+<p>A difficulty in previous versions of Spree was using it with existing
+applications, as there may have been conflicting class names between the
+Spree engines and the host application. For example, if the host
+application had a <em>Product</em> class, then this would cause Spree’s
+<em>Product</em> class to not load and issues would be encountered.</p>
+
+<p>A major change within the 1.0 Release is the namespacing of all classes
+within Spree. This change remedies the above problem in the cleanest
+fashion possible.</p>
+
+<p>Classes such as <em>Product</em>, <em>Variant</em> and <em>ProductsController</em> are now
+<em>Spree::Product</em>, <em>Spree::Variant</em> and <em>Spree::ProductsController</em>.
+Other classes, such as <em>RedirectLegacyProductUrl</em>, have undergone one
+more level of namespacing to more clearly represent what areas of Spree
+they are from. This class is now called
+<em>Spree::Core::RedirectLegacyProductUrl</em>.</p>
+
+<p>Constants such as <em>SpreeCore</em> and <em>SpreeAuth</em> are now <em>Spree::Core</em> and
+<em>Spree::Auth</em> respectively.</p>
+
+<h2 id="referencing-spree-routes">Referencing Spree routes</h2>
+
+<p>In previous versions of Spree, due to the lack of namespacing, it was
+possible to reference routing helpers such as <em>product_url</em> as-is in
+the controllers and views of your application and send them to the
+<em>ProductsController</em> for Spree.</p>
+
+<p>Due to the namespacing changes, these references must now be called on
+the <em>spree</em> routing proxy, so that Rails will route to Spree’s
+<em>product_url</em>, rather than a <em>potential</em> <em>product_url</em> within an
+application. Routing helpers referencing Spree parts must now be written
+like this:</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>spree.product_url
+
+</pre></div>
+</div>
+</div>
+
+<p>Conversely, to reference routes from the main application within a
+controller, view or template from Spree, you must use the <em>main_app</em>
+routing proxy like this:</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>main_app.root_url
+
+</pre></div>
+</div>
+</div>
+
+<p>If you encounter errors where routing methods you think should be there
+are not available, ensure that you aren’t trying to call a Spree route
+from the main application within the proxy prefix, or a main application
+route from Spree without the proxy as well.</p>
+
+<h2 id="mounting-the-spree-engine">Mounting the Spree engine</h2>
+
+<p>When <em>rails g spree:install</em> is run inside an application, it will
+install Spree, mounting the <em>Spree::Core::Engine</em> component by inserting
+this line automatically into <em>config/routes.rb</em>:</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>mount <span class="constant">Spree</span>::<span class="constant">Core</span>::<span class="constant">Engine</span>, <span class="key">at</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">/</span><span class="delimiter">&quot;</span></span>
+
+</pre></div>
+</div>
+</div>
+
+<p>By default, all Spree routes will be available at the root of your
+domain. For example, if your domain is http://shop.com, Spree’s
+/products URL will be available at http://shop.com/products.</p>
+
+<p>You can customize this simply by changing the <em>:at</em> specification in
+<em>config/routes.rb</em> to be something else. For example, if your domain is
+http://bobsite.com and you would like Spree to be mounted at /shop, you
+can write this:</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>mount <span class="constant">Spree</span>::<span class="constant">Core</span>::<span class="constant">Engine</span>, <span class="key">at</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">/shop</span><span class="delimiter">&quot;</span></span>
+
+</pre></div>
+</div>
+</div>
+
+<p>The different parts of Spree (Auth, API, Dash &amp; Promo) all extend the
+Core’s routes, and so they will be mounted as well if they are available
+as gems.</p>
+
+<h1 id="spree-analytics">Spree Analytics</h1>
+
+<p>The admin dashboard has been replaced with Spree Analytics. This new
+service will provide deep insight\
+into your store’s ecommerce performance and sales conversion funnel.</p>
+
+<p>You will have to <a href="http://spreecommerce.com/stores/new">register your
+store</a> with Spree Commerce. Then
+configure the Analytics Add On to generate your token. The token should
+be entered on the Admin Overview page.</p>
+
+<p>The original dashboard has been extracted into the <a href="https://github.com/spree/spree_simple_dash">spree_dash
+gem</a> .</p>
+
+<h1 id="command-line-tool">Command line tool</h1>
+
+<p>We have moved the ‘spree’ command line tool to its own gem. This is the
+new recommended way for adding Spree to an existing Rails application.
+The tool will add the Spree gem, copy migrations, initializers and
+generate sample data.</p>
+
+<p>To add Spree to a Rails application you do the following:</p>
+
+<div class="language-bash highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>$ gem install spree
+$ rails new my_store
+$ cd my_store
+$ spree install
+</pre></div>
+</div>
+</div>
+
+<p>The extension generator has also been moved to this new tool.</p>
+
+<div class="language-bash highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>$ gem install spree
+$ spree extension my_ext
+</pre></div>
+</div>
+</div>
+
+<h1 id="default-payment-gateways">Default Payment Gateways</h1>
+
+<p>The new Spree Command Line Tool prompts you to install the default
+gateways. This adds the
+<a href="https://github.com/spree/spree_skrill">spree\skrill</a> and
+<a href="https://github.com/spree/spree_usa_epay">spree_usa_epay</a> gems. These
+are the Spree Commerce supported gateways for stores in the United
+States (USA ePay) and Internationally (Skrill formally Moneybookers).</p>
+
+<div class="language-bash highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre> $ rails new my_store
+ $ spree install my_store
+ Would you like to install the default gateways? (yes/no) <span class="reserved">[</span>yes<span class="reserved">]</span>
+</pre></div>
+</div>
+</div>
+
+<p>We have moved all the gateways out of core (except bogus) to the <a href="https://github.com/spree/spree_gateway">Spree
+Gateway Gem</a>. You can add this
+gem to your Gemfile if you need one of those gateways.</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>gem <span class="string"><span class="delimiter">'</span><span class="content">spree</span><span class="delimiter">'</span></span>
+
+<span class="comment">#  add to your Gemfile after the Spree gem</span>
+gem <span class="string"><span class="delimiter">'</span><span class="content">spree_gateway</span><span class="delimiter">'</span></span>
+
+</pre></div>
+</div>
+</div>
+
+<p>The gateways available in the <a href="https://github.com/spree/spree_gateway">Spree Gateway
+Gem</a> are community supported.
+These include Authorize.net, Stripe and Braintree and many other
+contributed gateways.</p>
+
+<h1 id="preferences">Preferences</h1>
+
+<p>We have refactored Spree Preferences to improve performance and
+simplify code for applications and extensions. The previous interfaces have been\
+maintained so no code changes should be required. The underlying
+classes have been completely rewritten.</p>
+
+<p>Please see the <a href="http://spreecommerce.com/blog/2011/12/08/spree-preferences-refactored">Spree
+blog</a>
+for notes on this release.</p>
+
+<h1 id="deprecated-functions">Deprecated functions</h1>
+
+<h2 id="middleware">Middleware</h2>
+
+<p>The lines for middleware in <em>config/application.rb</em> within a host
+application are now deprecated. When upgrading to Spree 1.0 you must
+remove these two lines from <em>config/application.rb</em>:</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>config.middleware.use <span class="string"><span class="delimiter">&quot;</span><span class="content">SeoAssist</span><span class="delimiter">&quot;</span></span>
+config.middleware.use <span class="string"><span class="delimiter">&quot;</span><span class="content">RedirectLegacyProductUrl</span><span class="delimiter">&quot;</span></span>
+
+</pre></div>
+</div>
+</div>
+
+<p>These two pieces of middleware are now automatically included by the
+<code>Spree::Core::Engine</code>.</p>
+
+<h2 id="product">Product</h2>
+
+<p><em>master_price</em>, <em>master_price=</em>, <em>variants?</em>, <em>variant</em> are now
+officially retired. Please use <em>Spree::Product#price</em>,
+<em>Spree::Product#price=</em>, <em>Spree::Product#has_variants?</em> and
+<em>Spree::Product#master</em> respectively instead.</p>
+
+<h2 id="spreeconfigstylesheets">Spree::Config[:stylesheets]</h2>
+
+<p><code>Spree::Config</code> and <code>stylesheet_tags</code> are removed in favor for the Rails
+3.1 Asset Pipeline. See the <a href="http://guides.spreecommerce.org/legacy/1-0-x/asset_customization.html">Asset
+Customization</a> for more information.</p>
+
+<p>Extensions looking to add stylesheets to the application should do so
+through the Asset Pipeline by making the extension an engine.</p>
+
+<h2 id="general-deprecations">General deprecations</h2>
+
+<ul>
+  <li><em>Gateway.current</em> is now deprecated. Use
+<em>order.payment_method.gateway</em> now.
+<a href="https://github.com/spree/spree/pull/747">#747</a></li>
+</ul>
+
+<h1 id="calculator">Calculator</h1>
+
+<h2 id="calculatorpricebucket-is-now-renamed-to-calculatorpricesack">Calculator::PriceBucket is now renamed to Calculator::PriceSack</h2>
+
+<p>The <em>PriceBucket</em> contains Bucket keyword that conflicts with <em>AWS::S3</em>
+library which has caused few issues with Heroku deployment. If you used
+this calculator in your application, then you will need to rename it to
+<em>PriceSack</em>.</p>
+
+<h1 id="taxation">Taxation</h1>
+
+<p>There have been several major changes to how Spree handles tax
+calculations. If you are migrating from an older version of Spree your
+previous tax configurations will not function properly and will need to
+be reconfigured before you can resume processing orders.</p>
+
+<div class="warning"><p>Be sure to backup your database before migrating. Your tax
+configuration will likely break after upgrading. You have been warned.</p>
+</div>
+
+<h2 id="zonematch-now-only-returns-the-best-possible-match">Zone#match now only returns the best possible match.</h2>
+
+<p>Previously the method would return an array of zones as long as the zone
+included the address. Now only the narrowest match is returned.</p>
+
+<h2 id="new-ordertaxzone-method">New <code>Order#tax_zone</code> method</h2>
+
+<p>Will return the zone to be used for computing tax on the order. Returns
+the best possible zone match given the order address. In the absence of
+an order address it will return the default tax zone (if one is
+specified.)</p>
+
+<h2 id="adjustments-are-now-polymorphic">Adjustments are now polymorphic</h2>
+
+<p>Previously the <code>Adjustment</code> class belonged to just <code>Order</code>. Now the
+<code>LineItem</code> class can have adjustments as well. This allows Spree to
+store the amount of tax included in the price when prices include tax
+(such as VAT case.)</p>
+
+<h2 id="new-orderpriceadjustments-method">New <code>Order#price_adjustments</code> method</h2>
+
+<p>Convenience method for listing all of the price adjustments in the
+order. Price adjustments are tax calculations equivalent to the amount
+of tax included in a price. These adjustments are not counted against
+the order total but are sometimes useful for reporting purposes.</p>
+
+<div class="note"><p>You don’t need to worry about price adjustments unless your prices
+include tax (such as the case with Value Added Tax.)</p>
+</div>
+
+<h2 id="new-orderpriceadjustmenttotals-method">New <code>Order#price_adjustment_totals</code> method</h2>
+
+<p>Convenient method for show the price adjustment totals grouped by
+similar tax categories and rates.</p>
+
+<h2 id="removed-helpers-and-javascript-related-to-vat">Removed helpers and javascript related to VAT</h2>
+
+<p>Prior to this version of Spree there were several helpers designed to
+show prices including tax before Spree was changed so that prices were
+expected to already include tax (when applicable.) We’ve removed a lot
+of stuff related to the old (more complicated) way of doing things.</p>
+
+<div class="warning"><p>One unfortunate byproduct of prices now including tax is that
+you will need to change the prices on your products if you are in a
+region that requires prices to include tax and you were not already
+including the tax in your prices.</p>
+</div>
+
+<h2 id="removed-sales-tax-and-vat-calculators">Removed sales tax and VAT calculators</h2>
+
+<p>Both of these calculators have been replaced by the single calculator
+<code>Calculator::DefaultTax</code>.</p>
+
+<h2 id="tax-rates-can-now-be-included-in-a-product-price">Tax rates can now be included in a product price</h2>
+
+<p>There is now a boolean checkbox for indiciating if a tax rate is
+included in the product price. The tax rate will only be considered as
+part of the product price if the product has a matching tax category.
+You can also have multiple tax rates with this designation.</p>
+
+<h2 id="new-taxrateadjust-method">New <code>TaxRate#adjust</code> method</h2>
+
+<p>This method is responsible for calculating the price. This is basically
+an internal change but some developers may be interested to know this.</p>
+
+<div class="note"><p>Marking a tax rate as including price is the new way to handle
+Value Added Tax (VAT) and other similar tax schemes.</p>
+</div>
+
+<h1 id="zones">Zones</h1>
+
+<p>There is one major change related to zones in this release. Zones can no
+longer have zone members that are themselves a zone. All zone members
+must now be a either a country or state.</p>
+
+<h1 id="testing">Testing</h1>
+
+<h2 id="the-demise-of-cucumber-testing">The demise of Cucumber testing</h2>
+
+<p>Cucumber is a great testing tool however it doesn’t bring more values
+for testing but overhead. It is decided to opt for a light-weight
+practice of RSpec + Capybara.</p>
+
+<h1 id="upgrading">Upgrading</h1>
+
+<p>This section aims to walk you through upgrading to the newest version of
+Spree.</p>
+
+<div class="note"><p>This steps in this guide were written while upgrading from 0.70.x
+to 1.0.0. Upgrading older versions of Spree may require some additional
+steps.</p>
+</div>
+
+<h2 id="upgrading-the-spree-gem">Upgrading the Spree Gem</h2>
+
+<p>You will want to begin the update process by updating the Spree gem in
+your Gemfile to reference version 1.0.0.</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>gem <span class="string"><span class="delimiter">'</span><span class="content">spree</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">1.0.0</span><span class="delimiter">'</span></span>
+
+</pre></div>
+</div>
+</div>
+
+<p>Next, you will need to update this gem using this command:</p>
+
+<div class="language-bash highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>$ bundle update spree
+</pre></div>
+</div>
+</div>
+
+<div class="note"><p>If you run <code>bundle update</code> instead of <code>bundle update spree</code>,
+you run the risk of having all your application dependencies updated to
+their latest version. It is recommended to only update spree during the
+upgrade process.</p>
+</div>
+
+<h2 id="extensions">Extensions</h2>
+
+<p>Any Spree extensions being used will also need to be updated to a 1.0.0
+compatible version. If there is not a 1.0.0 compatible extensions
+release yet, you will need to disable that extension in order to
+continue the upgrade process.</p>
+
+<h2 id="routes">Routes</h2>
+
+<p>You will need to update your routes file in order for Spree’s routes to
+be correctly loaded. You will need to add <code>mount Spree::Core::Engine,
+at: '/'</code> as shown below.</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="comment">#config/routes.rb</span>
+<span class="constant">YourStore</span>::<span class="constant">Application</span>.routes.draw <span class="keyword">do</span>
+  mount <span class="constant">Spree</span>::<span class="constant">Core</span>::<span class="constant">Engine</span>, <span class="key">at</span>: <span class="string"><span class="delimiter">'</span><span class="content">/</span><span class="delimiter">'</span></span>
+  
+  <span class="comment"># your application's custom routes</span>
+  …
+<span class="keyword">end</span>
+
+</pre></div>
+</div>
+</div>
+
+<p>If you’re mounting Spree at the default root path, it is recommended to
+place your application’s custom routes beneath Spree’s mounted routes as
+shown in the above example. This will ensure you don’t override any of
+Spree’s defined routes.</p>
+
+<p>You may choose to mount Spree at a custom location by changing the <em>:at</em>
+option to something different, such as <em>at: ‘/shop’</em>.</p>
+
+<h2 id="update-configapplicationrb">Update config/application.rb</h2>
+
+<p>Remove the following two lines from <strong>config/application.rb</strong> in your
+application:</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>config.middleware.use <span class="string"><span class="delimiter">&quot;</span><span class="content">SeoAssist</span><span class="delimiter">&quot;</span></span>
+config.middleware.use <span class="string"><span class="delimiter">&quot;</span><span class="content">RedirectLegacyProductUrl</span><span class="delimiter">&quot;</span></span>
+
+</pre></div>
+</div>
+</div>
+
+<p>These two pieces of middleware are now automatically included by Spree.
+If you have no desire to use these pieces of middleware, you can now
+remove them by placing these two lines into your
+<strong>config/application.rb</strong>:</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>config.middleware.delete <span class="string"><span class="delimiter">&quot;</span><span class="content">Spree::Core::Middleware::SeoAssist</span><span class="delimiter">&quot;</span></span>
+config.middleware.delete
+<span class="string"><span class="delimiter">&quot;</span><span class="content">Spree::Core::Middleware::RedirectLegacyProductUrl</span><span class="delimiter">&quot;</span></span>
+
+</pre></div>
+</div>
+</div>
+
+<h2 id="migrations">Migrations</h2>
+
+<div class="language-bash highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>$ bundle exec rake railties:install:migrations
+</pre></div>
+</div>
+</div>
+
+<p>Run the above command to copy over all the migrations from all the
+engines included in your application. This may also include any
+migrations from extensions or other engines.</p>
+
+<p>Then it is time to run any new migrations copied to your application.</p>
+
+<div class="language-bash highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>$ bundle exec rake db:migrate
+
+</pre></div>
+</div>
+</div>
+
+<h2 id="asset-manifest-files">Asset Manifest Files</h2>
+
+<p>Remove the line requiring spree_dash from
+<strong>app/assets/stylesheets/store/all.css</strong>,
+<strong>app/assets/stylesheets/admin/all.css</strong>,
+<strong>app/assets/javascripts/store/all.js</strong>, and
+<strong>app/assets/javascripts/store/all.js</strong></p>
+
+<h2 id="other-tips-for-upgrading">Other Tips for Upgrading</h2>
+
+<ul>
+  <li>If your application defines any class decorators, you will need to
+update these files to decorate Spree’s new namespace classes. This
+means <em>Product</em> becomes <em>Spree::Product</em>, <em>Country</em> becomes
+<em>Spree::Country</em>, and so on.</li>
+  <li>Correct the paths to any templates you are overriding to include the
+Spree namespace. Things such as <strong>app/views/products/show.html.erb</strong>
+have now become <strong>app/views/spree/products/show.html.erb</strong>.</li>
+</ul>
+
+<h1 id="bug-fixes">Bug fixes</h1>
+
+<ul>
+  <li>Fixed issue caused by using <em>&amp;:upcase</em> syntax inside the <em>tab</em>
+helper provided by <em>Admin::NavigationHelper</em>.
+<a href="https://github.com/spree/spree/pull/693">#693</a> and
+<a href="https://github.com/spree/spree/pull/704">#704</a>.</li>
+  <li>Fixed issue where non-ASCII characters were not being correctly
+titleized in the <em>tab</em> helper provided by <em>Admin::NavigationHelper</em>.
+<a href="https://github.com/spree/spree/pull/722">#722</a></li>
+  <li>When Thinking Sphinx was being used, a conflict would occur with its
+<em>Scopes</em> module and the one inside Spree.
+<a href="https://github.com/spree/spree/pull/740">#740</a></li>
+  <li>Added <em>script/rails</em> to core to allow things such as <em>rails
+generate</em> and <em>rails console</em> to be used. <a href="https://github.com/spree/spree/commit/b0903ea477b63bd36c9940b5e0386e29e55f6189">commit
+b0903ea</a></li>
+  <li>Performance improvements for the <em>best_selling_variants</em> and
+<em>top_grossing_variants</em> methods in <em>Admin::OverviewController</em>.
+<a href="https://github.com/spree/spree/pull/718">#718</a></li>
+  <li>If an admin user already exists, <em>rake db:admin:create</em> will now ask
+if you want to override.
+<a href="https://github.com/spree/spree/pull/752">#752</a></li>
+  <li>Making a request to a URL such as
+<em>/admin/products/non-existant/edit</em> no longer shows a status 500
+page. <a href="https://github.com/spree/spree/issues/538">#538</a></li>
+  <li><em>rails g spree:install</em> output is now not so excessive. <a href="https://github.com/spree/spree/commit/ca4db301e773da4ebc9d2a13e24c5d0e86dd0108">commit
+ca4db30</a></li>
+  <li>The <em>Spree::Core::Engine</em> is automatically mounted inside your
+application when you run <em>rails g spree:install</em>. <a href="https://github.com/spree/spree/commit/ba67b514af41918bf892323c9fd685689c74667a">commit
+ba67b51</a></li>
+  <li>Product <em>on_hand</em> now takes all variants into account.
+<a href="https://github.com/spree/spree/issues/772">#772</a></li>
+  <li>The translation for “Listing Products” in admin/products now is more
+easily translatable into different languages. <a href="https://github.com/spree/spree/commit/c0d5cb5316715ec8aa886fab5bc0820be616d302">commit
+c0d5cb5</a></li>
+  <li>Removed POSIX-only system calls, replaced with Ruby calls instead to
+enable Windows compatibility.
+<a href="https://github.com/spree/spree/issues/711">#711</a> and <a href="https://github.com/spree/spree/commit/ce001721a32dd84523d9504feec074db72ef3efb">commit
+ce00172</a></li>
+  <li>Improved <em>bundle exec rake test_app</em> performance. <a href="https://github.com/spree/spree/commit/ce001721a32dd84523d9504feec074db72ef3efb">commit
+6a2d367</a></li>
+  <li>Improved permalink code, removed reliance on the
+<em>rd-find_by_param</em> gem.
+<a href="https://github.com/spree/spree/issues/444">#444</a> and
+<a href="https://github.com/spree/spree/issues/847">#847</a></li>
+  <li>Master variant is now deleted when a product is deleted. Performance
+with this action has also been improved.
+<a href="https://github.com/spree/spree/issues/801">#801</a></li>
+  <li>An invalid coupon code on the payment screen will now show an error.
+<a href="https://github.com/spree/spree/issues/717">#717</a></li>
+  <li>Products are now restocked when an order is canceled, and unstocked
+when the order is resumed.
+<a href="https://github.com/spree/spree/issues/729">#729</a></li>
+  <li>The <em>ffaker</em> gem is now used in favor of the <em>faker</em> gem.
+<a href="https://github.com/spree/spree/issues/826">#826</a></li>
+  <li><em>Spree::Config.set</em> should no longer be used, please use
+<em>Spree.config</em> with a block: <a href="https://github.com/spree/spree/commit/5590fb3">commit
+5590fb3</a>
+<a href="https://github.com/spree/spree/issues/801">#801</a></li>
+  <li>Fix calculator dropdown bug for creating a shipping method in the
+admin interface. <a href="https://github.com/spree/spree/issues/825">#825</a></li>
+  <li>Fix escaping of <em>order_subtotal</em> in view.
+<a href="https://github.com/spree/spree/issues/852">#852</a></li>
+</ul>
+
+
+        </div>
+      </div>
+
+    </section>
+
+    <aside id="sidebar" class="four columns">
+  <nav id="sidebar-menu">
+    <ul>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-version-menu"><i class="icon-right-open"></i></a>
+          <a href='#.html'>Versions</a>
+        </h3>
+        <ul class="js-guides">
+          <li><i class="icon-dot"></i><a href='spree_3_4_0.html'>3.4.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_3_3_0.html'>3.3.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_3_2_0.html'>3.2.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_3_1_0.html'>3.1.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_3_0_0.html'>3.0.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_2_4_0.html'>2.4.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_2_3_0.html'>2.3.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_2_2_0.html'>2.2.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_2_1_0.html'>2.1.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_2_0_0.html'>2.0.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_1_3_0.html'>1.3.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_1_2_2.html'>1.2.2</a></li>
+          <li><i class="icon-dot"></i><a href='spree_1_2_0.html'>1.2.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_1_1_4.html'>1.1.4</a></li>
+          <li><i class="icon-dot"></i><a href='spree_1_1_0.html'>1.1.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_1_0_0.html'>1.0.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_0_70_0.html'>0.70.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_0_60_0.html'>0.60.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_0_50_0.html'>0.50.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_0_40_0.html'>0.40.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_0_30_0.html'>0.30.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_0_10_0.html'>0.10.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_0_9_0.html'>0.9.0</a></li>
+        </ul>
+      </li>
+    </ul>
+  </nav>
+</aside>
+
+  </div>
+
+  <footer id="main-footer">
+
+  <div class="footer-top">
+    <div class="container">
+      <div id="link-blocks" class="row">
+        <div class="link-block six columns">
+          <h3 class="block-title">Developers</h3>
+          <ul>
+            <li><a href="https://slack.spreecommerce.org" target="_blank" rel="nofollow">Slack</a></li>
+            <li><a href="https://github.com/spree-contrib" target="_blank">Extensions</a></li>
+            <li><a href="https://github.com/spree/spree/blob/master/license.md" target="_blank">License</a></li>
+          </ul>
+        </div>
+        <div class="link-block seven columns">
+          <h3 class="block-title">About Spree</h3>
+          <p>
+            <strong><a href="https://spreecommerce.org">Spree Commerce</a></strong>
+            is a complete modular, API-driven open source e-commerce solution
+            built with Ruby on Rails.
+          </p>
+          <p>
+            Guides are hosted and maintained by
+            <a href="http://sparksolutions.co" target="_blank">Spark Solutions</a>
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</footer>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-104990445-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/docsearch.js/2/docsearch.min.js"></script>
+<script type="text/javascript"> docsearch({
+apiKey: 'fb697cd2d04591b036ea172259c05ba8',
+indexName: 'spreecommerce',
+inputSelector: '#search-field',
+debug: false // Set debug to true if you want to inspect the dropdown
+});
+</script>
+
+
+  </body>
+</html>

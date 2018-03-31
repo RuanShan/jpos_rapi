@@ -1,0 +1,114 @@
+
+<% content_for :game_asset_js do %>
+<script>
+WechatMore = {
+	openid: null,
+	game_code:  <%== @game_round.game_code.to_json %>,
+	game_round_id:  <%= @game_round.id %>,
+	game_round_name:  <%== @game_round.name.to_json %>,
+	game_countdown: <%= @game_round.duration %>,
+	game_player_id: <%== message_verifier.generate( cookies.signed_or_encrypted[:game_player_id]).to_json %>,
+	terminal: 'screen',
+	panelState: 'opended',
+	playerState: 'unknown',
+	game_player_salt: <%== GamePlayer::Salt.to_json %>,
+	routes: {}
+}
+
+WechatMore.routes.image_bg_url = <%== image_url("game/runlin_car_game/bg.jpg").to_json %>;
+WechatMore.routes.image_wood0_url = <%== image_url("game/runlin_car_game/rock1.png").to_json %>;
+WechatMore.routes.image_wood1_url = <%== image_url("game/runlin_car_game/wood1.png").to_json %>;
+WechatMore.routes.image_wood2_url = <%== image_url("game/runlin_car_game/wood2.png").to_json %>;
+WechatMore.routes.image_wood3_url = <%== image_url("game/runlin_car_game/wood3.png").to_json %>;
+WechatMore.routes.image_wood4_url = <%== image_url("game/runlin_car_game/wood4.png").to_json %>;
+WechatMore.routes.image_wood5_url = <%== image_url("game/runlin_car_game/wood5.png").to_json %>;
+WechatMore.routes.image_tipBg_url = <%== image_url("game/runlin_car_game/tipBg.png").to_json %>;
+WechatMore.routes.image_tipIcons_url = <%== image_url("game/runlin_car_game/tipIcons.png").to_json %>;
+WechatMore.routes.image_indexLogo_url = <%== image_url("game/runlin_car_game/indexLogo.png").to_json %>;
+WechatMore.routes.image_orderBtn_url = <%== image_url("game/runlin_car_game/orderBtn.png").to_json %>;
+WechatMore.routes.image_gameBtn_url = <%== image_url("game/runlin_car_game/gameBtn.png").to_json %>;
+WechatMore.routes.image_road_url = <%== image_url("game/runlin_car_game/road.jpg").to_json %>;
+WechatMore.routes.image_leftDown_url = <%== image_url("game/runlin_car_game/leftDown.png").to_json %>;
+WechatMore.routes.image_leftUp_url = <%== image_url("game/runlin_car_game/leftUp.png").to_json %>;
+WechatMore.routes.image_rightDown_url = <%== image_url("game/runlin_car_game/rightDown.png").to_json %>;
+WechatMore.routes.image_rightUp_url = <%== image_url("game/runlin_car_game/rightUp.png").to_json %>;
+WechatMore.routes.image_gameTop_url = <%== image_url("game/runlin_car_game/gameTop.png").to_json %>;
+WechatMore.routes.image_gameBot_url = <%== image_url("game/runlin_car_game/gameBot.png").to_json %>;
+WechatMore.routes.image_gameBh_url = <%== image_url("game/runlin_car_game/gameBh.png").to_json %>;
+WechatMore.routes.image_gameBotBtn_url = <%== image_url("game/runlin_car_game/gameBotBtn.png").to_json %>;
+WechatMore.routes.image_startBtn_url = <%== image_url("game/runlin_car_game/startBtn.png").to_json %>;
+WechatMore.routes.image_startCountdown_url = <%== image_url("game/runlin_car_game/startBtn2.png").to_json %>;
+WechatMore.routes.image_startBtnDown_url = <%== image_url("game/runlin_car_game/startBtnDown.png").to_json %>;
+WechatMore.routes.image_gravityBtnOff_url = <%== image_url("game/runlin_car_game/gravityBtnOff.png").to_json %>;
+WechatMore.routes.image_gravityBtnOn_url = <%== image_url("game/runlin_car_game/gravityBtnOn.png").to_json %>;
+WechatMore.routes.image_point1_url = <%== image_url("game/runlin_car_game/point.png").to_json %>;
+WechatMore.routes.image_point2_url = <%== image_url("game/runlin_car_game/point2.png").to_json %>;
+WechatMore.routes.image_point3_url = <%== image_url("game/runlin_car_game/point3.png").to_json %>;
+WechatMore.routes.image_car_url = <%== image_url("game/runlin_car_game/car.png").to_json %>;
+WechatMore.routes.image_zi0_url = <%== image_url("game/runlin_car_game/zi0.png").to_json %>;
+WechatMore.routes.image_zi1_url = <%== image_url("game/runlin_car_game/zi1.png").to_json %>;
+WechatMore.routes.image_zi2_url = <%== image_url("game/runlin_car_game/zi2.png").to_json %>;
+WechatMore.routes.image_zi3_url = <%== image_url("game/runlin_car_game/zi3.png").to_json %>;
+WechatMore.routes.image_zi4_url = <%== image_url("game/runlin_car_game/zi4.png").to_json %>;
+WechatMore.routes.image_zi5_url = <%== image_url("game/runlin_car_game/zi5.png").to_json %>;
+WechatMore.routes.image_zi6_url = <%== image_url("game/runlin_car_game/zi6.png").to_json %>;
+WechatMore.routes.image_zi7_url = <%== image_url("game/runlin_car_game/zi7.png").to_json %>;
+WechatMore.routes.image_zi8_url = <%== image_url("game/runlin_car_game/zi8.png").to_json %>;
+WechatMore.routes.image_zi9_url = <%== image_url("game/runlin_car_game/zi9.png").to_json %>;
+WechatMore.routes.image_hp_url = <%== image_url("game/runlin_car_game/life.png").to_json %>;
+WechatMore.routes.image_carAni_url = <%== image_url("game/runlin_car_game/carAni.png").to_json %>;
+WechatMore.routes.image_loading_url = <%== image_url("game/runlin_car_game/loading.gif").to_json %>;
+
+WechatMore.routes.game_player_path = <%== game_player_path(@game_player).to_json %>;
+WechatMore.routes.score_game_player_path = <%== score_game_player_path(@game_player).to_json %>;
+WechatMore.routes.result_game_round_path = <%== result_game_round_path(@game_round).to_json %>;
+WechatMore.routes.awards_game_round_path = <%== awards_game_round_path(@game_round).to_json %>;
+WechatMore.routes.ranking_game_round_path = <%== ranking_game_round_path(@game_round).to_json %>;
+WechatMore.routes.award_game_player_path = <%== award_game_player_path(@game_player).to_json %>;
+WechatMore.routes.play_again_game_player_path = <%== play_again_game_player_path(@game_player).to_json %>;
+</script>
+<% end %>
+
+
+<% content_for :game_info do %>
+<div id="jinnangWrap" class="m_porA" style="">
+	<a id="jinnangBtn"> &nbsp; </a>
+	<div class="jinnang-container m_dn poupInfoBox" style="">
+			<div class="poupClose"></div>
+			<div class="weui-tab poupMain">
+				<div class="weui-navbar poupHead" style="">
+					<a class="weui-navbar__item weui-bar__item--on poupTitle" href="#tab1"><span class="innerText">活动规则 </span></a>
+					<a class="weui-navbar__item poupTitle" href="#rankingTab" ><span class="innerText">排行榜	</span></a>
+					<a class="weui-navbar__item poupTitle" href="#awardsTab"><span class="innerText">奖品设置</span></a>
+					<a class="weui-navbar__item poupTitle" href="#resultTab"><span class="innerText last">获奖榜单</span></a>
+				</div>
+				<div class="weui-tab__bd">
+					<div id="tab1" class="poupTab weui-tab__bd-item weui-tab__bd-item--active">
+						<div class="poupSection">
+							<div class="desc">
+								<%= render "games/#{@game_round.game_code}/desc"%>
+							</div>
+						</div>
+					</div>
+					<div id="rankingTab" class="poupTab weui-tab__bd-item"  >
+						<div class="poupSection loading" style="text-align:center;">
+							<p class="title"> <span> 排行榜 <%= image_tag 'spinner.gif' %></span></p>
+						</div>
+
+					</div>
+					<div id="awardsTab" class="poupTab weui-tab__bd-item">
+						<div class="poupSection loading" style="text-align:center;">
+							<p class="title"> <span> 奖品设置 <%= image_tag 'spinner.gif' %></span></p>
+						</div>
+					</div>
+					<div id="resultTab" class="poupTab weui-tab__bd-item">
+						<div class="poupSection loading" style="text-align:center;">
+							<p class="title"> <span> 获奖榜单 <%= image_tag 'spinner.gif' %></span></p>
+						</div>
+					</div>
+
+				</div>
+			</div>
+	</div>
+</div>
+<% end %>

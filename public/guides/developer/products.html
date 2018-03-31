@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>    <html class="lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>    <html class="lt-ie9"> <![endif]-->
+<!--[if IE 9]>    <html class="ie9"> <![endif]-->
+<!--[if gt IE 9]><!--> <html lang="en" > <!--<![endif]-->
+<head>
+  <title>Products - Developer Guide | Spree - Ruby on Rails e-commerce platform</title>
+
+  <meta charset="utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta name="section" content="core" />
+
+<link href="/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+<link href="/shared/css/icons.css" media="screen" rel="stylesheet" type="text/css">
+<link href="/shared/css/icons-codes.css" media="screen" rel="stylesheet" type="text/css">
+
+<link href="/shared/css/skeleton.css" media="screen" rel="stylesheet" type="text/css">
+<link href="/shared/css/documentation.css" media="screen" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="/assets/stylesheets/guides.css" media="screen" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/docsearch.js/2/docsearch.min.css" />
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-migrate/1.1.1/jquery-migrate.min.js"></script>
+<script src="/assets/javascripts/css_browser_selector_dev.js" type="text/javascript"></script>
+<script src="/assets/javascripts/jquery.toc.js" type="text/javascript"></script>
+<script src="/assets/javascripts/documentation.js" type="text/javascript"></script>
+
+
+</head>
+<body class="developer">
+  
+  <header id="header">
+    <div id="top-header">
+  <div class="container">
+    <div class="row">
+      <div class="two columns">
+  <a class="logo" href="http://spreecommerce.org">
+    <img src='/images/logo.png' alt="Spree Commerce - Ruby on Rails e-commerce platform" />
+  </a>
+</div>
+
+      <div class="three columns">
+  <input type="text" id="search-field" placeholder="Search..." />
+</div>
+
+      <nav id="main-menu" class="eleven columns">
+  <ul class="inline">
+    <li><a href="../api/">API</a></li>
+    <li><a href="../developer/">Developer</a></li>
+    <li><a href="../user/">User</a></li>
+    <li><a href="../release_notes/">Release Notes</a></li>
+    <li>
+      <a href="http://slack.spreecommerce.org" target="_blank">Slack</a>
+    </li>
+    <li>
+      <a href="https://heroku.com/deploy?template=https://github.com/spree/spree" target="_blank" rel="nofollow">Demo</a>
+    </li>
+  </ul>
+</nav>
+
+    </div>
+  </div>
+</div>
+
+
+    <div id="subheader">
+      <div class="container">
+        <div class="sixteen columns">
+          <h1 class="page-title">Products - Developer Guide | Spree - Ruby on Rails e-commerce platform</h1>
+        </div>
+      </div>
+    </div>
+
+  </header>
+
+  <div class="container" id="main">
+    <section id="main-content">
+
+      <div class="twelve columns">
+        <div id="content">
+          
+<h2 id="overview">Overview</h2>
+
+<p><code>Product</code> records track unique products within your store. These differ from <a href="#variants">Variants</a>, which track the unique variations of a product. For instance, a product that’s a T-shirt would have variants denoting its different colors. Together, Products and Variants describe what is for sale.</p>
+
+<p>Products have the following attributes:</p>
+
+<ul>
+  <li><code>name</code>: short name for the product</li>
+  <li><code>description</code>: The most elegant, poetic turn of phrase for describing your product’s benefits and features to your site visitors</li>
+  <li><code>permalink</code>: An SEO slug based on the product name that is placed into the URL for the product</li>
+  <li><code>available_on</code>: The first date the product becomes available for sale online in your shop. If you don’t set the <code>available_on</code> attribute, the product will not appear among your store’s products for sale.</li>
+  <li><code>deleted_at</code>: The date the product is no longer available for sale in the store</li>
+  <li><code>meta_description</code>: A description targeted at search engines for search engine optimization (SEO)</li>
+  <li><code>meta_keywords</code>: Several words and short phrases separated by commas, also targeted at search engines</li>
+</ul>
+
+<p>To understand how variants come to be, you must first understand option types and option values.</p>
+
+<h2 id="option-types-and-option-values">Option Types and Option Values</h2>
+
+<p>Option types denote the different options for a variant. A typical option type would be a size, with that option type’s values being something such as “Small”, “Medium” and “Large”. Another typical option type could be a color, such as “Red”, “Green”, or “Blue”.</p>
+
+<p>A product can be assigned many option types, but must be assigned at least one if you wish to create variants for that product.</p>
+
+<h2 id="variants">Variants</h2>
+
+<p><code>Variant</code> records track the individual variants of a <code>Product</code>. Variants are of two types: master variants and normal variants.</p>
+
+<p>Variant records can track some individual properties regarding a variant, such as height, width, depth, and cost price. These properties are unique to each variant, and so are different from <a href="#product-properties">Product Properties</a>, which apply to all variants of that product.</p>
+
+<h3 id="master-variants">Master Variants</h3>
+
+<p>Every single product has a master variant, which tracks basic information such as a count on hand, a price and a SKU. Whenever a product is created, a master variant for that product will be created too.</p>
+
+<p>Master variants are automatically created along with a product and exist for the sole purpose of having a consistent API when associating variants and <a href="orders.html#line-items">line items</a>. If there were no master variant, then line items would need to track a polymorphic association which would either be a product or a variant.</p>
+
+<p>By having a master variant, the code within Spree to track  is simplified.</p>
+
+<h3 id="normal-variants">Normal Variants</h3>
+
+<p>Variants which are not the master variant are unique based on <a href="#option_type">option type and option value</a> combinations. For instance, you may be selling a product which is a Baseball Jersey, which comes in the sizes “Small”, “Medium” and “Large”, as well as in the colors of “Red”, “Green” and “Blue”. For this combination of sizes and colors, you would be able to create 9 unique variants:</p>
+
+<ul>
+  <li>Small, Red</li>
+  <li>Small, Green</li>
+  <li>Small, Blue</li>
+  <li>Medium, Red</li>
+  <li>Medium, Green</li>
+  <li>Medium, Blue</li>
+  <li>Large, Red</li>
+  <li>Large, Green</li>
+  <li>Large, Blue</li>
+</ul>
+
+<h2 id="images">Images</h2>
+
+<p>Images link to a product through its master variant. The sub-variants for the product may also have their own unique images to differentiate them in the frontend.</p>
+
+<p>Spree automatically handles creation and storage of several size versions of each image (via the Paperclip plugin). The default styles are as follows:</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="key">styles</span>: {
+  <span class="key">mini</span>: <span class="string"><span class="delimiter">'</span><span class="content">48x48&gt;</span><span class="delimiter">'</span></span>,
+  <span class="key">small</span>: <span class="string"><span class="delimiter">'</span><span class="content">100x100&gt;</span><span class="delimiter">'</span></span>,
+  <span class="key">product</span>: <span class="string"><span class="delimiter">'</span><span class="content">240x240&gt;</span><span class="delimiter">'</span></span>,
+  <span class="key">large</span>: <span class="string"><span class="delimiter">'</span><span class="content">600x600&gt;</span><span class="delimiter">'</span></span>
+}
+
+</pre></div>
+</div>
+</div>
+
+<p>These sizes can be changed by altering the value of <code>Spree::Image.attachment_definitions[:attachment][:styles]</code>. Once <code>Spree::Image.attachment_definitions[:attachment][:styles]</code> has been changed, you <em>must</em> regenerate the paperclip thumbnails by running this command:</p>
+
+<div class="language-bash highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>$ bundle exec rake paperclip:refresh:thumbnails CLASS=Spree::Image
+
+</pre></div>
+</div>
+</div>
+
+<p>If you want to change the image that is displayed when a product has no image, simply set <code>Spree::Image.attachment_definitions[:attachment][:default_url]</code> with a path to the image that you want to use like this: <code>/assets/images/missing_:style.png</code>. These image styles must match the keys within <code>Spree::Config[:attachment_styles]</code>. That means that ideally, you’d have four images of different sizes: <code>missing_mini.png</code>, <code>missing_small.png</code>, <code>missing_product.png</code>, and <code>missing_large.png</code>.</p>
+
+<h2 id="product-properties">Product Properties</h2>
+
+<p>Product properties track individual attributes for a product which don’t apply to all products. These are typically additional information about the item. For instance, a T-Shirt may have properties representing information about the kind of material used, as well as the type of fit the shirt is.</p>
+
+<p>A <code>Property</code> should not be confused with an <a href="#option_type"><code>OptionType</code></a>, which is used when defining <a href="#variants">Variants</a> for a product.</p>
+
+<p>You can retrieve the value for a property on a <code>Product</code> object by calling the <code>property</code> method on it and passing through that property’s name:</p>
+
+<div class="language-bash highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>$ product.property(&quot;material&quot;)
+=&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">100% Cotton</span><span class="delimiter">&quot;</span></span>
+
+</pre></div>
+</div>
+</div>
+
+<p>You can set a property on a product by calling the <code>set_property</code> method:</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>product.set_property(<span class="string"><span class="delimiter">&quot;</span><span class="content">material</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">100% cotton</span><span class="delimiter">&quot;</span></span>)
+
+</pre></div>
+</div>
+</div>
+
+<p>If this property doesn’t already exist, a new <code>Property</code> instance with this name will be created.</p>
+
+<h2 id="multi-currency-support">Multi-Currency Support</h2>
+
+<p><code>Price</code> objects track a price for a particular currency and variant combination. For instance, a <a href="#variants">Variant</a> may be available for $15 (15 USD) and €7 (7 Euro).</p>
+
+<p>This presence or lack of a price for a variant in a particular currency will determine if that variant is visible in the frontend. If no variants of a product have a particular price value for the site’s current currency, that product will not be visible in the frontend.</p>
+
+<p>You may see what price a product would be in the current currency (<code>Spree::Config[:currency]</code>) by calling the <code>price</code> method on that instance:</p>
+
+<div class="language-bash highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>$ product.price
+=&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">15.99</span><span class="delimiter">&quot;</span></span>
+
+</pre></div>
+</div>
+</div>
+
+<p>To find a list of currencies that this product is available in, call <code>prices</code> to get a list of related <code>Price</code> objects:</p>
+
+<div class="language-bash highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>$ product.prices
+=&gt; [#&lt;Spree<span class="reserved">:</span><span class="reserved">:</span>Price id<span class="reserved">:</span> <span class="integer">2</span> ...<span class="reserved">]</span>
+
+</pre></div>
+</div>
+</div>
+
+<h2 id="prototypes">Prototypes</h2>
+
+<p>A prototype is a useful way to share common <code>OptionType</code> and <code>Property</code> combinations amongst many different products. For instance, if you’re creating a lot of shirt products, you may wish to maintain the “Size” and “Color” option types, as well as a “Fitting Type” property.</p>
+
+<h2 id="taxons-and-taxonomies">Taxons and Taxonomies</h2>
+
+<p>Taxonomies provide a simple, yet robust way of categorizing products by enabling store administrators to define as many separate structures as needed.</p>
+
+<p>When working with Taxonomies there are two key terms to understand:</p>
+
+<ul>
+  <li><code>Taxonomy</code> – a hierarchical list which is made up of individual Taxons. Each taxonomy relates to one <code>Taxon</code>, which is its root node.</li>
+  <li><code>Taxon</code> – a single child node which exists at a given point within a <code>Taxonomy</code>. Each <code>Taxon</code> can contain many (or no) sub / child taxons. Store administrators can define as many Taxonomies as required, and link a product to multiple Taxons from each Taxonomy.</li>
+</ul>
+
+<p>By default, both Taxons and Taxonomies are ordered by their <code>position</code> attribute.</p>
+
+<p>Taxons use the <a href="http://en.wikipedia.org/wiki/Nested_set_model">Nested set model</a> for their hierarchy. The <code>lft</code> and <code>rgt</code> columns in the <code>spree_taxons</code> table represent the locations within the hierarchy of the item. This logic is handled by the <a href="https://github.com/collectiveidea/awesome_nested_set">awesome_nested_set</a> gem.</p>
+
+<p>Taxons link to products through an intermediary model called <code>Classification</code>. This model exists so that when a product is deleted, all of the links from that product to its taxons are deleted automatically. A similar action takes place when a taxon is deleted; all of the links to products are deleted automatically.</p>
+
+<p>Linking to a taxon in a controller or a template should be done using the <code>spree.nested_taxons_path</code> helper, which will use the taxon’s permalink to
+generate a URL such as <code>/t/categories/brand</code>.</p>
+
+        </div>
+      </div>
+
+    </section>
+
+    <aside id="sidebar" class="four columns">
+  <nav id="sidebar-menu">
+    <ul>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-tutorial-menu"><i class="icon-right-open"></i></a>
+          <a href='/developer/getting_started_tutorial.html'>Tutorials</a>
+        </h3>
+        <ul class="js-guides">
+          <li><i class="icon-dot"></i><a href='/developer/getting_started_tutorial.html'>Getting Started</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/extensions_tutorial.html'>Extensions</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/deface_overrides_tutorial.html'>Deface Overrides</a> <div class="toc"></div> </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-source-code-menu"><i class="icon-right-open"></i></a>
+          <a href='/developer/about.html'>Source Code</a>
+        </h3>
+        <ul class="js-guides">
+          <li><i class="icon-dot"></i><a href='/developer/about.html'>About</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/navigating.html'>Navigating</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/getting_help.html'>Getting Help</a> <div class="toc"></div> </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href="https://github.com/spree/spree/blob/master/.github/CONTRIBUTING.md" target="_blank" rel="nofollow">
+              Contributing
+            </a>
+            <div class="toc"></div>
+          </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-core-menu"><i class="icon-right-open"></i></a>
+          <a href='/developer/addresses.html'>The Core</a>
+        </h3>
+        <ul class="js-guides">
+          <li><i class="icon-dot"></i><a href='/developer/addresses.html'>Addresses</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/adjustments.html'>Adjustments</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/calculators.html'>Calculators</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/inventory.html'>Inventory</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/orders.html'>Orders</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/payments.html'>Payments</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/preferences.html'>Preferences</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/products.html'>Products</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/promotions.html'>Promotions</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/shipments.html'>Shipments</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/taxation.html'>Taxation</a> <div class="toc"></div> </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-customization-menu"><i class="icon-right-open"></i></a>
+          <a href='/developer/authentication.html'>Customization</a>
+        </h3>
+        <ul class="js-guides">
+          <li><i class="icon-dot"></i><a href='/developer/authentication.html'>Authentication</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/i18n.html'>Internationalization (i18n)</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/view.html'>View</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/asset.html'>Asset</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/logic.html'>Logic</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/s3_storage.html'>Use S3</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/checkout.html'>Checkout</a> <div class="toc"></div> </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-deployment-menu"><i class="icon-right-open"></i></a>
+          <a href='/developer/deployment_tips.html'>Deployment</a>
+        </h3>
+        <ul class="js-guides">
+          <li><i class="icon-dot"></i><a href='/developer/heroku.html'>Heroku</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/ansible-ubuntu.html'>Ansible Ubuntu Deployment</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/manual-ubuntu.html'>Manual Ubuntu Deployment</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/deployment_options.html'>Deployment Options</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/deployment_tips.html'>Deployment Tips</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/requesting_and_configuring_ssl.html'>Requesting/Configuring SSL</a> <div class="toc"></div> </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-advanced-menu"><i class="icon-right-open"></i></a>
+          <a href='/developer/seo.html'>Advanced Topics</a>
+        </h3>
+        <ul class="js-guides">
+          <li><i class="icon-dot"></i><a href='/developer/developer_tips.html'>Developer Tips</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/gateway_specific_information.html'>Gateway Specific Information</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/migration.html'>Migrating to Spree</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/seo.html'>Search Engine Optimization</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/security.html'>Security</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/testing.html'>Testing Spree Applications</a> <div class="toc"></div> </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-upgrades-menu"><i class="icon-right-open"></i></a>
+          <a href='/developer/upgrade_guides.html'>Upgrade Guides</a>
+        </h3>
+        <ul class="js-guides">
+          <li><i class="icon-dot"></i><a href='/developer/point-sixty-to-point-seventy.html'>0.60.x to 0.70.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/point-seventy-to-one-dot-oh.html'>0.70.x to 1.0.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/one-dot-oh-to-one-dot-one.html'>1.0.x to 1.1.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/one-dot-one-to-one-dot-two.html'>1.1.x to 1.2.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/one-dot-two-to-one-dot-three.html'>1.2.x to 1.3.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/one-dot-three-to-two-dot-oh.html'>1.3.x to 2.0.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/two-dot-oh-to-two-dot-one.html'>2.0.x to 2.1.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/two-dot-one-to-two-dot-two.html'>2.1.x to 2.2.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/two-dot-two-to-two-dot-three.html'>2.2.x to 2.3.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/two-dot-three-to-two-dot-four.html'>2.3.x to 2.4.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/three-dot-oh-to-three-dot-one.html'>3.0.x to 3.1.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/three-dot-one-to-three-dot-two.html'>3.1.x to 3.2.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/three-dot-two-to-three-dot-three.html'>3.2.x to 3.3.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/three-dot-three-to-three-dot-four.html'>3.3.x to 3.4.x</a> <div
+          class="toc"></div></li>
+        </ul>
+      </li>
+    </ul>
+  </nav>
+</aside>
+
+  </div>
+
+  <footer id="main-footer">
+
+  <div class="footer-top">
+    <div class="container">
+      <div id="link-blocks" class="row">
+        <div class="link-block six columns">
+          <h3 class="block-title">Developers</h3>
+          <ul>
+            <li><a href="https://slack.spreecommerce.org" target="_blank" rel="nofollow">Slack</a></li>
+            <li><a href="https://github.com/spree-contrib" target="_blank">Extensions</a></li>
+            <li><a href="https://github.com/spree/spree/blob/master/license.md" target="_blank">License</a></li>
+          </ul>
+        </div>
+        <div class="link-block seven columns">
+          <h3 class="block-title">About Spree</h3>
+          <p>
+            <strong><a href="https://spreecommerce.org">Spree Commerce</a></strong>
+            is a complete modular, API-driven open source e-commerce solution
+            built with Ruby on Rails.
+          </p>
+          <p>
+            Guides are hosted and maintained by
+            <a href="http://sparksolutions.co" target="_blank">Spark Solutions</a>
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</footer>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-104990445-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/docsearch.js/2/docsearch.min.js"></script>
+<script type="text/javascript"> docsearch({
+apiKey: 'fb697cd2d04591b036ea172259c05ba8',
+indexName: 'spreecommerce',
+inputSelector: '#search-field',
+debug: false // Set debug to true if you want to inspect the dropdown
+});
+</script>
+
+
+  </body>
+</html>

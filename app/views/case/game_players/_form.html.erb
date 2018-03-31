@@ -1,0 +1,14 @@
+<%= simple_form_for(@game_player, url: case_game_player_path(@game_player)) do |f| %>
+  <%= f.error_notification %>
+
+  <div class="form-inputs">
+    <%= f.association :store , input_html:{ readonly: true }%>
+    <%= f.input :realname %>
+    <%= f.input :cellphone %>
+    <%= f.input :memo %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit %>
+  </div>
+<% end %>

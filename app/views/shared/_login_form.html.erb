@@ -1,0 +1,39 @@
+<div class="card card-block round-box devise">
+  <div class="card-body devise">
+    <%= form_for(:user, as: 'user', url: session_path(:user), html: {role: 'form'}) do |f| %>
+      <div class="form-group">
+        <%= link_to t('devise.registrations.new.sign_up'), new_registration_path(:user), class: 'btn btn-block btn-primary' %>
+        <hr class="green"/>
+      </div>
+      <div class="row form-group devise">
+        <div class="col-sm-12">
+          <%= f.text_field :username, class: 'form-control form-control-sm', id: 'inputUsername1', placeholder: t('label.username') %>
+
+        </div>
+      </div>
+      <div class="row form-group devise">
+        <div class="col-sm-12">
+          <%= f.password_field :password, class: 'form-control form-control-sm', id: 'inputPassword1', placeholder: t('label.password')%>
+        </div>
+      </div>
+      <div class="row form-group devise">
+        <div class="col-sm-6">
+          <div class="checkbox">
+            <label class="form-control-label devise normal small">
+              <%= f.check_box :remember_me %>
+              <%= t('label.remember_me') %>
+            </label>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <%= link_to  t('devise.shared.links.forgot_your_password'), new_password_path(:user), class: 'devise_shared' %>
+        </div>
+      </div>
+      <div class="row form-group devise">
+        <div class="col-sm-12">
+          <%= f.submit t('devise.sessions.new.sign_in'), class: 'btn btn-success' %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

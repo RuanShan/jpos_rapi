@@ -1,0 +1,6 @@
+%tr
+  %td.nowrap= entry.created_at.strftime('%H:%M')
+  %td= entry.user_ip
+  %td= entry.username.present? ? entry.username : '(unknown)'
+  %td= entry.role
+  %td.nowrap= t(entry.action, scope: 'classy_enum.devise_action') if entry.action.present?

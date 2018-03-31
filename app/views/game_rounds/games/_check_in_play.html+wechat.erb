@@ -1,0 +1,60 @@
+<% content_for :game_asset_css do %>
+  <%= stylesheet_link_tag  'game_round_wechat', media: 'all', 'data-turbolinks-track' => true %>
+<% end %>
+
+<% content_for :game_asset_js do %>
+  <%= javascript_include_tag 'game_round_wechat', 'data-turbolinks-track' => true %>
+<% end %>
+
+
+<div class="game check_in_wechat mobile">
+  <div class=" ">
+    <img src="<%=@game_player['avatar']%>" width="0" height="0"   >
+    <div class="award_list_wrapper">
+      <a id="b_show_award_list" style="float:right;"> 活动锦囊 </a>
+      <div id="b_award_list " class="poupInfoBox">
+        <div class="poupClose"></div>
+        <div class="weui-tab">
+          <div class="weui-navbar" style="background-color:transparent;">
+            <div class="weui-navbar__item">   获奖名单       </div>
+          </div>
+          <div class="weui-tab__panel">
+            <% if @game_round.game_award_players.count > 0 %>
+            <div class="awards-wrapper">
+              <% @game_round.game_awards.includes( game_award_players: :game_player ).each{ |award|%>
+                <div class="award">
+                  <p class="award-name">  <%= award.name  %>         </p>
+                  <ul>
+                  <% award.game_award_players.each{ |award_player| %>
+                    <li class="award-player">
+                      <%= tag :img, src: award_player.game_player.avatar, width: 50, height: 50 %>
+                      <span><%= award_player.game_player.nickname %></span>
+                    </li>
+                  <% } %>
+
+                  </ul>
+                </div>
+              <% } %>
+            </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="vgy_user">
+            <div class="info2">
+            	<img class="touxiang" src="<%=@game_player.avatar%>">
+                	<p class="name"><%=@game_player.nickname %></p>
+    				<p class="tx">恭喜您！签到成功</p>
+    				<div class="infotext">
+              亲爱的嘉宾，请留意大屏幕的抽奖活动！
+    				</div>
+            <p style="display: none">
+              <a> 确定 </a>
+            </p>
+        	</div>
+    </div>
+  </div>
+
+
+</div>

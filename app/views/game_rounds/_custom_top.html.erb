@@ -1,0 +1,19 @@
+<div class="header">
+  <img alt="logo" src="<%=logo_url(@game_round)%>" class="logo"/>
+  <div class="b_heading_warpper heading-wrapper">
+    <div class="b_heading heading">
+      <span class="b_name"> <%=@game_round.name %> </span>
+      <div class="icon hide">
+         <%= game_name_image( @game_round ) %>
+      </div>
+
+      <div class="players">
+         参与人员: <span class="b_player_count num"> 0 </span>
+      </div>
+    </div>
+
+  </div>
+
+  <%image_tag "qrcode_ruanshan.jpg", class: 'qrcode' %>
+
+</div>

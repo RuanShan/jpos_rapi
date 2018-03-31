@@ -1,0 +1,24 @@
+<div class="ranking-wrap">
+  <div class="m_clear player" style="border-bottom: 6px solid #cccccc;">
+    <div class="rank" style="">  </div>
+    <div class="avatar"  style=""> <%= tag('img', src: @current_player.avatar, style:'float:left;') %>
+      <div class="m_fl" style="line-height:20px;">
+        <span class="ellipsis" style="line-height:20px;"> <%=  @current_player.nickname%> </span><br/>
+        <span class="" style="line-height:20px;color:#f39700;"> 第 <%= @current_player.current_position %> 名 </span>
+      </div>
+     </div>
+    <div class="score" style="font-weight:bold;font-size:120%;color:#f39700;">  <%= @current_player.max_score %> 分 </div>
+  </div>
+
+  <div class="ranking">
+    <div class="players">
+    <% @game_players.each_with_index{ |game_player, i| %>
+      <div class="m_clear player">
+        <div class=" rank" style=""> <%= i+1 %> </div>
+        <div class=" avatar" style="float:left;width:60%;text-align:left;"> <%= tag('img', src: game_player.avatar) %> <span class="ellipsis">  <%= game_player.nickname%></span></div>
+        <div class="score"style="">  <%= game_player.max_score %> 分</div>
+      </div>
+    <% } %>
+    </div>
+  </div>
+</div>

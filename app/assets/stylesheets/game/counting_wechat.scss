@@ -1,0 +1,558 @@
+.game.counting_wechat
+{
+  .iphone_cover
+  { /*處理遊戲時蘋果手機滑屏問題*/
+    position: absolute;
+    top: 50px; /* enable top menu*/
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 2;
+  }
+
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  .header
+  {
+    padding-top: 40px;
+    text-align: center;
+    .logo{
+      width: 25%;
+    }
+    .heading{
+      font-size: 20px;
+      color: #ffffff;
+      margin: 0 40px;
+      padding: 4px 0;
+      background:transparent image-url('game/title_bg.png') center center no-repeat;
+      background-size: contain;
+      span{
+        display: inline-block;
+      }
+    }
+  }
+  .rmb-container
+  {
+    position: absolute;
+    bottom: 0;
+    top: 66%;
+    width: 50%;
+    left: 25%;
+    overflow: hidden;
+    .rmb{
+      width: 100%;
+    }
+  }
+  #wrap{
+  	position: relative;
+    width: 100%;
+    height:100%;
+
+    #contact_info
+    {
+      width: 100%;
+      height:100%;
+    }
+    .game_name{
+      img{
+        height: 50px;
+      }
+    }
+    .b_countdown
+    {
+      width: 60px;
+      height: 60px;
+      background-color: red;
+      color: #ffffff;
+      border-radius: 100%;
+      margin: 0 auto;
+      display:table;
+      font-size: 32px;
+      font-weight: bold;
+      line-height: 60px;
+      span{
+        font-weight:normal;
+        font-size: 14px;
+        display:table-cell;
+        vertical-align:middle;
+        line-height: 1.2em;
+      }
+    }
+  }
+  .pt1{
+  	position: absolute;
+  	top: 1.0em;
+  	width: 6.14em;
+  	animation: pt1Move .8s 1 .3s;
+  	animation-fill-mode: forwards;
+  	opacity: 0;
+  }
+  @keyframes pt1Move{
+  	0%{
+  		opacity: 0;
+  		transform: scale(0);
+  	}
+  	/*50%{
+  		transform: scale(0.9);
+  	}*/
+  	100%{
+  		opacity: 1;
+  		transform: scale(1);
+  	}
+  }
+  .pt2{
+  	position: absolute;
+  	top: 2.66em;
+  	width: 6.21em;
+  	animation: pt2Move .8s 1;
+  }
+  @keyframes pt2Move{
+  	0%{
+  		transform: rotateY(0deg);
+  	}
+  	25%{
+  		transform: rotateY(-30deg);
+  	}
+  	50%{
+  		transform: rotateY(0deg);
+  	}
+  	75%{
+  		transform: rotateY(30deg);
+  	}
+  	100%{
+  		transform: rotateY(0deg);
+  	}
+  }
+  .begin-btn{
+  	position: absolute;
+  	top: 7.9em;
+  	left:3em;
+  	margin-top: -1.3em;
+  	margin-left: -1.3em;
+  	width: 2.6em;
+  	height: 2.6em;
+  	animation: bbtnMove 1.3s infinite;
+  }
+
+  .b-state
+  {
+    position: absolute;
+    top: 35%;
+    width: 100%;
+    text-align: center;
+    font-size: 14px;
+    .msg{
+          color: #ffffff;
+    }
+    .state-ready-sign
+    {
+      height: 40px;
+    }
+  }
+  @keyframes bbtnMove{
+  	0%{
+  		transform: scale(1);
+  	}
+  	50%{
+  		transform: scale(1.1);
+  	}
+  	100%{
+  		transform: scale(1);
+  	}
+  }
+  .hand{
+  	position: absolute;
+  	top: 8.3em;
+  	left:4em;
+  	margin-top: -0.35em;
+  	margin-left: -0.35em;
+  	width: 0.7em;
+  	height: 0.7em;
+  	animation: handMove 2s infinite;
+  }
+  @keyframes handMove{
+  	0%{
+  		opacity: 1;
+  	}
+  	50%{
+  		opacity: 0;
+  	}
+  	100%{
+  		opacity: 1;
+  	}
+  }
+  .bottom-btn{
+  	position: absolute;
+  	/*top: 9.81em;*/
+    bottom: 0.8em;
+  	width: 6.4em;
+  	/*height: 11.5em;*/
+  	text-align: center;
+  }
+  .bottom-btn li{
+  	position: absolute;
+  	display: inline-block;
+  	list-style: none;
+  	width: 1.3em;
+  	height: 0.9em;
+  	background: blue;
+  	opacity: 0;
+  	border-radius: 0.2em;
+  }
+  .bottom-btn li:nth-child(1){
+  	left:0.4em;
+  }
+  .bottom-btn li:nth-child(2){
+  	left:1.85em;
+  }
+  .bottom-btn li:nth-child(3){
+  	left:3.23em;
+  }
+  .bottom-btn li:nth-child(4){
+  	left:4.71em;
+  }
+
+
+  .box1,.box2,.box3,.startBox{
+  	margin: 2.3em auto;
+  	width: 5.1em;
+  	height: 5.7em;
+  	background: #FCE6C8;
+  	border:1px solid #DD0029;
+  	border-radius: 0.15em;
+  }
+  .box1 li span{
+  	padding-top:5px;
+  }
+  .box1 li{
+  	list-style: none;
+  	margin: 0 0.3em;
+  	padding: 0.26em 0;
+  	border-bottom: 1px dashed #6D6E74;
+  }
+  .box1 li:first-child{
+  	margin: 0;
+  	padding: 0;
+  	border-bottom: none;
+  	text-align: center;
+
+  }
+  .box1 li:first-child img{
+  	width: 2.03em;
+  }
+  .box1 li span:nth-child(2){
+  	margin-left: 0.31em;
+  }
+  .box1 li span:nth-child(3){
+  	float: right;
+  }
+  .hide{
+  	display: none;
+  }
+  .box2 h2,.box3 h2{
+  	text-align: center;
+  	margin:0.31em 0 0.46em;
+  }
+  .box2 p {
+  	margin:0px 0.31em;
+  	font-size: 0.22em;
+  	line-height: 0.25em;
+  }
+  .box3 p{
+  	margin:0px 0.31em 0.46em;
+  	font-size: 0.22em;
+  	line-height: 0.25em;
+  }
+  .box3 p:nth-child(5){
+  	margin-bottom: 0;
+  }
+  .startBox{
+  	text-align: center
+  }
+  .startBox>p{
+  	color: #909090;
+  	font-size: 0.25em;
+  	line-height: 0.28em;
+  }
+  .startBox .sb-title{
+  	width: 5em;
+  }
+  .startBox form{
+  	margin-top: 0.31em;
+  }
+  .startBox .username,.startBox .phone{
+  	display: inline-block;
+  	padding-left: 0.15em;
+  	width: 4em;
+  	height: 0.78em;
+  	margin-bottom: 0.15em;
+  	font-size: 0.28em;
+  	border:2px solid #DD1536;
+  	border-radius: 0.15em;
+  	background: #F0AE00;
+  	outline: none;
+  }
+  .startBox .startbtn{
+  	display: inline-block;
+  	width: 3.23em;
+  	height: 0.78em;
+  	background: #DD1536;
+  	border:none;
+  	border-radius: 0.15em;
+  	color: #fff;
+  	font-size: 0.31em;
+  	outline: none;
+  }
+
+
+
+  /*running 界面*/
+  #running{
+  	position: relative;
+  	overflow: hidden;
+  	width: 100%;
+  	height: 100%;
+
+    .header
+    {
+      position: absolute;
+      padding: 0;
+      top: 40px;
+      left: 0;
+      right: 0;
+
+      text-align: center;
+      .logo{
+        height: 2em;
+        width: auto;
+        vertical-align: middle;
+      }
+      .icon{
+        height: 2em;
+        width: auto;
+        vertical-align: middle;
+      }
+      .heading{
+        background:transparent image-url('game/title_bg.png') center center no-repeat;
+        background-size: contain;
+        line-height: 2em;
+        font-size: 16px;
+        color: #ffffff;
+        margin: 0;
+        padding: 0;
+        span{
+          display: inline-block;
+        }
+      }
+    }
+
+    .overing{
+      /*處理遊戲時蘋果手機滑屏問題*/
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 15; /*it should > money's 10 */
+        font-size: 14px;
+        text-align: center;
+        color: red;
+    }
+  }
+  .profile{
+    position: absolute;
+    top: 20%;
+    left: 0;
+    right: 0;
+    .ava{ width:74px; height:74px; border-radius:73px; overflow:hidden; border:3px solid #fff; margin:0 auto;}
+    .ava img{ width:73px; height:73px; border-radius:73px;}
+    .score{
+      font-size: 14px;
+      color: #ffffff;
+      text-align: center;
+      padding: 4px 0;
+      span{
+        display: inline-block;
+        border-radius: 6px;
+        background-color: green;
+        vertical-align: middle;
+        line-height: 1.6em;
+        width: 5em;
+      }
+    }
+  }
+  .running-text{
+  	position: relative;
+  	margin: 1.4em 0 0.46em;
+  }
+  .running-text img{
+  	position: absolute;
+  	left: 0.64em;
+  	width: 5.17em;
+  }
+  .score-time{
+  	margin: 3.59em auto 0;
+  	background: image-url('game/counting/time.png')  no-repeat center center;
+  	background-size: 4.37em 1.09em;
+  	line-height: 0.93em;
+  }
+  .score-time li{
+  	display: inline-block;
+  	margin-right: 0.54em;
+  	font-size: 0.46em;
+  	color: #fff;
+  }
+  .score-time li:nth-child(1){
+  	margin-left: 1.37em;
+  }
+  .score-time li:last-child{
+  	margin-left: 0.1em;
+  	font-size: 0.39em;
+  	color: #A87C4E;
+  }
+  .money{
+  	position: relative;
+  	margin: 6.09em 0 0;
+  	transform-style: preserve-3d;
+  	 -webkit-transform-style: preserve-3d;
+     z-index: 10;
+  }
+  /* http://www.open-open.com/lib/view/open1471763142296.html */
+  .money>img{
+  	position: absolute;
+  	z-index: 5;
+  	left:0.97em;
+  	width: 4.52em;
+    will-change: transform;
+  }
+  .money div{
+  	position: absolute;
+  	z-index: 10;
+  	left:0.97em;
+  	width: 4.52em;
+  	height: 11em;
+  	background: rgba(44,44,44,0);
+  }
+  .running-hand{
+  	position: absolute;
+  	z-index: 15;
+  	left:4.2em;
+  	top:7.7em;
+  	width: 2.03em;
+  	animation: runHandMove 1.5s infinite;
+  }
+  @keyframes runHandMove{
+  	from{
+  		opacity: 1;
+  		display: inline-block;
+  		transform: translateY(0em);
+  	}
+  	to{
+  		opacity: 0;
+  		transform: translateY(-1.5em);
+  		display: none;
+  	}
+  }
+  .bottom{
+  	position: absolute;
+  	z-index: 200000;
+  	bottom:0;
+  	width: 100%;
+  }
+  .anim{
+  	animation:move 1.3s infinite;
+  	-webkit-animation:move 1.3s infinite;
+  	animation-iteration-count:1;
+  	animation-fill-mode: forwards;
+  }
+  @keyframes move{
+    0%{
+  		transform: translateY(0px) scale(1);
+  		opacity: 1;
+  	}
+  	100%{
+  		transform: translateY(-7.81em) scale(0.1);
+  		opacity: 0;
+  	}
+  }
+  @-webkit-keyframes move{
+  	0%{
+  		transform: translateY(0px) scale(1);
+  		opacity: 1;
+  	}
+  	100%{
+  		transform: translateY(-7.81em) scale(0.1);
+  		opacity: 0;
+  	}
+  }
+  /*结果页面*/
+  #result{
+  	overflow: hidden;
+  	position: relative;
+  	width: 100%;
+  	height: 100%;
+    .state{
+      color: #ffffff;
+      .score{
+        color: gold;
+        font-size: 1.2em;
+      }
+      .rank{
+        color: gold;
+        font-size: 1.2em;
+      }
+    }
+
+
+  }
+  #result .bottom-btn{
+  	top: 9.7em;
+  }
+
+  #result>p{
+  	color: #fff;
+  	font-size: 0.28em;
+  	text-align: center;
+  }
+  #result>p:nth-child(1){
+  	margin: 2.78em 0 0.64em;
+  	font-size: 35px;
+  }
+  #result>p:nth-child(2){
+  	margin: 0 0 0.51em 0;
+  }
+  #result>p:nth-child(3){
+  	margin: 0 auto;
+  	padding: 0.15em 0.46em;
+  	width: 4.72em;
+  	background: #fff;
+  	color:#C8001D;
+  	border-radius: 0.15em;
+  }
+  .result-btns{
+  	margin-top: 1.29em;
+  	text-align: center;
+  }
+  .result-btns img{
+  	width: 2.03em;
+  	height: 2.03em;
+  }
+  .result-btns img:first-child{
+  	margin-right: 0.64em;
+  }
+  .share img{
+  	position:absolute;
+  	top: 0.78em;
+  	left: 2.58em;
+  	width: 3.59em;
+  }
+
+  .rank-name{
+  	padding:0 0 5px 30px;
+  	background: image-url('game/counting/user.png') no-repeat;
+  }
+}

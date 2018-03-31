@@ -1,0 +1,1451 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>WechatMore API Reference</title>
+
+    <style>
+      .highlight table td { padding: 5px; }
+.highlight table pre { margin: 0; }
+.highlight .gh {
+  color: #999999;
+}
+.highlight .sr {
+  color: #f6aa11;
+}
+.highlight .go {
+  color: #888888;
+}
+.highlight .gp {
+  color: #555555;
+}
+.highlight .gs {
+}
+.highlight .gu {
+  color: #aaaaaa;
+}
+.highlight .nb {
+  color: #f6aa11;
+}
+.highlight .cm {
+  color: #75715e;
+}
+.highlight .cp {
+  color: #75715e;
+}
+.highlight .c1 {
+  color: #75715e;
+}
+.highlight .cs {
+  color: #75715e;
+}
+.highlight .c, .highlight .cd {
+  color: #75715e;
+}
+.highlight .err {
+  color: #960050;
+}
+.highlight .gr {
+  color: #960050;
+}
+.highlight .gt {
+  color: #960050;
+}
+.highlight .gd {
+  color: #49483e;
+}
+.highlight .gi {
+  color: #49483e;
+}
+.highlight .ge {
+  color: #49483e;
+}
+.highlight .kc {
+  color: #66d9ef;
+}
+.highlight .kd {
+  color: #66d9ef;
+}
+.highlight .kr {
+  color: #66d9ef;
+}
+.highlight .no {
+  color: #66d9ef;
+}
+.highlight .kt {
+  color: #66d9ef;
+}
+.highlight .mf {
+  color: #ae81ff;
+}
+.highlight .mh {
+  color: #ae81ff;
+}
+.highlight .il {
+  color: #ae81ff;
+}
+.highlight .mi {
+  color: #ae81ff;
+}
+.highlight .mo {
+  color: #ae81ff;
+}
+.highlight .m, .highlight .mb, .highlight .mx {
+  color: #ae81ff;
+}
+.highlight .sc {
+  color: #ae81ff;
+}
+.highlight .se {
+  color: #ae81ff;
+}
+.highlight .ss {
+  color: #ae81ff;
+}
+.highlight .sd {
+  color: #e6db74;
+}
+.highlight .s2 {
+  color: #e6db74;
+}
+.highlight .sb {
+  color: #e6db74;
+}
+.highlight .sh {
+  color: #e6db74;
+}
+.highlight .si {
+  color: #e6db74;
+}
+.highlight .sx {
+  color: #e6db74;
+}
+.highlight .s1 {
+  color: #e6db74;
+}
+.highlight .s {
+  color: #e6db74;
+}
+.highlight .na {
+  color: #a6e22e;
+}
+.highlight .nc {
+  color: #a6e22e;
+}
+.highlight .nd {
+  color: #a6e22e;
+}
+.highlight .ne {
+  color: #a6e22e;
+}
+.highlight .nf {
+  color: #a6e22e;
+}
+.highlight .vc {
+  color: #ffffff;
+}
+.highlight .nn {
+  color: #ffffff;
+}
+.highlight .nl {
+  color: #ffffff;
+}
+.highlight .ni {
+  color: #ffffff;
+}
+.highlight .bp {
+  color: #ffffff;
+}
+.highlight .vg {
+  color: #ffffff;
+}
+.highlight .vi {
+  color: #ffffff;
+}
+.highlight .nv {
+  color: #ffffff;
+}
+.highlight .w {
+  color: #ffffff;
+}
+.highlight {
+  color: #ffffff;
+}
+.highlight .n, .highlight .py, .highlight .nx {
+  color: #ffffff;
+}
+.highlight .ow {
+  color: #f92672;
+}
+.highlight .nt {
+  color: #f92672;
+}
+.highlight .k, .highlight .kv {
+  color: #f92672;
+}
+.highlight .kn {
+  color: #f92672;
+}
+.highlight .kp {
+  color: #f92672;
+}
+.highlight .o {
+  color: #f92672;
+}
+    </style>
+    <link href="stylesheets/screen.css" rel="stylesheet" media="screen" />
+    <link href="stylesheets/print.css" rel="stylesheet" media="print" />
+      <script src="javascripts/all.js"></script>
+  </head>
+
+  <body class="index" data-languages="[&quot;shell&quot;,&quot;ruby&quot;]">
+    <a href="#" id="nav-button">
+      <span>
+        NAV
+        <img src="images/navbar.png" alt="Navbar" />
+      </span>
+    </a>
+    <div class="tocify-wrapper">
+      <img src="images/logo.png" alt="Logo" />
+        <div class="lang-selector">
+              <a href="#" data-language-name="shell">shell</a>
+              <a href="#" data-language-name="ruby">ruby</a>
+        </div>
+        <div class="search">
+          <input type="text" class="search" id="input-search" placeholder="Search">
+        </div>
+        <ul class="search-results"></ul>
+      <div id="toc">
+      </div>
+        <ul class="toc-footer">
+            <li><a href='http://github.com/tripit/slate'>Documentation Powered by Slate</a></li>
+        </ul>
+    </div>
+    <div class="page-wrapper">
+      <div class="dark-box"></div>
+      <div class="content">
+        <h1 id="part-293f425e">介绍</h1>
+
+<p>API 文档， 这是微信小游戏系統的API 文档，通过接口调用实现您的定制需求。</p>
+
+          <h1 id="part-a044c204">接入说明</h1>
+
+<blockquote>
+<p>为了正确调用接口, 请参考如下代码:</p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code><span class="c"># 在操作系统shell中，可以通过curl命令，并设置请求的head,实现API调用.</span>
+curl <span class="s2">"API 请求路径"</span>
+  -H <span class="s2">"Authorization: your_api_key"</span>
+</code></pre>
+<blockquote>
+<p>请使用属于您的 api_key 替换上述代码中的  <code class="prettyprint">your_api_key</code>.</p>
+</blockquote>
+
+<p>微信小游戏系统 使用 api_key 訪問所有的 API. 如果不知道 api_key 請聯繫技術人員取得。</p>
+
+<p><code class="prettyprint">Authorization: your_api_key</code></p>
+
+<aside class="notice">
+请使用属于您的 api_key 替换上述代码中的 <code>your_api_key</code>.
+</aside>
+
+          <h1 id="part-2d852b91">活动</h1>
+
+<h2 id="part-510c0242">获取所有活动</h2>
+<pre class="highlight shell tab-shell"><code>
+curl -i http://wx-more-staging.getstore.cn/api/v1/campaigns
+  -H <span class="s2">"Authorization: your_api_key"</span>
+
+</code></pre>
+<blockquote>
+<p>上述代码返回结果示例如下:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"paginate_meta"</span><span class="p">:</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"current_page"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="s2">"next_page"</span><span class="p">:</span><span class="kc">null</span><span class="p">,</span><span class="s2">"prev_page"</span><span class="p">:</span><span class="kc">null</span><span class="p">,</span><span class="s2">"total_pages"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="s2">"total_count"</span><span class="p">:</span><span class="mi">1</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"campaigns"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w"> </span><span class="s2">"id"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="s2">"name"</span><span class="p">:</span><span class="s2">"六一儿童节快乐联欢"</span><span class="p">,</span><span class="s2">"start_at"</span><span class="p">:</span><span class="kc">null</span><span class="p">,</span><span class="s2">"end_at"</span><span class="p">:</span><span class="kc">null</span><span class="p">}</span><span class="w">
+  </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<h3 id="http">HTTP 请求</h3>
+
+<p><code class="prettyprint">GET http://wx-more-staging.getstore.cn/api/v1/campaigns</code></p>
+
+<h3 id="part-fc15d28d">请求参数</h3>
+
+<table><thead>
+<tr>
+<th>参数名</th>
+<th>是否必需</th>
+<th>描述</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>per_page</td>
+<td>否</td>
+<td>单页条数，默认值25，最大100条</td>
+</tr>
+<tr>
+<td>page</td>
+<td>否</td>
+<td>返回页码，从1开始</td>
+</tr>
+</tbody></table>
+
+<h3 id="part-28c1a6fd">响应</h3>
+
+<h2 id="part-6d2034d8">添加活动</h2>
+<pre class="highlight shell tab-shell"><code>
+curl -i -X POST
+  -d <span class="s2">"campaign[name]=六一儿童节快乐联欢&amp;campaign[start_at]=2017-05-24T06:32:39"</span>
+  -H <span class="s2">"Authorization: your_api_key"</span>
+  http://wx-more-staging.getstore.cn/api/v1/campaigns  
+
+</code></pre>
+<blockquote>
+<p>上述代码返回结果示例如下:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"campaign"</span><span class="p">:</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"id"</span><span class="p">:</span><span class="mi">5</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"name"</span><span class="p">:</span><span class="s2">"六一儿童节快乐联欢"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"start_at"</span><span class="p">:</span><span class="s2">"2017-05-24T06:32:39.000+08:00"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"end_at"</span><span class="p">:</span><span class="kc">null</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"created_at"</span><span class="p">:</span><span class="s2">"2017-05-24T14:24:39.000+08:00"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<h3 id="http">HTTP 请求</h3>
+
+<p><code class="prettyprint">POST http://wx-more-staging.getstore.cn/api/v1/campaigns</code></p>
+
+<h3 id="part-fc15d28d">请求参数</h3>
+
+<table><thead>
+<tr>
+<th>参数名</th>
+<th>是否必需</th>
+<th>描述</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>campaign[name]</td>
+<td>是</td>
+<td>活动名称</td>
+</tr>
+<tr>
+<td>campaign[start_at]</td>
+<td>否</td>
+<td>活动开始时间</td>
+</tr>
+<tr>
+<td>campaign[end_at]</td>
+<td>否</td>
+<td>活动结束时间</td>
+</tr>
+</tbody></table>
+
+<h3 id="part-28c1a6fd">响应</h3>
+
+<h2 id="part-30c07244">删除活动</h2>
+<pre class="highlight shell tab-shell"><code>
+curl -i -X DELETE http://wx-more-staging.getstore.cn/api/v1/campaigns/&lt;id&gt;
+  -H <span class="s2">"Authorization: your_api_key"</span>
+
+</code></pre>
+<h3 id="http">HTTP 请求</h3>
+
+<p><code class="prettyprint">DELETE http://wx-more-staging.getstore.cn/api/v1/campaigns/&lt;id&gt;</code></p>
+
+<h3 id="part-fc15d28d">请求参数</h3>
+
+<table><thead>
+<tr>
+<th>参数名</th>
+<th>是否必需</th>
+<th>描述</th>
+</tr>
+</thead><tbody>
+</tbody></table>
+
+<h3 id="part-28c1a6fd">响应</h3>
+
+<p>http status： 204</p>
+
+<h2 id="part-7e50962f">修改活动信息</h2>
+<pre class="highlight shell tab-shell"><code>
+curl -i -X PUT -d <span class="s2">"campaign[name]=庆祝六一儿童节快乐联欢"</span>
+  -H <span class="s2">"Authorization: your_api_key"</span>
+  http://wx-more-staging.getstore.cn/api/v1/campaigns/&lt;id&gt;
+
+</code></pre>
+<blockquote>
+<p>上述代码返回结果示例如下:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"campaign"</span><span class="p">:</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"id"</span><span class="p">:</span><span class="mi">5</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"name"</span><span class="p">:</span><span class="s2">"六一儿童节快乐联欢"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"start_at"</span><span class="p">:</span><span class="s2">"2017-05-24T06:32:39.000+08:00"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"end_at"</span><span class="p">:</span><span class="kc">null</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"created_at"</span><span class="p">:</span><span class="s2">"2017-05-24T14:24:39.000+08:00"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<h3 id="http">HTTP 请求</h3>
+
+<p><code class="prettyprint">PUT http://wx-more-staging.getstore.cn/api/v1/campaigns/&lt;id&gt;</code></p>
+
+<h3 id="part-fc15d28d">请求参数</h3>
+
+<table><thead>
+<tr>
+<th>参数名</th>
+<th>是否必需</th>
+<th>描述</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>campaign[name]</td>
+<td>否</td>
+<td>活动名称</td>
+</tr>
+<tr>
+<td>campaign[start_at]</td>
+<td>否</td>
+<td>活动开始时间 格式示例: 2017-05-29T06:32:39</td>
+</tr>
+<tr>
+<td>campaign[end_at]</td>
+<td>否</td>
+<td>活动结束时间 格式示例:2017-05-29T06:32:39</td>
+</tr>
+</tbody></table>
+
+<h3 id="part-28c1a6fd">响应</h3>
+
+<h2 id="part-64e59d15">获取单个活动</h2>
+<pre class="highlight shell tab-shell"><code>
+curl -i http://wx-more-staging.getstore.cn/api/v1/campaigns/1
+  -H <span class="s2">"Authorization: your_api_key"</span>
+
+</code></pre>
+<blockquote>
+<p>上述代码返回结果示例如下:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+
+  </span><span class="s2">"campaign"</span><span class="p">:</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"id"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"name"</span><span class="p">:</span><span class="s2">"六一儿童节快乐联欢"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"start_at"</span><span class="p">:</span><span class="kc">null</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"end_at"</span><span class="p">:</span><span class="kc">null</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<h3 id="http">HTTP 请求</h3>
+
+<p><code class="prettyprint">GET http://wx-more-staging.getstore.cn/api/v1/campaigns/&lt;id&gt;</code></p>
+
+<h3 id="part-fc15d28d">请求参数</h3>
+
+<table><thead>
+<tr>
+<th>参数名</th>
+<th>是否必需</th>
+<th>描述</th>
+</tr>
+</thead><tbody>
+</tbody></table>
+
+<h3 id="part-28c1a6fd">响应</h3>
+
+          <h1 id="part-2dcbec58">游戏</h1>
+
+<h2 id="part-5152c309">获取所有游戏</h2>
+<pre class="highlight shell tab-shell"><code>
+curl -i http://wx-more-staging.getstore.cn/api/v1/game_rounds
+  -H <span class="s2">"Authorization: your_api_key"</span>
+
+</code></pre>
+<blockquote>
+<p>上述代码返回结果示例如下:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"paginate_meta"</span><span class="p">:</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"current_page"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="s2">"next_page"</span><span class="p">:</span><span class="kc">null</span><span class="p">,</span><span class="s2">"prev_page"</span><span class="p">:</span><span class="kc">null</span><span class="p">,</span><span class="s2">"total_pages"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="s2">"total_count"</span><span class="p">:</span><span class="mi">1</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"game_rounds"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"id"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"appid"</span><span class="p">:</span><span class="s2">"wxe1e41bc95e1ffc98"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"name"</span><span class="p">:</span><span class="s2">"六一儿童节快乐联欢"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"code"</span><span class="p">:</span><span class="s2">"check_in"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"duration"</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"play_times"</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"aasm_state"</span><span class="p">:</span><span class="s2">"open"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"open_at"</span><span class="p">:</span><span class="s2">"2017-05-20T15:28:00.000+08:00"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"close_at"</span><span class="p">:</span><span class="s2">"2017-05-21T23:31:18.000+08:00"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"start_at"</span><span class="p">:</span><span class="kc">null</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"end_at"</span><span class="p">:</span><span class="kc">null</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"created_at"</span><span class="p">:</span><span class="s2">"2017-05-20T15:29:06.000+08:00"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"id"</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"appid"</span><span class="p">:</span><span class="s2">"wxe1e41bc95e1ffc99"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"name"</span><span class="p">:</span><span class="s2">"只是第一个數錢游戏"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"code"</span><span class="p">:</span><span class="s2">"counting"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"duration"</span><span class="p">:</span><span class="mi">20</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"play_times"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"open_at"</span><span class="p">:</span><span class="kc">null</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"close_at"</span><span class="p">:</span><span class="s2">"2017-05-23T18:51:55.000+08:00"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"start_at"</span><span class="p">:</span><span class="s2">"2017-05-23T18:52:03.000+08:00"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"end_at"</span><span class="p">:</span><span class="s2">"2017-05-23T18:52:23.000+08:00"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"created_at"</span><span class="p">:</span><span class="s2">"2017-05-20T15:29:32.000+08:00"</span><span class="w">
+  </span><span class="p">}</span><span class="w"> </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<h3 id="http">HTTP 请求</h3>
+
+<p><code class="prettyprint">GET http://wx-more-staging.getstore.cn/api/v1/game_rounds</code></p>
+
+<h3 id="part-fc15d28d">请求参数</h3>
+
+<table><thead>
+<tr>
+<th>参数名</th>
+<th>是否必需</th>
+<th>描述</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>per_page</td>
+<td>否</td>
+<td>单页条数，默认值25，最大100条</td>
+</tr>
+<tr>
+<td>page</td>
+<td>否</td>
+<td>返回页码，从1开始</td>
+</tr>
+<tr>
+<td>q_code</td>
+<td>否</td>
+<td>查询条件，游戏分类，取值 &lsquo;check_in&rsquo;,&lsquo;counting&#39;，&#39;runlin_car_game&rsquo;</td>
+</tr>
+</tbody></table>
+
+<h3 id="part-28c1a6fd">响应</h3>
+
+<h2 id="part-6d66f59f">添加游戏</h2>
+<pre class="highlight shell tab-shell"><code>curl -i -X POST -d  
+  <span class="s2">"game_round[name]=这是一个新的签到抽奖游戏&amp;game_round[code]=check_in&amp;  
+  game_round[appid]=wxe1e41bc95e1ffc08&amp;game_round[wx_keyword]=qd&amp;
+  game_round[contact_required]=1&amp;game_round[display_players]=8&amp;
+  game_round[duration]=30&amp;game_round[gear]=100&amp;
+  game_round[start_at]=2017-05-24T10:00:00&amp;game_round[end_at]=2017-05-24T10:00:20&amp;
+  game_round[game_awards_attributes][0][name]=一等奖&amp;game_round[game_awards_attributes][0][prize_count]=1&amp;
+  game_round[game_awards_attributes][1][name]=二等奖&amp;game_round[game_awards_attributes][1][prize_count]=2"</span>
+  -H <span class="s2">"Authorization: your_api_key"</span>  
+  http://wx-more-staging.getstore.cn/api/v1/game_rounds
+
+</code></pre>
+<blockquote>
+<p>上述代码返回结果示例如下:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"game_round"</span><span class="p">:{</span><span class="w">
+    </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"code"</span><span class="p">:</span><span class="s2">"check_in"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"appid"</span><span class="p">:</span><span class="s2">"wxe1e41bc95e1ffc08"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"name"</span><span class="p">:</span><span class="s2">"这是一个新的签到抽奖游戏"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"wx_keyword"</span><span class="p">:</span><span class="s2">"qd"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"contact_required"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"display_players"</span><span class="p">:</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"duration"</span><span class="p">:</span><span class="w"> </span><span class="mi">30</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"gear"</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"start_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-05-24T10:00:00.000+08:00"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"end_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-05-24T10:00:20.000+08:00"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"game_awards"</span><span class="p">:[</span><span class="w">
+      </span><span class="p">{</span><span class="s2">"id"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="s2">"game_round_id"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s2">"name"</span><span class="p">:</span><span class="s2">"一等奖"</span><span class="p">,</span><span class="w"> </span><span class="s2">"position"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s2">"prize_count"</span><span class="p">:</span><span class="mi">1</span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="s2">"id"</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span><span class="s2">"game_round_id"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s2">"name"</span><span class="p">:</span><span class="s2">"二等奖"</span><span class="p">,</span><span class="w"> </span><span class="s2">"position"</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="s2">"prize_count"</span><span class="p">:</span><span class="mi">2</span><span class="p">}</span><span class="w">
+    </span><span class="p">]</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<h3 id="http">HTTP 请求</h3>
+
+<p><code class="prettyprint">POST http://wx-more-staging.getstore.cn/api/v1/game_rounds</code></p>
+
+<h3 id="part-fc15d28d">请求参数</h3>
+
+<table><thead>
+<tr>
+<th>参数名</th>
+<th>是否必需</th>
+<th>描述</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>game_round[code]</td>
+<td>是</td>
+<td>游戏类型, 取值:&lsquo;check_in&rsquo;,&lsquo;counting&rsquo;,&lsquo;runlin_car_game&rsquo;</td>
+</tr>
+<tr>
+<td>game_round[appid]</td>
+<td>是</td>
+<td>微信 appid,区分游戏所属公众号</td>
+</tr>
+<tr>
+<td>game_round[name]</td>
+<td>是</td>
+<td>游戏名称</td>
+</tr>
+<tr>
+<td>game_round[desc]</td>
+<td>否</td>
+<td>游戏描述</td>
+</tr>
+<tr>
+<td>game_round[wx_keyword]</td>
+<td>否</td>
+<td>微信回复关键字</td>
+</tr>
+<tr>
+<td>game_round[display_players]</td>
+<td>否</td>
+<td>显示用户排名个数</td>
+</tr>
+<tr>
+<td>game_round[duration]</td>
+<td>否</td>
+<td>数钱游戏持续时间</td>
+</tr>
+<tr>
+<td>game_round[gear]</td>
+<td>否</td>
+<td>数钱游戏货币选择，取值: 1，10，100</td>
+</tr>
+<tr>
+<td>game_round[open_at]</td>
+<td>否</td>
+<td>游戏开放时间，玩家可以查看游戏</td>
+</tr>
+<tr>
+<td>game_round[close_at]</td>
+<td>否</td>
+<td>游戏关闭时间</td>
+</tr>
+<tr>
+<td>game_round[start_at]</td>
+<td>否</td>
+<td>游戏开始时间，数钱游戏的开始时间</td>
+</tr>
+<tr>
+<td>game_round[end_at]</td>
+<td>否</td>
+<td>游戏结束时间，数钱游戏的开始时间</td>
+</tr>
+<tr>
+<td>game_round[contact_required]</td>
+<td>否</td>
+<td>加入游戏前，用户是否需要输入姓名电话, 取值: 0，1</td>
+</tr>
+<tr>
+<td>game_round[game_awards_attributes][0][name]</td>
+<td>否</td>
+<td>游戏奖励名称 如：一等奖</td>
+</tr>
+<tr>
+<td>game_round[game_awards_attributes][0][position]</td>
+<td>否</td>
+<td>游戏奖励排序位置，从1开始</td>
+</tr>
+<tr>
+<td>game_round[game_awards_attributes][0][prize_count]</td>
+<td>否</td>
+<td>游戏奖品数量</td>
+</tr>
+<tr>
+<td>game_round[game_awards_attributes][0][prize_name]</td>
+<td>否</td>
+<td>游戏奖品名称</td>
+</tr>
+</tbody></table>
+
+<h3 id="part-28c1a6fd">响应</h3>
+
+<h2 id="part-3107330b">删除游戏</h2>
+<pre class="highlight shell tab-shell"><code>
+curl -i -X DELETE http://wx-more-staging.getstore.cn/api/v1/game_rounds/1
+  -H <span class="s2">"Authorization: your_api_key"</span>
+
+</code></pre>
+<h3 id="http">HTTP 请求</h3>
+
+<p><code class="prettyprint">DELETE http://wx-more-staging.getstore.cn/api/v1/game_rounds/&lt;id&gt;</code></p>
+
+<h3 id="part-fc15d28d">请求参数</h3>
+
+<table><thead>
+<tr>
+<th>参数名</th>
+<th>是否必需</th>
+<th>描述</th>
+</tr>
+</thead><tbody>
+</tbody></table>
+
+<h3 id="part-28c1a6fd">响应</h3>
+
+<p>http status： 204</p>
+
+<h2 id="part-9f2c9036">修改游戏信息</h2>
+<pre class="highlight shell tab-shell"><code>curl -i -X PUT -d
+  <span class="s2">"game_round[name]=这是一个最新数钱游戏&amp;game_round[game_awards_attributes][0][name]=最新一等奖&amp;game_round[game_awards_attributes][0][id]=31"</span>
+  http://wx-more-staging.getstore.cn/api/v1/game_rounds/&lt;id&gt;
+  -H <span class="s2">"Authorization: your_api_key"</span>
+
+</code></pre>
+<blockquote>
+<p>上述代码返回结果示例如下:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+ </span><span class="s2">"game_round"</span><span class="p">:</span><span class="w">
+ </span><span class="p">{</span><span class="w"> </span><span class="s2">"id"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="w">
+   </span><span class="s2">"name"</span><span class="p">:</span><span class="s2">"这是一个最新数钱游戏"</span><span class="p">,</span><span class="w">
+   </span><span class="s2">"contact_required"</span><span class="p">:</span><span class="kc">false</span><span class="p">,</span><span class="w">
+   </span><span class="s2">"display_players"</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="w">
+   </span><span class="s2">"duration"</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="w">
+   </span><span class="s2">"play_times"</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="w">
+   </span><span class="s2">"award_times"</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="w">
+   </span><span class="s2">"aasm_state"</span><span class="p">:</span><span class="s2">"ready"</span><span class="p">,</span><span class="w">
+   </span><span class="s2">"start_at"</span><span class="p">:</span><span class="kc">null</span><span class="p">,</span><span class="w">
+   </span><span class="s2">"end_at"</span><span class="p">:</span><span class="kc">null</span><span class="p">,</span><span class="w">
+   </span><span class="s2">"created_at"</span><span class="p">:</span><span class="s2">"2017-05-20T15:29:06.000+08:00"</span><span class="p">,</span><span class="w">
+   </span><span class="s2">"game_awards"</span><span class="p">:[</span><span class="w">
+     </span><span class="p">{</span><span class="s2">"id"</span><span class="p">:</span><span class="mi">33</span><span class="p">,</span><span class="s2">"game_round_id"</span><span class="p">:</span><span class="mi">8</span><span class="p">,</span><span class="s2">"name"</span><span class="p">:</span><span class="s2">"最新一等奖"</span><span class="p">,</span><span class="s2">"position"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="s2">"prize_count"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="s2">"prize_name"</span><span class="p">:</span><span class="s2">""</span><span class="p">,</span><span class="s2">"created_at"</span><span class="p">:</span><span class="s2">"2017-05-24T18:21:17.000+08:00"</span><span class="p">},</span><span class="w">
+     </span><span class="p">{</span><span class="s2">"id"</span><span class="p">:</span><span class="mi">34</span><span class="p">,</span><span class="s2">"game_round_id"</span><span class="p">:</span><span class="mi">8</span><span class="p">,</span><span class="s2">"name"</span><span class="p">:</span><span class="s2">"二等奖"</span><span class="p">,</span><span class="s2">"position"</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span><span class="s2">"prize_count"</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span><span class="s2">"prize_name"</span><span class="p">:</span><span class="s2">""</span><span class="p">,</span><span class="s2">"created_at"</span><span class="p">:</span><span class="s2">"2017-05-24T18:21:17.000+08:00"</span><span class="p">}]</span><span class="w">
+ </span><span class="p">}</span><span class="w">
+
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<h3 id="http">HTTP 请求</h3>
+
+<p><code class="prettyprint">PUT http://wx-more-staging.getstore.cn/api/v1/game_rounds/&lt;id&gt;</code></p>
+
+<h3 id="part-fc15d28d">请求参数</h3>
+
+<table><thead>
+<tr>
+<th>参数名</th>
+<th>是否必需</th>
+<th>描述</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>game_round[name]</td>
+<td>否</td>
+<td>游戏名称</td>
+</tr>
+<tr>
+<td>game_round[wx_keyword]</td>
+<td>否</td>
+<td>微信回复关键字</td>
+</tr>
+<tr>
+<td>game_round[aasm_state]</td>
+<td>否</td>
+<td>游戏状态，取值:见下表</td>
+</tr>
+<tr>
+<td>game_round[display_players]</td>
+<td>否</td>
+<td>显示用户排名个数</td>
+</tr>
+<tr>
+<td>game_round[duration]</td>
+<td>否</td>
+<td>数钱游戏持续时间</td>
+</tr>
+<tr>
+<td>game_round[gear]</td>
+<td>否</td>
+<td>数钱游戏货币选择，取值: 1，10，100</td>
+</tr>
+<tr>
+<td>game_round[start_at]</td>
+<td>否</td>
+<td>游戏开始时间</td>
+</tr>
+<tr>
+<td>game_round[end_at]</td>
+<td>否</td>
+<td>数钱结束时间</td>
+</tr>
+<tr>
+<td>game_round[contact_required]</td>
+<td>否</td>
+<td>加入游戏前，用户是否需要输入姓名电话, 取值: 0，1</td>
+</tr>
+</tbody></table>
+
+<table><thead>
+<tr>
+<th>游戏状态</th>
+<th>取值</th>
+<th>描述</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>created</td>
+<td>created</td>
+<td>新建</td>
+</tr>
+<tr>
+<td>open</td>
+<td>open</td>
+<td>开始签到</td>
+</tr>
+<tr>
+<td>ready</td>
+<td>ready</td>
+<td>结束签到，准备开始</td>
+</tr>
+<tr>
+<td>starting</td>
+<td>starting</td>
+<td>开始前倒计时中</td>
+</tr>
+<tr>
+<td>started</td>
+<td>started</td>
+<td>游戏已开始</td>
+</tr>
+<tr>
+<td>completed</td>
+<td>completed</td>
+<td>游戏已结束</td>
+</tr>
+<tr>
+<td>disabled</td>
+<td>disabled</td>
+<td>游戏已关闭</td>
+</tr>
+</tbody></table>
+
+<h3 id="part-28c1a6fd">响应</h3>
+
+<h2 id="part-652c5ddc">获取单个游戏</h2>
+<pre class="highlight shell tab-shell"><code>curl -i http://wx-more-staging.getstore.cn/api/v1/game_rounds/1
+  -H <span class="s2">"Authorization: your_api_key"</span>
+
+</code></pre>
+<blockquote>
+<p>上述代码返回结果示例如下:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"game_round"</span><span class="p">:</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"id"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"name"</span><span class="p">:</span><span class="s2">"这是一个最新数钱游戏"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"contact_required"</span><span class="p">:</span><span class="kc">false</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"display_players"</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"duration"</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"play_times"</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"award_times"</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"aasm_state"</span><span class="p">:</span><span class="s2">"ready"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"start_at"</span><span class="p">:</span><span class="kc">null</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"end_at"</span><span class="p">:</span><span class="kc">null</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"created_at"</span><span class="p">:</span><span class="s2">"2017-05-20T15:29:06.000+08:00"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"game_awards"</span><span class="p">:[</span><span class="w">
+      </span><span class="p">{</span><span class="s2">"id"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="s2">"game_round_id"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="s2">"name"</span><span class="p">:</span><span class="s2">"一等奖"</span><span class="p">,</span><span class="s2">"position"</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span><span class="s2">"prize_count"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="s2">"prize_name"</span><span class="p">:</span><span class="s2">""</span><span class="p">,</span><span class="s2">"created_at"</span><span class="p">:</span><span class="s2">"2017-05-20T15:29:06.000+08:00"</span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="s2">"id"</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span><span class="s2">"game_round_id"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="s2">"name"</span><span class="p">:</span><span class="s2">"二等奖"</span><span class="p">,</span><span class="s2">"position"</span><span class="p">:</span><span class="mi">3</span><span class="p">,</span><span class="s2">"prize_count"</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span><span class="s2">"prize_name"</span><span class="p">:</span><span class="s2">""</span><span class="p">,</span><span class="s2">"created_at"</span><span class="p">:</span><span class="s2">"2017-05-20T15:29:06.000+08:00"</span><span class="p">},</span><span class="w">
+    </span><span class="p">]</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+
+</span></code></pre>
+<h3 id="http">HTTP 请求</h3>
+
+<p><code class="prettyprint">GET http://wx-more-staging.getstore.cn/api/v1/game_rounds/&lt;id&gt;</code></p>
+
+<h3 id="part-fc15d28d">请求参数</h3>
+
+<table><thead>
+<tr>
+<th>参数名</th>
+<th>是否必需</th>
+<th>描述</th>
+</tr>
+</thead><tbody>
+</tbody></table>
+
+<h3 id="part-28c1a6fd">响应</h3>
+
+          <h1 id="part-623f12f8">游戏奖励</h1>
+
+<h2 id="part-aeb24aca">获取一个游戏的所有奖励信息</h2>
+<pre class="highlight shell tab-shell"><code>
+curl -i http://wx-more-staging.getstore.cn/api/v1/game_rounds/&lt;id&gt;/awards
+  -H <span class="s2">"Authorization: your_api_key"</span>
+
+</code></pre>
+<blockquote>
+<p>上述代码返回结果示例如下:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">  
+  </span><span class="s2">"game_awards"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="s2">"id"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="s2">"game_round_id"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="s2">"name"</span><span class="p">:</span><span class="s2">"一等奖"</span><span class="p">,</span><span class="s2">"position"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="s2">"prize_count"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="s2">"prize_name"</span><span class="p">:</span><span class="s2">""</span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="s2">"id"</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span><span class="s2">"game_round_id"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="s2">"name"</span><span class="p">:</span><span class="s2">"二等奖"</span><span class="p">,</span><span class="s2">"position"</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span><span class="s2">"prize_count"</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span><span class="s2">"prize_name"</span><span class="p">:</span><span class="s2">""</span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="s2">"id"</span><span class="p">:</span><span class="mi">3</span><span class="p">,</span><span class="s2">"game_round_id"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="s2">"name"</span><span class="p">:</span><span class="s2">"三等奖"</span><span class="p">,</span><span class="s2">"position"</span><span class="p">:</span><span class="mi">3</span><span class="p">,</span><span class="s2">"prize_count"</span><span class="p">:</span><span class="mi">3</span><span class="p">,</span><span class="s2">"prize_name"</span><span class="p">:</span><span class="s2">""</span><span class="p">}</span><span class="w">
+  </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<h3 id="http">HTTP 请求</h3>
+
+<p><code class="prettyprint">GET http://wx-more-staging.getstore.cn/api/v1/game_rounds/&lt;id&gt;/awards</code></p>
+
+<h3 id="part-fc15d28d">请求参数</h3>
+
+<table><thead>
+<tr>
+<th>参数名</th>
+<th>是否必需</th>
+<th>描述</th>
+</tr>
+</thead><tbody>
+</tbody></table>
+
+<h3 id="part-28c1a6fd">响应</h3>
+
+<h2 id="part-cfa3b57f">添加游戏奖励</h2>
+<pre class="highlight shell tab-shell"><code>curl -i -X POST
+  -d <span class="s2">"game_award[name]=四等奖&amp;game_award[game_round_id]=1&amp;game_award[prize_count]=4&amp;game_award[prize_name]=小米1金"</span>
+  -H <span class="s2">"Authorization: your_api_key"</span>
+  http://wx-more-staging.getstore.cn/api/v1/game_awards  
+
+</code></pre>
+<blockquote>
+<p>上述代码返回结果示例如下:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"game_award"</span><span class="p">:</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"id"</span><span class="p">:</span><span class="mi">32</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"game_round_id"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"name"</span><span class="p">:</span><span class="s2">"四等奖"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"position"</span><span class="p">:</span><span class="mi">4</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"prize_count"</span><span class="p">:</span><span class="mi">4</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"prize_name"</span><span class="p">:</span><span class="s2">"小米1金"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<h3 id="http">HTTP 请求</h3>
+
+<p><code class="prettyprint">POST http://wx-more-staging.getstore.cn/api/v1/game_awards</code></p>
+
+<h3 id="part-fc15d28d">请求参数</h3>
+
+<table><thead>
+<tr>
+<th>参数名</th>
+<th>是否必需</th>
+<th>描述</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>game_award[game_round_id]</td>
+<td>是</td>
+<td>游戏id</td>
+</tr>
+<tr>
+<td>game_award[name]</td>
+<td>是</td>
+<td>游戏奖励名称</td>
+</tr>
+<tr>
+<td>game_award[position]</td>
+<td>否</td>
+<td>游戏抽奖顺序</td>
+</tr>
+<tr>
+<td>game_award[prize_count]</td>
+<td>否</td>
+<td>游戏奖品数量</td>
+</tr>
+<tr>
+<td>game_award[prize_name]</td>
+<td>否</td>
+<td>游戏奖品名称</td>
+</tr>
+</tbody></table>
+
+<h3 id="part-28c1a6fd">响应</h3>
+
+<h2 id="part-e54f53eb">删除游戏奖励</h2>
+<pre class="highlight shell tab-shell"><code>curl -i -X DELETE
+  -H <span class="s2">"Authorization: your_api_key"</span>
+  http://wx-more-staging.getstore.cn/api/v1/game_awards/1
+
+</code></pre>
+<h3 id="http">HTTP 请求</h3>
+
+<p><code class="prettyprint">DELETE http://wx-more-staging.getstore.cn/api/v1/game_awards/&lt;id&gt;</code></p>
+
+<h3 id="part-fc15d28d">请求参数</h3>
+
+<table><thead>
+<tr>
+<th>参数名</th>
+<th>是否必需</th>
+<th>描述</th>
+</tr>
+</thead><tbody>
+</tbody></table>
+
+<h3 id="part-28c1a6fd">响应</h3>
+
+<p>http status： 204</p>
+
+<h2 id="part-5db341d6">修改游戏奖励信息</h2>
+<pre class="highlight shell tab-shell"><code>curl -i -X PUT -d <span class="s2">"game_award[prize_name]=小米4金"</span>
+  -H <span class="s2">"Authorization: your_api_key"</span>
+  http://wx-more-staging.getstore.cn/api/v1/game_awards/32
+
+</code></pre>
+<blockquote>
+<p>上述代码返回结果示例如下:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"game_award"</span><span class="p">:</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"id"</span><span class="p">:</span><span class="mi">32</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"game_round_id"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"name"</span><span class="p">:</span><span class="s2">"四等奖"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"position"</span><span class="p">:</span><span class="mi">4</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"prize_count"</span><span class="p">:</span><span class="mi">4</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"prize_name"</span><span class="p">:</span><span class="s2">"小米4金"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<h3 id="http">HTTP 请求</h3>
+
+<p><code class="prettyprint">PUT http://wx-more-staging.getstore.cn/api/v1/game_awards/&lt;id&gt;</code></p>
+
+<h3 id="part-fc15d28d">请求参数</h3>
+
+<table><thead>
+<tr>
+<th>参数名</th>
+<th>是否必需</th>
+<th>描述</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>game_award[name]</td>
+<td>否</td>
+<td>游戏奖励名称</td>
+</tr>
+<tr>
+<td>game_award[position]</td>
+<td>否</td>
+<td>游戏抽奖顺序</td>
+</tr>
+<tr>
+<td>game_award[prize_count]</td>
+<td>否</td>
+<td>游戏奖品数量</td>
+</tr>
+<tr>
+<td>game_award[prize_name]</td>
+<td>否</td>
+<td>游戏奖品名称</td>
+</tr>
+</tbody></table>
+
+<h3 id="part-28c1a6fd">响应</h3>
+
+<h2 id="part-c777977c">获取单个游戏奖励</h2>
+<pre class="highlight shell tab-shell"><code>curl -i http://wx-more-staging.getstore.cn/api/v1/game_awards/32
+  -H <span class="s2">"Authorization: your_api_key"</span>
+
+</code></pre>
+<blockquote>
+<p>上述代码返回结果示例如下:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"game_award"</span><span class="p">:</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"id"</span><span class="p">:</span><span class="mi">32</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"game_round_id"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"name"</span><span class="p">:</span><span class="s2">"二等奖"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"position"</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"prize_count"</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"prize_name"</span><span class="p">:</span><span class="s2">"小米1金"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<h3 id="http">HTTP 请求</h3>
+
+<p><code class="prettyprint">GET http://wx-more-staging.getstore.cn/api/v1/game_awards/&lt;id&gt;</code></p>
+
+<h3 id="part-fc15d28d">请求参数</h3>
+
+<table><thead>
+<tr>
+<th>参数名</th>
+<th>是否必需</th>
+<th>描述</th>
+</tr>
+</thead><tbody>
+</tbody></table>
+
+<h3 id="part-28c1a6fd">响应</h3>
+
+          <h1 id="part-65bfa680">游戏用户</h1>
+
+<h2 id="part-e8056452">获取一个游戏的所有用户信息</h2>
+<pre class="highlight shell tab-shell"><code>
+curl -i http://wx-more-staging.getstore.cn/api/v1/game_rounds/1/players
+  -H <span class="s2">"Authorization: your_api_key"</span>
+
+</code></pre>
+<blockquote>
+<p>上述代码返回结果示例如下:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+
+  </span><span class="s2">"paginate_meta"</span><span class="p">:{</span><span class="s2">"current_page"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="s2">"next_page"</span><span class="p">:</span><span class="kc">null</span><span class="p">,</span><span class="s2">"prev_page"</span><span class="p">:</span><span class="kc">null</span><span class="p">,</span><span class="s2">"total_pages"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="s2">"total_count"</span><span class="p">:</span><span class="mi">3</span><span class="p">},</span><span class="w">
+  </span><span class="s2">"game_players"</span><span class="p">:[</span><span class="w">
+    </span><span class="p">{</span><span class="s2">"id"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"game_round_id"</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"avatar"</span><span class="p">:</span><span class="s2">"http://wx.qlogo.cn/mmopen/VX7U0xDSUxgL7k7xGcKNmUjRTaibhnbMXGwbiaB0HuBicvH3HCuhAicf1k5wz7t9b9QBFicATSdqQu13WtDEVmmfM3ibAiatEUEDsmk/0"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"nickname"</span><span class="p">:</span><span class="s2">"我的爱人"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"position"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"realname"</span><span class="p">:</span><span class="s2">""</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"cellphone"</span><span class="p">:</span><span class="s2">""</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"score"</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"rank"</span><span class="p">:</span><span class="mi">0</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="s2">"id"</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"game_round_id"</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"avatar"</span><span class="p">:</span><span class="s2">"http://wx.qlogo.cn/mmopen/W2SRdFhYWlTKg3H31ettpYDJS7ibcseKuMXUPDIlTCItEdmGJqMfQE24Hic01YbKRb77cvhMZtguo4ibQEwMEmM3j9fOjXgiaqIh/0"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"nickname"</span><span class="p">:</span><span class="s2">"我的祖国"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"position"</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"realname"</span><span class="p">:</span><span class="s2">""</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"cellphone"</span><span class="p">:</span><span class="s2">""</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"score"</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"rank"</span><span class="p">:</span><span class="mi">0</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="s2">"id"</span><span class="p">:</span><span class="mi">3</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"game_round_id"</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"avatar"</span><span class="p">:</span><span class="s2">"http://wx.qlogo.cn/mmopen/7yc1S1j89ygxiceUgQqIHbHxOnhtDtKbC7yUCWJ2Oia5hKRsDe9RgPEAnalZ1s7e5qvp0WXf0qPdZPAicMv9G8vf6EibqBcNhLgR/0"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"nickname"</span><span class="p">:</span><span class="s2">"我的世界"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"position"</span><span class="p">:</span><span class="mi">3</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"realname"</span><span class="p">:</span><span class="s2">""</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"cellphone"</span><span class="p">:</span><span class="s2">""</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"score"</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"rank"</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"game_award"</span><span class="p">:{</span><span class="s2">"id"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="s2">"name"</span><span class="p">:</span><span class="s2">"一等奖"</span><span class="p">,</span><span class="s2">"prize_name"</span><span class="p">:</span><span class="s2">""</span><span class="p">,</span><span class="s2">"position"</span><span class="p">:</span><span class="mi">1</span><span class="p">}</span><span class="w">
+    </span><span class="p">}]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<h3 id="http">HTTP 请求</h3>
+
+<p><code class="prettyprint">GET http://wx-more-staging.getstore.cn/api/v1/game_rounds/&lt;id&gt;/players</code></p>
+
+<h3 id="part-fc15d28d">请求参数</h3>
+
+<table><thead>
+<tr>
+<th>参数名</th>
+<th>是否必需</th>
+<th>描述</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>per_page</td>
+<td>否</td>
+<td>单页条数，默认值25，最大9999条</td>
+</tr>
+<tr>
+<td>page</td>
+<td>否</td>
+<td>返回页码，从1开始</td>
+</tr>
+<tr>
+<td>q_term</td>
+<td>否</td>
+<td>姓名，昵称查询关键字</td>
+</tr>
+<tr>
+<td>q_award</td>
+<td>否</td>
+<td>是否中奖查询, 可选值：yes,no</td>
+</tr>
+</tbody></table>
+
+<h3 id="part-28c1a6fd">响应</h3>
+
+<table><thead>
+<tr>
+<th>返回字段</th>
+<th>描述</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>realname</td>
+<td>真实姓名</td>
+</tr>
+<tr>
+<td>cellphone</td>
+<td>电话</td>
+</tr>
+<tr>
+<td>score</td>
+<td>游戏分数 数钱分数</td>
+</tr>
+<tr>
+<td>rank</td>
+<td>游戏排名 数钱排名</td>
+</tr>
+<tr>
+<td>game_award</td>
+<td>中奖信息</td>
+</tr>
+</tbody></table>
+
+<h2 id="part-caf82b04">获取单个游戏用户</h2>
+<pre class="highlight shell tab-shell"><code>curl -i http://wx-more-staging.getstore.cn/api/v1/game_players/42
+  -H <span class="s2">"Authorization: your_api_key"</span>
+
+</code></pre>
+<blockquote>
+<p>上述代码返回结果示例如下:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+
+  </span><span class="s2">"game_player"</span><span class="p">:</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"id"</span><span class="p">:</span><span class="mi">42</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"game_round_id"</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"position"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"nickname"</span><span class="p">:</span><span class="s2">"我是土豆"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"avatar"</span><span class="p">:</span><span class="s2">"http://wx.qlogo.cn/mmopen/VX7U0xDSUxgL7k7xGcKNmUjRTaibhnbMXGwbiaB0HuBicvH3HCuhAicf1k5wz7t9b9QBFicATSdqQu13WtDEVmmfM3ibAiatEUEDsmk/0"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"realname"</span><span class="p">:</span><span class="s2">"我是马铃薯"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"cellphone"</span><span class="p">:</span><span class="s2">"13812345678"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"score"</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"rank"</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"created_at"</span><span class="p">:</span><span class="s2">"2017-05-23T18:48:10.000+08:00"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"game_award"</span><span class="p">:{</span><span class="s2">"id"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="s2">"name"</span><span class="p">:</span><span class="s2">"一等奖"</span><span class="p">,</span><span class="s2">"prize_name"</span><span class="p">:</span><span class="s2">"大米2两"</span><span class="p">,</span><span class="s2">"position"</span><span class="p">:</span><span class="mi">1</span><span class="p">}</span><span class="w">
+
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<h3 id="http">HTTP 请求</h3>
+
+<p><code class="prettyprint">GET http://wx-more-staging.getstore.cn/api/v1/game_players/&lt;id&gt;</code></p>
+
+<h3 id="part-fc15d28d">请求参数</h3>
+
+<table><thead>
+<tr>
+<th>参数名</th>
+<th>是否必需</th>
+<th>描述</th>
+</tr>
+</thead><tbody>
+</tbody></table>
+
+<h3 id="part-28c1a6fd">响应</h3>
+
+          <h1 id="part-62843981">游戏成绩</h1>
+
+<h2 id="part-5b1212a3">获取一个游戏的所有用户的最佳成绩信息，按照成绩降序，游戏时间升序。如赛车游戏，用户可能玩多次，只返回用户的最好成绩，</h2>
+<pre class="highlight shell tab-shell"><code>
+curl -i http://wx-more-staging.getstore.cn/api/v1/game_rounds/1/results/best
+  -H <span class="s2">"Authorization: your_api_key"</span>
+
+</code></pre>
+<blockquote>
+<p>上述代码返回结果示例如下:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+
+  </span><span class="s2">"paginate_meta"</span><span class="p">:{</span><span class="s2">"current_page"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="s2">"next_page"</span><span class="p">:</span><span class="kc">null</span><span class="p">,</span><span class="s2">"prev_page"</span><span class="p">:</span><span class="kc">null</span><span class="p">,</span><span class="s2">"total_pages"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="s2">"total_count"</span><span class="p">:</span><span class="mi">3</span><span class="p">},</span><span class="w">
+  </span><span class="s2">"game_results"</span><span class="p">:[</span><span class="w">
+    </span><span class="p">{</span><span class="s2">"id"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"game_round_id"</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"game_player_id"</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"avatar"</span><span class="p">:</span><span class="s2">"http://wx.qlogo.cn/mmopen/VX7U0xDSUxgL7k7xGcKNmUjRTaibhnbMXGwbiaB0HuBicvH3HCuhAicf1k5wz7t9b9QBFicATSdqQu13WtDEVmmfM3ibAiatEUEDsmk/0"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"nickname"</span><span class="p">:</span><span class="s2">"我的爱人"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"openid"</span><span class="p">:</span><span class="s2">"oF9hV0SyZ6tI_k2WHtpRXqfedRH4"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"score"</span><span class="p">:</span><span class="mi">130</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"created_at"</span><span class="p">:</span><span class="s2">"2018-03-29T11:33:03.000+08:00"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="s2">"id"</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"game_round_id"</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"game_player_id"</span><span class="p">:</span><span class="mi">4</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"avatar"</span><span class="p">:</span><span class="s2">"http://wx.qlogo.cn/mmopen/W2SRdFhYWlTKg3H31ettpYDJS7ibcseKuMXUPDIlTCItEdmGJqMfQE24Hic01YbKRb77cvhMZtguo4ibQEwMEmM3j9fOjXgiaqIh/0"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"nickname"</span><span class="p">:</span><span class="s2">"我的祖国"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"openid"</span><span class="p">:</span><span class="s2">"oF9hV0SyZ6tI_k2WHtpRXqfedRH4"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"score"</span><span class="p">:</span><span class="mi">90</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"created_at"</span><span class="p">:</span><span class="s2">"2018-03-29T11:33:03.000+08:00"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="s2">"id"</span><span class="p">:</span><span class="mi">3</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"game_round_id"</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"game_player_id"</span><span class="p">:</span><span class="mi">6</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"avatar"</span><span class="p">:</span><span class="s2">"http://wx.qlogo.cn/mmopen/7yc1S1j89ygxiceUgQqIHbHxOnhtDtKbC7yUCWJ2Oia5hKRsDe9RgPEAnalZ1s7e5qvp0WXf0qPdZPAicMv9G8vf6EibqBcNhLgR/0"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"nickname"</span><span class="p">:</span><span class="s2">"我的世界"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"openid"</span><span class="p">:</span><span class="s2">"oF9hV0SyZ6tI_k2WHtpRXqfedRH5"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"score"</span><span class="p">:</span><span class="mi">10</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"created_at"</span><span class="p">:</span><span class="s2">"2018-03-29T11:33:03.000+08:00"</span><span class="w">
+    </span><span class="p">}]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<h3 id="http">HTTP 请求</h3>
+
+<p><code class="prettyprint">GET http://wx-more-staging.getstore.cn/api/v1/game_rounds/&lt;id&gt;/results/best</code></p>
+
+<h3 id="part-fc15d28d">请求参数</h3>
+
+<table><thead>
+<tr>
+<th>参数名</th>
+<th>是否必需</th>
+<th>描述</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>per_page</td>
+<td>否</td>
+<td>单页条数，默认值25，最大9999条</td>
+</tr>
+<tr>
+<td>page</td>
+<td>否</td>
+<td>返回页码，从1开始</td>
+</tr>
+</tbody></table>
+
+<h3 id="part-28c1a6fd">响应</h3>
+
+<table><thead>
+<tr>
+<th>返回字段</th>
+<th>描述</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>id</td>
+<td>game_result id</td>
+</tr>
+<tr>
+<td>game_round_id</td>
+<td>game_round id</td>
+</tr>
+<tr>
+<td>game_player_id</td>
+<td>game_player id</td>
+</tr>
+<tr>
+<td>openid</td>
+<td>openid</td>
+</tr>
+<tr>
+<td>nickname</td>
+<td>昵称</td>
+</tr>
+<tr>
+<td>avatar</td>
+<td>头像</td>
+</tr>
+<tr>
+<td>score</td>
+<td>游戏分数</td>
+</tr>
+<tr>
+<td>created_at</td>
+<td>游戏时间</td>
+</tr>
+</tbody></table>
+
+          <h1 id="part-3c97631b">错误信息</h1>
+
+<aside class="notice">
+微信小游戏 API 使用如下Http状态码，作为出错时状态提示:
+</aside>
+
+<table><thead>
+<tr>
+<th>Error Code</th>
+<th>Meaning</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>400</td>
+<td>Bad Request &ndash; Your request sucks</td>
+</tr>
+<tr>
+<td>401</td>
+<td>Unauthorized &ndash; Your API key is wrong</td>
+</tr>
+<tr>
+<td>403</td>
+<td>Forbidden &ndash; The kitten requested is hidden for administrators only</td>
+</tr>
+<tr>
+<td>404</td>
+<td>Not Found &ndash; The specified kitten could not be found</td>
+</tr>
+<tr>
+<td>405</td>
+<td>Method Not Allowed &ndash; You tried to access a kitten with an invalid method</td>
+</tr>
+<tr>
+<td>406</td>
+<td>Not Acceptable &ndash; You requested a format that isn&rsquo;t json</td>
+</tr>
+<tr>
+<td>410</td>
+<td>Gone &ndash; The kitten requested has been removed from our servers</td>
+</tr>
+<tr>
+<td>418</td>
+<td>I&rsquo;m a teapot</td>
+</tr>
+<tr>
+<td>429</td>
+<td>Too Many Requests &ndash; You&rsquo;re requesting too many kittens! Slow down!</td>
+</tr>
+<tr>
+<td>500</td>
+<td>Internal Server Error &ndash; We had a problem with our server. Try again later.</td>
+</tr>
+<tr>
+<td>503</td>
+<td>Service Unavailable &ndash; We&rsquo;re temporarily offline for maintenance. Please try again later.</td>
+</tr>
+</tbody></table>
+
+      </div>
+      <div class="dark-box">
+          <div class="lang-selector">
+                <a href="#" data-language-name="shell">shell</a>
+                <a href="#" data-language-name="ruby">ruby</a>
+          </div>
+      </div>
+    </div>
+  </body>
+</html>

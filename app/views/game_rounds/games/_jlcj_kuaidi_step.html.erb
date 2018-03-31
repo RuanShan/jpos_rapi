@@ -1,0 +1,134 @@
+<% content_for :game_asset_css do %>
+  <%= stylesheet_link_tag    'game/jlcj_kuaidi/all', media: 'all', 'data-turbolinks-track' => true %>
+<% end %>
+
+<% content_for :game_asset_js do %>
+  <%= javascript_include_tag "game/jlcj_kuaidi/all", media: 'all','data-turbolinks-track' => true %>
+<% end %>
+
+
+<div class="content-padded">
+    <!--校园送货标题title-->
+    <div class="weui-flex">
+        <div class="weui-flex__item">
+            <div class="title"><h2>不取快递</h2></div>
+        </div>
+    </div>
+    <!--校园送货标题-ENDtitle-->
+
+    <div class="weui-flex">
+        <div id="from" class="weui-flex__item ">
+          <%= form_for @game_result, url: game_results_path(format: :json), remote: true, html: { id: 'new_game_result_form' } do |f| %>
+
+            <div class="" style="">
+              <!--寝室-->
+              <div class="weui-cell ">
+                  <div class="weui-cell__hd hint"><label for="game_delivery_room" class="weui-label"><i class="fa fa-building-o fa-lg" aria-hidden="true"></i></label></div>
+                  <div class="weui-cell__bd">
+                    <%= f.text_field :delivery_room, class: 'weui-input', placeholder: "寝室,请按格式填写(如03-410)", required: true  %>
+                  </div>
+              </div>
+              <!--收件人姓名-->
+                <div class="weui-cell ">
+                    <div class="weui-cell__hd hint"><label for="game_result_realname" class="weui-label"><i class="fa fa-user-o fa-lg" aria-hidden="true"></i></label></div>
+                    <div class="weui-cell__bd">
+                      <%= f.text_field :realname, class: 'weui-input', placeholder: "收件人姓名", required: true  %>
+                    </div>
+                </div>
+
+                <!--收件人手机-->
+                <div class="weui-cell ">
+                    <div class="weui-cell__hd hint"><label for="game_result_cellphone" class="weui-label"><i class="fa fa-mobile fa-2x" aria-hidden="true"></i></label></div>
+                    <div class="weui-cell__bd">
+                      <%= f.telephone_field :cellphone, class: 'weui-input', placeholder: "收件人手机号", pattern:"REG_MOBILE", required: true   %>
+                    </div>
+                </div>
+
+                <!--联系人电话-->
+                <div class="weui-cell after-border">
+                    <div class="weui-cell__hd hint"><label for="game_result_delivery_cellphone" class="weui-label"><i class="fa fa-phone fa-lg" aria-hidden="true"></i></label></div>
+                    <div class="weui-cell__bd">
+                      <%= f.telephone_field :delivery_cellphone, class: 'weui-input', placeholder: "联系电话(选填)" %>
+                    </div>
+                </div>
+                <!--短信时间选择-->
+                <div class="weui-cells__title  colors " > 短信时间</div>
+                <div  class="weui-flex weui-cells no-before-border ">
+                  <% GameResult.translate_enum_collection( :delivery_sms_option ).each{ |option|  %>
+                    <div class="weui-cell weui-flex">
+                      <%= f.label(:delivery_sms_option, value: option[1]) do %>
+                      <div class="weui-cell__bd">
+                          <%= f.radio_button :delivery_sms_option, option[1], checked: option[1]=='today'   %>
+                          <span> <%=option[0] %> </span>
+                      </div>
+
+                      <%end %>
+                    </div>
+                  <% } %>
+                </div>
+                <!--短信时间选择-END-->
+                <!--取件短信-->
+                <div class="weui-cells__title colors">取件短信</div>
+                <div class="weui-cells no-before-border">
+                    <div class="weui-cell ">
+                        <div class="weui-cell__bd">
+                            <textarea name="game_result[delivery_sms]" class="weui-textarea" placeholder="请完整粘贴1条取件短信" rows="3" required></textarea>
+                            <!--<div class="weui-textarea-counter"><span>0</span>/100</div>-->
+                        </div>
+                    </div>
+                </div>
+                <!--时间选择-->
+                <div class="weui-cells__title colors">配送时间</div>
+                <div class="weui-cells  no-before-border">
+                  <div class="weui-cell weui-flex ">
+                  <% GameResult.translate_enum_collection( :delivery_time_option ).each{ |option|  %>
+                    <div class="weui-flex__item">
+                      <%= f.label(:delivery_time_option, value: option[1]) do %>
+                      <div class="weui-cell__bd">
+                          <%= f.radio_button :delivery_time_option, option[1], disabled: !delivery_time_option_enable?(option[1] ), checked: delivery_time_option_checked?(option[1], @game_result.delivery_time_option ) %>
+                          <span> <%=option[0] %> </span>
+                      </div>
+
+                      <%end %>
+                    </div>
+                  <% } %>
+                  </div>
+                </div>
+                <!--时间选择-END-->
+                <!--备注-->
+                <div class="weui-cell memo-wrap">
+                  <div class="weui-cell__hd hint"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></div>
+                    <div class="weui-cell__bd">
+                        <input name="game_result[memo]" class="weui-input" type="text" value="" placeholder="备注(选填)">
+                    </div>
+                </div>
+
+                <div class="weui-cell weui-cell_vcode">
+                    <div class="weui-cell__hd hint"><i class="fa fa-unlock-alt fa-lg" aria-hidden="true"></i></div>
+                    <div class="weui-cell__bd">
+                      <%= rucaptcha_input_tag(class: 'weui-input', placeholder: '请输入验证码', required: true, pattern:'REG_IMGCODE' ) %>
+                    </div>
+                    <div class="weui-cell__ft" style="padding-right: 15px;">
+                      <%= rucaptcha_image_tag(alt: 'Captcha', class:'weui-vcode-img') %>
+                    </div>
+                </div>
+
+                <!--按钮-->
+                <div class="weui-flex">
+                    <div class="weui-flex__item">
+                        <div class="weui-btn-area">
+                            <button class="weui-btn weui-btn_primary"  type="button" id="submitBtn">提 交</button>
+                        </div>
+                    </div>
+                    <div class="weui-flex__item">
+                        <div class="weui-btn-area">
+                            <button class="weui-btn weui-btn_primary"  type="reset" id="restart">重 置</button>
+                        </div>
+                    </div>
+                </div>
+                <!--按钮END-->
+            </div>
+          <% end %>
+        </div>
+    </div>
+</div>

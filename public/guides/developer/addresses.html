@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>    <html class="lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>    <html class="lt-ie9"> <![endif]-->
+<!--[if IE 9]>    <html class="ie9"> <![endif]-->
+<!--[if gt IE 9]><!--> <html lang="en" > <!--<![endif]-->
+<head>
+  <title>Addresses - Developer Guide | Spree - Ruby on Rails e-commerce platform</title>
+
+  <meta charset="utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta name="section" content="core" />
+
+<link href="/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+<link href="/shared/css/icons.css" media="screen" rel="stylesheet" type="text/css">
+<link href="/shared/css/icons-codes.css" media="screen" rel="stylesheet" type="text/css">
+
+<link href="/shared/css/skeleton.css" media="screen" rel="stylesheet" type="text/css">
+<link href="/shared/css/documentation.css" media="screen" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="/assets/stylesheets/guides.css" media="screen" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/docsearch.js/2/docsearch.min.css" />
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-migrate/1.1.1/jquery-migrate.min.js"></script>
+<script src="/assets/javascripts/css_browser_selector_dev.js" type="text/javascript"></script>
+<script src="/assets/javascripts/jquery.toc.js" type="text/javascript"></script>
+<script src="/assets/javascripts/documentation.js" type="text/javascript"></script>
+
+
+</head>
+<body class="developer">
+  
+  <header id="header">
+    <div id="top-header">
+  <div class="container">
+    <div class="row">
+      <div class="two columns">
+  <a class="logo" href="http://spreecommerce.org">
+    <img src='/images/logo.png' alt="Spree Commerce - Ruby on Rails e-commerce platform" />
+  </a>
+</div>
+
+      <div class="three columns">
+  <input type="text" id="search-field" placeholder="Search..." />
+</div>
+
+      <nav id="main-menu" class="eleven columns">
+  <ul class="inline">
+    <li><a href="../api/">API</a></li>
+    <li><a href="../developer/">Developer</a></li>
+    <li><a href="../user/">User</a></li>
+    <li><a href="../release_notes/">Release Notes</a></li>
+    <li>
+      <a href="http://slack.spreecommerce.org" target="_blank">Slack</a>
+    </li>
+    <li>
+      <a href="https://heroku.com/deploy?template=https://github.com/spree/spree" target="_blank" rel="nofollow">Demo</a>
+    </li>
+  </ul>
+</nav>
+
+    </div>
+  </div>
+</div>
+
+
+    <div id="subheader">
+      <div class="container">
+        <div class="sixteen columns">
+          <h1 class="page-title">Addresses - Developer Guide | Spree - Ruby on Rails e-commerce platform</h1>
+        </div>
+      </div>
+    </div>
+
+  </header>
+
+  <div class="container" id="main">
+    <section id="main-content">
+
+      <div class="twelve columns">
+        <div id="content">
+          
+<h2 id="address">Address</h2>
+
+<p>The <code>Address</code> model in the <code>spree</code> gem is used to track address information, mainly for orders. Address information can also be tied to the <code>Spree::User</code> objects which come from the <code>spree_auth_devise</code> extension.</p>
+
+<p>Addresses have the following attributes:</p>
+
+<ul>
+  <li><code>firstname</code>: The first name for the person at this address.</li>
+  <li><code>lastname</code>: The last name for the person at this address.</li>
+  <li><code>address1</code>: The address’s first line.</li>
+  <li><code>address2</code>: The address’s second line.</li>
+  <li><code>city</code>: The city where the address is.</li>
+  <li><code>zipcode</code>: The postal code.</li>
+  <li><code>phone</code>: The phone number.</li>
+  <li><code>state_name</code>: The name for the state.</li>
+  <li><code>alternative_phone</code>: The alternative phone number.</li>
+  <li><code>company</code>: A company name.</li>
+</ul>
+
+<p>Addresses can also link to countries and states. An address must always link to a <code>Spree::Country</code> object. It can optionally link to a <code>Spree::State</code> object, but only in the cases where the related country has no states listed. In that case, the state information is still required, and is kept within the <code>state_name</code> field on the address record. An easy way to get the state information for the address is to call <code>state_text</code> on that object.</p>
+
+<h2 id="zones">Zones</h2>
+
+<p>When an order’s address is linked to a country or a state, that can ultimately affect different features of the order, including shipping availability and taxation. The way these effects work is through zones.</p>
+
+<p>A zone is comprised of many different “zone members”, which can either be a set of countries or a set of states.</p>
+
+<p>Every order has a “tax zone”, which indicates if a user should or shouldn’t be taxed when placing an order. For more information, please see the <a href="taxation.html">Taxation</a> guide.</p>
+
+<p>In addition to tax zones, orders also have shipping methods. These are provided to the user based on their address information, and once selected lock in how an order is going to be shipped to that user. For more information, please see the <a href="shipments.html">Shipments</a> guide.</p>
+
+<h2 id="countries">Countries</h2>
+
+<p>Countries within Spree are used as a container for states. Countries can be zone members, and also link to an address. The difference between one country and another on an address record can determine which tax rates and shipping methods are used for the order.</p>
+
+<h2 id="states">States</h2>
+
+<p>States within Spree are used to scope address data slightly more than country. States are useful for tax purposes, as different states in a country may impose different tax rates on different products. In addition to this, different states may cause different tax rates and shipping methods to be used for an order, similar to how countries affect it also.</p>
+
+        </div>
+      </div>
+
+    </section>
+
+    <aside id="sidebar" class="four columns">
+  <nav id="sidebar-menu">
+    <ul>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-tutorial-menu"><i class="icon-right-open"></i></a>
+          <a href='/developer/getting_started_tutorial.html'>Tutorials</a>
+        </h3>
+        <ul class="js-guides">
+          <li><i class="icon-dot"></i><a href='/developer/getting_started_tutorial.html'>Getting Started</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/extensions_tutorial.html'>Extensions</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/deface_overrides_tutorial.html'>Deface Overrides</a> <div class="toc"></div> </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-source-code-menu"><i class="icon-right-open"></i></a>
+          <a href='/developer/about.html'>Source Code</a>
+        </h3>
+        <ul class="js-guides">
+          <li><i class="icon-dot"></i><a href='/developer/about.html'>About</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/navigating.html'>Navigating</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/getting_help.html'>Getting Help</a> <div class="toc"></div> </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href="https://github.com/spree/spree/blob/master/.github/CONTRIBUTING.md" target="_blank" rel="nofollow">
+              Contributing
+            </a>
+            <div class="toc"></div>
+          </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-core-menu"><i class="icon-right-open"></i></a>
+          <a href='/developer/addresses.html'>The Core</a>
+        </h3>
+        <ul class="js-guides">
+          <li><i class="icon-dot"></i><a href='/developer/addresses.html'>Addresses</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/adjustments.html'>Adjustments</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/calculators.html'>Calculators</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/inventory.html'>Inventory</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/orders.html'>Orders</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/payments.html'>Payments</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/preferences.html'>Preferences</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/products.html'>Products</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/promotions.html'>Promotions</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/shipments.html'>Shipments</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/taxation.html'>Taxation</a> <div class="toc"></div> </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-customization-menu"><i class="icon-right-open"></i></a>
+          <a href='/developer/authentication.html'>Customization</a>
+        </h3>
+        <ul class="js-guides">
+          <li><i class="icon-dot"></i><a href='/developer/authentication.html'>Authentication</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/i18n.html'>Internationalization (i18n)</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/view.html'>View</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/asset.html'>Asset</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/logic.html'>Logic</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/s3_storage.html'>Use S3</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/checkout.html'>Checkout</a> <div class="toc"></div> </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-deployment-menu"><i class="icon-right-open"></i></a>
+          <a href='/developer/deployment_tips.html'>Deployment</a>
+        </h3>
+        <ul class="js-guides">
+          <li><i class="icon-dot"></i><a href='/developer/heroku.html'>Heroku</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/ansible-ubuntu.html'>Ansible Ubuntu Deployment</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/manual-ubuntu.html'>Manual Ubuntu Deployment</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/deployment_options.html'>Deployment Options</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/deployment_tips.html'>Deployment Tips</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/requesting_and_configuring_ssl.html'>Requesting/Configuring SSL</a> <div class="toc"></div> </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-advanced-menu"><i class="icon-right-open"></i></a>
+          <a href='/developer/seo.html'>Advanced Topics</a>
+        </h3>
+        <ul class="js-guides">
+          <li><i class="icon-dot"></i><a href='/developer/developer_tips.html'>Developer Tips</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/gateway_specific_information.html'>Gateway Specific Information</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/migration.html'>Migrating to Spree</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/seo.html'>Search Engine Optimization</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/security.html'>Security</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/testing.html'>Testing Spree Applications</a> <div class="toc"></div> </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-upgrades-menu"><i class="icon-right-open"></i></a>
+          <a href='/developer/upgrade_guides.html'>Upgrade Guides</a>
+        </h3>
+        <ul class="js-guides">
+          <li><i class="icon-dot"></i><a href='/developer/point-sixty-to-point-seventy.html'>0.60.x to 0.70.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/point-seventy-to-one-dot-oh.html'>0.70.x to 1.0.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/one-dot-oh-to-one-dot-one.html'>1.0.x to 1.1.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/one-dot-one-to-one-dot-two.html'>1.1.x to 1.2.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/one-dot-two-to-one-dot-three.html'>1.2.x to 1.3.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/one-dot-three-to-two-dot-oh.html'>1.3.x to 2.0.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/two-dot-oh-to-two-dot-one.html'>2.0.x to 2.1.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/two-dot-one-to-two-dot-two.html'>2.1.x to 2.2.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/two-dot-two-to-two-dot-three.html'>2.2.x to 2.3.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/two-dot-three-to-two-dot-four.html'>2.3.x to 2.4.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/three-dot-oh-to-three-dot-one.html'>3.0.x to 3.1.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/three-dot-one-to-three-dot-two.html'>3.1.x to 3.2.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/three-dot-two-to-three-dot-three.html'>3.2.x to 3.3.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/three-dot-three-to-three-dot-four.html'>3.3.x to 3.4.x</a> <div
+          class="toc"></div></li>
+        </ul>
+      </li>
+    </ul>
+  </nav>
+</aside>
+
+  </div>
+
+  <footer id="main-footer">
+
+  <div class="footer-top">
+    <div class="container">
+      <div id="link-blocks" class="row">
+        <div class="link-block six columns">
+          <h3 class="block-title">Developers</h3>
+          <ul>
+            <li><a href="https://slack.spreecommerce.org" target="_blank" rel="nofollow">Slack</a></li>
+            <li><a href="https://github.com/spree-contrib" target="_blank">Extensions</a></li>
+            <li><a href="https://github.com/spree/spree/blob/master/license.md" target="_blank">License</a></li>
+          </ul>
+        </div>
+        <div class="link-block seven columns">
+          <h3 class="block-title">About Spree</h3>
+          <p>
+            <strong><a href="https://spreecommerce.org">Spree Commerce</a></strong>
+            is a complete modular, API-driven open source e-commerce solution
+            built with Ruby on Rails.
+          </p>
+          <p>
+            Guides are hosted and maintained by
+            <a href="http://sparksolutions.co" target="_blank">Spark Solutions</a>
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</footer>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-104990445-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/docsearch.js/2/docsearch.min.js"></script>
+<script type="text/javascript"> docsearch({
+apiKey: 'fb697cd2d04591b036ea172259c05ba8',
+indexName: 'spreecommerce',
+inputSelector: '#search-field',
+debug: false // Set debug to true if you want to inspect the dropdown
+});
+</script>
+
+
+  </body>
+</html>

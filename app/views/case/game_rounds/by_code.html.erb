@@ -1,0 +1,40 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Game Instances</h1>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Game</th>
+      <th>Name</th>
+      <th>Start at</th>
+      <th>End at</th>
+      <th>Preferences</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @game_rounds.each do |game_round| %>
+      <tr>
+        <td><%= game_round.game.code %></td>
+        <td><%= game_round.name %></td>
+        <td><%= game_round.start_at %></td>
+        <td><%= game_round.end_at %></td>
+        <td>
+          <a> <%= link_to "签到大屏幕", check_in_game_round_path(game_round), target: '_blank' %>
+          <a> <%= link_to "游戏大屏幕", play_game_round_path(game_round), target: '_blank' %>
+        </td>
+        <td><%= game_round.preferences %></td>
+        <td><%= link_to 'Show', case_game_round_path(  game_round)  %></td>
+        <td><%= link_to 'Edit', edit_case_game_round_path( game_round) %></td>
+        <td><%= link_to 'Destroy', case_game_round_path( game_round ), method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to '新建签到', new_case_campaign_game_round_path( @campaign, game_id: Game.check_in.first ) %>
+<%= link_to '新建数钱', new_case_campaign_game_round_path( @campaign, game_id: Game.counting.first ) %>

@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>    <html class="lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>    <html class="lt-ie9"> <![endif]-->
+<!--[if IE 9]>    <html class="ie9"> <![endif]-->
+<!--[if gt IE 9]><!--> <html lang="en" > <!--<![endif]-->
+<head>
+  <title>Creating a New Product - User Guide | Spree - Ruby on Rails e-commerce platform</title>
+
+  <meta charset="utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta name="section" content="creating_products" />
+
+<link href="/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+<link href="/shared/css/icons.css" media="screen" rel="stylesheet" type="text/css">
+<link href="/shared/css/icons-codes.css" media="screen" rel="stylesheet" type="text/css">
+
+<link href="/shared/css/skeleton.css" media="screen" rel="stylesheet" type="text/css">
+<link href="/shared/css/documentation.css" media="screen" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="/assets/stylesheets/guides.css" media="screen" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/docsearch.js/2/docsearch.min.css" />
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-migrate/1.1.1/jquery-migrate.min.js"></script>
+<script src="/assets/javascripts/css_browser_selector_dev.js" type="text/javascript"></script>
+<script src="/assets/javascripts/jquery.toc.js" type="text/javascript"></script>
+<script src="/assets/javascripts/documentation.js" type="text/javascript"></script>
+
+
+</head>
+<body class="api">
+  
+  <header id="header">
+    <div id="top-header">
+  <div class="container">
+    <div class="row">
+      <div class="two columns">
+  <a class="logo" href="http://spreecommerce.org">
+    <img src='/images/logo.png' alt="Spree Commerce - Ruby on Rails e-commerce platform" />
+  </a>
+</div>
+
+      <div class="three columns">
+  <input type="text" id="search-field" placeholder="Search..." />
+</div>
+
+      <nav id="main-menu" class="eleven columns">
+  <ul class="inline">
+    <li><a href="../api/">API</a></li>
+    <li><a href="../developer/">Developer</a></li>
+    <li><a href="../user/">User</a></li>
+    <li><a href="../release_notes/">Release Notes</a></li>
+    <li>
+      <a href="http://slack.spreecommerce.org" target="_blank">Slack</a>
+    </li>
+    <li>
+      <a href="https://heroku.com/deploy?template=https://github.com/spree/spree" target="_blank" rel="nofollow">Demo</a>
+    </li>
+  </ul>
+</nav>
+
+    </div>
+  </div>
+</div>
+
+
+    <div id="subheader">
+      <div class="container">
+        <div class="twelve columns">
+          <h1 class="page-title">Creating a New Product - User Guide</h1>
+        </div>
+      </div>
+    </div>
+
+  </header>
+
+  <div class="container">
+    <section id="main-content">
+
+      <div class="twelve columns">
+        <div id="content">
+          
+<h2 id="introduction">Introduction</h2>
+
+<p>To create a new product for your store, go into the Admin Interface, click the “Products” tab, and click the “New Product” button.</p>
+
+<p><img src="/images/user/products/new_product_entry_form.jpg" alt="New Product Entry Form" /></p>
+
+<p>The two mandatory fields (“Name” and “Master Price”) are denoted with an asterisk (*) next to the label. You can leave SKU blank. If you don’t add a value for “Available On” the product will not be shown in your store.</p>
+
+<div class="note"><p><a href="product_prototypes.html">Prototypes</a> are a more complex topic, and are covered in their own guide.</p>
+</div>
+
+<h2 id="product-details">Product Details</h2>
+
+<p>After you click the “Create” button, the Spree application brings you to a more detailed product entry page, where you can input more information about your new product.</p>
+
+<p><img src="/images/user/products/product_edit_form.jpg" alt="Product Edit Form" /></p>
+
+<ul>
+  <li><strong>Name</strong> - This field will either be blank, or the same as what you entered on the initial page. You can change this field whenever you like.</li>
+  <li><strong>Permalink</strong> - The permalink is automatically created by the application for you when the product is first saved, and is based on the product’s name. This is what is appended to the end of a URL when someone visits the page for a particular product. You can change the permalink, but should exercise extreme caution in doing so to avoid naming collisions with other products in your database.</li>
+  <li><strong>Description</strong> - This is where you will provide a detailed description of the product and its features. The application gives you plenty of room to be thorough.</li>
+  <li><strong>Master Price</strong> - For now, just think about the Master Price as the price you charge someone to buy the item. Later in this guide, you will learn more about variants and how they impact a product’s actual price.</li>
+  <li><strong>Cost Price</strong> - What the item costs you, the seller, to purchase or produce.</li>
+  <li><strong>Cost Currency</strong> - It may be that the currency used when you purchased the product is not the same as that you use in your store. Spree makes these conversions for you - just enter the code for the currency used in acquiring your inventory.</li>
+  <li><strong>Available On</strong> - This field will either be blank, or the same as what you entered on the initial page. You can change this field whenever you like.</li>
+  <li><strong>SKU</strong> - This field will either be blank, or the same as what you entered on the initial page. You can change this field whenever you like.</li>
+  <li><strong>Weight</strong> - The product’s weight in ounces. May be used to calculate shipping cost.</li>
+  <li><strong>Height</strong> - The product’s height in inches. May be used to calculate shipping cost.</li>
+  <li><strong>Width</strong> - The product’s width in inches. May be used to calculate shipping cost.</li>
+  <li><strong>Depth</strong> - The product’s depth or breadth in inches. May be used to calculate shipping cost.</li>
+  <li><strong>Shipping Categories</strong> - You will learn about setting up Shipping Categories in the <a href="shipping_categories.html">Shipping Categories</a>.</li>
+  <li><strong>Tax Category</strong> - You will learn about setting up Tax Categories in the <a href="configuring_taxes.html">Taxes Guide</a>.</li>
+  <li><strong>Taxons</strong> - Taxons are basically like categories. You will learn more about them in the <a href="configuring_taxonomies.html">Taxonomies Guide</a>.</li>
+  <li><strong>Option Types</strong> - You can select any number of Options to associate your new product with. You’ll learn more about Options in the <a href="product_options.html">Options Guide</a>.</li>
+  <li><strong>Meta Keywords</strong> - These words are appended to the website’s keywords you established in the <a href="configuring_general_settings.html">Site Settings</a> and can help improve your site’s search engine ratings, bringing you more web traffic. They should be words that are key to your new product.</li>
+  <li><strong>Meta Description</strong> - The summary that someone sees when your product’s page is returned in a web search. It should be descriptive but not overly verbose.</li>
+</ul>
+
+<h2 id="images">Images</h2>
+
+<p>A store whose products had no images to look at would be pretty boring, and probably not garner a lot of sales. It would be very time-consuming to have to upload, crop, resize, and associate several photos to each product, if you had to do so manually. Luckily, Spree makes maintaining images of your products quick and painless.</p>
+
+<p>Just click the “Images” link under “Product Details” on the right-hand side of the screen. Any images that you may have already uploaded will be previewed for you. To add a new image for your product, click the “New Image” button.</p>
+
+<p><img src="/images/user/products/new_image_form.jpg" alt="New Product Image Form" /></p>
+
+<p>Select the Image file, and enter the Alternative Text for the image. Alternative Text is what appears when someone has their browser’s image-rendering turned off, as with certain types of screen readers.</p>
+
+<p>You have the option to associate a photo only with a particular “Variant” (again, more on Variants later in this guide), or with all of the product’s Variants.</p>
+
+<p>When you click Update, not only is the product photo uploaded, it is automatically resized and cropped to fit your store’s requirements, and it is associated with the correct versions of your product.</p>
+
+<h2 id="understanding-variants">Understanding Variants</h2>
+
+<p>Suppose that in your store, you sell drink tumblers. All of the tumblers are made by the same manufacturer and have the same basic product specifications (materials used, machine washability rating, etc.), but your inventory includes several options:</p>
+
+<ul>
+  <li><strong>Size</strong> - You carry both Medium and Large tumblers</li>
+  <li><strong>Decorative Wrap</strong> - Your tumblers come with the option of several kinds of decorative plastic wraps: Stars, Owls, Pink Paisley, Purple Paisley, or Skulls.</li>
+  <li><strong>Lid Color</strong> - The tumblers also come with with an assortment of lids to match the decorative wrap - the Star tumblers have Blue lids, the Owls have Orange lids, the Pink Paisley have Pink lids, the Purple Paisley have White lids, and the Skulls can be purchased with White <em>or</em> Black lids.</li>
+</ul>
+
+<p>Given this inventory, you will need to create a Drink Tumbler <em>Product</em>, with three <em>Option Types</em>, the corresponding <em>Option Values</em>, and twelve <em>Variants</em>:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Size</th>
+      <th>Wrap</th>
+      <th>Lid Color</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Large</td>
+      <td>Stars</td>
+      <td>Blue</td>
+    </tr>
+    <tr>
+      <td>Small</td>
+      <td>Stars</td>
+      <td>Blue</td>
+    </tr>
+    <tr>
+      <td>Large</td>
+      <td>Owls</td>
+      <td>Orange</td>
+    </tr>
+    <tr>
+      <td>Small</td>
+      <td>Owls</td>
+      <td>Orange</td>
+    </tr>
+    <tr>
+      <td>Large</td>
+      <td>Pink Paisley</td>
+      <td>Pink</td>
+    </tr>
+    <tr>
+      <td>Small</td>
+      <td>Pink Paisley</td>
+      <td>Pink</td>
+    </tr>
+    <tr>
+      <td>Large</td>
+      <td>Purple Paisley</td>
+      <td>White</td>
+    </tr>
+    <tr>
+      <td>Small</td>
+      <td>Purple Paisley</td>
+      <td>White</td>
+    </tr>
+    <tr>
+      <td>Large</td>
+      <td>Skulls</td>
+      <td>White</td>
+    </tr>
+    <tr>
+      <td>Large</td>
+      <td>Skulls</td>
+      <td>Black</td>
+    </tr>
+    <tr>
+      <td>Small</td>
+      <td>Skulls</td>
+      <td>White</td>
+    </tr>
+    <tr>
+      <td>Small</td>
+      <td>Skulls</td>
+      <td>Black</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>The <em>Option Types</em> you would create for this inventory are - Size, Wrap, and Lid Color - with the corresponding <em>Option Values</em> below.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Option Type</th>
+      <th>Option Values</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Size</td>
+      <td>Large, Small</td>
+    </tr>
+    <tr>
+      <td>Wrap</td>
+      <td>Stars, Owls, Pink Paisley, Purple Paisley, Skulls</td>
+    </tr>
+    <tr>
+      <td>Lid Color</td>
+      <td>Blue, Orange, Pink, White, Black</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Read the <a href="product_options.html">Product Options Guide</a> for directions on creating Option Types and Option Values. You must establish your Option Types and Option Values before you can set up your Variants. Don’t forget to associate the Option Types with the Tumbler product so they’ll be available to you when you make your Variants.</p>
+
+<h3 id="creating-variants">Creating Variants</h3>
+
+<p>Now that you have set up the appropriate options for your Product’s Variants and associated those options with the product, you can create the Variants themselves.</p>
+
+<p>Let’s create the large, star-wrapped, blue-lidded tumbler Variant as an example. You can then use the same approach to creating all of the other Variants we mentioned earlier.</p>
+
+<p>On your tumbler product edit page, click the “Variants” link. Click the “New Variant” button.</p>
+
+<p><img src="/images/user/products/new_variant.jpg" alt="New Product Variant" /></p>
+
+<p>Select the appropriate values for the Option Types. As you can see, you also have the choice to enter values for this particular Variant that may be different from what you input on the Product’s main page. Let’s raise the price on our Variant to $20. Click the “Create” button.</p>
+
+<p><img src="/images/user/products/variants_list.jpg" alt="Variants List" /></p>
+
+<h2 id="product-properties">Product Properties</h2>
+
+<p>You can set as many individual product properties as you like. These include things like the item’s country of manufacture, material(s) used, design style, etc. Typically, these are characteristics that do not change across variants of a product.</p>
+
+<p>You can read much more in-depth information about this feature in the <a href="product_properties.html">Product Properties Guide</a>.</p>
+
+<h2 id="stock-management">Stock Management</h2>
+
+<p>As of version 2.0 of Spree, you now have much more granular control over how inventory is tracked through your store. You will learn more about stock locations in the <a href="stock_locations.html">Stock Locations Guide</a>, but for now it’s enough to understand that you enter the number of each product variant that you have at each of your individual stock locations.</p>
+
+<p>Let’s assume that you have two stock locations - your main New York warehouse and your satellite Detroit warehouse. Refer to the instructions on creating stock locations in the <a href="stock_locations.html#create-a-new-stock-location">Stock Locations Guide</a> to add your warehouses.</p>
+
+<p>Now, go back to the Tumblers product page, and click the “Stock Management” link.</p>
+
+<p><img src="/images/user/products/stock_management.jpg" alt="Stock Management Page" /></p>
+
+<p>For this guide, let’s say we want to say that we have 7 of our tumbler variant in the New York warehouse, and 3 in Detroit. To accomplish this, change the quantity to 7, select “New York Warehouse” from the “Stock Location” drop-down list, and select “large-blue-stars” from the “Variant” drop-down list. Click the “Add Stock button”.</p>
+
+<p>The “Stock Location Info” table will update, showing you that there are 7 of these items in the New York warehouse. Repeat these steps, adding 3 tumblers from the Detroit warehouse.</p>
+
+<p><img src="/images/user/products/stock_location_info.jpg" alt="Stock Location Info" /></p>
+
+<p>Your Stock Location Info table should now look like the one pictured above.</p>
+
+<div class="note"><p>“Backorderable” may or may not be checked for your individual Stock Locations, depending on how you configured them. Each Stock Location has defaults for this value, but you can change it on a variant-by-variant basis in this dialog.</p>
+</div>
+
+<p>You should be sure to read the <a href="configuring_inventory.html#stock-locations">Stock Locations</a> and <a href="configuring_inventory.html#stock-movements">Stock Movements</a> guides for further information on managing your store’s inventory.</p>
+
+        </div>
+      </div>
+
+    </section>
+
+    <aside id="sidebar" class="four columns">
+  <nav id="sidebar-menu">
+    <ul>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-tutorial-menu"><i class="icon-right-open"></i></a>
+          <a href='products.html'>Products</a>
+        </h3>
+        <ul class="js-guides">
+          <li>
+            <i class="icon-dot"></i>
+            <a href='creating_products.html'>Creating Products</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='deleting_products.html'>Deleting Products</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='editing_products.html'>Editing Products</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='cloning_products.html'>Cloning Products</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='product_options.html'>Options</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='product_properties.html'>Properties</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='product_prototypes.html'>Prototypes</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='searching_products.html'>Searching Products</a>
+          </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-tutorial-menu"><i class="icon-right-open"></i></a>
+          <a href='orders.html'>Orders</a>
+        </h3>
+        <ul class="js-guides">
+          <li>
+            <i class="icon-dot"></i>
+            <a href='processing_orders.html'>Processing Orders</a>
+          </li>
+
+          <li>
+            <i class="icon-dot"></i>
+            <a href='entering_orders.html'>Entering Orders</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='editing_orders.html'>Editing Orders</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='order_states.html'>Order States</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='returning_orders.html'>Returning Orders</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='searching_orders.html'>Searching Orders</a>
+          </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-tutorial-menu"><i class="icon-right-open"></i></a>
+          <a href='users.html'>Users</a>
+        </h3>
+        <ul class="js-guides">
+          <li>
+            <i class="icon-dot"></i>
+            <a href='creating_users.html'>Creating Users</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='searching_users.html'>Searching Users</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='deleting_users.html'>Deleting Users</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='editing_users.html'>Editing Users</a>
+          </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-tutorial-menu"><i class="icon-right-open"></i></a>
+          <a href='payments.html'>Payments</a>
+        </h3>
+        <ul class="js-guides">
+          <li>
+            <i class="icon-dot"></i>
+            <a href='payment_methods.html'>Payment Methods</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='payment_states.html'>Payment States</a>
+          </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-tutorial-menu"><i class="icon-right-open"></i></a>
+          <a href='shipments.html'>Shipments</a>
+        </h3>
+        <ul class="js-guides">
+          <li>
+            <i class="icon-dot"></i>
+            <a href='shipping_categories.html'>Shipping Categories</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='zones.html'>Zones</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='calculators.html'>Calculators</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='shipping_methods.html'>Shipping Methods</a>
+          </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-tutorial-menu"><i class="icon-right-open"></i></a>
+          <a href='configuration.html'>Configuration</a>
+        </h3>
+        <ul class="js-guides">
+          <li>
+            <i class="icon-dot"></i>
+            <a href='configuring_general_settings.html'>General Settings</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='configuring_mail_methods.html'>Mail Methods</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='configuring_taxes.html'>Taxation</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='configuring_geography.html'>Zones, Countries, and States</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='payment_methods.html'>Payment Methods</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='configuring_taxonomies.html'>Taxonomies</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='shipments.html'>Shipping Methods and Categories</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='configuring_inventory.html'>Inventory Settings</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='configuring_analytics.html'>Analytic Trackers</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='configuring_store_credit_categories.html'>Store Credits</a>
+          </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-source-code-menu"><i class="icon-right-open"></i></a>
+          <a href='promotions.html'>Promotions</a>
+        </h3>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-source-code-menu"><i class="icon-right-open"></i></a>
+          <a href='reports.html'>Reports</a>
+        </h3>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed"><i class="icon-right-open"></i></a>
+          <a href='extensions.html'>Extensions</a>
+        </h3>
+      </li>
+    </ul>
+  </nav>
+</aside>
+
+  </div>
+
+  <footer id="main-footer">
+
+  <div class="footer-top">
+    <div class="container">
+      <div id="link-blocks" class="row">
+        <div class="link-block six columns">
+          <h3 class="block-title">Developers</h3>
+          <ul>
+            <li><a href="https://slack.spreecommerce.org" target="_blank" rel="nofollow">Slack</a></li>
+            <li><a href="https://github.com/spree-contrib" target="_blank">Extensions</a></li>
+            <li><a href="https://github.com/spree/spree/blob/master/license.md" target="_blank">License</a></li>
+          </ul>
+        </div>
+        <div class="link-block seven columns">
+          <h3 class="block-title">About Spree</h3>
+          <p>
+            <strong><a href="https://spreecommerce.org">Spree Commerce</a></strong>
+            is a complete modular, API-driven open source e-commerce solution
+            built with Ruby on Rails.
+          </p>
+          <p>
+            Guides are hosted and maintained by
+            <a href="http://sparksolutions.co" target="_blank">Spark Solutions</a>
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</footer>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-104990445-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/docsearch.js/2/docsearch.min.js"></script>
+<script type="text/javascript"> docsearch({
+apiKey: 'fb697cd2d04591b036ea172259c05ba8',
+indexName: 'spreecommerce',
+inputSelector: '#search-field',
+debug: false // Set debug to true if you want to inspect the dropdown
+});
+</script>
+
+
+  </body>
+</html>

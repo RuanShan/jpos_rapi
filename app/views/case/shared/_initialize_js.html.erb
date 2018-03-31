@@ -1,0 +1,15 @@
+<script>
+WechatMore = {
+	game_round_id:  <%= @game_round.id %>,
+	routes: {}
+}
+
+WechatMore.routes.case_game_rounds_path = <%== case_game_rounds_url.to_json %>;
+
+
+WechatMore.routes.build_case_game_rounds_player_results_path = function(){
+  return WechatMore.routes.case_game_rounds_path+'/'+WechatMore.game_round_id+'/player_results';
+}
+
+
+</script>

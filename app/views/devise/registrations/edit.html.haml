@@ -1,0 +1,69 @@
+= form_for(resource, as: resource_name, url: registration_path(resource_name), html: {method: :put, role: 'form'}) do |f|
+  .container
+    .row
+      .col-md-offset-3.col-md-7
+        .card.card-block.round-box.devise
+          %h4.card-header.devise= t('label.edit_user')
+
+          .card-body.devise
+            = devise_error_messages!
+
+            .row.form-group
+              %label.col-sm-4.form-control-label.text-sm-right.devise= t('label.username')
+              .col-sm-8
+                %p.form-control-static= current_user.username
+
+            .row.form-group
+              %label.col-sm-4.form-control-label.text-sm-right.devise{for: 'inputCurrentPassword1'}= t('label.current_password')
+              .col-md-8
+                = f.password_field :current_password, class: 'form-control form-control-sm', id: 'inputCurrentPassword1',
+                                                      placeholder: t('label.current_password').downcase
+
+                %span.help-block.devise (need current password to confirm changes)
+
+            %hr.devise
+
+            .row.form-group
+              %label.col-sm-4.form-control-label.text-sm-right.devise{for: 'inputEmail1'}= t('label.email')
+              .col-sm-8
+                = f.email_field :email, class: 'form-control form-control-sm', id: 'inputEmail1',
+                                        placeholder: t('label.email_example').downcase,
+                                        type: 'email'
+
+            - if resource.pending_reconfirmation?
+              .help-block.devise.text-sm-right
+                Currently waiting confirmation for: #{resource.unconfirmed_email}
+
+            .row.form-group
+              %label.col-sm-4.form-control-label.text-sm-right.devise{for: 'inputPassword1'}= t('label.new_password')
+              .col-sm-8
+                = f.password_field :password, class: 'form-control form-control-sm', id: 'inputPassword1',
+                                              placeholder: t('label.new_password').downcase
+                %span.help-block.devise (leave blank if you don't want to change it)
+
+            .row.form-group
+              %label.col-sm-4.form-control-label.text-sm-right.devise{for: 'inputConfirmPassword1'}= t('label.confirm_new_password')
+              .col-sm-8
+                = f.password_field :password_confirmation, class: 'form-control form-control-sm', id: 'inputConfirmPassword1',
+                                                           placeholder: t('label.confirm_new_password').downcase
+
+
+            .row.form-group
+              .col-sm-offset-4.col-sm-8
+                = f.submit t('button.update'), class: 'btn btn-success'
+          .card-footer.text-sm-right.devise
+            = render 'devise/shared/links'
+
+- if current_user
+  .container
+    .row
+      .col-md-offset-3.col-md-7
+        .card.card-block.round-box.devise
+          %h4.card-header.devise= t('label.delete_user')
+
+          .card-body.devise
+            %p= t('devise.confirmations.confirm_delete_user')
+            = button_to t('button.delete_user', username: current_user.username), registration_path(resource_name),
+                        data: {confirm: 'Are you sure?'}, method: :delete, class: 'btn btn-danger'
+%br/
+%br/

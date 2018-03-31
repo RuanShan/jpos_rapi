@@ -1,0 +1,2 @@
+class WxComponentSecret < ApplicationRecord
+end

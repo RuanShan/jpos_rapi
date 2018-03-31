@@ -1,0 +1,42 @@
+<%= form_for(wechat_account) do |f| %>
+  <% if wechat_account.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(wechat_account.errors.count, "error") %> prohibited this wechat_account from being saved:</h2>
+
+      <ul>
+      <% wechat_account.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :name %>
+    <%= f.text_field :name %>
+  </div>
+
+  <div class="field">
+    <%= f.label :account %>
+    <%= f.text_field :account %>
+  </div>
+
+  <div class="field">
+    <%= f.label :key %>
+    <%= f.text_field :key %>
+  </div>
+
+  <div class="field">
+    <%= f.label :secret %>
+    <%= f.text_field :secret %>
+  </div>
+
+  <div class="field">
+    <%= f.label :access_token %>
+    <%= f.text_field :access_token %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

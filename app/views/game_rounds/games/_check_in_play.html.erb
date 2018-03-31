@@ -1,0 +1,54 @@
+<% content_for :game_asset_js do %>
+<%= javascript_include_tag "game_play" %>
+<% end %>
+<div class="Panel Lottery game check_in_play" style=" display: block; opacity: 1;">
+
+  <div class="lottery-left">
+      <div class="lottery-title"><span class="title-label">抽奖</span><span class="usercount-label">0</span>人</div>
+      <div class="lottery-run">
+          <div class="user">
+              <span class="nick-name"></span>
+          </div>
+
+          <div class="control button-run" style="display: block;">开始抽奖</div>
+          <div class="control button-stop" style="display: none;">停止抽奖</div>
+          <div class="control button-nextround" style="display: none;">下一轮</div>
+      </div>
+      <div class="lottery-bottom">
+          <div class="round-num">
+            <input id="tag_num" type="hidden" value="" />
+            <div class="select-panel" style="font-size:15px;">
+                <div style="display:inline-block">选择奖项:</div>
+                <select name="luckTag" id="award_select" >
+                    <option value="-1">--请选择奖项--</option>
+                    <% @game_awards.each{|award| %>
+                      <%= content_tag :option, "#{award.name}(共#{award.prize_count}个)", value:award.id, data: { 'game-award-prize-count': award.prize_count}  %>
+                    <% } %>
+
+                </select>
+
+            </div>
+          </div>
+          <!--<div class="button-showresult">全部结果</div>-->
+          <div class="button-reload" onclick="javascript:window.location.reload();">重新加载</div>
+      </div>
+
+  </div>
+  <div class="lottery-right">
+    <div class="b_award_players">
+      <!--<div class="result-line">
+          <div class="result-num">1</div>
+          <i class="delLottery"></i>
+      </div>-->
+    </div>
+    <div class="lottery-bottom" style="">
+      <div id="b_restart_award" class="newLuckButton" onclick="">重新抽奖</div>
+    </div>
+  </div>
+</div>
+<script>
+$(document).ready(function(){
+  choujiang.players = <%== @game_players.as_json( only: [:id, :nickname, :avatar, :position, :rank] ).to_json %>;
+  choujiang.playerCount = choujiang.players.length;
+})
+</script>

@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>    <html class="lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>    <html class="lt-ie9"> <![endif]-->
+<!--[if IE 9]>    <html class="ie9"> <![endif]-->
+<!--[if gt IE 9]><!--> <html lang="en" > <!--<![endif]-->
+<head>
+  <title>Calculators - User Guide | Spree - Ruby on Rails e-commerce platform</title>
+
+  <meta charset="utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta name="section" content="" />
+
+<link href="/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+<link href="/shared/css/icons.css" media="screen" rel="stylesheet" type="text/css">
+<link href="/shared/css/icons-codes.css" media="screen" rel="stylesheet" type="text/css">
+
+<link href="/shared/css/skeleton.css" media="screen" rel="stylesheet" type="text/css">
+<link href="/shared/css/documentation.css" media="screen" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="/assets/stylesheets/guides.css" media="screen" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/docsearch.js/2/docsearch.min.css" />
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-migrate/1.1.1/jquery-migrate.min.js"></script>
+<script src="/assets/javascripts/css_browser_selector_dev.js" type="text/javascript"></script>
+<script src="/assets/javascripts/jquery.toc.js" type="text/javascript"></script>
+<script src="/assets/javascripts/documentation.js" type="text/javascript"></script>
+
+
+</head>
+<body class="api">
+  
+  <header id="header">
+    <div id="top-header">
+  <div class="container">
+    <div class="row">
+      <div class="two columns">
+  <a class="logo" href="http://spreecommerce.org">
+    <img src='/images/logo.png' alt="Spree Commerce - Ruby on Rails e-commerce platform" />
+  </a>
+</div>
+
+      <div class="three columns">
+  <input type="text" id="search-field" placeholder="Search..." />
+</div>
+
+      <nav id="main-menu" class="eleven columns">
+  <ul class="inline">
+    <li><a href="../api/">API</a></li>
+    <li><a href="../developer/">Developer</a></li>
+    <li><a href="../user/">User</a></li>
+    <li><a href="../release_notes/">Release Notes</a></li>
+    <li>
+      <a href="http://slack.spreecommerce.org" target="_blank">Slack</a>
+    </li>
+    <li>
+      <a href="https://heroku.com/deploy?template=https://github.com/spree/spree" target="_blank" rel="nofollow">Demo</a>
+    </li>
+  </ul>
+</nav>
+
+    </div>
+  </div>
+</div>
+
+
+    <div id="subheader">
+      <div class="container">
+        <div class="twelve columns">
+          <h1 class="page-title">Calculators - User Guide</h1>
+        </div>
+      </div>
+    </div>
+
+  </header>
+
+  <div class="container">
+    <section id="main-content">
+
+      <div class="twelve columns">
+        <div id="content">
+          
+<h2 id="calculators">Calculators</h2>
+
+<p>A Calculator is the component of the Spree shipping system responsible for calculating the shipping price for each available <a href="shipping_methods.html">Shipping Method</a>.</p>
+
+<p>Spree ships with 5 default calculators:</p>
+
+<ul>
+  <li><a href="#flat-rate-per-order">Flat rate (per order)</a></li>
+  <li><a href="#flat-rate-per-item">Flat rate (per item)</a></li>
+  <li><a href="#flat-percent">Flat percent</a></li>
+  <li><a href="#flexible-rate">Flexible rate</a></li>
+  <li><a href="#price-sack">Price sack</a></li>
+</ul>
+
+<h3 id="flat-rate-per-order">Flat Rate (per order)</h3>
+
+<p>The Flat Rate (per order) calculator allows you to charge the same shipping price per order regardless of the number of items in the order. You define the flat rate charged per order at the shipping method level.</p>
+
+<p>For example, if you have two shipping methods defined for your store (“UPS 1-Day” and “UPS 2-Day”), and have selected “Flat rate” as the calculator type for each, you could charge a $15 flat rate shipping cost for the UPS 1-Day orders and a $10 flat rate shipping cost for the UPS 2-Day orders.</p>
+
+<h3 id="flat-rate-per-item">Flat Rate (per item)</h3>
+
+<p>The Flat Rate (per item/product) calculator allows you to determine the shipping costs based on the number of items in the order.</p>
+
+<p>For example, if there are 4 items in an order and the flat rate per item amount is set to $10 then the total shipping costs for the order would be $40.</p>
+
+<h3 id="flat-percent">Flat Percent</h3>
+
+<p>The Flat Percent calculator allows you to calculate shipping costs as a percent of the total amount charged for the order. The amount is calculated as follows:</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>[item total] x [flat percentage]
+</pre></div>
+</div>
+</div>
+
+<p>For example, if an order had an item total of $31 and the calculator was configured to have a flat percent amount of 10, the shipping cost would be $3.10, because $31 x 10% = $3.10.</p>
+
+<h3 id="flexible-rate">Flexible Rate</h3>
+
+<p>The Flexible Rate calculator is typically used for promotional discounts when you want to give a specific discount for the first product, and then subsequent discounts for other products, up to a certain amount.</p>
+
+<p>The Flexible Rate calculator takes four inputs:</p>
+
+<ul>
+  <li>First Item Cost: the amount of shipping charged for the first item in the order.</li>
+  <li>Additional Item Cost: the amount of shipping charged for items beyond the first item.</li>
+  <li>Max Items: the maximum number of items on which shipping will be calculated.</li>
+  <li>Currency: defaults to the currency you have configured for your store.</li>
+</ul>
+
+<p>For example, if you set First Item Cost to $10, Additional Item Cost to $5, and Max Items to 4, you could be charging $10 for the first item, $5 for the next 3 items, and $0 for items beyond the first 4. Thus, an order with 1 item would have a shipping cost of $10. An order with two items would cost $15 to ship, and an order of 7 items would cost $25 to ship.</p>
+
+<h3 id="price-sack">Price Sack</h3>
+
+<p>The Price Sack calculator is a way to offer discount shipping to orders over a certain dollar amount. The Price Sack calculator takes four inputs:</p>
+
+<ul>
+  <li>Minimal Amount</li>
+  <li>Normal Amount</li>
+  <li>Discount Amount</li>
+  <li>Currency (defaults to the currency you have configured for your store)</li>
+</ul>
+
+<p>Any order whose subtotal is under is less than what you set for Minimal Amount would be charged a shipping cost of Normal Amount. Orders whose subtotals are equal to or greater than the Minimal Amount would be charged the Discount Amount.</p>
+
+<p>For example, suppose you create a shipping calculator with these settings:</p>
+
+<ul>
+  <li>Minimal Amount - $50</li>
+  <li>Normal Amount - $15</li>
+  <li>Discount Amount - $5</li>
+</ul>
+
+<p>A customer whose order subtotal equals $35 would be offered a shipping cost of $15 using this shipping method. A different customer whose order subtotal equals $55 would be offered a shipping cost of only $5.</p>
+
+<h3 id="custom-calculators">Custom Calculators</h3>
+
+<p>You can define your own calculator if you have more complex needs. In that case, check out the <a href="../developer/calculators.html">Calculators Guide</a>.</p>
+
+<h2 id="next-step">Next Step</h2>
+
+<p>If you have followed this guide series <a href="shipments.html">from the beginning</a>, your store is now stocked with <a href="shipping_categories.html">shipping categories</a>, <a href="zones.html">geographical shipping zones</a>, and calculators. The final step is to pull it all together into <a href="shipping_methods.html">shipping methods</a>, from which your customers can choose at checkout.</p>
+
+        </div>
+      </div>
+
+    </section>
+
+    <aside id="sidebar" class="four columns">
+  <nav id="sidebar-menu">
+    <ul>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-tutorial-menu"><i class="icon-right-open"></i></a>
+          <a href='products.html'>Products</a>
+        </h3>
+        <ul class="js-guides">
+          <li>
+            <i class="icon-dot"></i>
+            <a href='creating_products.html'>Creating Products</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='deleting_products.html'>Deleting Products</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='editing_products.html'>Editing Products</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='cloning_products.html'>Cloning Products</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='product_options.html'>Options</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='product_properties.html'>Properties</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='product_prototypes.html'>Prototypes</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='searching_products.html'>Searching Products</a>
+          </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-tutorial-menu"><i class="icon-right-open"></i></a>
+          <a href='orders.html'>Orders</a>
+        </h3>
+        <ul class="js-guides">
+          <li>
+            <i class="icon-dot"></i>
+            <a href='processing_orders.html'>Processing Orders</a>
+          </li>
+
+          <li>
+            <i class="icon-dot"></i>
+            <a href='entering_orders.html'>Entering Orders</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='editing_orders.html'>Editing Orders</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='order_states.html'>Order States</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='returning_orders.html'>Returning Orders</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='searching_orders.html'>Searching Orders</a>
+          </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-tutorial-menu"><i class="icon-right-open"></i></a>
+          <a href='users.html'>Users</a>
+        </h3>
+        <ul class="js-guides">
+          <li>
+            <i class="icon-dot"></i>
+            <a href='creating_users.html'>Creating Users</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='searching_users.html'>Searching Users</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='deleting_users.html'>Deleting Users</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='editing_users.html'>Editing Users</a>
+          </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-tutorial-menu"><i class="icon-right-open"></i></a>
+          <a href='payments.html'>Payments</a>
+        </h3>
+        <ul class="js-guides">
+          <li>
+            <i class="icon-dot"></i>
+            <a href='payment_methods.html'>Payment Methods</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='payment_states.html'>Payment States</a>
+          </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-tutorial-menu"><i class="icon-right-open"></i></a>
+          <a href='shipments.html'>Shipments</a>
+        </h3>
+        <ul class="js-guides">
+          <li>
+            <i class="icon-dot"></i>
+            <a href='shipping_categories.html'>Shipping Categories</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='zones.html'>Zones</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='calculators.html'>Calculators</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='shipping_methods.html'>Shipping Methods</a>
+          </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-tutorial-menu"><i class="icon-right-open"></i></a>
+          <a href='configuration.html'>Configuration</a>
+        </h3>
+        <ul class="js-guides">
+          <li>
+            <i class="icon-dot"></i>
+            <a href='configuring_general_settings.html'>General Settings</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='configuring_mail_methods.html'>Mail Methods</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='configuring_taxes.html'>Taxation</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='configuring_geography.html'>Zones, Countries, and States</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='payment_methods.html'>Payment Methods</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='configuring_taxonomies.html'>Taxonomies</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='shipments.html'>Shipping Methods and Categories</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='configuring_inventory.html'>Inventory Settings</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='configuring_analytics.html'>Analytic Trackers</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='configuring_store_credit_categories.html'>Store Credits</a>
+          </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-source-code-menu"><i class="icon-right-open"></i></a>
+          <a href='promotions.html'>Promotions</a>
+        </h3>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-source-code-menu"><i class="icon-right-open"></i></a>
+          <a href='reports.html'>Reports</a>
+        </h3>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed"><i class="icon-right-open"></i></a>
+          <a href='extensions.html'>Extensions</a>
+        </h3>
+      </li>
+    </ul>
+  </nav>
+</aside>
+
+  </div>
+
+  <footer id="main-footer">
+
+  <div class="footer-top">
+    <div class="container">
+      <div id="link-blocks" class="row">
+        <div class="link-block six columns">
+          <h3 class="block-title">Developers</h3>
+          <ul>
+            <li><a href="https://slack.spreecommerce.org" target="_blank" rel="nofollow">Slack</a></li>
+            <li><a href="https://github.com/spree-contrib" target="_blank">Extensions</a></li>
+            <li><a href="https://github.com/spree/spree/blob/master/license.md" target="_blank">License</a></li>
+          </ul>
+        </div>
+        <div class="link-block seven columns">
+          <h3 class="block-title">About Spree</h3>
+          <p>
+            <strong><a href="https://spreecommerce.org">Spree Commerce</a></strong>
+            is a complete modular, API-driven open source e-commerce solution
+            built with Ruby on Rails.
+          </p>
+          <p>
+            Guides are hosted and maintained by
+            <a href="http://sparksolutions.co" target="_blank">Spark Solutions</a>
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</footer>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-104990445-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/docsearch.js/2/docsearch.min.js"></script>
+<script type="text/javascript"> docsearch({
+apiKey: 'fb697cd2d04591b036ea172259c05ba8',
+indexName: 'spreecommerce',
+inputSelector: '#search-field',
+debug: false // Set debug to true if you want to inspect the dropdown
+});
+</script>
+
+
+  </body>
+</html>

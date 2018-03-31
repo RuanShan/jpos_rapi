@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>    <html class="lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>    <html class="lt-ie9"> <![endif]-->
+<!--[if IE 9]>    <html class="ie9"> <![endif]-->
+<!--[if gt IE 9]><!--> <html lang="en" > <!--<![endif]-->
+<head>
+  <title>Spree 2.3.0 - Release Notes | Spree - Ruby on Rails e-commerce platform</title>
+
+  <meta charset="utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta name="section" content="version" />
+
+<link href="/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+<link href="/shared/css/icons.css" media="screen" rel="stylesheet" type="text/css">
+<link href="/shared/css/icons-codes.css" media="screen" rel="stylesheet" type="text/css">
+
+<link href="/shared/css/skeleton.css" media="screen" rel="stylesheet" type="text/css">
+<link href="/shared/css/documentation.css" media="screen" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="/assets/stylesheets/guides.css" media="screen" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/docsearch.js/2/docsearch.min.css" />
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-migrate/1.1.1/jquery-migrate.min.js"></script>
+<script src="/assets/javascripts/css_browser_selector_dev.js" type="text/javascript"></script>
+<script src="/assets/javascripts/jquery.toc.js" type="text/javascript"></script>
+<script src="/assets/javascripts/documentation.js" type="text/javascript"></script>
+
+
+</head>
+<body class="integration">
+  
+  <header id="header">
+    <div id="top-header">
+  <div class="container">
+    <div class="row">
+      <div class="two columns">
+  <a class="logo" href="http://spreecommerce.org">
+    <img src='/images/logo.png' alt="Spree Commerce - Ruby on Rails e-commerce platform" />
+  </a>
+</div>
+
+      <div class="three columns">
+  <input type="text" id="search-field" placeholder="Search..." />
+</div>
+
+      <nav id="main-menu" class="eleven columns">
+  <ul class="inline">
+    <li><a href="../api/">API</a></li>
+    <li><a href="../developer/">Developer</a></li>
+    <li><a href="../user/">User</a></li>
+    <li><a href="../release_notes/">Release Notes</a></li>
+    <li>
+      <a href="http://slack.spreecommerce.org" target="_blank">Slack</a>
+    </li>
+    <li>
+      <a href="https://heroku.com/deploy?template=https://github.com/spree/spree" target="_blank" rel="nofollow">Demo</a>
+    </li>
+  </ul>
+</nav>
+
+    </div>
+  </div>
+</div>
+
+
+    <div id="subheader">
+      <div class="container">
+        <div class="twelve columns">
+          <h1 class="page-title">Spree 2.3.0 - Release Notes</h1>
+        </div>
+      </div>
+    </div>
+
+  </header>
+
+  <div class="container">
+    <section id="main-content">
+
+      <div class="twelve columns">
+        <div id="content">
+          
+<h2 id="majornew-features">Major/new features</h2>
+
+<h3 id="rails-41-support">Rails 4.1 support</h3>
+
+<p>Rails 4.1 is now supported by Spree 2.3. If you wish to use Rails 4.1, Spree 2.3 is the release for you.</p>
+
+<h3 id="preferences-serialized-on-records">Preferences serialized on records</h3>
+
+<p>Preferences are now stored on their records, rather than being stored in <code>spree_preferences</code>. This means that to fetch a preference for say, a calculator, one query needs to be done to the database for that row, as that row has the <code>preferences</code> column which contains all preferences.</p>
+
+<p>Previously, there would be a single DB call for the record itself, and then any number of database calls thereafter to fetch the required preference values for that record. What happens now is that there’s only one database call, which means there should be some minor speedups.</p>
+
+<h3 id="better-multi-store-support">Better multi-store support</h3>
+
+<p>A <code>Spree::Store</code> model for basic multi-store/multi-domain support has been added.</p>
+
+<p>This provides a basic framework for multi-store/multi-domain, based on the
+spree-multi-domain extension. Some existing configuration has been moved to
+this model, so that they can have different values depending on the site
+being served:</p>
+
+<ul>
+  <li><code>Spree::Config[:site_name]</code> is moved to <code>name</code></li>
+  <li><code>Spree::Config[:site_url]</code> is moved to <code>url</code></li>
+  <li><code>Spree::Config[:default_meta_description]</code> is moved to <code>meta_description</code></li>
+  <li><code>Spree::Config[:default_meta_keywords]</code> is moved to <code>meta_keywords</code></li>
+  <li><code>Spree::Config[:default_seo_title]</code> is moved to <code>seo_title</code></li>
+</ul>
+
+<p>A migration will move existing configuration onto a new default store.</p>
+
+<p>A new <code>ControllerHelpers::Store</code> concern provides a <code>current_store</code> helper
+to fetch a helper based on the request’s domain.</p>
+
+<h3 id="better-guest-user-tracking">Better guest user tracking</h3>
+
+<p>Now we are using a signed cookie to store the guests unique token
+in the browser.  This allows customers who close their browser to
+continue their shopping when they visit again.  More importantly
+it allows you as a store owner to uniquely identify your guests orders.
+Since we set <code>cookies.signed[:guest_token]</code> whenever a vistor comes
+you may also use this cookie token on other objects than just orders.
+For instance if a guest user wants to favorite a product you can
+assign the <code>cookies.signed[:guest_token]</code> value to a token field on your
+favorites model.  Which will then allow you to analyze the orders and
+favorites this user has placed before which is useful for recommendations.</p>
+
+<h2 id="core">Core</h2>
+
+<ul>
+  <li>
+    <p>Drop first_name and last_name fields from spree_credit_cards.  Add
+first_name &amp; last_name methods for now to keep ActiveMerchant happy.</p>
+
+    <p>Jordan Brough</p>
+  </li>
+  <li>
+    <p>Replaced cookies.signed[:order_id] with cookies.signed[:guest_token].</p>
+
+    <p>Now we are using a signed cookie to store the guests unique token
+in the browser.  This allows customers who close their browser to
+continue their shopping when they visit again.  More importantly
+it allows you as a store owner to uniquely identify your guests orders.
+Since we set cookies.signed[:guest_token] whenever a vistor comes
+you may also use this cookie token on other objects than just orders.
+For instance if a guest user wants to favorite a product you can
+assign the cookies.signed[:guest_token] value to a token field on your
+favorites model.  Which will then allow you to analyze the orders and
+favorites this user has placed before which is useful for recommendations.</p>
+
+    <p>Jeff Dutil</p>
+  </li>
+  <li>
+    <p>Order#token is no longer fetched from another table.</p>
+
+    <p>Both Spree::Core::TokenResource and Spree::TokenizedPermission are deprecated.
+Order#token value is now persisted into spree_orders.guest_token. Main motivation
+here is save a few extra queries when creating an order. The TokenResource
+module was being of no use in spree core.</p>
+
+    <p>NOTE: Watch out for the possible expensive migration that come along with this</p>
+
+    <p>Washington L Braga Jr</p>
+  </li>
+  <li>
+    <p>Replaced session[:order_id] usage with cookies.signed[:order_id].</p>
+
+    <p>Now we are using a signed cookie to store the order id on a guests
+browser client.  This allows customers who close their browser to
+continue their shopping when they visit again.
+Fixes #4319</p>
+
+    <p>Jeff Dutil</p>
+  </li>
+  <li>
+    <p>Order#process_payments! no longer raises. Gateways must raise on failing authorizations.</p>
+
+    <p>Now it’s a Gateway or PaymentMethod responsability to raise a custom
+exception any time an authorization fails so that it can be rescued
+during checkout and proper action taken.</p>
+  </li>
+  <li>
+    <p>Assign request headers env to Payment when creating it via checkout.</p>
+
+    <p>This might come in handy for some gateways, e.g. Adyen, actions that require
+data such as user agent and accept header to create user profiles. Previously
+we had no way to access the request headers from within a gateway class</p>
+  </li>
+  <li>
+    <p>More accurate and simpler Order#payment_state options.</p>
+
+    <p>Balance Due. Paid. Credit Owed. Failed. These are the only possible values
+for order payment_state now. The previous <code>pending</code> state has been dropped
+and order updater logic greatly improved as it now mostly consider total
+values rather than doing last payment state checks.</p>
+
+    <p>Huge thanks to dan-ding. See https://github.com/spree/spree/issues/4605</p>
+  </li>
+  <li>
+    <p>Config settings related to mail have been removed. This includes
+<code>enable_mail_delivery</code>, <code>mail_bcc</code>, <code>intercept_email</code>,
+<code>override_actionmailer_config</code>, <code>mail_host</code>, <code>mail_domain</code>, <code>mail_port</code>,
+<code>secure_connection_type</code>, <code>mail_auth_type</code>, <code>smtp_username</code>, and
+<code>smtp_password</code>.</p>
+
+    <p>These should instead be <a href="http://api.rubyonrails.org/classes/ActionMailer/Base.html#class-ActionMailer::Base-label-Configuration+options">configured on actionmailer directly</a>.
+The existing functionality can also be used by including the <a href="https://github.com/spree-contrib/spree_mail_settings">spree_mail_settings</a> gem.</p>
+
+    <p>John Hawthorn</p>
+  </li>
+  <li>
+    <p>refactor the api to use a general importer in <code>lib/spree/importer/order.rb</code></p>
+
+    <p>Peter Berkenbosch</p>
+  </li>
+  <li>
+    <p>Ensure transition to payment processing state happens outside transaction.</p>
+
+    <p>Chris Salzberg</p>
+  </li>
+  <li>
+    <p>Increase the precision of the amount/price columns in order for support other currencies. See https://github.com/spree/spree/issues/4657</p>
+
+    <p>Gonzalo Moreno</p>
+  </li>
+  <li>
+    <p>Preferences on models are now stored in a serialized <code>preferences</code> column instead of the <code>Spree::Preferences</code> table.</p>
+
+    <p><code>Spree::Preferences</code> are still used for configuration (like <code>Spree::Config</code>).
+For models with preferences (<code>Calculator</code>, <code>PromotionRule</code>, and
+<code>PaymentMethod</code> in spree core) they are now serialized using
+<code>ActiveRecord::Base.serialize</code>, storing the preferences as YAML in the
+<code>preferences</code> column.</p>
+
+    <p><code>
+&gt; c = Spree::Calculator.first
+=&gt; #&lt;Spree::Calculator::Shipping::FlatRate id: 1, type: "Spree::Calculator::Shipping::FlatRate",
+calculable_id: 1, calculable_type: "Spree::ShippingMethod", created_at: "2014-06-29 21:56:59",
+updated_at: "2014-06-29 21:57:00", preferences: {amount: 5, currency: "USD"}&gt;
+&gt; c.preferred_amount
+=&gt; 5
+&gt; c.preferred_amount = 10
+=&gt; 10
+&gt; c
+=&gt; #&lt;Spree::Calculator::Shipping::FlatRate id: 1, type: "Spree::Calculator::Shipping::FlatRate",
+calculable_id: 1, calculable_type: "Spree::ShippingMethod", created_at: "2014-06-29 21:56:59",
+updated_at: "2014-06-29 21:57:00", preferences: {amount: 10, currency: "USD"}&gt;
+</code></p>
+
+    <p>John Hawthorn</p>
+  </li>
+  <li>
+    <p>Add Spree::Store model for basic multi-store/multi-domain support</p>
+
+    <p>This provides a basic framework for multi-store/multi-domain, based on the
+spree-multi-domain extension. Some existing configuration has been moved to
+this model, so that they can have different values depending on the site
+being served:</p>
+
+    <ul>
+      <li><code>Spree::Config[:site_name]</code> is moved to <code>name</code></li>
+      <li><code>Spree::Config[:site_url]</code> is moved to <code>url</code></li>
+      <li><code>Spree::Config[:default_meta_description]</code> is moved to <code>meta_description</code></li>
+      <li><code>Spree::Config[:default_meta_keywords]</code> is moved to <code>meta_keywords</code></li>
+      <li><code>Spree::Config[:default_seo_title]</code> is moved to <code>seo_title</code></li>
+    </ul>
+
+    <p>A migration will move existing configuration onto a new default store.</p>
+
+    <p>A new <code>ControllerHelpers::Store</code> concern provides a <code>current_store</code> helper
+to fetch a helper based on the request’s domain.</p>
+
+    <p>Jeff Dutil, Clarke Brunsdon, and John Hawthorn</p>
+  </li>
+</ul>
+
+<h2 id="api">API</h2>
+
+<ul>
+  <li>
+    <p>Support existing credit card feature on checkout.</p>
+
+    <p>Checkouts_controller#update now uses the same Order::Checkout#update_from_params
+from spree frontend which help us to remove a lot of duplicated logic. As a
+result of that <code>payment_source</code> params must be sent now outsite the <code>order</code> key.</p>
+
+    <p>Before you’d send a request like this:</p>
+
+    <p><code>ruby
+api_put :update, id: order.to_param, order_token: order.guest_token,
+  order: {
+    payments_attributes: [{ payment_method_id: @payment_method.id.to_s }],
+    payment_source: { @payment_method.id.to_s =&gt; { name: "Spree" } }
+  }
+</code></p>
+
+    <p>Now it should look like this:</p>
+
+    <p><code>ruby
+api_put :update, id: order.to_param, order_token: order.guest_token,
+  order: {
+    payments_attributes: [{ payment_method_id: @payment_method.id.to_s }]
+  },
+  payment_source: {
+    @payment_method.id.to_s =&gt; { name: "Spree" }
+  }
+</code></p>
+
+    <p>Josh Hepworth and Washington</p>
+  </li>
+  <li>
+    <p>api/orders/show now display credit cards as source under payment</p>
+
+    <p>Washington Luiz</p>
+  </li>
+  <li>
+    <p>refactor the api to use a general importer in core gem.</p>
+
+    <p>Peter Berkenbosch</p>
+  </li>
+  <li>
+    <p>Shipment manifests viewed within the context of an order no longer return variant info. The line items for the order already contains this information. #4498</p>
+
+    <ul>
+      <li>Ryan Bigg</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="frontend">Frontend</h2>
+
+<ul>
+  <li>
+    <p>The api key that was previously placed in the dom for ajax requests has been
+removed since the api now uses the session to authenticate the user.</p>
+  </li>
+  <li>
+    <p>Mostly inspired by Jeff Squires’ extension spree_reuse_credit card, checkout
+now can remember user credit card info. Make sure your user model responds
+to a <code>payment_sources</code> method and customers will be able to reuse their
+credit card info.</p>
+
+    <p>Washington Luiz</p>
+  </li>
+  <li>
+    <p>Use settings from current_store instead of Spree::Config</p>
+
+    <p>Jeff Dutil, John Hawthorn, and Washington Luiz</p>
+  </li>
+</ul>
+
+<h2 id="backend">Backend</h2>
+
+<ul>
+  <li>The api key that was previously placed in the dom for ajax requests has been
+removed since the api now uses the session to authenticate the user.</li>
+</ul>
+
+        </div>
+      </div>
+
+    </section>
+
+    <aside id="sidebar" class="four columns">
+  <nav id="sidebar-menu">
+    <ul>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-version-menu"><i class="icon-right-open"></i></a>
+          <a href='#.html'>Versions</a>
+        </h3>
+        <ul class="js-guides">
+          <li><i class="icon-dot"></i><a href='spree_3_4_0.html'>3.4.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_3_3_0.html'>3.3.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_3_2_0.html'>3.2.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_3_1_0.html'>3.1.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_3_0_0.html'>3.0.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_2_4_0.html'>2.4.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_2_3_0.html'>2.3.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_2_2_0.html'>2.2.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_2_1_0.html'>2.1.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_2_0_0.html'>2.0.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_1_3_0.html'>1.3.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_1_2_2.html'>1.2.2</a></li>
+          <li><i class="icon-dot"></i><a href='spree_1_2_0.html'>1.2.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_1_1_4.html'>1.1.4</a></li>
+          <li><i class="icon-dot"></i><a href='spree_1_1_0.html'>1.1.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_1_0_0.html'>1.0.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_0_70_0.html'>0.70.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_0_60_0.html'>0.60.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_0_50_0.html'>0.50.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_0_40_0.html'>0.40.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_0_30_0.html'>0.30.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_0_10_0.html'>0.10.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_0_9_0.html'>0.9.0</a></li>
+        </ul>
+      </li>
+    </ul>
+  </nav>
+</aside>
+
+  </div>
+
+  <footer id="main-footer">
+
+  <div class="footer-top">
+    <div class="container">
+      <div id="link-blocks" class="row">
+        <div class="link-block six columns">
+          <h3 class="block-title">Developers</h3>
+          <ul>
+            <li><a href="https://slack.spreecommerce.org" target="_blank" rel="nofollow">Slack</a></li>
+            <li><a href="https://github.com/spree-contrib" target="_blank">Extensions</a></li>
+            <li><a href="https://github.com/spree/spree/blob/master/license.md" target="_blank">License</a></li>
+          </ul>
+        </div>
+        <div class="link-block seven columns">
+          <h3 class="block-title">About Spree</h3>
+          <p>
+            <strong><a href="https://spreecommerce.org">Spree Commerce</a></strong>
+            is a complete modular, API-driven open source e-commerce solution
+            built with Ruby on Rails.
+          </p>
+          <p>
+            Guides are hosted and maintained by
+            <a href="http://sparksolutions.co" target="_blank">Spark Solutions</a>
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</footer>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-104990445-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/docsearch.js/2/docsearch.min.js"></script>
+<script type="text/javascript"> docsearch({
+apiKey: 'fb697cd2d04591b036ea172259c05ba8',
+indexName: 'spreecommerce',
+inputSelector: '#search-field',
+debug: false // Set debug to true if you want to inspect the dropdown
+});
+</script>
+
+
+  </body>
+</html>

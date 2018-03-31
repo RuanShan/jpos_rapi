@@ -1,0 +1,205 @@
+@charset "utf-8";
+@import "game/rl_dumpling/comm/weui.min";
+@import "game/rl_dumpling/base";
+@import "game/rl_dumpling/main";
+@import "game/rl_dumpling/xjtx.min";
+
+.user-img-hat{
+	background-image:image-url('game/rl_dumpling/crown.png');
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: contain;
+	position: absolute;
+	top:0;
+	height: 1.5rem;
+	left: 0;
+	right: 0;
+}
+.user-img-fail-hat{
+	background-image:none;
+}
+#resule-status-lotsBox
+{
+	.cartoonWrap{
+		position: absolute;
+		top:30%;
+		z-index:5;
+	  left: 0;
+		right: 0;
+		height: 3.2rem;
+		background-image: image-url('game/rl_dumpling/line.png');
+		background-repeat: repeat-x;
+		background-position: center;
+
+	}
+	.cartoonBox{
+		position: absolute;
+		left:0;
+		z-index:5;
+	  width:5rem;
+		height: 3.2rem;
+		background-image: image-url('game/rl_dumpling/car.png');
+		background-repeat: no-repeat;
+		background-size: contain;
+		background-position: center;
+	  &.move{
+	    animation:car2_drive 2s ease-in 1;
+	  }
+	}
+}
+
+@keyframes car2_drive{
+	0%,20%{
+	}
+	60%,100%{
+		left:600px;
+	}
+}
+
+.menuBtnBox .menuName2 {
+	display:inline-block;
+	overflow:hidden;
+	width:100%;
+	height:100%
+}
+
+.resule-status-minscore2
+{
+	margin: .4rem auto;
+  *{
+		color:#7d0022;
+		font-size: 0.6rem;
+		line-height: 0.7rem;
+  }
+}
+
+#payment-confirm-msg{
+	  border-radius: 8px;
+		border: 2px solid #fff;
+		background-color: #000;
+		background-image: image-url('game/rl_dumpling/poup-bg.png');
+		.weui-dialog__bd:first-child {
+		    padding: 1.8em 20px 0.2em;
+		}
+		.weui-dialog__ft{
+			width: 200px;
+			margin: auto;
+			&:after{
+				border: 0 none;
+			}
+		}
+		.primaryBtn{
+			color:#fff;
+			width: 50%;
+			font-size: .6rem;
+			line-height: .6em;
+			margin: 20px 10px;
+			padding: 8px 0;
+			border: 1px solid #fff;
+			border-radius: 20px;
+		}
+		.defaultBtn{
+			color:#fff;
+			width: 50%;
+			font-size: .6rem;
+			line-height: .6em;
+			margin: 20px 10px;
+			border: 1px solid #fff;
+			border-radius: 20px;
+			padding: 8px 0;
+		}
+		.weui-dialog__bd{
+			color:#fff;
+		}
+}
+
+.resuleBox{
+	.resule-button{
+		background-color: #fff;
+		color:#000;
+		border-radius: .8em;
+	}
+	.resule-foot-box{
+		.resule-button{
+			background-color: #fff;
+			color:#000;
+			border-radius: .8em;
+		}
+	}
+}
+#poupInfoBox .poupClose{
+	display: none;
+}
+.attentionBox{
+	.hdskillInfo
+	{
+		.poupClose2{
+			border: 1px solid #fff;
+			text-decoration: none;
+		}
+	}
+	.menuBtnBox{
+		background-color: transparent;
+		.menuName2{
+			background-color: #fff;
+			color:#000;
+			border-radius: .8em;
+		}
+	}
+}
+#resule-gift-box{
+	.menuBack{
+		background-color: #fff;
+		color:#000;
+		border-radius: .8em;
+	}
+	.attentionBox{
+
+		.menuBtnBox{
+			height: 4rem;
+			background-color: transparent;
+			a{
+				display: inline-block;
+				width:100%;
+				height: auto;
+				margin-bottom: .4em;
+			}
+		}
+	}
+}
+
+.resuleBox #resule-status-lotsHand .shakeHand{
+	    width: 100%;
+			height: 3.825rem;
+}
+#resule-gift-rank {
+	span{
+		color:#fff;
+	}
+}
+#resule-gift-memo
+{
+  color:#7d0022;
+	font-size: 0.5rem;
+	line-height: 0.6rem;
+}
+
+.zawList
+{
+	.zawImg{
+		float: left;
+		width:60px;
+		height:70px;
+		margin: 6px;
+		&.zaw01{
+			background-image: image-url('game/rl_dumpling/4/zaw01.png');
+			background-position: top center;
+			background-repeat: no-repeat;
+		}
+		&.zaw02{
+			background-image: image-url('game/rl_dumpling/4/zaw02.png');
+			background-position: top center;
+			background-repeat: no-repeat;
+		}
+	}
+}

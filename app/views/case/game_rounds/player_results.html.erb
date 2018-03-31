@@ -1,0 +1,66 @@
+<section class="content-header">
+  <h1><%= @game_round.name %> - 数据 </h1>
+</section>
+<%= render 'shared/notice' %>
+<section class="content">
+  <div class="box">
+    <div class="box-header">
+
+    <%= search_form_for @q, url: player_results_case_game_round_path( @game_round), html: { class: 'form-inline pull-left'} do |f| %>
+
+      <%= f.label :realname_cont,'姓名' %>
+      <%= f.search_field :realname_cont, class:'form-control' %>
+      <%= f.label :cellphone_cont,'手机' %>
+      <%= f.search_field :cellphone_cont, class:'form-control'  %>
+      <%= f.label :delivery_sms_cont,'取件短信' %>
+      <%= f.search_field :delivery_sms_cont, class:'form-control'  %>
+
+      <%= f.label :delivery_time_at_gt_all,'配送时间' %>
+      <%= f.search_field :delivery_time_at_gt_all, class:'form-control datetimepicker-delivery-time-at', readonly: true, value: display_delivery_time_at(:delivery_time_at_gt_all) %> -
+      <%= f.search_field :delivery_time_at_lt_all, class:'form-control datetimepicker-delivery-time-at', readonly: true, value: display_delivery_time_at(:delivery_time_at_lt_all) %>
+
+      <%= f.submit '搜索', class:'btn btn-primary' %>
+    <% end %>
+
+    <%= link_to "导出今晚", player_results_case_game_round_path(@game_round, 'csv', 'q[delivery_time_at_gt_all]': DateTime.current.at_noon.since(1.hour), 'q[delivery_time_at_lt_all]': DateTime.current.at_end_of_day), class:'btn pull-right', method: :get,target: '_blank'   %>
+    <%= link_to "导出今中", player_results_case_game_round_path(@game_round, 'csv', 'q[delivery_time_at_gt_all]': DateTime.current.at_midnight, 'q[delivery_time_at_lt_all]': DateTime.current.at_noon.since(1.hour)), class:'btn pull-right', method: :get,target: '_blank'   %>
+    <%= link_to "条件导出", player_results_case_game_round_path(@game_round, 'csv'), class:'btn pull-right', method: :get,target: '_blank', id:'exportBtn', onclick: "prepare_search_params();"  %>
+
+  </div>
+    <div class="box-body no-padding">
+  <table class="table game_players">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>姓名</th>
+        <th>电话</th>
+        <th>联系电话</th>
+        <th>配送时间</th>
+        <th>取件短信</th>
+        <th>备注</th>
+        <th>创建时间</th>
+        <th colspan="2"></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @game_results.each do |game_result| %>
+        <tr>
+          <td><%= game_result.id %> </td>
+          <td><%= game_result.realname %></td>
+          <td><%= game_result.cellphone %></td>
+          <td><%= game_result.delivery_cellphone %> </td>
+          <td><%= GameResult.translate_enum_name :delivery_time_option, game_result.delivery_time_option %> </td>
+          <td><%= game_result.display_delivery_sms %>  </td>
+          <td><%= game_result.memo %> </td>
+          <td><%= l game_result.created_at, format: :better %></td>
+          <td></td>
+          <td></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <%= paginate @game_results %>
+    </div>
+  </div>
+</section>

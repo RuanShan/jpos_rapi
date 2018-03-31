@@ -1,0 +1,9 @@
+<% content_for :game_asset_css do %>
+  <%= stylesheet_link_tag  'game_round_wechat', media: 'all', 'data-turbolinks-track' => true %>
+<% end %>
+
+<% content_for :game_asset_js do %>
+  <%= javascript_include_tag 'game_round_wechat', 'data-turbolinks-track' => true %>
+<% end %>
+
+<%= render "game_rounds/games/contact_required_form" %>

@@ -1,0 +1,2 @@
+module WechatAccountsHelper
+end

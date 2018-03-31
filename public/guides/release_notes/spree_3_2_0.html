@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>    <html class="lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>    <html class="lt-ie9"> <![endif]-->
+<!--[if IE 9]>    <html class="ie9"> <![endif]-->
+<!--[if gt IE 9]><!--> <html lang="en" > <!--<![endif]-->
+<head>
+  <title>Spree 3.2.0 - Release Notes | Spree - Ruby on Rails e-commerce platform</title>
+
+  <meta charset="utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta name="section" content="version" />
+
+<link href="/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+<link href="/shared/css/icons.css" media="screen" rel="stylesheet" type="text/css">
+<link href="/shared/css/icons-codes.css" media="screen" rel="stylesheet" type="text/css">
+
+<link href="/shared/css/skeleton.css" media="screen" rel="stylesheet" type="text/css">
+<link href="/shared/css/documentation.css" media="screen" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="/assets/stylesheets/guides.css" media="screen" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/docsearch.js/2/docsearch.min.css" />
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-migrate/1.1.1/jquery-migrate.min.js"></script>
+<script src="/assets/javascripts/css_browser_selector_dev.js" type="text/javascript"></script>
+<script src="/assets/javascripts/jquery.toc.js" type="text/javascript"></script>
+<script src="/assets/javascripts/documentation.js" type="text/javascript"></script>
+
+
+</head>
+<body class="integration">
+  
+  <header id="header">
+    <div id="top-header">
+  <div class="container">
+    <div class="row">
+      <div class="two columns">
+  <a class="logo" href="http://spreecommerce.org">
+    <img src='/images/logo.png' alt="Spree Commerce - Ruby on Rails e-commerce platform" />
+  </a>
+</div>
+
+      <div class="three columns">
+  <input type="text" id="search-field" placeholder="Search..." />
+</div>
+
+      <nav id="main-menu" class="eleven columns">
+  <ul class="inline">
+    <li><a href="../api/">API</a></li>
+    <li><a href="../developer/">Developer</a></li>
+    <li><a href="../user/">User</a></li>
+    <li><a href="../release_notes/">Release Notes</a></li>
+    <li>
+      <a href="http://slack.spreecommerce.org" target="_blank">Slack</a>
+    </li>
+    <li>
+      <a href="https://heroku.com/deploy?template=https://github.com/spree/spree" target="_blank" rel="nofollow">Demo</a>
+    </li>
+  </ul>
+</nav>
+
+    </div>
+  </div>
+</div>
+
+
+    <div id="subheader">
+      <div class="container">
+        <div class="twelve columns">
+          <h1 class="page-title">Spree 3.2.0 - Release Notes</h1>
+        </div>
+      </div>
+    </div>
+
+  </header>
+
+  <div class="container">
+    <section id="main-content">
+
+      <div class="twelve columns">
+        <div id="content">
+          
+<h2 id="majornew-features">Major/New Features</h2>
+
+<h3 id="rails-5-support">Rails 5 support</h3>
+
+<p><code>Spree 3.2</code> is now compatible with <code>Rails 5</code> compared to <code>3.1</code> which used to run on <code>Rails 4.2</code>.
+Thanks to that you can start using all of the <a href="http://edgeguides.rubyonrails.org/5_0_release_notes.html">new great features available in Rails 5</a></p>
+
+<p>Contributed by <a href="http://sparksolutions.co">Spark Solutions</a> &amp; <a href="http://vinsol.com">Vinsol</a> &amp; <a href="https://github.com/jhawthorn">John Hawthorn</a></p>
+
+<h3 id="products-tagging">Products Tagging</h3>
+
+<p>You can now tag Products additionally to just using Taxons. Tagging module uses <code>acts-as-taggable-on</code> gem. You can easily fetch a list of Products associated to any given tag(s) which should be very helpful for creating new dynamic products listings.</p>
+
+<p>Contributed by <a href="https://github.com/spree/spree/pull/7347">Vishal Zambre</a></p>
+
+<h3 id="promo-code-applier-on-cart">Promo code applier on Cart</h3>
+
+<p>Discount code applier was brought back to the Cart view in customer frontend. Now enhanced, more user friendly and using API V1.</p>
+
+<p>Contributed by <a href="https://github.com/spree/spree/pull/7684">Vinsol</a></p>
+
+<h3 id="extended-google-analytics-enhanced-ecommerce-integration">Extended Google Analytics Enhanced Ecommerce integration</h3>
+
+<p>Spree now passes more meaningful information into Google Analytics when adding Products to Cart like:</p>
+
+<ul>
+  <li>product category name</li>
+  <li>product brand name</li>
+  <li>variant description</li>
+</ul>
+
+<p>Contributed by <a href="https://github.com/spree/spree/pull/7727">Spark Solutions</a></p>
+
+<h3 id="new-spree-open-source-branding">New Spree open source branding</h3>
+
+<p>We’ve changed logo for default customer frontend and Admin Panel to differentiate
+Spree Open Source project from Spree Commerce (company).</p>
+
+<p>Contributed by <a href="https://github.com/spree/spree/pull/7707">Spark Solutions</a></p>
+
+<h3 id="lighter-and-more-user-friendly-admin-panel">Lighter and more user-friendly Admin Panel</h3>
+
+<p>We’ve removed a lot of unused, deprecated, outdated code and assets from the Admin Panel,
+overall reducing the codebase by a lot. We’ve also fixed a huge amount of UX issues
+like missing validation, bad navigation or lack of thereof and so on.</p>
+
+<p>Contributed by <a href="https://github.com/spree/spree/pulls?q=is%3Apr+is%3Aclosed+label%3A%22Admin+Panel%22">Spark Solutions</a></p>
+
+<h3 id="semantic-versioning-for-future-extensions">Semantic versioning for future Extensions</h3>
+
+<p>We’re changing how extensions dependencies work. Previously you had to match
+extension branch to Spree branch. Starting from now <code>master</code> branch of all
+generated extensions will work with Spree &gt;= <code>3.1</code> and &lt; <code>4.0</code>. Thanks to
+that we’re dropping versioning of extensions same as Spree and using
+standard <a href="http://semver.org/">Semantic versioning</a>.</p>
+
+<p>Contributed by <a href="https://github.com/spree/spree/pull/7747">Spark Solutions</a></p>
+
+<h3 id="more-developer-friendly-extension-generator">More developer-friendly Extension generator</h3>
+
+<p>Extension template used by the generator includes now Travis CI config with
+settings to test extension against Spree 3.1, 3.2 &amp; 3.3 (edge), PostgreSQL,
+MySQL, Ruby 2.2 &amp; 2.3 thanks to <a href="https://github.com/thoughtbot/appraisal">Appraisals gem</a>
+by thoughtbot.</p>
+
+<p>Contributed by <a href="https://github.com/spree/spree/pull/7761">Spark Solutions</a></p>
+
+<h2 id="upgrade">Upgrade</h2>
+
+<h3 id="update-your-rails-version-to-50">Update your Rails version to 5.0</h3>
+
+<p>Please follow the
+<a href="http://edgeguides.rubyonrails.org/upgrading_ruby_on_rails.html#upgrading-from-rails-4-2-to-rails-5-0">official Rails guide</a>
+to upgrade your store.</p>
+
+<h3 id="update-gemfile">Update Gemfile</h3>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>gem <span class="string"><span class="delimiter">'</span><span class="content">spree</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">~&gt; 3.2.0</span><span class="delimiter">'</span></span>
+gem <span class="string"><span class="delimiter">'</span><span class="content">spree_auth_devise</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">~&gt; 3.2.0</span><span class="delimiter">'</span></span>
+gem <span class="string"><span class="delimiter">'</span><span class="content">spree_gateway</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">~&gt; 3.2.0</span><span class="delimiter">'</span></span>
+
+</pre></div>
+</div>
+</div>
+
+<h3 id="update-your-extensions">Update your extensions</h3>
+
+<p>We’re changing how extensions dependencies work. Previously you had to match
+extension branch to Spree branch. Starting from now <code>master</code> branch of all
+<code>spree-contrib</code> extensions should work with Spree &gt;= <code>3.1</code> and &lt; <code>4.0</code>. Please change
+your extensions in Gemfile eg.:</p>
+
+<p>from:</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>gem <span class="string"><span class="delimiter">'</span><span class="content">spree_braintree_vzero</span><span class="delimiter">'</span></span>, <span class="key">github</span>: <span class="string"><span class="delimiter">'</span><span class="content">spree-contrib/spree_braintree_vzero</span><span class="delimiter">'</span></span>, <span class="key">branch</span>: <span class="string"><span class="delimiter">'</span><span class="content">3-1-stable</span><span class="delimiter">'</span></span>
+
+</pre></div>
+</div>
+</div>
+
+<p>to:</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>gem <span class="string"><span class="delimiter">'</span><span class="content">spree_braintree_vzero</span><span class="delimiter">'</span></span>, <span class="key">github</span>: <span class="string"><span class="delimiter">'</span><span class="content">spree-contrib/spree_braintree_vzero</span><span class="delimiter">'</span></span>
+
+</pre></div>
+</div>
+</div>
+
+<h3 id="run-bundle-update">Run <code>bundle update</code></h3>
+
+<h3 id="install-missing-migrations">Install missing migrations</h3>
+
+<div class="language-bash highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>rails spree<span class="reserved">:</span>install<span class="reserved">:</span>migrations
+rails spree_auth<span class="reserved">:</span>install<span class="reserved">:</span>migrations
+rails spree_gateway<span class="reserved">:</span>install<span class="reserved">:</span>migrations
+
+</pre></div>
+</div>
+</div>
+
+<h3 id="run-migrations">Run migrations</h3>
+
+<div class="language-bash highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>rails db<span class="reserved">:</span>migrate
+
+</pre></div>
+</div>
+</div>
+
+<h3 id="other-gotchas">Other Gotchas</h3>
+
+<h4 id="ruby--222-required">Ruby &gt;= 2.2.2 required</h4>
+
+<p>As Rails 5 is now a dependency it requires at least Ruby 2.2.2 to run. Ruby 2.3
+is also supported.</p>
+
+<h4 id="noteworthy-changes">Noteworthy Changes</h4>
+
+<p>Also please review each of the noteworthy changes, and ensure your customizations
+or extensions are not effected. If you are affected by a change, and have any
+of your own tips please submit a PR to help the next person!</p>
+
+<h2 id="full-changelog">Full Changelog</h2>
+
+<p>You can view the full changes using <a href="https://github.com/spree/spree/compare/3-1-stable...master">Github Compare</a>.</p>
+
+<h2 id="noteworthy-changes-1">Noteworthy Changes</h2>
+
+<ul>
+  <li>
+    <p>Removed previously deprecated Spree CMD installer</p>
+
+    <p><a href="https://github.com/spree/spree/pull/7278">Spark Solutions</a></p>
+  </li>
+  <li>
+    <p>Removed unused <code>Spree::StoreController#apply_coupon_code</code> action</p>
+
+    <p><a href="https://github.com/spree/spree/pull/7284">Spark Solutions</a></p>
+  </li>
+  <li>
+    <p>Removed <code>Admin::SearchController</code> and pointed Admin Panel search actions to API endpoints</p>
+
+    <p><a href="https://github.com/spree/spree/pull/7444">Spark Solutions</a></p>
+  </li>
+  <li>
+    <p>Removed previously deprecated <code>Spree::ProductsHelper::line_item_description</code></p>
+
+    <p><a href="https://github.com/spree/spree/pull/7283">Spark Solutions</a></p>
+  </li>
+  <li>
+    <p>Removed unused method  <code>Spree::Admin::BaseHelper#attribute_name_for</code></p>
+
+    <p><a href="https://github.com/spree/spree/pull/7282">Spark Solutions</a></p>
+  </li>
+  <li>
+    <p>Removed unused <code>Spree::Admin::InventorySettingsHelper</code></p>
+
+    <p><a href="https://github.com/spree/spree/pull/7282">Spark Solutions</a></p>
+  </li>
+  <li>
+    <p>Removed unused <code>Spree::Admin::TablesHelper</code></p>
+
+    <p><a href="https://github.com/spree/spree/pull/7282">Spark Solutions</a></p>
+  </li>
+  <li>
+    <p>Removed unused <code>Spree::Admin::ProductsHelper</code></p>
+
+    <p><a href="https://github.com/spree/spree/pull/7282">Spark Solutions</a></p>
+  </li>
+  <li>
+    <p>Removed unused method  <code>Spree::Admin::NavigationHelper#collapse_sidebar_link</code></p>
+
+    <p><a href="https://github.com/spree/spree/pull/7282">Spark Solutions</a></p>
+  </li>
+  <li>
+    <p>Removed unused method  <code>Spree::Admin::NavigationHelper#configurations_menu_item</code></p>
+
+    <p><a href="https://github.com/spree/spree/pull/7282">Spark Solutions</a></p>
+  </li>
+  <li>
+    <p>Moved <code>Spree::PromotionRulesHelper</code> to <code>Spree::Admin::PromotionRulesHelper</code></p>
+
+    <p><a href="https://github.com/spree/spree/pull/7282">Spark Solutions</a></p>
+  </li>
+  <li>
+    <p>Fixed permissions for Product associations management in Admin Panel</p>
+
+    <p><a href="https://github.com/spree/spree/pull/7663">Spark Solutions</a></p>
+  </li>
+  <li>
+    <p>ActiveMerchant updated to <code>~&gt; 1.59</code></p>
+
+    <p><a href="https://github.com/spree/spree/pull/7616">Spark Solutions</a></p>
+  </li>
+  <li>
+    <p>Added <code>created_at</code> to Variant model</p>
+
+    <p><a href="https://github.com/spree/spree/pull/7627">Spark Solutions</a></p>
+  </li>
+  <li>
+    <p>Additional Admin Panel usability fixes</p>
+
+    <p><a href="https://github.com/spree/spree/pull/7551, https://github.com/spree/spree/pull/7552. https://github.com/spree/spree/pull/7553">Nimish Gupta</a></p>
+  </li>
+  <li>
+    <p>Allow order to transit from resumed state to returned state</p>
+
+    <p><a href="https://github.com/spree/spree/pull/7554">Nimish Gupta</a></p>
+  </li>
+  <li>
+    <p>Changed <code>state</code> translation key in Admin Panel to <code>status</code></p>
+
+    <p><a href="https://github.com/spree/spree/pull/7557">orbit-dna</a></p>
+  </li>
+  <li>
+    <p>Fixed API pagination <code>per_page</code> and <code>current_page</code> values (now always returned as integer)</p>
+
+    <p><a href="https://github.com/spree/spree/pull/7550">Spark Solutions</a></p>
+  </li>
+  <li>
+    <p>Display Spree version in Admin Panel</p>
+
+    <p><a href="https://github.com/spree/spree/pull/7685">Spark Solutions</a></p>
+
+    <p>By default, it’s displayed only for Admin users who can manage the current Store, but can be disabled altogether by changing preferences:</p>
+
+    <p><code>
+  Spree::Config[:admin_show_version] = false
+ </code>
+  in <code>config/initializers/spree.rb</code></p>
+  </li>
+  <li>
+    <p>New preferences for Admin Panel <code>per_page</code> settings, default value for all of them is now
+<code>Kaminari.config.default_per_page</code> (by default <code>25</code>)</p>
+
+    <p><a href="https://github.com/spree/spree/pull/7730">Spark Solutions</a></p>
+
+    <ul>
+      <li><code>orders_per_page</code> renamed to <code>admin_orders_per_page</code></li>
+      <li><code>properties_per_page</code> renamed to <code>properties_per_page</code></li>
+      <li><code>promotions_per_page</code> renamed to <code>admin_promotions_per_page</code></li>
+      <li><code>customer_returns_per_page</code> renamed to <code>admin_customer_returns_per_page</code></li>
+      <li>added <code>admin_users_per_page</code></li>
+    </ul>
+  </li>
+  <li>
+    <p>Removed unused <code>Spree::Admin::UsersController#json_data</code> method</p>
+
+    <p><a href="https://github.com/spree/spree/pull/7731">Spark Solutions</a></p>
+  </li>
+  <li>
+    <p>Added validation errors and other UX fixes for return process in Admin Panel</p>
+
+    <p><a href="https://github.com/spree/spree/pull/7728">Spark Solutions</a></p>
+  </li>
+  <li>
+    <p>Added GitGub issue template</p>
+
+    <p><a href="https://github.com/spree/spree/pull/7721">Josh Powell</a></p>
+  </li>
+  <li>
+    <p>Added revert and deactivate methods to allow actions to take place when a
+Promotion is removed from the Cart</p>
+
+    <p><a href="https://github.com/spree/spree/pull/7705">Joe Connor</a></p>
+  </li>
+  <li>
+    <p>Use <code>Spree::Money</code> to display values in Sales Total report</p>
+
+    <p><a href="https://github.com/spree/spree/pull/7702">Spark Solutions</a></p>
+  </li>
+  <li>
+    <p>Fixed filtering out Products by <code>discontinue_on</code> in Admin Panel products index</p>
+
+    <p><a href="https://github.com/spree/spree/pull/7686">Joe Swann</a></p>
+  </li>
+  <li>
+    <p>Allow title separator to be customized</p>
+
+    <p><a href="https://github.com/spree/spree/pull/7672">Ryan Siddle</a></p>
+  </li>
+  <li>
+    <p>Additional fixes for Spree mounted in other then default <code>/</code> mountpoint</p>
+
+    <p><a href="https://github.com/spree/spree/pull/7725">Spark Solutions</a></p>
+  </li>
+  <li>
+    <p>Search for current Order in Frontend using guest token only</p>
+
+    <p><a href="https://github.com/spree/spree/pull/7626">Björn Andersson</a></p>
+  </li>
+  <li>
+    <p>Deprecated <code>Spree::Calculator::FreeShipping</code></p>
+
+    <p><a href="https://github.com/spree/spree/pull/7753">Spark Solutions</a></p>
+  </li>
+  <li>
+    <p>Added promotion rule for shipping country</p>
+
+    <p><a href="https://github.com/spree/spree/pull/7542">Spark Solutions</a></p>
+  </li>
+</ul>
+
+        </div>
+      </div>
+
+    </section>
+
+    <aside id="sidebar" class="four columns">
+  <nav id="sidebar-menu">
+    <ul>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-version-menu"><i class="icon-right-open"></i></a>
+          <a href='#.html'>Versions</a>
+        </h3>
+        <ul class="js-guides">
+          <li><i class="icon-dot"></i><a href='spree_3_4_0.html'>3.4.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_3_3_0.html'>3.3.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_3_2_0.html'>3.2.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_3_1_0.html'>3.1.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_3_0_0.html'>3.0.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_2_4_0.html'>2.4.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_2_3_0.html'>2.3.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_2_2_0.html'>2.2.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_2_1_0.html'>2.1.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_2_0_0.html'>2.0.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_1_3_0.html'>1.3.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_1_2_2.html'>1.2.2</a></li>
+          <li><i class="icon-dot"></i><a href='spree_1_2_0.html'>1.2.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_1_1_4.html'>1.1.4</a></li>
+          <li><i class="icon-dot"></i><a href='spree_1_1_0.html'>1.1.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_1_0_0.html'>1.0.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_0_70_0.html'>0.70.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_0_60_0.html'>0.60.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_0_50_0.html'>0.50.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_0_40_0.html'>0.40.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_0_30_0.html'>0.30.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_0_10_0.html'>0.10.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_0_9_0.html'>0.9.0</a></li>
+        </ul>
+      </li>
+    </ul>
+  </nav>
+</aside>
+
+  </div>
+
+  <footer id="main-footer">
+
+  <div class="footer-top">
+    <div class="container">
+      <div id="link-blocks" class="row">
+        <div class="link-block six columns">
+          <h3 class="block-title">Developers</h3>
+          <ul>
+            <li><a href="https://slack.spreecommerce.org" target="_blank" rel="nofollow">Slack</a></li>
+            <li><a href="https://github.com/spree-contrib" target="_blank">Extensions</a></li>
+            <li><a href="https://github.com/spree/spree/blob/master/license.md" target="_blank">License</a></li>
+          </ul>
+        </div>
+        <div class="link-block seven columns">
+          <h3 class="block-title">About Spree</h3>
+          <p>
+            <strong><a href="https://spreecommerce.org">Spree Commerce</a></strong>
+            is a complete modular, API-driven open source e-commerce solution
+            built with Ruby on Rails.
+          </p>
+          <p>
+            Guides are hosted and maintained by
+            <a href="http://sparksolutions.co" target="_blank">Spark Solutions</a>
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</footer>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-104990445-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/docsearch.js/2/docsearch.min.js"></script>
+<script type="text/javascript"> docsearch({
+apiKey: 'fb697cd2d04591b036ea172259c05ba8',
+indexName: 'spreecommerce',
+inputSelector: '#search-field',
+debug: false // Set debug to true if you want to inspect the dropdown
+});
+</script>
+
+
+  </body>
+</html>

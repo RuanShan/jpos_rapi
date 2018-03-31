@@ -1,0 +1,1 @@
+json.array! @game_settings, partial: 'game_settings/game_setting', as: :game_setting

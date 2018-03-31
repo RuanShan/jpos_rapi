@@ -1,0 +1,49 @@
+1. 创建活动
+curl -i -X POST\
+  -d "campaign[name]=六一儿童节快乐联欢&campaign[start_at]=2017-06-01T13:30:00"\
+  -H "Authorization: your_api_key"\
+  http://wx-more.getstore.cn/api/v1/campaigns
+
+
+2.创建游戏
+curl -i -X POST -d\
+  "game_round[name]=这是一个新的签到抽奖游戏&game_round[code]=check_in&\
+  game_round[campaign_id]=3&game_round[wx_keyword]=qd&\
+  game_round[contact_required]=1&game_round[display_players]=8&\
+  game_round[duration]=30&game_round[gear]=100&\
+  game_round[start_at]=2017-06-01T10:00:00&game_round[end_at]=2017-06-01T10:00:20&\
+  game_round[game_awards_attributes][0][name]=一等奖&game_round[game_awards_attributes][0][prize_count]=1&\
+  game_round[game_awards_attributes][1][name]=二等奖&game_round[game_awards_attributes][1][prize_count]=2"\
+  -H "Authorization: your_api_key"\
+  http://wx-more.getstore.cn/api/v1/game_rounds
+
+  curl -i -X POST -d\
+    "game_round[name]=这是一个新的签到抽奖游戏&game_round[code]=check_in&\
+    game_round[campaign_id]=3&game_round[wx_keyword]=qd&\
+    game_round[contact_required]=1&game_round[display_players]=8&\
+    game_round[duration]=30&game_round[gear]=100&\
+    game_round[start_at]=2017-06-01T10:00:00&game_round[end_at]=2017-06-01T10:00:20&\
+    game_round[game_awards_attributes][0][name]=一等奖&game_round[game_awards_attributes][0][prize_count]=1&\
+    game_round[game_awards_attributes][1][name]=二等奖&game_round[game_awards_attributes][1][prize_count]=2"\
+    -H "Authorization: your_api_key"\
+    http://wx-more.getstore.cn/api/v1/game_rounds
+
+    curl -i -X POST -d\
+      "game_round[name]=这是一个新的签到抽奖游戏&game_round[code]=check_in&\
+      game_round[campaign_id]=3&game_round[wx_keyword]=qd&\
+      game_round[contact_required]=1&game_round[display_players]=8&\
+      game_round[duration]=30&game_round[gear]=100&\
+      game_round[start_at]=2017-06-01T10:00:00&game_round[end_at]=2017-06-01T10:00:20&\
+      game_round[game_awards_attributes][0][name]=一等奖&game_round[game_awards_attributes][0][prize_count]=1&\
+      game_round[game_awards_attributes][1][name]=二等奖&game_round[game_awards_attributes][1][prize_count]=2"\
+      -H "Authorization: your_api_key"\
+      http://wx-more.getstore.cn/api/v1/game_rounds
+
+2.1 查询游戏
+  curl -i -X GET http://wx-more.getstore.cn/api/v1/game_rounds/3
+    -H "Authorization: your_api_key"
+2.2 修改游戏
+  curl -i -X PUT -d\
+  "game_round[name]=第一个抽奖游戏&game_round[aasm_state]=open"\
+  http://wx-more.getstore.cn/api/v1/game_rounds/<id>\
+  -H "Authorization: your_api_key"

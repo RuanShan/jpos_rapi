@@ -1,0 +1,25 @@
+= form_for @game_round do |f|
+  - if @game_round.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@game_round.errors.count, "error")} prohibited this game_round from being saved:"
+      %ul
+        - @game_round.errors.full_messages.each do |msg|
+          %li= msg
+
+  .field
+    = f.label :game
+    = f.text_field :game
+  .field
+    = f.label :name
+    = f.text_field :name
+  .field
+    = f.label :start_at
+    = f.datetime_select :start_at
+  .field
+    = f.label :end_at
+    = f.datetime_select :end_at
+  .field
+    = f.label :preferences
+    = f.text_field :preferences
+  .actions
+    = f.submit 'Save'

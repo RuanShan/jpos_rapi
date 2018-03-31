@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>    <html class="lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>    <html class="lt-ie9"> <![endif]-->
+<!--[if IE 9]>    <html class="ie9"> <![endif]-->
+<!--[if gt IE 9]><!--> <html lang="en" > <!--<![endif]-->
+<head>
+  <title>Payments - Developer Guide | Spree - Ruby on Rails e-commerce platform</title>
+
+  <meta charset="utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta name="section" content="core" />
+
+<link href="/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+<link href="/shared/css/icons.css" media="screen" rel="stylesheet" type="text/css">
+<link href="/shared/css/icons-codes.css" media="screen" rel="stylesheet" type="text/css">
+
+<link href="/shared/css/skeleton.css" media="screen" rel="stylesheet" type="text/css">
+<link href="/shared/css/documentation.css" media="screen" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="/assets/stylesheets/guides.css" media="screen" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/docsearch.js/2/docsearch.min.css" />
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-migrate/1.1.1/jquery-migrate.min.js"></script>
+<script src="/assets/javascripts/css_browser_selector_dev.js" type="text/javascript"></script>
+<script src="/assets/javascripts/jquery.toc.js" type="text/javascript"></script>
+<script src="/assets/javascripts/documentation.js" type="text/javascript"></script>
+
+
+</head>
+<body class="developer">
+  
+  <header id="header">
+    <div id="top-header">
+  <div class="container">
+    <div class="row">
+      <div class="two columns">
+  <a class="logo" href="http://spreecommerce.org">
+    <img src='/images/logo.png' alt="Spree Commerce - Ruby on Rails e-commerce platform" />
+  </a>
+</div>
+
+      <div class="three columns">
+  <input type="text" id="search-field" placeholder="Search..." />
+</div>
+
+      <nav id="main-menu" class="eleven columns">
+  <ul class="inline">
+    <li><a href="../api/">API</a></li>
+    <li><a href="../developer/">Developer</a></li>
+    <li><a href="../user/">User</a></li>
+    <li><a href="../release_notes/">Release Notes</a></li>
+    <li>
+      <a href="http://slack.spreecommerce.org" target="_blank">Slack</a>
+    </li>
+    <li>
+      <a href="https://heroku.com/deploy?template=https://github.com/spree/spree" target="_blank" rel="nofollow">Demo</a>
+    </li>
+  </ul>
+</nav>
+
+    </div>
+  </div>
+</div>
+
+
+    <div id="subheader">
+      <div class="container">
+        <div class="sixteen columns">
+          <h1 class="page-title">Payments - Developer Guide | Spree - Ruby on Rails e-commerce platform</h1>
+        </div>
+      </div>
+    </div>
+
+  </header>
+
+  <div class="container" id="main">
+    <section id="main-content">
+
+      <div class="twelve columns">
+        <div id="content">
+          
+<h2 id="overview">Overview</h2>
+
+<p>Spree has a highly flexible payments model which allows multiple payment methods to be available during checkout. The logic for processing payments is decoupled from orders, making it easy to define custom payment methods with their own processing logic.</p>
+
+<p>Payment methods typically represent a payment gateway. Gateways will process card payments, and may also include non-gateway methods of payment such as Check, which is provided in Spree by default.</p>
+
+<p>The <code>Payment</code> model in Spree tracks payments against <a href="orders.html">Orders</a>. Payments relate to a <code>source</code> which indicates how the payment was made, and a <code>PaymentMethod</code>, indicating the processor used for this payment.</p>
+
+<p>When a payment is created, it is given a unique, 8-character identifier. This is used when sending the payment details to the payment processor. Without this identifier, some payment gateways mistakenly reported duplicate payments.</p>
+
+<p>A payment can go through many different states, as illustrated below.</p>
+
+<p><img src="/images/developer/core/payment_flow.jpg" alt="Payment flow" /></p>
+
+<p>An explanation of the different states:</p>
+
+<ul>
+  <li><code>checkout</code>: Checkout has not been completed</li>
+  <li><code>processing</code>: The payment is being processed (temporary – intended to prevent double submission)</li>
+  <li><code>pending</code>: The payment has been processed but is not yet complete (ex. authorized but not captured)</li>
+  <li><code>failed</code>: The payment was rejected (ex. credit card was declined)</li>
+  <li><code>void</code>: The payment should not be counted against the order</li>
+  <li><code>completed</code>: The payment is completed. Only payments in this state count against the order total</li>
+</ul>
+
+<p>The state transition for these is handled by the processing code within Spree; however, you are able to call the event methods yourself to reach these states. The event methods are:</p>
+
+<ul>
+  <li><code>started_processing</code></li>
+  <li><code>failure</code></li>
+  <li><code>pend</code></li>
+  <li><code>complete</code></li>
+  <li><code>void</code></li>
+</ul>
+
+<h2 id="payment-methods">Payment Methods</h2>
+
+<p>Payment methods represent the different options a customer has for making a payment. Most sites will accept credit card payments through a payment gateway, but there are other options. Spree also comes with built-in support for a Check payment, which can be used to represent any offline payment. There are also third-party extensions that provide support for some other interesting options such as <a href="https://github.com/spree-contrib/spree_braintree_vzero">spree_braintree_vzero</a> for Braintree &amp; PayPal payment methods.</p>
+
+<p>A <code>PaymentMethod</code> can have the following attributes:</p>
+
+<ul>
+  <li><code>type</code>: The subclass of <code>Spree::PaymentMethod</code> this payment method represents. Uses rails single table inheritance feature.</li>
+  <li><code>name</code>: The visible name for this payment method</li>
+  <li><code>description</code>: The description for this payment method</li>
+  <li><code>active</code>: Whether or not this payment method is active. Set it <code>false</code> to hide it in frontend.</li>
+  <li><code>display_on</code>: Determines where the payment method can be visible. Values can be <code>front</code> for frontend, <code>back</code> for backend or <code>both</code> for both.</li>
+</ul>
+
+<h3 id="payment-method-visibility">Payment Method Visibility</h3>
+
+<p>The appearance of the payment methods on the frontend and backend depend on several criteria used by the <code>PaymentMethod.available</code> method. The code is this:</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="keyword">def</span> <span class="predefined-constant">self</span>.<span class="function">available</span>(display_on = <span class="string"><span class="delimiter">'</span><span class="content">both</span><span class="delimiter">'</span></span>)
+  all.select <span class="keyword">do</span> |p|
+    p.active &amp;&amp;
+    (p.display_on == display_on.to_s || p.display_on.blank?)
+  <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+</pre></div>
+</div>
+</div>
+
+<p>If a payment method meets these criteria, then it will be available.</p>
+
+<h3 id="auto-capturing">Auto-Capturing</h3>
+
+<p>By default, a payment method’s <code>auto_capture?</code> method depends on the <code>Spree::Config[:auto_capture]</code> preference. If you have set this preference to <code>true</code>, but don’t want a payment method to be auto-capturable like other payment methods in your system, you can override the <code>auto_capture?</code> method in your
+<code>PaymentMethod</code> subclass:</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="keyword">class</span> <span class="class">FancyPaymentMethod</span> &lt; <span class="constant">Spree</span>::<span class="constant">PaymentMethod</span>
+  <span class="keyword">def</span> <span class="function">auto_capture?</span>
+    <span class="predefined-constant">false</span>
+  <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+</pre></div>
+</div>
+</div>
+
+<p>The result of this method determines if a payment will be automatically captured (true) or only authorized (false) during the processing of the payment.</p>
+
+<h2 id="payment-processing">Payment Processing</h2>
+
+<p>Payment processing in Spree supports many different gateways, but also attempts to comply with the API provided by the <a href="https://github.com/shopify/active_merchant">active_merchant</a> gem where possible.</p>
+
+<h3 id="gateway-options">Gateway Options</h3>
+
+<p>For every gateway action, a list of gateway options are passed through.</p>
+
+<ul>
+  <li><code>email</code> and <code>customer</code>: The email address related to the order</li>
+  <li><code>ip</code>: The last IP address for the order</li>
+  <li><code>order_id</code>: The Order’s <code>number</code> attribute, plus the <code>identifier</code> for each payment, generated when the payment is first created</li>
+  <li><code>shipping</code>: The total shipping cost for the order, in cents</li>
+  <li><code>tax</code>: The total tax cost for the order, in cents</li>
+  <li><code>subtotal</code>: The item total for the order, in cents</li>
+  <li><code>currency</code>: The 3-character currency code for the order</li>
+  <li><code>discount</code>: The promotional discount applied to the order</li>
+  <li><code>billing_address</code>: A hash containing billing address information</li>
+  <li><code>shipping_address</code>: A hash containing shipping address information</li>
+</ul>
+
+<p>The billing address and shipping address data is as follows:</p>
+
+<ul>
+  <li><code>name</code>: The combined <code>first_name</code> and <code>last_name</code> from the address</li>
+  <li><code>address1</code>: The first line of the address information</li>
+  <li><code>address2</code>: The second line of address information</li>
+  <li><code>city</code>: The city of the address</li>
+  <li><code>state</code>: An abbreviated version of the state name or, failing that, the state name itself, from the related <code>State</code> object. If that fails, the <code>state_name</code> attribute from the address.</li>
+  <li><code>country</code>: The ISO name for the country. For example, United States of America is “US”, Australia is “AU”.</li>
+  <li><code>phone</code>: The phone number associated with the address</li>
+</ul>
+
+<h3 id="credit-card-data">Credit Card Data</h3>
+
+<p>Spree stores only the type, expiration date, name and last four digits for the card on your server. This data can then be used to present to the user so that they can verify that the correct card is being used. All credit card data sent through forms is sent through immediately to the gateways, and is not stored for any period of time.</p>
+
+<h3 id="processing-walkthrough">Processing Walkthrough</h3>
+
+<p>When an order is completed in spree, each <code>Payment</code> object associated with the order has the <code>process!</code> method called on it (unless <code>payment_required?</code> for the order returns <code>false</code>), in order to attempt to automatically fulfill the payment required for the order. If the payment method requires a source, and the payment has a source associated with it, then Spree will attempt to process the payment. Otherwise, the payment will need to be processed manually.</p>
+
+<p>If the <code>PaymentMethod</code> object is configured to auto-capture payments, then the <code>Payment#purchase!</code> method will be called, which will call <code>PaymentMethod#purchase</code> like this:</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>payment_method.purchase(&lt;amount&gt;, &lt;source&gt;, &lt;gateway options&gt;)
+
+</pre></div>
+</div>
+</div>
+
+<p>If the payment is <em>not</em> configured to auto-capture payments, the <code>Payment#authorize!</code> method will be called, with the same arguments as the <code>purchase</code> method above:</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>payment_method.authorize(&lt;amount&gt;, &lt;source&gt;, &lt;gateway options&gt;)
+
+</pre></div>
+</div>
+</div>
+
+<p>How the payment is actually put through depends on the <code>PaymentMethod</code> sub-class’ implementation of the <code>purchase</code> and <code>authorize</code> methods.</p>
+
+<p>The returned object from both the <code>purchase</code> and <code>authorize</code> methods on the payment method objects must be an <code>ActiveMerchant::Billing::Response</code> object. This response object is then stored (in YAML) in the <code>spree_log_entries</code> table. Log entries can be retrieved with a call to the <code>log_entries</code> association on any <code>Payment</code> object.</p>
+
+<p>If the <code>purchase!</code> route is taken and is successful, the payment is marked as <code>completed</code>. If it fails, it is marked as <code>failed</code>. If the <code>authorize</code> method is successful, the payment is transitioned to the <code>pending</code> state so that it can be manually captured later by calling the <code>capture!</code> method. If it is unsuccessful, it is also transitioned to the <code>failed</code> state.</p>
+
+<div class="note"><p>Once a payment has been saved, it also updates the order. This may trigger the <code>payment_state</code> to change, which would reflect the current payment state of the order. The possible states are:</p>
+
+<ul>
+  <li><code>balance_due</code>: Indicates that payment is required for this order</li>
+  <li><code>failed</code>: Indicates that the last payment for the order failed</li>
+  <li><code>credit_owed</code>: This order has been paid for in excess of its total</li>
+  <li><code>paid</code>: This order has been paid for in full.</li>
+</ul>
+</div>
+
+<div class="warning"><p>You may want to keep tabs on the number of orders with a <code>payment_state</code> of <code>failed</code>. A sudden increase in the number of such orders could indicate a problem with your credit card gateway and most likely indicates a serious problem affecting customer satisfaction. You should check the latest <code>log_entries</code> for the most recent payments in the store if this is happening.</p>
+</div>
+
+<h3 id="log-entries">Log Entries</h3>
+
+<p>Responses from payment gateways within Spree are typically <code>ActiveMerchant::Billing::Response</code> objects. When Spree handles a response from a payment gateway, it will serialize the object as YAML and store it in the database as a log entry for a payment. These responses can be useful for debugging why a payment has failed.</p>
+
+<p>You can get a list of these log entries by calling the <code>log_entries</code> on any <code>Spree::Payment</code> object. To get the <code>Active::Merchant::Billing::Response</code> out of these <code>Spree::LogEntry</code> objects, call the <code>details</code> method.</p>
+
+<h2 id="supported-gateways">Supported Gateways</h2>
+
+<p>Access to a number of payment gateways is handled with the usage of the <a href="https://github.com/spree/spree_gateway">spree_gateway</a> extension. This extension currently supports the following gateways:</p>
+
+<ul>
+  <li>Authorize.Net</li>
+  <li>Balanced</li>
+  <li>Beanstram</li>
+  <li>Braintree</li>
+  <li>eWAY</li>
+  <li>LinkPoint</li>
+  <li>Moneris</li>
+  <li>PayPal</li>
+  <li>Sage Pay</li>
+  <li>Samurai</li>
+  <li>Skrill</li>
+  <li>Stripe</li>
+  <li>USA ePay</li>
+  <li>WorldPay</li>
+</ul>
+
+<p>With the <code>spree_gateway</code> gem included in your application’s <code>Gemfile</code>, these gateways will be selectable in the admin backend for payment methods.</p>
+
+<div class="note"><p>These are just some of the gateways which are supported by the Active Merchant gem. You can see a <a href="https://github.com/Shopify/active_merchant#supported-direct-payment-gateways">list of all the Active Merchant gateways on that project’s GitHub page</a>.</p>
+
+<p>In order to implement a new gateway in the spree_gateway project, please refer to the other gateways within <code>app/models/spree/gateway</code> inside that project.</p>
+</div>
+
+<h2 id="adding-your-custom-gateway">Adding your custom gateway</h2>
+
+<p>In order to make your custom gateway show up on backend list of available payment methods
+you need to add it to spree config list of payment methods first. That can be achieved
+by adding the following code in your spree.rb for example:</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="constant">Rails</span>.application.config.spree.payment_methods &lt;&lt; <span class="constant">YourCustomGateway</span>
+
+</pre></div>
+</div>
+</div>
+
+<p><a href="https://github.com/spree-contrib/spree_braintree_vzero">spree_braintree_vzero</a> is a good example of a standalone custom gateways.</p>
+
+        </div>
+      </div>
+
+    </section>
+
+    <aside id="sidebar" class="four columns">
+  <nav id="sidebar-menu">
+    <ul>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-tutorial-menu"><i class="icon-right-open"></i></a>
+          <a href='/developer/getting_started_tutorial.html'>Tutorials</a>
+        </h3>
+        <ul class="js-guides">
+          <li><i class="icon-dot"></i><a href='/developer/getting_started_tutorial.html'>Getting Started</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/extensions_tutorial.html'>Extensions</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/deface_overrides_tutorial.html'>Deface Overrides</a> <div class="toc"></div> </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-source-code-menu"><i class="icon-right-open"></i></a>
+          <a href='/developer/about.html'>Source Code</a>
+        </h3>
+        <ul class="js-guides">
+          <li><i class="icon-dot"></i><a href='/developer/about.html'>About</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/navigating.html'>Navigating</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/getting_help.html'>Getting Help</a> <div class="toc"></div> </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href="https://github.com/spree/spree/blob/master/.github/CONTRIBUTING.md" target="_blank" rel="nofollow">
+              Contributing
+            </a>
+            <div class="toc"></div>
+          </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-core-menu"><i class="icon-right-open"></i></a>
+          <a href='/developer/addresses.html'>The Core</a>
+        </h3>
+        <ul class="js-guides">
+          <li><i class="icon-dot"></i><a href='/developer/addresses.html'>Addresses</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/adjustments.html'>Adjustments</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/calculators.html'>Calculators</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/inventory.html'>Inventory</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/orders.html'>Orders</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/payments.html'>Payments</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/preferences.html'>Preferences</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/products.html'>Products</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/promotions.html'>Promotions</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/shipments.html'>Shipments</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/taxation.html'>Taxation</a> <div class="toc"></div> </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-customization-menu"><i class="icon-right-open"></i></a>
+          <a href='/developer/authentication.html'>Customization</a>
+        </h3>
+        <ul class="js-guides">
+          <li><i class="icon-dot"></i><a href='/developer/authentication.html'>Authentication</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/i18n.html'>Internationalization (i18n)</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/view.html'>View</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/asset.html'>Asset</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/logic.html'>Logic</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/s3_storage.html'>Use S3</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/checkout.html'>Checkout</a> <div class="toc"></div> </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-deployment-menu"><i class="icon-right-open"></i></a>
+          <a href='/developer/deployment_tips.html'>Deployment</a>
+        </h3>
+        <ul class="js-guides">
+          <li><i class="icon-dot"></i><a href='/developer/heroku.html'>Heroku</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/ansible-ubuntu.html'>Ansible Ubuntu Deployment</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/manual-ubuntu.html'>Manual Ubuntu Deployment</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/deployment_options.html'>Deployment Options</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/deployment_tips.html'>Deployment Tips</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/requesting_and_configuring_ssl.html'>Requesting/Configuring SSL</a> <div class="toc"></div> </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-advanced-menu"><i class="icon-right-open"></i></a>
+          <a href='/developer/seo.html'>Advanced Topics</a>
+        </h3>
+        <ul class="js-guides">
+          <li><i class="icon-dot"></i><a href='/developer/developer_tips.html'>Developer Tips</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/gateway_specific_information.html'>Gateway Specific Information</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/migration.html'>Migrating to Spree</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/seo.html'>Search Engine Optimization</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/security.html'>Security</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/testing.html'>Testing Spree Applications</a> <div class="toc"></div> </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-upgrades-menu"><i class="icon-right-open"></i></a>
+          <a href='/developer/upgrade_guides.html'>Upgrade Guides</a>
+        </h3>
+        <ul class="js-guides">
+          <li><i class="icon-dot"></i><a href='/developer/point-sixty-to-point-seventy.html'>0.60.x to 0.70.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/point-seventy-to-one-dot-oh.html'>0.70.x to 1.0.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/one-dot-oh-to-one-dot-one.html'>1.0.x to 1.1.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/one-dot-one-to-one-dot-two.html'>1.1.x to 1.2.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/one-dot-two-to-one-dot-three.html'>1.2.x to 1.3.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/one-dot-three-to-two-dot-oh.html'>1.3.x to 2.0.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/two-dot-oh-to-two-dot-one.html'>2.0.x to 2.1.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/two-dot-one-to-two-dot-two.html'>2.1.x to 2.2.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/two-dot-two-to-two-dot-three.html'>2.2.x to 2.3.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/two-dot-three-to-two-dot-four.html'>2.3.x to 2.4.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/three-dot-oh-to-three-dot-one.html'>3.0.x to 3.1.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/three-dot-one-to-three-dot-two.html'>3.1.x to 3.2.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/three-dot-two-to-three-dot-three.html'>3.2.x to 3.3.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/three-dot-three-to-three-dot-four.html'>3.3.x to 3.4.x</a> <div
+          class="toc"></div></li>
+        </ul>
+      </li>
+    </ul>
+  </nav>
+</aside>
+
+  </div>
+
+  <footer id="main-footer">
+
+  <div class="footer-top">
+    <div class="container">
+      <div id="link-blocks" class="row">
+        <div class="link-block six columns">
+          <h3 class="block-title">Developers</h3>
+          <ul>
+            <li><a href="https://slack.spreecommerce.org" target="_blank" rel="nofollow">Slack</a></li>
+            <li><a href="https://github.com/spree-contrib" target="_blank">Extensions</a></li>
+            <li><a href="https://github.com/spree/spree/blob/master/license.md" target="_blank">License</a></li>
+          </ul>
+        </div>
+        <div class="link-block seven columns">
+          <h3 class="block-title">About Spree</h3>
+          <p>
+            <strong><a href="https://spreecommerce.org">Spree Commerce</a></strong>
+            is a complete modular, API-driven open source e-commerce solution
+            built with Ruby on Rails.
+          </p>
+          <p>
+            Guides are hosted and maintained by
+            <a href="http://sparksolutions.co" target="_blank">Spark Solutions</a>
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</footer>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-104990445-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/docsearch.js/2/docsearch.min.js"></script>
+<script type="text/javascript"> docsearch({
+apiKey: 'fb697cd2d04591b036ea172259c05ba8',
+indexName: 'spreecommerce',
+inputSelector: '#search-field',
+debug: false // Set debug to true if you want to inspect the dropdown
+});
+</script>
+
+
+  </body>
+</html>

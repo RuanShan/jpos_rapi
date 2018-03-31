@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>    <html class="lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>    <html class="lt-ie9"> <![endif]-->
+<!--[if IE 9]>    <html class="ie9"> <![endif]-->
+<!--[if gt IE 9]><!--> <html lang="en" > <!--<![endif]-->
+<head>
+  <title>Calculators - Developer Guide | Spree - Ruby on Rails e-commerce platform</title>
+
+  <meta charset="utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta name="section" content="core" />
+
+<link href="/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+<link href="/shared/css/icons.css" media="screen" rel="stylesheet" type="text/css">
+<link href="/shared/css/icons-codes.css" media="screen" rel="stylesheet" type="text/css">
+
+<link href="/shared/css/skeleton.css" media="screen" rel="stylesheet" type="text/css">
+<link href="/shared/css/documentation.css" media="screen" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="/assets/stylesheets/guides.css" media="screen" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/docsearch.js/2/docsearch.min.css" />
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-migrate/1.1.1/jquery-migrate.min.js"></script>
+<script src="/assets/javascripts/css_browser_selector_dev.js" type="text/javascript"></script>
+<script src="/assets/javascripts/jquery.toc.js" type="text/javascript"></script>
+<script src="/assets/javascripts/documentation.js" type="text/javascript"></script>
+
+
+</head>
+<body class="developer">
+  
+  <header id="header">
+    <div id="top-header">
+  <div class="container">
+    <div class="row">
+      <div class="two columns">
+  <a class="logo" href="http://spreecommerce.org">
+    <img src='/images/logo.png' alt="Spree Commerce - Ruby on Rails e-commerce platform" />
+  </a>
+</div>
+
+      <div class="three columns">
+  <input type="text" id="search-field" placeholder="Search..." />
+</div>
+
+      <nav id="main-menu" class="eleven columns">
+  <ul class="inline">
+    <li><a href="../api/">API</a></li>
+    <li><a href="../developer/">Developer</a></li>
+    <li><a href="../user/">User</a></li>
+    <li><a href="../release_notes/">Release Notes</a></li>
+    <li>
+      <a href="http://slack.spreecommerce.org" target="_blank">Slack</a>
+    </li>
+    <li>
+      <a href="https://heroku.com/deploy?template=https://github.com/spree/spree" target="_blank" rel="nofollow">Demo</a>
+    </li>
+  </ul>
+</nav>
+
+    </div>
+  </div>
+</div>
+
+
+    <div id="subheader">
+      <div class="container">
+        <div class="sixteen columns">
+          <h1 class="page-title">Calculators - Developer Guide | Spree - Ruby on Rails e-commerce platform</h1>
+        </div>
+      </div>
+    </div>
+
+  </header>
+
+  <div class="container" id="main">
+    <section id="main-content">
+
+      <div class="twelve columns">
+        <div id="content">
+          
+<h2 id="overview">Overview</h2>
+
+<p>Spree makes extensive use of the <code>Spree::Calculator</code> model and there are several subclasses provided to deal with various types of calculations (flat rate, percentage discount, sales tax, VAT, etc.) All calculators extend the <code>Spree::Calculator</code> class and must provide the following methods:</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="keyword">def</span> <span class="predefined-constant">self</span>.<span class="function">description</span>
+  <span class="comment"># Human readable description of the calculator</span>
+<span class="keyword">end</span>
+
+<span class="keyword">def</span> <span class="function">compute</span>(object=<span class="predefined-constant">nil</span>)
+  <span class="comment"># Returns the value after performing the required calculation</span>
+<span class="keyword">end</span>
+
+</pre></div>
+</div>
+</div>
+
+<p>Calculators link to a <code>calculable</code> object, which are typically one of <code>Spree::ShippingMethod</code>, <code>Spree::TaxRate</code>, or <code>Spree::Promotion::Actions::CreateAdjustment</code>. These three classes use the <code>Spree::Core::CalculatedAdjustment</code> module described below to provide an easy way to calculate adjustments for their objects.</p>
+
+<h2 id="available-calculators">Available Calculators</h2>
+
+<p>The following are descriptions of the currently available calculators in Spree. If you would like to add your own, please see the <a href="#creating-a-new-calculator">Creating a New Calculator</a> section.</p>
+
+<h3 id="default-tax">Default Tax</h3>
+
+<p>For information about this calculator, please read the <a href="taxation.html">Taxation</a> guide.</p>
+
+<h3 id="flat-percent-per-item-total">Flat Percent Per Item Total</h3>
+
+<p>This calculator has one preference: <code>flat_percent</code> and can be set like this:</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>calculator.preferred_flat_percent = <span class="integer">10</span>
+
+</pre></div>
+</div>
+</div>
+
+<p>This calculator takes an order and calculates an amount using this calculation:</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>[item total] x [flat percentage]
+
+</pre></div>
+</div>
+</div>
+
+<p>For example, if an order had an item total of $31 and the calculator was configured to have a flat percent amount of 10, the discount would be $3.10, because $31 x 10% = $3.10.</p>
+
+<h3 id="flat-rate">Flat Rate</h3>
+
+<p>This calculator can be used to provide a flat rate discount.</p>
+
+<p>This calculator has two preferences: <code>amount</code> and <code>currency</code>. These can be set like this:</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>calculator.preferred_amount = <span class="integer">10</span>
+calculator.currency = <span class="string"><span class="delimiter">&quot;</span><span class="content">USD</span><span class="delimiter">&quot;</span></span>
+
+</pre></div>
+</div>
+</div>
+
+<p>The currency for this calculator is used to check to see if a shipping method is available for an order. If an order’s currency does not match the shipping method’s currency, then that shipping method will not be displayed on the frontend.</p>
+
+<p>This calculator can take any object and will return simply the preferred amount.</p>
+
+<h3 id="flexi-rate">Flexi Rate</h3>
+
+<p>This calculator is typically used for promotional discounts when you want a specific discount for the first product, and then subsequent discounts for other products, up to a certain amount.</p>
+
+<p>This calculator takes three preferences:</p>
+
+<ul>
+  <li><code>first_item</code>: The discounted price of the first item(s).</li>
+  <li><code>additional_item</code>: The discounted price of subsequent items.</li>
+  <li><code>max_items</code>: The maximum number of items this discount applies to.</li>
+</ul>
+
+<p>The calculator computes based on this:</p>
+
+<p>[first item discount] + (([items_count*] - 1) x [additional item discount])</p>
+
+<ul>
+  <li>up to the <code>max_items</code></li>
+</ul>
+
+<p>Thus, if you have ten items in your shopping cart, your <code>first_item</code> preference is set to $10, your <code>additional_items</code> preference is set to $5, and your <code>max_items</code> preference is set to 4, the total discount would be $25:</p>
+
+<ul>
+  <li>$10 for the first item</li>
+  <li>$5 for each of the 3 subsequent items: $5 * 3 = $15</li>
+  <li>$0 for the remaining 6 items</li>
+</ul>
+
+<h3 id="free-shipping">Free Shipping</h3>
+
+<p>This calculator will take an object, and then work out the shipping total for that object. Useful for when you want to apply free shipping to an order.</p>
+
+<p>**************** TODO ****************</p>
+<p>This is a little confusing and vague. Need to investigate more and explain better. Also, might this be obsolete with the new split shipments functionality?</p>
+<p>**************************************</p>
+
+<h3 id="a-idper-itemaper-item"><a id="per-item"></a>Per Item</h3>
+
+<p>The Per Item calculator computes a value for every item within an order. This is useful for providing a discount for a specific product, without it affecting others.</p>
+
+<p>This calculator takes two preferences:</p>
+
+<ul>
+  <li><code>amount</code>: The amount per item to calculate.</li>
+  <li><code>currency</code>: The currency for this calculator.</li>
+</ul>
+
+<p>This calculator depends on its <code>calculable</code> responding to a <code>promotion</code> method, which should return a <code>Spree::Promotion</code> (or similar) object. This object should then return a list of rules, which should respond to a <code>products</code> method. This is used to return a result of matching products.</p>
+
+<p>The list of matching products is compared against the line items for the order being calculated. If any of the matching products are included in the order, they are eligible for this calculator. The calculation is this:</p>
+
+<p>[matching product quantity] x [amount]</p>
+
+<p>Every matching product within an order will add to the calculator’s total. For example, assuming the calculator has an <code>amount</code> of 5 and there’s an order with the following line items:</p>
+
+<ul>
+  <li>Product A: $15.00 x 2 (within matching products)</li>
+  <li>Product B: $10.00 x 1 (within matching products)</li>
+  <li>Product C: $20.00 x 4 (excluded from matching products)</li>
+</ul>
+
+<p>The calculation would be:</p>
+
+<pre><code>= (2 x 5) + (1 x 5)
+= 10 + 5
+</code></pre>
+
+<p>meaning the calculator will compute an amount of 15.</p>
+
+<h3 id="percent-per-item">Percent Per Item</h3>
+
+<p>The Percent Per Item calculator works in a near-identical fashion to the <a href="#per-item">Per Item Calculator</a>, with the exception that rather than providing a flat-rate per item, it is a percentage.</p>
+
+<p>Assuming a calculator amount of 10% and an order such as this:</p>
+
+<ul>
+  <li>Product A: $15.00 x 2 (within matching products)</li>
+  <li>Product B: $10.00 x 1 (within matching products)</li>
+  <li>Product C: $20.00 x 4 (excluded from matching products)</li>
+</ul>
+
+<p>The calculation would be:</p>
+
+<pre><code>= ($15 x 2 x 10%) + ($10 x 10%)
+= ($30 x 10%) + ($10 x 10%)
+= $3 + $1
+</code></pre>
+
+<p>The calculator will calculate a discount of $4.</p>
+
+<h3 id="price-sack">Price Sack</h3>
+
+<p>The Price Sack calculator is useful for when you want to provide a discount for an order which is over a certain price. The calculator has four preferences:</p>
+
+<ul>
+  <li><code>minimal_amount</code>: The minimum amount for the line items total to trigger the calculator.</li>
+  <li><code>discount_amount</code>: The amount to discount from the order if the line items total is equal to or greater than the <code>minimal_amount</code>.</li>
+  <li><code>normal_amount</code>: The amount to discount from the order if the line items total is less than the <code>minimal_amount</code>.</li>
+  <li><code>currency</code>: The currency for this calculator. Defaults to the currency you have set for your store with <code>Spree::Config[:currency]</code></li>
+</ul>
+
+<p>Suppose you have a Price Sack calculator with a <code>minimal_amount</code> preference of $50, a <code>normal_amount</code> preference of $2, and a <code>discount_amount</code> of $5. An order with a line items total of $60 would result in a discount of $5 for the whole order. An order of $20 would result in a discount of $2.</p>
+
+<h2 id="creating-a-new-calculator">Creating a New Calculator</h2>
+
+<p>To create a new calculator for Spree, you need to do two things. The first is to inherit from the <code>Spree::Calculator</code> class and define <code>description</code> and <code>compute</code> methods on that class:</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="keyword">class</span> <span class="class">CustomCalculator</span> &lt; <span class="constant">Spree</span>::<span class="constant">Calculator</span>
+  <span class="keyword">def</span> <span class="predefined-constant">self</span>.<span class="function">description</span>
+    <span class="comment"># Human readable description of the calculator</span>
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">compute</span>(object=<span class="predefined-constant">nil</span>)
+    <span class="comment"># Returns the value after performing the required calculation</span>
+  <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+</pre></div>
+</div>
+</div>
+
+<p>If you are creating a new calculator for shipping methods, please be aware that you need to inherit from <code>Spree::ShippingCalculator</code> instead, and define a <code>compute_package</code> method:</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="keyword">class</span> <span class="class">CustomCalculator</span> &lt; <span class="constant">Spree</span>::<span class="constant">ShippingCalculator</span>
+  <span class="keyword">def</span> <span class="predefined-constant">self</span>.<span class="function">description</span>
+    <span class="comment"># Human readable description of the calculator</span>
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">compute_package</span>(package)
+    <span class="comment"># Returns the value after performing the required calculation</span>
+  <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+</pre></div>
+</div>
+</div>
+
+<p>The second thing is to register this calculator as a tax, shipping, or promotion adjustment calculator by calling code like this at the end of <code>config/initializers/spree.rb</code> inside your application (<code>config</code> variable defined for brevity):</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>config = <span class="constant">Rails</span>.application.config
+config.spree.calculators.tax_rates &lt;&lt; <span class="constant">CustomCalculator</span>
+config.spree.calculators.shipping_methods &lt;&lt; <span class="constant">CustomCalculator</span>
+config.spree.calculators.promotion_actions_create_adjustments &lt;&lt; <span class="constant">CustomCalculator</span>
+
+</pre></div>
+</div>
+</div>
+
+<p>For example if your calculator is placed in <code>app/models/spree/calculator/shipping/my_own_calculator.rb</code> you should call:</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>config = <span class="constant">Rails</span>.application.config
+config.spree.calculators.shipping_methods &lt;&lt; <span class="constant">Spree</span>::<span class="constant">Calculator</span>::<span class="constant">Shipping</span>::<span class="constant">MyOwnCalculator</span>
+
+</pre></div>
+</div>
+</div>
+
+<h3 id="determining-availability">Determining Availability</h3>
+
+<p>By default, all shipping method calculators are available at all times. If you wish to make this dependent on something from the order, you can re-define the <code>available?</code> method inside your calculator:</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="keyword">class</span> <span class="class">CustomCalculator</span> &lt; <span class="constant">Spree</span>::<span class="constant">Calculator</span>
+  <span class="keyword">def</span> <span class="function">available?</span>(object)
+    object.currency == <span class="string"><span class="delimiter">&quot;</span><span class="content">USD</span><span class="delimiter">&quot;</span></span>
+  <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+</pre></div>
+</div>
+</div>
+
+<h2 id="calculated-adjustments">Calculated Adjustments</h2>
+
+<p>If you wish to use Spree’s calculator functionality for your own application, you can include the <code>Spree::Core::CalculatedAdjustments</code> module into a model of your choosing.</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="keyword">class</span> <span class="class">Plan</span> &lt; <span class="constant">ActiveRecord</span>::<span class="constant">Base</span>
+  include <span class="constant">Spree</span>::<span class="constant">Core</span>::<span class="constant">CalculatedAdjustments</span>
+<span class="keyword">end</span>
+
+</pre></div>
+</div>
+</div>
+
+<p>To have calculators available for this class, you will need to register them:</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>config.spree.calculators.plans &lt;&lt; <span class="constant">CustomCalculator</span>
+
+</pre></div>
+</div>
+</div>
+
+<p>Then you can access these calculators by calling this method:</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="constant">Plan</span>.calculators
+
+</pre></div>
+</div>
+</div>
+
+<p>Using this method, you can then display the calculators as you please. Each object for this new class will need to have a calculator associated so that adjustments can be calculated on them.</p>
+
+<p>This module provides a <code>has_one</code> association to a <code>calculator</code> object, as well as some convenience helpers for creating and updating adjustments for objects. Assuming that an object has a calculator associated with it first, creating an adjustment is simple:</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>plan.create_adjustment(<span class="string"><span class="delimiter">&quot;</span><span class="inline"><span class="inline-delimiter">#{</span>plan.name<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>, &lt;target object&gt;, &lt;calculable object&gt;)
+
+</pre></div>
+</div>
+</div>
+
+<p>To update this adjustment:</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>plan.update_adjustment(&lt;adjustment object&gt;, &lt;calculable object&gt;)
+
+</pre></div>
+</div>
+</div>
+
+<p>To work out what the calculator would compute an amount to be:</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>plan.compute_amount(&lt;calculable object&gt;)
+
+</pre></div>
+</div>
+</div>
+
+<p><code>create_adjustment</code>, <code>update_adjustment</code> and <code>compute_amount</code> will call <code>compute</code> on the <code>Calculator</code> object. This <code>calculable</code> amount is whatever object your
+<code>CustomCalculator</code> class supports.</p>
+
+        </div>
+      </div>
+
+    </section>
+
+    <aside id="sidebar" class="four columns">
+  <nav id="sidebar-menu">
+    <ul>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-tutorial-menu"><i class="icon-right-open"></i></a>
+          <a href='/developer/getting_started_tutorial.html'>Tutorials</a>
+        </h3>
+        <ul class="js-guides">
+          <li><i class="icon-dot"></i><a href='/developer/getting_started_tutorial.html'>Getting Started</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/extensions_tutorial.html'>Extensions</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/deface_overrides_tutorial.html'>Deface Overrides</a> <div class="toc"></div> </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-source-code-menu"><i class="icon-right-open"></i></a>
+          <a href='/developer/about.html'>Source Code</a>
+        </h3>
+        <ul class="js-guides">
+          <li><i class="icon-dot"></i><a href='/developer/about.html'>About</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/navigating.html'>Navigating</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/getting_help.html'>Getting Help</a> <div class="toc"></div> </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href="https://github.com/spree/spree/blob/master/.github/CONTRIBUTING.md" target="_blank" rel="nofollow">
+              Contributing
+            </a>
+            <div class="toc"></div>
+          </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-core-menu"><i class="icon-right-open"></i></a>
+          <a href='/developer/addresses.html'>The Core</a>
+        </h3>
+        <ul class="js-guides">
+          <li><i class="icon-dot"></i><a href='/developer/addresses.html'>Addresses</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/adjustments.html'>Adjustments</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/calculators.html'>Calculators</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/inventory.html'>Inventory</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/orders.html'>Orders</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/payments.html'>Payments</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/preferences.html'>Preferences</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/products.html'>Products</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/promotions.html'>Promotions</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/shipments.html'>Shipments</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/taxation.html'>Taxation</a> <div class="toc"></div> </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-customization-menu"><i class="icon-right-open"></i></a>
+          <a href='/developer/authentication.html'>Customization</a>
+        </h3>
+        <ul class="js-guides">
+          <li><i class="icon-dot"></i><a href='/developer/authentication.html'>Authentication</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/i18n.html'>Internationalization (i18n)</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/view.html'>View</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/asset.html'>Asset</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/logic.html'>Logic</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/s3_storage.html'>Use S3</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/checkout.html'>Checkout</a> <div class="toc"></div> </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-deployment-menu"><i class="icon-right-open"></i></a>
+          <a href='/developer/deployment_tips.html'>Deployment</a>
+        </h3>
+        <ul class="js-guides">
+          <li><i class="icon-dot"></i><a href='/developer/heroku.html'>Heroku</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/ansible-ubuntu.html'>Ansible Ubuntu Deployment</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/manual-ubuntu.html'>Manual Ubuntu Deployment</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/deployment_options.html'>Deployment Options</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/deployment_tips.html'>Deployment Tips</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/requesting_and_configuring_ssl.html'>Requesting/Configuring SSL</a> <div class="toc"></div> </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-advanced-menu"><i class="icon-right-open"></i></a>
+          <a href='/developer/seo.html'>Advanced Topics</a>
+        </h3>
+        <ul class="js-guides">
+          <li><i class="icon-dot"></i><a href='/developer/developer_tips.html'>Developer Tips</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/gateway_specific_information.html'>Gateway Specific Information</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/migration.html'>Migrating to Spree</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/seo.html'>Search Engine Optimization</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/security.html'>Security</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/testing.html'>Testing Spree Applications</a> <div class="toc"></div> </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-upgrades-menu"><i class="icon-right-open"></i></a>
+          <a href='/developer/upgrade_guides.html'>Upgrade Guides</a>
+        </h3>
+        <ul class="js-guides">
+          <li><i class="icon-dot"></i><a href='/developer/point-sixty-to-point-seventy.html'>0.60.x to 0.70.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/point-seventy-to-one-dot-oh.html'>0.70.x to 1.0.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/one-dot-oh-to-one-dot-one.html'>1.0.x to 1.1.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/one-dot-one-to-one-dot-two.html'>1.1.x to 1.2.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/one-dot-two-to-one-dot-three.html'>1.2.x to 1.3.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/one-dot-three-to-two-dot-oh.html'>1.3.x to 2.0.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/two-dot-oh-to-two-dot-one.html'>2.0.x to 2.1.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/two-dot-one-to-two-dot-two.html'>2.1.x to 2.2.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/two-dot-two-to-two-dot-three.html'>2.2.x to 2.3.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/two-dot-three-to-two-dot-four.html'>2.3.x to 2.4.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/three-dot-oh-to-three-dot-one.html'>3.0.x to 3.1.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/three-dot-one-to-three-dot-two.html'>3.1.x to 3.2.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/three-dot-two-to-three-dot-three.html'>3.2.x to 3.3.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/three-dot-three-to-three-dot-four.html'>3.3.x to 3.4.x</a> <div
+          class="toc"></div></li>
+        </ul>
+      </li>
+    </ul>
+  </nav>
+</aside>
+
+  </div>
+
+  <footer id="main-footer">
+
+  <div class="footer-top">
+    <div class="container">
+      <div id="link-blocks" class="row">
+        <div class="link-block six columns">
+          <h3 class="block-title">Developers</h3>
+          <ul>
+            <li><a href="https://slack.spreecommerce.org" target="_blank" rel="nofollow">Slack</a></li>
+            <li><a href="https://github.com/spree-contrib" target="_blank">Extensions</a></li>
+            <li><a href="https://github.com/spree/spree/blob/master/license.md" target="_blank">License</a></li>
+          </ul>
+        </div>
+        <div class="link-block seven columns">
+          <h3 class="block-title">About Spree</h3>
+          <p>
+            <strong><a href="https://spreecommerce.org">Spree Commerce</a></strong>
+            is a complete modular, API-driven open source e-commerce solution
+            built with Ruby on Rails.
+          </p>
+          <p>
+            Guides are hosted and maintained by
+            <a href="http://sparksolutions.co" target="_blank">Spark Solutions</a>
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</footer>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-104990445-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/docsearch.js/2/docsearch.min.js"></script>
+<script type="text/javascript"> docsearch({
+apiKey: 'fb697cd2d04591b036ea172259c05ba8',
+indexName: 'spreecommerce',
+inputSelector: '#search-field',
+debug: false // Set debug to true if you want to inspect the dropdown
+});
+</script>
+
+
+  </body>
+</html>

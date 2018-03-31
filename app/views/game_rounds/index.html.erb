@@ -1,0 +1,35 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Game Instances</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Game</th>
+      <th>Name</th>
+      <th>Start at</th>
+      <th>End at</th>
+      <th>Preferences</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @game_rounds.each do |game_round| %>
+      <tr>
+        <td><%= game_round.game %></td>
+        <td><%= game_round.name %></td>
+        <td><%= game_round.start_at %></td>
+        <td><%= game_round.end_at %></td>
+        <td><%= game_round.preferences %></td>
+        <td><%= link_to 'Show', game_round %></td>
+        <td><%= link_to 'Edit', edit_game_round_path(game_round) %></td>
+        <td><%= link_to 'Destroy', game_round, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Game Instance', new_game_round_path %>

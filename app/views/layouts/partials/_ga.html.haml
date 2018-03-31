@@ -1,0 +1,27 @@
+- unless Rails.env.test?
+  %script{type: 'text/javascript'}
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', '#{ENV['ga_tracker']}']);
+    _gaq.push(['_setDomainName','#{ENV['ga_tracker_domain']}']);
+
+    (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+
+    if (((_ref = window.history) != null ? _ref.pushState : void 0) && window.history.replaceState && typeof Turbolinks !== 'undefined') {
+    document.addEventListener('page:change', function() {
+    if (window._gaq != null) {
+    _gaq.push(['_trackPageview']);
+    } else if (window.pageTracker != null) {
+    pageTracker._trackPageview();
+    } })
+    } else {
+    _gaq.push(['_trackPageview']);
+    }
+
+-# NOTE:
+-# removed JS indentation to keep HAML happy
+-# not using :javascript so can have type on script tag for turbolinks
+

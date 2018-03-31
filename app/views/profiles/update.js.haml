@@ -1,0 +1,6 @@
+- if @errors_found
+  $('#edit_user_modal').html('#{escape_javascript(render 'profiles/partials/edit')}')
+  $('#edit_user_modal').modal('show')
+- else
+  $('#edit_user_modal').modal('hide')
+  $('#user_list').html('#{escape_javascript(render 'admin/partials/users')}')

@@ -1,0 +1,54 @@
+// buttons
+.btn-xs {
+  padding: 0.15rem 0.65rem;
+  font-size: .8rem;
+  line-height: 1.5;
+  border-radius: 0.2rem;
+}
+
+// modals
+
+.model-content {
+  boder: none;
+}
+
+// top navbar
+.navbar.fixed-top {
+  background-color: $belize-hole;
+  color: $white;
+  padding-bottom: 0;
+}
+
+.navbar-nav > li > a, .navbar-brand, .nav-text, .navbar-toggler {
+    padding-top:5px !important;
+    padding-bottom:0 !important;
+    height: 30px;
+    line-height: 0.8rem;
+}
+.navbar {min-height:25px !important;}
+
+.navbar.fixed-top a:hover,
+.navbar.fixed-top a:focus,
+.navbar.fixed-top a {
+  text-decoration: none;
+}
+
+.navbar-inverse .navbar-nav .nav-link,
+.navbar-inverse .navbar-toggler {
+  color: $white;
+}
+
+.avatar {
+  margin-top: -7px;
+}
+
+.navbar-brand {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+}
+
+.navbar-toggler {
+  cursor: pointer;
+  border: none;
+  padding-top: 0 !important;
+  margin: 0 !important;
+}

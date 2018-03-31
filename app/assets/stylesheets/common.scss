@@ -1,0 +1,129 @@
+/*@import "bootstrap_config.scss";*/
+@import "font-awesome";
+@import "colors.scss";
+@import "bootstrap-yeti.scss";
+
+.fullpage-body {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+.fullpage-content {
+  flex: 1;
+}
+
+.narrow-well {
+  margin: 0 auto;
+  max-width: 1240px;
+  padding-top: 60px; /* nav bar space */
+}
+
+footer {
+  margin-top: 1rem;
+  padding: 2rem 1.5rem;
+  color: $gray-light;
+  background-color: lighten($midnight-blue, 70%);
+}
+
+.footer-link {
+  color: darken($gray-light, 30%);
+}
+
+h1, .h1 {
+  font-size: 2.1rem;
+}
+
+.form-control-label {
+  &.devise {
+    white-space: nowrap;
+    color: $nephritis;
+    font-weight: bold;
+    padding-right: 0rem;
+    &.normal {
+      font-weight: normal;
+      padding-right: 0.75rem;
+      &.small {
+        font-size: 90%;
+      }
+    }
+  }
+}
+
+.help-block {
+  &.devise {
+    font: 80% Arial,sans-serif;
+    font-style:italic;
+    color: $nephritis;
+  }
+}
+
+.small-text {
+  font: 85% Arial,sans-serif;
+  font-style:italic;
+}
+
+.round-box {
+  /*
+  -webkit-border-radius: 20px;
+  -moz-border-radius: 20px;
+  border-radius: 20px;
+  border:1px solid #000;
+  &.devise {
+    margin-top: 20px;
+    border-color: $nephritis;
+  }
+  */
+}
+
+hr {
+  &.devise {
+    border-color: $nephritis;
+    width: 80%;
+    margin-top: 0;
+  }
+  &.green {
+    border-color: $nephritis;
+  }
+}
+
+.card-header {
+  &.devise {
+    color: $nephritis;
+    border-bottom: 1px solid $nephritis;
+    padding-bottom: 15px;
+  }
+}
+
+.modal-title {
+  &.devise {
+    color: $nephritis;
+  }
+}
+
+.card-footer {
+  &.devise {
+    background-color: $white;
+    color: $nephritis;
+    padding: none;
+    border-top: 1px solid $nephritis;
+  }
+}
+
+a,
+a:hover,
+a:active {
+  &.devise_shared {
+    font-size: 90%;
+  }
+}
+
+.form-group {
+  &.devise {
+    margin-bottom: .25rem;
+  }
+}
+
+.nowrap {
+  white-space: nowrap;
+}

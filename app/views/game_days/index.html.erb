@@ -1,0 +1,33 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Game Days</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Game player</th>
+      <th>Day</th>
+      <th>Play count</th>
+      <th>Share count</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @game_days.each do |game_day| %>
+      <tr>
+        <td><%= game_day.game_player_id %></td>
+        <td><%= game_day.day %></td>
+        <td><%= game_day.play_count %></td>
+        <td><%= game_day.share_count %></td>
+        <td><%= link_to 'Show', game_day %></td>
+        <td><%= link_to 'Edit', edit_game_day_path(game_day) %></td>
+        <td><%= link_to 'Destroy', game_day, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Game Day', new_game_day_path %>

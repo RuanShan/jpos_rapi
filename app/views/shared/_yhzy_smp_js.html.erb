@@ -1,0 +1,29 @@
+<script>
+WechatMore = {
+	openid: null,
+	game_code:  <%== @game_round.game_code.to_json %>,
+	game_round_id:  <%= @game_round.id %>,
+	game_rount_name:  <%== @game_round.name.to_json %>,
+	game_countdown: <%= @game_round.duration %>,
+	game_player_count: <%= @game_round.current_players.count %>,
+	terminal: 'screen',
+	panelState: 'opended',
+	playerState: 'unknown',
+	routes: {},
+  assets: {},
+	fn: {}, //扩展一些功能
+	shareData: {
+      "img_url":  <%== image_url('game/yhzy_smp/share.jpg').to_json %>,
+      "link": <%== play_game_round_url(@game_round).to_json %>,
+      "title": "shareTitle",
+      "desc": "shareContent"
+  }
+}
+
+WechatMore.assets.audio_err_path = <%== audio_path( 'game/yhzy_smp/err.ogg').to_json %>;
+WechatMore.assets.audio_end_path = <%== audio_path( 'game/yhzy_smp/end.ogg').to_json %>;
+WechatMore.assets.audio_tap_path = <%== audio_path( 'game/yhzy_smp/count.ogg').to_json %>;
+
+WechatMore.routes.score_game_player_path = <%== score_game_player_path( @game_player.id).to_json %>;
+
+</script>

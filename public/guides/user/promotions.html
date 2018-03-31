@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>    <html class="lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>    <html class="lt-ie9"> <![endif]-->
+<!--[if IE 9]>    <html class="ie9"> <![endif]-->
+<!--[if gt IE 9]><!--> <html lang="en" > <!--<![endif]-->
+<head>
+  <title>Promotions - User Guide | Spree - Ruby on Rails e-commerce platform</title>
+
+  <meta charset="utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta name="section" content="" />
+
+<link href="/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+<link href="/shared/css/icons.css" media="screen" rel="stylesheet" type="text/css">
+<link href="/shared/css/icons-codes.css" media="screen" rel="stylesheet" type="text/css">
+
+<link href="/shared/css/skeleton.css" media="screen" rel="stylesheet" type="text/css">
+<link href="/shared/css/documentation.css" media="screen" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="/assets/stylesheets/guides.css" media="screen" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/docsearch.js/2/docsearch.min.css" />
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-migrate/1.1.1/jquery-migrate.min.js"></script>
+<script src="/assets/javascripts/css_browser_selector_dev.js" type="text/javascript"></script>
+<script src="/assets/javascripts/jquery.toc.js" type="text/javascript"></script>
+<script src="/assets/javascripts/documentation.js" type="text/javascript"></script>
+
+
+</head>
+<body class="api">
+  
+  <header id="header">
+    <div id="top-header">
+  <div class="container">
+    <div class="row">
+      <div class="two columns">
+  <a class="logo" href="http://spreecommerce.org">
+    <img src='/images/logo.png' alt="Spree Commerce - Ruby on Rails e-commerce platform" />
+  </a>
+</div>
+
+      <div class="three columns">
+  <input type="text" id="search-field" placeholder="Search..." />
+</div>
+
+      <nav id="main-menu" class="eleven columns">
+  <ul class="inline">
+    <li><a href="../api/">API</a></li>
+    <li><a href="../developer/">Developer</a></li>
+    <li><a href="../user/">User</a></li>
+    <li><a href="../release_notes/">Release Notes</a></li>
+    <li>
+      <a href="http://slack.spreecommerce.org" target="_blank">Slack</a>
+    </li>
+    <li>
+      <a href="https://heroku.com/deploy?template=https://github.com/spree/spree" target="_blank" rel="nofollow">Demo</a>
+    </li>
+  </ul>
+</nav>
+
+    </div>
+  </div>
+</div>
+
+
+    <div id="subheader">
+      <div class="container">
+        <div class="twelve columns">
+          <h1 class="page-title">Promotions - User Guide</h1>
+        </div>
+      </div>
+    </div>
+
+  </header>
+
+  <div class="container">
+    <section id="main-content">
+
+      <div class="twelve columns">
+        <div id="content">
+          
+<h2 id="introduction">Introduction</h2>
+
+<p>The Spree cart’s promotions functionality allows you to offer coupons and discount to your site’s users, based on the conditions you choose. This guide will explain to you all of the options at hand.</p>
+
+<p>To reach the Promotions pane, go to your Admin Interface and click the “Promotions” tab.</p>
+
+<h2 id="creating-a-new-promotion">Creating a New Promotion</h2>
+
+<p>To create a new promotion, click the “New Promotion” button.</p>
+
+<p><img src="/images/user/promotions/new_promotion.jpg" alt="New Promotion" /></p>
+
+<p>The page that renders allows you to set several standard options that apply to all promotions. Each is explained below.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Option</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Name</td>
+      <td>The name you assign for the promotion.</td>
+    </tr>
+    <tr>
+      <td>Event Name</td>
+      <td>This is what must happen before the system will check to see if the promotion will apply to the order. Options are: <strong>Add to cart</strong> (any time an item is added to the cart), <strong>Order contents changed</strong> (an item is added to or removed from an order, or a quantity for an item in the order changes), <strong>User signup</strong> (a store visitor creates an account on the site), <strong>Coupon code added</strong> (a store visitor inputs a coupon code at checkout. The code has to match what you input for the code value if you select this option), or <strong>Visit static content page</strong> (a store visitor visits a path that you declare. This is often used to ensure that a customer has reviewed your store’s policies or has been exposed to some other content that is important to your business model.)</td>
+    </tr>
+    <tr>
+      <td>Advertise</td>
+      <td>Checking this box will make the promotion visible to site visitors as they shop your store.</td>
+    </tr>
+    <tr>
+      <td>Description</td>
+      <td>A more thorough explanation of the promotion. The customer will be able to see this description at checkout.</td>
+    </tr>
+    <tr>
+      <td>Usage Limit</td>
+      <td>The maximum total number of times the promotion can be used in your store across all users. If you don’t input a value for this setting, the promotion can be used an unlimited number of times. Beneath this input field is a “Current Usage” counter, which is useful later when you’re editing a promotion and need to know how many redemptions the promotion has had.</td>
+    </tr>
+    <tr>
+      <td>Starts At</td>
+      <td>The date the promotion becomes valid.</td>
+    </tr>
+    <tr>
+      <td>Expires At</td>
+      <td>The date after which the promotion is invalid.</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>When you enter values for these fields and click “Create”, a new screen is rendered, giving you access to even more options for fine-tuning your promotion.</p>
+
+<h3 id="rules">Rules</h3>
+
+<p>Rules represent the factors that must be met for a promotion to be applicable to an order. You can set one or more rules for a single promotion. When you set multiple rules, you have the option of either requiring that all of the rules must be met for the promotion to apply, or allowing a promotion to apply to an order if even one of the rules is met.</p>
+
+<p>There are five types of rules. You can only add one rule of each type to a single promotion. Each is explained in detail below.</p>
+
+<p><img src="/images/user/promotions/rules_options.jpg" alt="Rules Options" /></p>
+
+<h4 id="item-total">Item Total</h4>
+
+<p>When you select “Item total” from the “Add Rule of Type” drop-down menu and click “Add”, you are declaring an Item Total rule.</p>
+
+<p><img src="/images/user/promotions/item_total_rule.jpg" alt="Item Total Rule" /></p>
+
+<p>You can then set the parameters for this type of rule. Specifically, you can establish whether an order’s items must be <strong>greater than</strong> or <strong>equal to or greater than</strong> the amount you set. Click “Update”.</p>
+
+<div class="note"><p>To remove a rule from a promotion, click the cross icon next to it.</p>
+
+<p><img src="/images/user/promotions/delete_rule_icon.jpg" alt="Delete Rule Icon" /></p>
+</div>
+
+<h4 id="products">Products</h4>
+
+<p>Using a rule of this type means the order must contain <strong>at least one</strong> or <strong>all</strong> of the products you declare.</p>
+
+<p><img src="/images/user/promotions/products_rule.jpg" alt="Products Rule" /></p>
+
+<p>To create this kind of rule, just select “Product(s)” from the “Add Rule of Type” drop-down menu and click “Add”. Start typing in the name of the product(s) you want to apply discounts to into the “Choose Products” box. Click on the correct variants. Choose either “at least one” or “all” from the selection box, and click “Update”.</p>
+
+<h4 id="user">User</h4>
+
+<p>You can use the User rule type to restrict a promotion to only those customers you declare. To create this type of rule, select “User” from the “Add Rule of Type” drop-down menu and click “Add”. Start typing in the name or email address of the user(s) you want to offer this promotion to. As the correct users are offered, click them to add them to the list. Click “Update”.</p>
+
+<p><img src="/images/user/promotions/user_rule.jpg" alt="User Rule" /></p>
+
+<h4 id="first-order">First Order</h4>
+
+<p>Select “First order” from the “Add Rule of Type” drop-down menu and click “Add” then “Update” to add a rule of this type to your promotion. This rule will restrict the promotion to only those customers ordering from you for the first time.</p>
+
+<p><img src="/images/user/promotions/first_order_rule.jpg" alt="First Order Rule" /></p>
+
+<h4 id="user-logged-in">User Logged In</h4>
+
+<p>Add a rule of this type to restrict the promotion only to logged-in users. Select “User Logged In” from the “Add Rule of Type” drop-down list, click “Add”, then click “Update”.</p>
+
+<p><img src="/images/user/promotions/logged_in_rule.jpg" alt="Logged In Rule" /></p>
+
+<h3 id="actions">Actions</h3>
+
+<p>Whereas <a href="#rules">Rules</a> establish whether a promotion applies or not, Actions determine what happens when a promotion does apply to an order. There are two types of actions: <a href="#create-adjustments">create adjustments</a> and <a href="#create-line-items">create line items</a>.</p>
+
+<h4 id="create-adjustments">Create Adjustments</h4>
+
+<p>When you select “Create adjustment” from the “Add Action of Type” drop-down menu and click “Add”, the system presents you with several calculator options. These are the same as the options you read about in the <a href="calculators.html">calculators guide</a>, except that instead of a <a href="calculators.html#price-sack">price sack calculator</a>, there are two additional calculators: percent per item and free shipping.</p>
+
+<p><img src="/images/user/promotions/create_adjustment.jpg" alt="Create Adjustments Action Calculators" /></p>
+
+<p>By default, when you add a new “Create adjustment” calculator it sets it to a “Flat percent” calculator. You can change this by selecting the new calculator type from the “Calculator” drop-down menu, but you will need to click the “Update” button to get that calculator’s specific additional required fields to display.</p>
+
+<p>Each calculator has its own set of required additional information fields.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Calculator Type</th>
+      <th>Additional Data Required</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Flat Percent</td>
+      <td>Percentage amount</td>
+    </tr>
+    <tr>
+      <td>Flat Rate</td>
+      <td>Amount of discount, and currency</td>
+    </tr>
+    <tr>
+      <td>Flexible Rate</td>
+      <td>The cost of the first item, the cost of each additional item, the maximum number of items included in the promotion, and the currency</td>
+    </tr>
+    <tr>
+      <td>Percent Per Item</td>
+      <td>Percentage amount</td>
+    </tr>
+    <tr>
+      <td>Free Shipping</td>
+      <td>No additional info required</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Enter all required information for your calculator type, then click “Update”.</p>
+
+<h4 id="create-line-items">Create Line Items</h4>
+
+<p>This action type is a way of automatically adding items to an order when a promotion applies to an order. To add this action to your promotion, select “Create line items” from the “Add Action of Type” drop-down menu and click “Add”.</p>
+
+<p><img src="/images/user/promotions/create_line_item.jpg" alt="Create Line Item Action" /></p>
+
+<p>Select the quantity and variant you want automatically added to the customer’s order from the product drop-down menu. Click “Update”.</p>
+
+<div class="warning"><p>Product variants added through Line Item Action Promotions will be priced as usual. If your intention is to add a free product, you should do both a Line Item action to add the product, and an Adjustment action to discount the cost of that variant.</p>
+</div>
+
+<h2 id="editing-a-promotion">Editing a Promotion</h2>
+
+<p>To edit a promotion, first go to the Promotions list (from the Admin Interface, click “Promotions”). Click the “Edit” icon next to the promotion.</p>
+
+<p><img src="/images/user/promotions/edit_promotion_icon.jpg" alt="Edit Promotion Icon" /></p>
+
+<h2 id="removing-a-promotion">Removing a Promotion</h2>
+
+<p>To remove a promotion, click the “Delete” icon next to the promotion in the Promotions list.</p>
+
+<p><img src="/images/user/promotions/delete_promotion_icon.jpg" alt="Delete Promotion Icon" /></p>
+
+        </div>
+      </div>
+
+    </section>
+
+    <aside id="sidebar" class="four columns">
+  <nav id="sidebar-menu">
+    <ul>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-tutorial-menu"><i class="icon-right-open"></i></a>
+          <a href='products.html'>Products</a>
+        </h3>
+        <ul class="js-guides">
+          <li>
+            <i class="icon-dot"></i>
+            <a href='creating_products.html'>Creating Products</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='deleting_products.html'>Deleting Products</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='editing_products.html'>Editing Products</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='cloning_products.html'>Cloning Products</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='product_options.html'>Options</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='product_properties.html'>Properties</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='product_prototypes.html'>Prototypes</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='searching_products.html'>Searching Products</a>
+          </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-tutorial-menu"><i class="icon-right-open"></i></a>
+          <a href='orders.html'>Orders</a>
+        </h3>
+        <ul class="js-guides">
+          <li>
+            <i class="icon-dot"></i>
+            <a href='processing_orders.html'>Processing Orders</a>
+          </li>
+
+          <li>
+            <i class="icon-dot"></i>
+            <a href='entering_orders.html'>Entering Orders</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='editing_orders.html'>Editing Orders</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='order_states.html'>Order States</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='returning_orders.html'>Returning Orders</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='searching_orders.html'>Searching Orders</a>
+          </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-tutorial-menu"><i class="icon-right-open"></i></a>
+          <a href='users.html'>Users</a>
+        </h3>
+        <ul class="js-guides">
+          <li>
+            <i class="icon-dot"></i>
+            <a href='creating_users.html'>Creating Users</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='searching_users.html'>Searching Users</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='deleting_users.html'>Deleting Users</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='editing_users.html'>Editing Users</a>
+          </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-tutorial-menu"><i class="icon-right-open"></i></a>
+          <a href='payments.html'>Payments</a>
+        </h3>
+        <ul class="js-guides">
+          <li>
+            <i class="icon-dot"></i>
+            <a href='payment_methods.html'>Payment Methods</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='payment_states.html'>Payment States</a>
+          </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-tutorial-menu"><i class="icon-right-open"></i></a>
+          <a href='shipments.html'>Shipments</a>
+        </h3>
+        <ul class="js-guides">
+          <li>
+            <i class="icon-dot"></i>
+            <a href='shipping_categories.html'>Shipping Categories</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='zones.html'>Zones</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='calculators.html'>Calculators</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='shipping_methods.html'>Shipping Methods</a>
+          </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-tutorial-menu"><i class="icon-right-open"></i></a>
+          <a href='configuration.html'>Configuration</a>
+        </h3>
+        <ul class="js-guides">
+          <li>
+            <i class="icon-dot"></i>
+            <a href='configuring_general_settings.html'>General Settings</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='configuring_mail_methods.html'>Mail Methods</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='configuring_taxes.html'>Taxation</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='configuring_geography.html'>Zones, Countries, and States</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='payment_methods.html'>Payment Methods</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='configuring_taxonomies.html'>Taxonomies</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='shipments.html'>Shipping Methods and Categories</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='configuring_inventory.html'>Inventory Settings</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='configuring_analytics.html'>Analytic Trackers</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='configuring_store_credit_categories.html'>Store Credits</a>
+          </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-source-code-menu"><i class="icon-right-open"></i></a>
+          <a href='promotions.html'>Promotions</a>
+        </h3>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-source-code-menu"><i class="icon-right-open"></i></a>
+          <a href='reports.html'>Reports</a>
+        </h3>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed"><i class="icon-right-open"></i></a>
+          <a href='extensions.html'>Extensions</a>
+        </h3>
+      </li>
+    </ul>
+  </nav>
+</aside>
+
+  </div>
+
+  <footer id="main-footer">
+
+  <div class="footer-top">
+    <div class="container">
+      <div id="link-blocks" class="row">
+        <div class="link-block six columns">
+          <h3 class="block-title">Developers</h3>
+          <ul>
+            <li><a href="https://slack.spreecommerce.org" target="_blank" rel="nofollow">Slack</a></li>
+            <li><a href="https://github.com/spree-contrib" target="_blank">Extensions</a></li>
+            <li><a href="https://github.com/spree/spree/blob/master/license.md" target="_blank">License</a></li>
+          </ul>
+        </div>
+        <div class="link-block seven columns">
+          <h3 class="block-title">About Spree</h3>
+          <p>
+            <strong><a href="https://spreecommerce.org">Spree Commerce</a></strong>
+            is a complete modular, API-driven open source e-commerce solution
+            built with Ruby on Rails.
+          </p>
+          <p>
+            Guides are hosted and maintained by
+            <a href="http://sparksolutions.co" target="_blank">Spark Solutions</a>
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</footer>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-104990445-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/docsearch.js/2/docsearch.min.js"></script>
+<script type="text/javascript"> docsearch({
+apiKey: 'fb697cd2d04591b036ea172259c05ba8',
+indexName: 'spreecommerce',
+inputSelector: '#search-field',
+debug: false // Set debug to true if you want to inspect the dropdown
+});
+</script>
+
+
+  </body>
+</html>

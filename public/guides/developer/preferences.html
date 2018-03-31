@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>    <html class="lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>    <html class="lt-ie9"> <![endif]-->
+<!--[if IE 9]>    <html class="ie9"> <![endif]-->
+<!--[if gt IE 9]><!--> <html lang="en" > <!--<![endif]-->
+<head>
+  <title>Preferences - Developer Guide | Spree - Ruby on Rails e-commerce platform</title>
+
+  <meta charset="utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta name="section" content="core" />
+
+<link href="/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+<link href="/shared/css/icons.css" media="screen" rel="stylesheet" type="text/css">
+<link href="/shared/css/icons-codes.css" media="screen" rel="stylesheet" type="text/css">
+
+<link href="/shared/css/skeleton.css" media="screen" rel="stylesheet" type="text/css">
+<link href="/shared/css/documentation.css" media="screen" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="/assets/stylesheets/guides.css" media="screen" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/docsearch.js/2/docsearch.min.css" />
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-migrate/1.1.1/jquery-migrate.min.js"></script>
+<script src="/assets/javascripts/css_browser_selector_dev.js" type="text/javascript"></script>
+<script src="/assets/javascripts/jquery.toc.js" type="text/javascript"></script>
+<script src="/assets/javascripts/documentation.js" type="text/javascript"></script>
+
+
+</head>
+<body class="developer">
+  
+  <header id="header">
+    <div id="top-header">
+  <div class="container">
+    <div class="row">
+      <div class="two columns">
+  <a class="logo" href="http://spreecommerce.org">
+    <img src='/images/logo.png' alt="Spree Commerce - Ruby on Rails e-commerce platform" />
+  </a>
+</div>
+
+      <div class="three columns">
+  <input type="text" id="search-field" placeholder="Search..." />
+</div>
+
+      <nav id="main-menu" class="eleven columns">
+  <ul class="inline">
+    <li><a href="../api/">API</a></li>
+    <li><a href="../developer/">Developer</a></li>
+    <li><a href="../user/">User</a></li>
+    <li><a href="../release_notes/">Release Notes</a></li>
+    <li>
+      <a href="http://slack.spreecommerce.org" target="_blank">Slack</a>
+    </li>
+    <li>
+      <a href="https://heroku.com/deploy?template=https://github.com/spree/spree" target="_blank" rel="nofollow">Demo</a>
+    </li>
+  </ul>
+</nav>
+
+    </div>
+  </div>
+</div>
+
+
+    <div id="subheader">
+      <div class="container">
+        <div class="sixteen columns">
+          <h1 class="page-title">Preferences - Developer Guide | Spree - Ruby on Rails e-commerce platform</h1>
+        </div>
+      </div>
+    </div>
+
+  </header>
+
+  <div class="container" id="main">
+    <section id="main-content">
+
+      <div class="twelve columns">
+        <div id="content">
+          
+<h2 id="overview">Overview</h2>
+
+<p>Spree Preferences support general application configuration and preferences per model instance. Spree comes with preferences for your store like <code>logo</code> and <code>currency</code>. Additional preferences can be added by your application or included extensions.</p>
+
+<p>To implement preferences for a model, simply add a new column called <code>preferences</code>. This is an example migration for the <code>spree_products</code> table:</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="keyword">class</span> <span class="class">AddPreferencesColumnToSpreeProducts</span> &lt; <span class="constant">ActiveRecord</span>::<span class="constant">Migration</span>[<span class="float">4.2</span>]
+  <span class="keyword">def</span> <span class="function">up</span>
+    add_column <span class="symbol">:spree_products</span>, <span class="symbol">:preferences</span>, <span class="symbol">:text</span>
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="function">down</span>
+    remove_column <span class="symbol">:spree_products</span>, <span class="symbol">:preferences</span>
+  <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+</pre></div>
+</div>
+</div>
+
+<p>This will work because <code>Spree::Product</code> is a subclass of <code>Spree::Base</code>. If found, the <code>preferences</code> attribute gets serialized into a <code>Hash</code> and merged with the default values.</p>
+
+<p>As another example, you might want to add preferences for users to manage their notification settings. Just make sure your <code>User</code> model inherits from <code>Spree::Base</code> then add the <code>preferences</code> column. You’ll then be able to define preferences for <code>User</code>s without adding extra columns to the database table.</p>
+
+<blockquote>
+  <p>If you’re using <code>spree_auth_devise</code>, note that the provided <code>Spree::User</code> doesn’t inherit from <code>Spree::Base</code>.</p>
+</blockquote>
+
+<p>Extensions may add to the Spree General Settings or create their own namespaced preferences.</p>
+
+<p>The first several sections of this guide describe preferences in a very general way. If you’re just interested in making modifications to the existing preferences, you can skip ahead to the <a href="#configuring-spree-preferences">Configuring Spree Preferences section</a>. If you would like a more in-depth understanding of the underlying concepts used by the preference system, please read on.</p>
+
+<h3 id="motivation">Motivation</h3>
+
+<p>Preferences for models within an application are very common. Although the rule of thumb is to keep the number of preferences available to a minimum, sometimes it’s necessary if you want users to have optional preferences like disabling e-mail notifications.</p>
+
+<p>Both use cases are handled by Spree Preferences. They are easy to define, provide quick cached reads, persist across restarts and do not require additional columns to be added to your models’ tables.</p>
+
+<h2 id="general-settings">General Settings</h2>
+
+<p>Spree comes with many application-wide preferences. They are defined in <code>core/app/models/spree/app_configuration.rb</code> and made available to your code through <code>Spree::Config</code>, e.g., <code>Spree::Config.logo</code>.</p>
+
+<p>A limited set of the general settings are available in the admin interface of your store (<code>/admin/general_settings</code>).</p>
+
+<p>You can add additional preferences under the <code>spree/app_configuration</code> namespace or create your own subclass of <code>Preferences::Configuration</code>.</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="comment"># These will be saved with key: spree/app_configuration/hot_salsa</span>
+<span class="constant">Spree</span>::<span class="constant">AppConfiguration</span>.class_eval <span class="keyword">do</span>
+  preference <span class="symbol">:hot_salsa</span>, <span class="symbol">:boolean</span>
+  preference <span class="symbol">:dark_chocolate</span>, <span class="symbol">:boolean</span>, <span class="key">default</span>: <span class="predefined-constant">true</span>
+  preference <span class="symbol">:color</span>, <span class="symbol">:string</span>
+  preference <span class="symbol">:favorite_number</span>
+  preference <span class="symbol">:language</span>, <span class="symbol">:string</span>, <span class="key">default</span>: <span class="string"><span class="delimiter">'</span><span class="content">English</span><span class="delimiter">'</span></span>
+<span class="keyword">end</span>
+
+<span class="comment"># Spree::Config is an instance of Spree::AppConfiguration</span>
+<span class="constant">Spree</span>::<span class="constant">Config</span>.hot_salsa = <span class="predefined-constant">false</span>
+
+<span class="comment"># Create your own class</span>
+<span class="comment"># These will be saved with key: kona/store_configuration/hot_coffee</span>
+<span class="constant">Kona</span>::<span class="constant">StoreConfiguration</span> &lt; <span class="constant">Preferences</span>::<span class="constant">Configuration</span>
+  preference <span class="symbol">:hot_coffee</span>, <span class="symbol">:boolean</span>
+  preference <span class="symbol">:color</span>, <span class="symbol">:string</span>, <span class="key">default</span>: <span class="string"><span class="delimiter">'</span><span class="content">black</span><span class="delimiter">'</span></span>
+<span class="keyword">end</span>
+
+<span class="constant">KONA</span>::<span class="constant">STORE_CONFIG</span> = <span class="constant">Kona</span>::<span class="constant">StoreConfiguration</span>.new
+puts <span class="constant">KONA</span>::<span class="constant">STORE_CONFIG</span>.hot_coffee
+
+</pre></div>
+</div>
+</div>
+
+<h2 id="defining-preferences">Defining Preferences</h2>
+
+<p>You can define preferences for a model within the model itself:</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="keyword">class</span> <span class="class">User</span> &lt; <span class="constant">ActiveRecord</span>::<span class="constant">Base</span>
+  preference <span class="symbol">:hot_salsa</span>, <span class="symbol">:boolean</span>
+  preference <span class="symbol">:dark_chocolate</span>, <span class="symbol">:boolean</span>, <span class="key">default</span>: <span class="predefined-constant">true</span>
+  preference <span class="symbol">:color</span>, <span class="symbol">:string</span>
+  preference <span class="symbol">:favorite_number</span>, <span class="symbol">:integer</span>
+  preference <span class="symbol">:language</span>, <span class="symbol">:string</span>, <span class="key">default</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">English</span><span class="delimiter">&quot;</span></span>
+<span class="keyword">end</span>
+
+</pre></div>
+</div>
+</div>
+
+<p>In the above model, five preferences have been defined:</p>
+
+<ul>
+  <li><code>hot_salsa</code></li>
+  <li><code>dark_chocolate</code></li>
+  <li><code>color</code></li>
+  <li><code>favorite_number</code></li>
+  <li><code>language</code></li>
+</ul>
+
+<p>For each preference, a data type is provided. The types available are:</p>
+
+<ul>
+  <li><code>boolean</code></li>
+  <li><code>string</code></li>
+  <li><code>password</code></li>
+  <li><code>integer</code></li>
+  <li><code>text</code></li>
+  <li><code>array</code></li>
+  <li><code>hash</code></li>
+</ul>
+
+<p>An optional default value may be defined which will be used unless a value has been set for that specific instance.</p>
+
+<h2 id="accessing-preferences">Accessing Preferences</h2>
+
+<p>Once preferences have been defined for a model, they can be accessed either using the shortcut methods that are generated for each preference or the generic methods that are not specific to a particular preference.</p>
+
+<h3 id="shortcut-methods">Shortcut Methods</h3>
+
+<p>There are several shortcut methods that are generated. They are shown below.</p>
+
+<p>Query methods:</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>user.prefers_hot_salsa? <span class="comment"># =&gt; false</span>
+user.prefers_dark_chocolate? <span class="comment"># =&gt; false</span>
+
+</pre></div>
+</div>
+</div>
+
+<p>Reader methods:</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>user.preferred_color      <span class="comment"># =&gt; nil</span>
+user.preferred_language   <span class="comment"># =&gt; &quot;English&quot;</span>
+
+</pre></div>
+</div>
+</div>
+
+<p>Writer methods:</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>user.prefers_hot_salsa = <span class="predefined-constant">false</span>         <span class="comment"># =&gt; false</span>
+user.preferred_language = <span class="string"><span class="delimiter">&quot;</span><span class="content">English</span><span class="delimiter">&quot;</span></span>    <span class="comment"># =&gt; &quot;English&quot;</span>
+
+</pre></div>
+</div>
+</div>
+
+<p>Check if a preference is available:</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>user.has_preference? <span class="symbol">:hot_salsa</span>
+
+</pre></div>
+</div>
+</div>
+
+<h3 id="generic-methods">Generic Methods</h3>
+
+<p>Each shortcut method is essentially a wrapper for the various generic methods shown below:</p>
+
+<p>Query method:</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>user.prefers?(<span class="symbol">:hot_salsa</span>)       <span class="comment"># =&gt; false</span>
+user.prefers?(<span class="symbol">:dark_chocolate</span>)  <span class="comment"># =&gt; false</span>
+
+</pre></div>
+</div>
+</div>
+
+<p>Reader methods:</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>user.preferred(<span class="symbol">:color</span>)      <span class="comment"># =&gt; nil</span>
+user.preferred(<span class="symbol">:language</span>)   <span class="comment"># =&gt; &quot;English&quot;</span>
+
+</pre></div>
+</div>
+</div>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>user.get_preference <span class="symbol">:color</span>
+user.get_preference <span class="symbol">:language</span>
+
+</pre></div>
+</div>
+</div>
+
+<p>Writer method:</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>user.set_preference(<span class="symbol">:hot_salsa</span>, <span class="predefined-constant">false</span>)     <span class="comment"># =&gt; false</span>
+user.set_preference(<span class="symbol">:language</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">English</span><span class="delimiter">&quot;</span></span>)  <span class="comment"># =&gt; &quot;English&quot;</span>
+
+</pre></div>
+</div>
+</div>
+
+<h3 id="accessing-all-preferences">Accessing All Preferences</h3>
+
+<p>You can get a hash of all stored preferences by accessing the <code>preferences</code> helper:</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>user.preferences <span class="comment"># =&gt; {&quot;language&quot;=&gt;&quot;English&quot;, &quot;color&quot;=&gt;nil}</span>
+
+</pre></div>
+</div>
+</div>
+
+<p>This hash will contain the value for every preference that has been defined for the model instance, whether the value is the default or one that has been previously stored.</p>
+
+<h3 id="default-and-type">Default and Type</h3>
+
+<p>You can access the default value for a preference:</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>user.preferred_color_default <span class="comment"># =&gt; 'blue'</span>
+
+</pre></div>
+</div>
+</div>
+
+<p>Types are used to generate forms or display the preference. You can also get the type defined for a preference:</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>user.preferred_color_type <span class="comment"># =&gt; :string</span>
+
+</pre></div>
+</div>
+</div>
+
+<h2 id="configuring-spree-preferences">Configuring Spree Preferences</h2>
+
+<p>Up until now we’ve been discussing the general preference system that was adapted to Spree. This has given you a general idea of what types of preference features are theoretically supported. Now, let’s start to look specifically at how Spree is using these preferences for configuration.</p>
+
+<h3 id="reading-the-current-preferences">Reading the Current Preferences</h3>
+
+<p>At the heart of Spree preferences lies the <code>Spree::Config</code> constant. This object provides general access to the configuration settings anywhere in the application.</p>
+
+<p>These settings can be accessed from initializers, models, controllers, views, etc.</p>
+
+<p>The <code>Spree::Config</code> constant returns an instance of <code>Spree::AppConfiguration</code> which is where the default values for all of the general Spree preferences are defined.</p>
+
+<p>You can access these preferences directly in code. To see this in action, just fire up <code>rails console</code> and try the following:</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>&gt;&gt; <span class="constant">Spree</span>::<span class="constant">Config</span>.admin_interface_logo
+=&gt; <span class="string"><span class="delimiter">&quot;</span><span class="content">logo/spree_50.png</span><span class="delimiter">&quot;</span></span>
+&gt;&gt; <span class="constant">Spree</span>::<span class="constant">Config</span>.admin_products_per_page
+=&gt; <span class="integer">10</span>
+
+</pre></div>
+</div>
+</div>
+
+<p>The above examples show the default configuration values for these preferences. The defaults themselves are coded within the <code>Spree::AppConfiguration</code> class.</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="keyword">class</span> <span class="class">Spree::AppConfiguration</span> &lt; <span class="constant">Configuration</span>
+  <span class="comment">#... snip ...</span>
+  preference <span class="symbol">:allow_guest_checkout</span>, <span class="symbol">:boolean</span>, <span class="key">default</span>: <span class="predefined-constant">true</span>
+  <span class="comment">#... snip ...</span>
+<span class="keyword">end</span>
+
+</pre></div>
+</div>
+</div>
+
+<p>If you are using the default preferences without any modifications, then nothing will be stored in the database. If you set a value for the preference it will save it to <code>spree_preferences</code> or in our <code>preferences</code> column. It will use a memory cached version to maintain performance.</p>
+
+<h3 id="overriding-the-default-preferences">Overriding the Default Preferences</h3>
+
+<p>The default Spree preferences in <code>Spree::AppConfiguration</code> can be changed using the <code>set</code> method of the <code>Spree::Config</code> module. For example to set the number of products shown on the products listing in the admin interface we could do the following:</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>&gt;&gt; <span class="constant">Spree</span>::<span class="constant">Config</span>.admin_products_per_page = <span class="integer">20</span>
+=&gt; <span class="integer">20</span>
+&gt;&gt; <span class="constant">Spree</span>::<span class="constant">Config</span>.admin_products_per_page
+=&gt; <span class="integer">20</span>
+
+</pre></div>
+</div>
+</div>
+
+<p>Here we are changing a preference to something other than the default as specified in <code>Spree::AppConfiguration</code>. In this case the preference system will persist the new value in the <code>spree_preferences</code> table.</p>
+
+<h3 id="configuration-through-the-spree-initializer">Configuration Through the Spree Initializer</h3>
+
+<p>During the Spree installation process, an initializer file is created within your application’s source code. The initializer is found under <code>config/initializers/spree.rb</code>:</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="constant">Spree</span>.config <span class="keyword">do</span> |config|
+  <span class="comment"># Example:</span>
+  <span class="comment"># Uncomment to override the default logo location.</span>
+  <span class="comment"># config.logo = 'logo/my_store.png'</span>
+<span class="keyword">end</span>
+
+</pre></div>
+</div>
+</div>
+
+<p>The <code>Spree.config</code> block acts as a shortcut to setting <code>Spree::Config</code> multiple times. If you have multiple default preferences you would like to override within your code you may override them here. Using the initializer for setting the defaults is a nice shortcut, and helps keep your preferences organized in a standard location.</p>
+
+<p>For example if you would like to change the logo location and if you want to tax using the shipping address you can accomplish this by doing the following:</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="constant">Spree</span>.config <span class="keyword">do</span> |config|
+  config.logo = <span class="string"><span class="delimiter">'</span><span class="content">logo/my_store.png</span><span class="delimiter">'</span></span>
+  config.tax_using_ship_address = <span class="predefined-constant">true</span>
+<span class="keyword">end</span>
+
+</pre></div>
+</div>
+</div>
+
+<div class="note"><p>Initializing preferences in <code>config/initializers/spree.rb</code> will overwrite any changes that were made through the admin user interface when you restart.</p>
+</div>
+
+<h3 id="configuration-through-the-admin-interface">Configuration Through the Admin Interface</h3>
+
+<p>The Spree admin interface has several different screens where various settings can be configured. For instance, the <code>admin/general_settings</code> URL in your Spree application can be used to configure the values for the site name and the site URL. This is basically equivalent to calling <code>Spree::Config.set(currency: "CDN", currency_thousands_separator: " ")</code> directly in your Ruby code.</p>
+
+<h2 id="site-wide-preferences">Site-Wide Preferences</h2>
+
+<p>You can define preferences that are site-wide and don’t apply to a specific instance of a model by creating a configuration file that inherits from <code>Spree::Preferences::Configuration</code>.</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="keyword">class</span> <span class="class">Spree::MyApplicationConfiguration</span> &lt; <span class="constant">Spree</span>::<span class="constant">Preferences</span>::<span class="constant">Configuration</span>
+  preference <span class="symbol">:theme</span>, <span class="symbol">:string</span>, <span class="key">default</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">Default</span><span class="delimiter">&quot;</span></span>
+  preference <span class="symbol">:show_splash_page</span>, <span class="symbol">:boolean</span>
+  preference <span class="symbol">:number_of_articles</span>, <span class="symbol">:integer</span>
+<span class="keyword">end</span>
+
+</pre></div>
+</div>
+</div>
+
+<p>In the above configuration file, three preferences have been defined:</p>
+
+<ul>
+  <li>theme</li>
+  <li>show_splash_page</li>
+  <li>number_of_articles</li>
+</ul>
+
+<p>It is recommended to create the configuration file in the <code>lib/</code> directory.</p>
+
+<div class="note"><p>Extensions can also define site-wide preferences. For more information on using preferences like this with extensions, check out the <a href="extensions_tutorial.html">Extensions Tutorial</a>.</p>
+</div>
+
+<h3 id="configuring-site-wide-preferences">Configuring Site-Wide Preferences</h3>
+
+<p>The recommended way to configure site-wide preferences is through an initializer. Let’s take a look at configuring the preferences defined in the previous configuration example.</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="keyword">module</span> <span class="class">Spree</span>
+  <span class="constant">MyApp</span>::<span class="constant">Config</span> = <span class="constant">Spree</span>::<span class="constant">MyApplicationConfiguration</span>.new
+<span class="keyword">end</span>
+
+<span class="constant">MyApp</span>::<span class="constant">Config</span>[<span class="symbol">:theme</span>] = <span class="string"><span class="delimiter">&quot;</span><span class="content">blue_theme</span><span class="delimiter">&quot;</span></span>
+<span class="constant">MyApp</span>::<span class="constant">Config</span>[<span class="symbol">:show_spash_page</span>] = <span class="predefined-constant">true</span>
+<span class="constant">MyApp</span>::<span class="constant">Config</span>[<span class="symbol">:number_of_articles</span>] = <span class="integer">5</span>
+
+</pre></div>
+</div>
+</div>
+
+<p>The <code>MyApp</code> name used here is an example and should be replaced with your actual application’s name, found in <code>config/application.rb</code>.</p>
+
+<p>The above example will configure the preferences we defined earlier. Take note of the second line. In order to set and get preferences using <code>MyApp::Config</code>, we must first instantiate the configuration object.</p>
+
+<h2 id="spree-configuration-options">Spree Configuration Options</h2>
+
+<p>This section lists all of the configuration options for the current version of Spree.</p>
+
+<p><code>address_requires_state</code></p>
+
+<p>Will determine if the state field should appear on the checkout page. Defaults to <code>true</code>.</p>
+
+<p><code>admin_interface_logo</code></p>
+
+<p>The path to the logo to display on the admin interface. Can be different from <code>Spree::Config[:logo]</code>. Defaults to <code>logo/spree_50.png</code>.</p>
+
+<p><code>admin_products_per_page</code></p>
+
+<p>How many products to display on the products listing in the admin interface. Defaults to 30.</p>
+
+<p><code>allow_checkout_on_gateway_error</code></p>
+
+<p>Continues the checkout process even if the payment gateway error failed. Defaults to <code>false</code>.</p>
+
+<p><code>alternative_shipping_phone</code></p>
+
+<p>Determines if an alternative phone number should be present for the shipping address on the checkout page. Defaults to <code>false</code>.</p>
+
+<p><code>always_put_site_name_in_title</code></p>
+
+<p>Determines if the site name (<code>current_store.site_name</code>) should be placed into the title. Defaults to <code>true</code>.</p>
+
+<p><code>attachment_default_url</code></p>
+
+<p>Tells <code>Paperclip</code> the form of the URL to use for attachments which are missing.</p>
+
+<p><code>attachment_path</code></p>
+
+<p>Tells <code>Paperclip</code> the path at which to store images.</p>
+
+<p><code>attachment_styles</code></p>
+
+<p>A JSON hash of different styles that are supported by attachments. Defaults to:</p>
+
+<div class="language-json highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>{
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">mini</span><span class="delimiter">&quot;</span></span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">48x48&gt;</span><span class="delimiter">&quot;</span></span>,
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">small</span><span class="delimiter">&quot;</span></span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">100x100&gt;</span><span class="delimiter">&quot;</span></span>,
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">product</span><span class="delimiter">&quot;</span></span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">240x240&gt;</span><span class="delimiter">&quot;</span></span>,
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">large</span><span class="delimiter">&quot;</span></span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">600x600&gt;</span><span class="delimiter">&quot;</span></span>
+}
+
+</pre></div>
+</div>
+</div>
+
+<p><code>attachment_default_style</code></p>
+
+<p>A key from the list of styles from <code>Spree::Config[:attachment_styles]</code> that is the default style for images. Defaults to the the <code>product</code> style.</p>
+
+<p><code>auto_capture</code></p>
+
+<p>Depending on whether or not Spree is configured to “auto capture” the credit card, either a purchase or an authorize operation will be performed on the card (via the current credit card gateway).  Defaults to <code>false</code>.</p>
+
+<p><code>checkout_zone</code></p>
+
+<p>Limits the checkout to countries from a specific zone, by name. Defaults to <code>nil</code>.</p>
+
+<p><code>company</code></p>
+
+<p>Determines whether or not a field for “Company” displays on the checkout pages for shipping and billing addresses. Defaults to <code>false</code>.</p>
+
+<p><code>currency</code></p>
+
+<p>The three-letter currency code for the currency that prices will be displayed in. Defaults to “USD”.</p>
+
+<p><code>default_country_id</code></p>
+
+<p>The default country’s id. Defaults to 214, as this is the id for the United States within the seed data.</p>
+
+<p><code>layout</code></p>
+
+<p>The path to the layout of your application, relative to the <code>app/views</code> directory. Defaults to <code>spree/layouts/spree_application</code>. To make Spree use your application’s layout rather than Spree’s default, use this:</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="constant">Spree</span>.config <span class="keyword">do</span> |config|
+  config.layout = <span class="string"><span class="delimiter">&quot;</span><span class="content">application</span><span class="delimiter">&quot;</span></span>
+<span class="keyword">end</span>
+
+</pre></div>
+</div>
+</div>
+
+<p><code>logo</code></p>
+
+<p>The logo to display on your frontend. Defaults to <code>logo/spree_50.png</code>.</p>
+
+<p><code>max_level_in_taxons_menu</code></p>
+
+<p>The number of levels to descend when viewing a taxon menu. Defaults to <code>1</code>.</p>
+
+<p><code>admin_orders_per_page</code></p>
+
+<p>The number of orders to display on the orders listing in the admin backend. Defaults to <code>30</code>.</p>
+
+<p><code>prices_inc_tax</code></p>
+
+<p>Determines if prices are labelled as including tax or not. Defaults to <code>false</code>.</p>
+
+<p><code>shipment_inc_vat</code></p>
+
+<p>Determines if shipments should include VAT calculations. Defaults to <code>false</code>.</p>
+
+<p><code>shipping_instructions</code></p>
+
+<p>Determines if shipping instructions are requested or not when checking out. Defaults to <code>false</code>.</p>
+
+<p><code>show_descendents</code></p>
+
+<p>Determines if taxon descendants are shown when showing taxons. Defaults to <code>true</code>.</p>
+
+<p><code>show_only_complete_orders_by_default</code></p>
+
+<p>Determines if, on the admin listing screen, only completed orders should be shown. Defaults to <code>true</code>.</p>
+
+<p><code>show_variant_full_price</code></p>
+
+<p>Determines if the variant’s full price or price difference from a product should be displayed on the product’s show page. Defaults to <code>false</code>.</p>
+
+<p><code>tax_using_ship_address</code></p>
+
+<p>Determines if tax information should be based on shipping address, rather than the billing address. Defaults to <code>true</code>.</p>
+
+<p><code>track_inventory_levels</code></p>
+
+<p>Determines if inventory levels should be tracked when products are purchased at checkout. This option causes new <code>InventoryUnit</code> objects to be created when a product is bought. Defaults to <code>true</code>.</p>
+
+        </div>
+      </div>
+
+    </section>
+
+    <aside id="sidebar" class="four columns">
+  <nav id="sidebar-menu">
+    <ul>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-tutorial-menu"><i class="icon-right-open"></i></a>
+          <a href='/developer/getting_started_tutorial.html'>Tutorials</a>
+        </h3>
+        <ul class="js-guides">
+          <li><i class="icon-dot"></i><a href='/developer/getting_started_tutorial.html'>Getting Started</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/extensions_tutorial.html'>Extensions</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/deface_overrides_tutorial.html'>Deface Overrides</a> <div class="toc"></div> </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-source-code-menu"><i class="icon-right-open"></i></a>
+          <a href='/developer/about.html'>Source Code</a>
+        </h3>
+        <ul class="js-guides">
+          <li><i class="icon-dot"></i><a href='/developer/about.html'>About</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/navigating.html'>Navigating</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/getting_help.html'>Getting Help</a> <div class="toc"></div> </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href="https://github.com/spree/spree/blob/master/.github/CONTRIBUTING.md" target="_blank" rel="nofollow">
+              Contributing
+            </a>
+            <div class="toc"></div>
+          </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-core-menu"><i class="icon-right-open"></i></a>
+          <a href='/developer/addresses.html'>The Core</a>
+        </h3>
+        <ul class="js-guides">
+          <li><i class="icon-dot"></i><a href='/developer/addresses.html'>Addresses</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/adjustments.html'>Adjustments</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/calculators.html'>Calculators</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/inventory.html'>Inventory</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/orders.html'>Orders</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/payments.html'>Payments</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/preferences.html'>Preferences</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/products.html'>Products</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/promotions.html'>Promotions</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/shipments.html'>Shipments</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/taxation.html'>Taxation</a> <div class="toc"></div> </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-customization-menu"><i class="icon-right-open"></i></a>
+          <a href='/developer/authentication.html'>Customization</a>
+        </h3>
+        <ul class="js-guides">
+          <li><i class="icon-dot"></i><a href='/developer/authentication.html'>Authentication</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/i18n.html'>Internationalization (i18n)</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/view.html'>View</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/asset.html'>Asset</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/logic.html'>Logic</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/s3_storage.html'>Use S3</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/checkout.html'>Checkout</a> <div class="toc"></div> </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-deployment-menu"><i class="icon-right-open"></i></a>
+          <a href='/developer/deployment_tips.html'>Deployment</a>
+        </h3>
+        <ul class="js-guides">
+          <li><i class="icon-dot"></i><a href='/developer/heroku.html'>Heroku</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/ansible-ubuntu.html'>Ansible Ubuntu Deployment</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/manual-ubuntu.html'>Manual Ubuntu Deployment</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/deployment_options.html'>Deployment Options</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/deployment_tips.html'>Deployment Tips</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/requesting_and_configuring_ssl.html'>Requesting/Configuring SSL</a> <div class="toc"></div> </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-advanced-menu"><i class="icon-right-open"></i></a>
+          <a href='/developer/seo.html'>Advanced Topics</a>
+        </h3>
+        <ul class="js-guides">
+          <li><i class="icon-dot"></i><a href='/developer/developer_tips.html'>Developer Tips</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/gateway_specific_information.html'>Gateway Specific Information</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/migration.html'>Migrating to Spree</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/seo.html'>Search Engine Optimization</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/security.html'>Security</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/testing.html'>Testing Spree Applications</a> <div class="toc"></div> </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-upgrades-menu"><i class="icon-right-open"></i></a>
+          <a href='/developer/upgrade_guides.html'>Upgrade Guides</a>
+        </h3>
+        <ul class="js-guides">
+          <li><i class="icon-dot"></i><a href='/developer/point-sixty-to-point-seventy.html'>0.60.x to 0.70.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/point-seventy-to-one-dot-oh.html'>0.70.x to 1.0.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/one-dot-oh-to-one-dot-one.html'>1.0.x to 1.1.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/one-dot-one-to-one-dot-two.html'>1.1.x to 1.2.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/one-dot-two-to-one-dot-three.html'>1.2.x to 1.3.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/one-dot-three-to-two-dot-oh.html'>1.3.x to 2.0.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/two-dot-oh-to-two-dot-one.html'>2.0.x to 2.1.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/two-dot-one-to-two-dot-two.html'>2.1.x to 2.2.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/two-dot-two-to-two-dot-three.html'>2.2.x to 2.3.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/two-dot-three-to-two-dot-four.html'>2.3.x to 2.4.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/three-dot-oh-to-three-dot-one.html'>3.0.x to 3.1.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/three-dot-one-to-three-dot-two.html'>3.1.x to 3.2.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/three-dot-two-to-three-dot-three.html'>3.2.x to 3.3.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/three-dot-three-to-three-dot-four.html'>3.3.x to 3.4.x</a> <div
+          class="toc"></div></li>
+        </ul>
+      </li>
+    </ul>
+  </nav>
+</aside>
+
+  </div>
+
+  <footer id="main-footer">
+
+  <div class="footer-top">
+    <div class="container">
+      <div id="link-blocks" class="row">
+        <div class="link-block six columns">
+          <h3 class="block-title">Developers</h3>
+          <ul>
+            <li><a href="https://slack.spreecommerce.org" target="_blank" rel="nofollow">Slack</a></li>
+            <li><a href="https://github.com/spree-contrib" target="_blank">Extensions</a></li>
+            <li><a href="https://github.com/spree/spree/blob/master/license.md" target="_blank">License</a></li>
+          </ul>
+        </div>
+        <div class="link-block seven columns">
+          <h3 class="block-title">About Spree</h3>
+          <p>
+            <strong><a href="https://spreecommerce.org">Spree Commerce</a></strong>
+            is a complete modular, API-driven open source e-commerce solution
+            built with Ruby on Rails.
+          </p>
+          <p>
+            Guides are hosted and maintained by
+            <a href="http://sparksolutions.co" target="_blank">Spark Solutions</a>
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</footer>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-104990445-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/docsearch.js/2/docsearch.min.js"></script>
+<script type="text/javascript"> docsearch({
+apiKey: 'fb697cd2d04591b036ea172259c05ba8',
+indexName: 'spreecommerce',
+inputSelector: '#search-field',
+debug: false // Set debug to true if you want to inspect the dropdown
+});
+</script>
+
+
+  </body>
+</html>

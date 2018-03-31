@@ -1,0 +1,87 @@
+<div class="main-content">
+  <div class="page-content">
+    <div class="row">
+      <div class="col-sm-12">
+
+        <div class="bgf9f9f9 pd10 table table-striped table-bordered table-hover dataTabletable table-striped table-bordered table-hover dataTable margin-top-20">
+          <h5 class="text-info">绑定公众号</h5>
+          <%= form_for @wx_mp_user, url: case_wx_mp_user_path(@wx_mp_user ), validate: true, :html => { :class => 'form-table  margin-bottom-20', id: 'wx_mp_user-form', role: 'form' } do |f| %>
+            <div class="row margin-top-10">
+              <div class="col-md-3 text-right">绑定状态：</div>
+              <div class="col-md-5">
+                <div class="input-group input-group-text">
+                  <%= @wx_mp_user.status %>
+                  <%= link_to '重新绑定', case_wechat_bind_url, target: '_blank', id: 'rebind_link', data: {confirm: '<h4>警告：变更公众账号绑定，会导致会员卡和电商数据丢失！请谨慎操作！后果商家自负！</h4>'} %>
+                </div>
+              </div>
+            </div>
+
+            <div class="row margin-top-10">
+              <div class="col-md-3 text-right">名称：</div>
+              <div class="col-md-5">
+                <div class="input-group input-group-text">
+                  <%= f.text_field :nick_name, class: "form-control", size: 60 %>
+                </div>
+              </div>
+            </div>
+            <div class="row margin-top-10">
+              <div class="col-md-3 text-right">公众号二维码</div>
+              <div class="col-md-5">
+                <div class="input-group input-group-text">
+                  <% if @wx_mp_user.qrcode_url.present? %>
+                  <%= image_tag
+                  <% end %>
+                </div>
+              </div>
+            </div>
+
+
+            <div class="row margin-top-10">
+              <div class="col-md-3 text-right"></div>
+              <div class="col-md-2">
+                <%= f.submit '保存', class: "btn btn-primary btn-sm" %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+
+
+        <div class="bgf9f9f9 pd10 table table-striped table-bordered table-hover dataTable margin-top-20">
+          <h5 class="margin-top-10 text-info">网页授权</h5>
+          <div class="alert alert-block alert-info margin-top-10">
+            <strong class="pull-left">提示：</strong>
+            <ul class="vwebsiteHeadAlert">
+              <li>1、使用网页授权必须是开通高级接口的认证服务号，且设置了OAuth2.0网页授权回调页面域名；</li>
+              <li>2、在公众平台设置网页回调页面域名路径：开发者中心 &gt; 高级接口 &gt; OAuth2.0网页授权 &gt; 修改 &gt; 填写授权回调页面域名；</li>
+              <li>3、开启网页授权后，用户通过朋友圈分享出去的活动页面，未关注该公众平台的用户也可以直接使用， 建议开启并在公众平台正确配置。</li>
+            </ul>
+          </div>
+          <form role="form" class="form-table margin-top-10 margin-bottom-20">
+            <div class="row ">
+              <div class="col-md-6">
+                <div class="input-group input-group-sm input-group-text">
+                  <input type="text" class="col-xs-12" value="<%= current_company.id %>.<%= Rails.application.secrets.hostname %>">
+                  <span class="input-group-addon">
+                    <a href="javascript:void(0);" class="btn btn-primary btn-sm btn-filter" id="J-copy" data-clipboard-text="<%= current_company.id %>.<%= Rails.application.secrets.hostname %>">复制授权回调页面域名</a>
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="row margin-top-10">
+              <div class="col-md-4 ">
+                <label>网页授权开关：</label>
+                <label>
+                  <input name="switch-field-1" class="ace ace-switch ace-switch-4 btn-flat" type="checkbox" <%= 'checked' if @wx_mp_user.is_oauth? %> <%#= 'disabled' unless @wx_mp_user.auth_service? %>>
+                  <span class="lbl"></span>
+                </label>
+              </div>
+            </div>
+          </form>
+          <%= link_to '', @wx_mp_user.is_oauth? ?  close_oauth_case_wx_mp_user_path(@wx_mp_user) : open_oauth_case_wx_mp_user_path(@wx_mp_user), method: :post, remote: true, id: 'ace-switch' %>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div>

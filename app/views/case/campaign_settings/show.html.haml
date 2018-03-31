@@ -1,0 +1,15 @@
+%p#notice= notice
+
+%p
+  %b Wx name:
+  = @game_setting.wx_name
+%p
+  %b Game:
+  = @game_setting.game_id
+%p
+  %b Wx status:
+  = @game_setting.wx_status
+
+= link_to 'Edit', edit_game_setting_path(@game_setting)
+\|
+= link_to 'Back', game_settings_path

@@ -1,0 +1,213 @@
+<div class="Panel Bottom"  >
+</div>
+  <div class="skinLayer" id="skinLayer"> <i class="closeb" onclick="document.getElementById('skinLayer').style.display='none';"></i>
+      <div class="stylebg">
+    <!--label>
+          <input name="" onchange="changeit(this)"      type="checkbox" value="1">
+          强制使用自定义背景</label-->
+  </div>
+      <div class="style-center">
+    <div class="style-nav">
+          <ul class="style-nav-list">
+
+      </ul>
+        </div>
+    <div class="style-box">
+          <ul class="style-img-list" >
+
+      </ul>
+        </div>
+  </div>
+    </div>
+  <script>
+	  function bigsmall(n) {}
+
+      function getmbhtml(cateid) {//点击具体某种分类 得到具体的风格背景
+        $(".style-img-list").load("{php echo $this->createMobileUrl('get_skins',array('control'=>$_GPC['do'],'rid'=>$rid))}&cateid=" + cateid);
+
+        $(".style-nav-list li").each(function() {
+          $(this).removeClass("curr");
+        });
+        $("#li" + cateid).addClass("curr");
+      }
+      function getcatehtml() {//获取各种节日背景
+        $(".style-nav-list").load("{php echo $this->createMobileUrl('get_skins',array('control'=>$_GPC['do'],'rid'=>$rid,'cateid'=>'meepo'))}");
+      }
+      getcatehtml();
+      getmbhtml(0);//默认获取全部风格
+	  </script>
+	<div class="loginform" style="z-index:100">
+		  <div class="activity_title">微现场</div>
+		  <div>
+			<input id="password" class="password" placeholder="请输入微现场的管理密码" type="password">
+		  </div>
+		  <div class="submitline">
+			<button class="button-login">开启</button>
+		  </div>
+    </div>
+    <div class="loader" style="display: block;">
+      <div class="icon"></div>
+    </div>
+    <div class="bigmpcodebar">
+      <div class="closebutton"></div>
+      <div class="label">{if $_GPC['do']=='qd' || $_GPC['do']=='wall' || $_GPC['do']=='lottory' || $_GPC['do']=='vote' || $_GPC['do']=='shake' || $_GPC['do']=='dm' || $_GPC['do']=='lizi' || $_GPC['do']=='redpack'}扫描下面的二维码参与{if $_GPC['do']=='qd'}{$qd_config['title']}{elseif $_GPC['do']=='wall'}{$wall_config['title']}{elseif $_GPC['do']=='lottory'}抽奖{elseif $_GPC['do']=='vote'}投票{elseif $_GPC['do']=='shake'}摇一摇{elseif $_GPC['do']=='dm'}弹幕{elseif $_GPC['do']=='redpack'}抢红包{/if}{else}扫描下面的二维码关注公众号{/if}</div>
+	  <?php
+		if($_GPC['do']=='dm'){
+			$do_it = 'wall';
+		}elseif($_GPC['do']=='lizi'){
+			$do_it = 'qd';
+		}else{
+			$do_it = $_GPC['do'];
+		}
+	  ?>
+      <img src="{if $_GPC['do']=='qd' || $_GPC['do']=='wall' || $_GPC['do']=='lottory' || $_GPC['do']=='vote' || $_GPC['do']=='shake' || $_GPC['do']=='dm' || $_GPC['do']=='lizi'  || $_GPC['do']=='redpack'}{php echo str_replace('./','',$_W['siteroot'].'app/'.$this->createMobileUrl('makeqrcode',array('url'=>$this->createMobileUrl('app_'.$do_it,array('rid'=>$rid,'vote_id'=>$vote['id'])))))}{else}{if !empty($basic_config['mp_img'])}{php echo tomedia($basic_config['mp_img'])}{else}../attachment/qrcode_{$_W['uniacid']}.jpg{/if}{/if}" onerror="../attachment/qrcode_{$_W['uniacid']}.jpg">
+	</div>
+	<div class="show_qrcode">
+      <div class="closebutton"></div>
+      <div class="label">扫描下面的二维码关注公众号</div>
+      <img src="{if !empty($basic_config['mp_img'])}{php echo tomedia($basic_config['mp_img'])}{else}../attachment/qrcode_{$_W['uniacid']}.jpg{/if}" onerror="../attachment/qrcode_{$_W['uniacid']}.jpg">
+	</div>
+	 <div id="leafContainer"></div>
+	<div id="effect"></div>
+	<div id="show_hide_nav"><img src="{MODULE_URL}template/mobile/app/images/opened.png"></div>
+  </body>
+
+.richStar1{position:absolute; left:30px; top:140px; width:60px; opacity:0.4}
+.richStar2{position:absolute; left:60px; top:30px; width:80px; opacity:0.4}
+.richStar3{position:absolute; left:170px; top:30px; width:60px; opacity:0.4}
+
+.richStar4{position:absolute; right:30px; top:140px; width:60px; opacity:0.4}
+.richStar5{position:absolute; right:60px; top:30px; width:80px; opacity:0.4}
+.richStar6{position:absolute; right:170px; top:30px; width:60px; opacity:0.4}
+
+.richStar7{position:absolute; left:60px; bottom:100px; width:80px; opacity:0.4}
+.richStar8{position:absolute; left:140px; bottom:30px; width:60px; opacity:0.4}
+
+.richStar9{position:absolute; right:60px; bottom:100px; width:80px; opacity:0.4}
+.richStar10{position:absolute; right:140px; bottom:30px; width:60px; opacity:0.4}
+
+.richStar1{
+	-webkit-animation:starAnimate1 2s infinite;
+	animation:starAnimate1 2s infinite;
+}
+.richStar2{
+	-webkit-animation:starAnimate1 2s 0.3s infinite;
+	animation:starAnimate1 2s 0.3s infinite;
+}
+.richStar3{
+	-webkit-animation:starAnimate1 2s 0.6s infinite;
+	animation:starAnimate1 2s 0.6s infinite;
+}
+.richStar4{
+	-webkit-animation:starAnimate1 2s infinite;
+	animation:starAnimate1 2s infinite;
+}
+.richStar5{
+	-webkit-animation:starAnimate1 2s 0.3s infinite;
+	animation:starAnimate1 2s 0.3s infinite;
+}
+.richStar6{
+	-webkit-animation:starAnimate1 2s 0.6s infinite;
+	animation:starAnimate1 2s 0.6s infinite;
+}
+.richStar7{
+	-webkit-animation:starAnimate1 2s infinite;
+	animation:starAnimate1 2s infinite;
+}
+.richStar8{
+	-webkit-animation:starAnimate1 2s 0.3s infinite;
+	animation:starAnimate1 2s 0.3s infinite;
+}
+.richStar9{
+	-webkit-animation:starAnimate1 2s infinite;
+	animation:starAnimate1 2s infinite;
+}
+.richStar10{
+	-webkit-animation:starAnimate1 2s 0.3s infinite;
+	animation:starAnimate1 2s 0.3s infinite;
+}
+@-webkit-keyframes starAnimate1 {
+  50% {
+	-webkit-transform:scale(1.8);
+    opacity: 1;
+  }
+  100% {
+	-webkit-transform:scale(1);
+    opacity: 0.4;
+  }
+}
+@keyframes starAnimate1 {
+  50% {
+	transform:scale(1.8);
+    opacity: 1;
+  }
+  100% {
+	transform:scale(1);
+    opacity: 0.4;
+  }
+}
+ </style>
+<script src="{MODULE_URL}template/mobile/app/js/stars.js"></script>
+<script>
+$(function(){
+var obj = document.getElementById('effect');
+initEffect(obj);
+
+});
+</script>
+{/if}
+{if $basic_config['show_leaf']==1}
+{template 'leaf'}
+{/if}
+<script>
+$(document).ready(function(){
+	$("#show_hide_nav img").on('click',function() {
+	if($("#panel_status").val()==0){
+		$(this).attr("src",'{MODULE_URL}template/mobile/app/images/opened.png');
+		hidetb();
+		$("#panel_status").val("1");
+	}else{
+
+		showtb();
+		$("#panel_status").val("0");
+		$(this).attr("src",'{MODULE_URL}template/mobile/app/images/chosed.png');
+
+	}
+	});
+	$("#bg_music").click(function(){
+			if ($(this).css("background-image").indexOf('no') != '-1') {
+                $("#audio").get(0).play();
+				$(this).css("background-image","url({MEEPO}common/images/music.png)");
+			} else {
+				$("#audio").get(0).pause();
+				$(this).css("background-image","url({MEEPO}common/images/no_music.png)");
+			}
+	});
+	$("#show_qd_code").click('click',function(){
+		$(".bigmpcodebar").slideUp()
+		$(".show_qrcode").slideDown();
+	});
+	$(".show_qrcode .closebutton").on("click", function() {
+			//$(".bigmpcodebar").slideUp()
+			$(".show_qrcode").slideUp()
+	});
+});
+function showtb() {
+    $(".Panel.Top").css({
+        top: "-" + $(".Panel.Top").height() + "px"
+    });
+    $(".Panel.Bottom").css({
+        bottom: "-" + $(".Panel.Bottom").height() + "px"
+    });
+}
+function hidetb() {
+    $(".Panel.Top").css({
+        top: 0
+    });
+    $(".Panel.Bottom").css({
+        bottom: 0
+    })
+};
+</script>
+
+</html>

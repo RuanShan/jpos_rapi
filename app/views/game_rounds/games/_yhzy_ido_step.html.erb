@@ -1,0 +1,213 @@
+<% content_for :game_asset_css do %>
+  <%= stylesheet_link_tag    'game/yhzy_ido/all', media: 'all', 'data-turbolinks-track' => true %>
+<% end %>
+
+<% content_for :game_asset_js do %>
+  <%= javascript_include_tag "game/yhzy_ido/all", media: 'all','data-turbolinks-track' => true %>
+<% end %>
+
+<div id="js_musicBtn" class="musicBtn" style="display: block;">
+        <div></div>
+        <div style="display: none;">
+          <%= audio_tag ['game/yhzy_ido/bg.ogg','game/yhzy_ido/bg.mp3'], loop: true, id: 'bgMusic' %>
+        </div>
+</div>
+
+<!-- Swiper -->
+<div class="swiper-container">
+    <div class="swiper-wrapper">
+        <div class="swiper-slide slide1 swiper-no-swiping" data-step='1'>
+          <div class="obg">
+          	<div class="onehead">   </div>
+          		<div class="onebgbai">
+                <%= image_tag 'game/yhzy_ido/one_04.png'%>
+          			<h3>I Do  全城说爱</h3>
+          			<h4>双十一让我们来一场高逼格的告白行动</h4>
+          			<p>全城说爱，每个纪念日都因为爱情<br>曾经，以为爱情在初见时最美<br>相视的心动、莫名的想念、牵手的悸动<br>后来，以为爱情在承诺时最美<br>蜜月的浪漫、婚礼的甜蜜、坚定的誓言<br>直到现在，才知道<br>爱情最美的时刻不在别处<br>而是在共同的[每一个纪念日]里<br>每一个纪念日都因为爱情<br>每一段爱情都因为I Do</p>
+          			<h1><%= image_tag 'game/yhzy_ido/logo.png', class:'logo' %></h1>
+          		</div>
+              <div class="btnWrap">
+                <%= image_tag 'game/yhzy_ido/one_tou.png', class:'one_tou' %>
+              </div>
+        	</div>
+        </div>
+        <div class="swiper-slide  slide2 swiper-no-swiping" data-step='2'>
+            <div class="two_head"><h2><%= image_tag 'game/yhzy_ido/logo.png', class:'logo' %></h2></div>
+            <div  class="two_body">
+            <div class="two_xian"></div>
+            <p>
+            即日起11月11日起不论你是情侣、闺蜜、母子...<br>
+            亦或是单身的你正在寻找真爱的路上<br>
+            只要你想在双十一当天放飞属于自己的真爱气球<br>
+            就可以报名参与活动<br>
+            11.11到现场参加活动的嘉宾每人均可获得精美纪念品一份<br>
+            活动地点：大连百年城<br>
+            活动时间：11月11日 16:00
+            </p>
+            <%= image_tag 'game/yhzy_ido/two_03.png'%>
+          </div>
+          <div class="btnWrap">
+            <a id="j-startup-btn" class=" two_woyao next-slide-btn"><%=  @game_player_by_openid.blank? ? '我要报名': '已报名'%></a>
+          </div>
+        </div>
+        <div class="swiper-slide  slide3 swiper-no-swiping" data-step='3'>
+          <div  class="twobg">
+            <div class="two_head"><h2><%= image_tag 'game/yhzy_ido/logo.png', class:'logo' %></h2></div>
+            <ul class="stores">
+            <% Store.all.each { |store| %>
+              <li class="store clearfix <%='selected' if (@game_player_by_openid.try(:store_id) == store.id) %>">
+              <span class="wu"> <%= store.name %> </span>
+              <span class="san">剩余 <%= store.available_count %>名  </span>
+              <%= link_to '报名', '#', class: "er select-store-btn", data:{ id: store.id } %>
+              </li>
+            <% } %>
+            </ul>
+          </div>
+          <div class="btnWrap" style="height:100px;">
+            <div class="car move">
+              <a id="j-car-btn" href="#">
+              <%= image_tag 'game/yhzy_ido/three_02.gif', style:'height:100%;'%>
+              </a>
+            </div>
+          </div>
+          <div id="j-car-tips" class="car-tips" style="display:none;">
+            <h3> 活动说明</h3>
+            <p style="text-align:left;">
+             11月4日-11月11日，I Do粉色大巴车带你环城游。只要在路上发现I Do粉色大巴车，即可免费乘坐，车上为您准备了各式各样的拍照道具，想在这个双十一炫爆你的朋友圈吗?快来一起寻找I Do粉色大巴车吧！
+             <br>
+环城路线一：11点万和汇集合—>金州新玛特—>亿合城--福佳新天地—>罗斯福购物中心—>和平广场—>百年城—>万和汇
+<br>
+环城路线二：11点凯德和平1号门集合—>高新万达—>甘井子万达—>亿合城—>百年城—>罗斯福购物中心—>亿合城
+            </p>
+          </div>
+        </div>
+        <div class="swiper-slide  slide4 swiper-no-swiping" data-step='4'>
+          <div class="obg">
+            <div class="head"><%= image_tag 'game/yhzy_ido/four_02.png'%> </div>
+          <%= simple_form_for :game_player, url: game_players_path, class: 'form-horizontal', html: { id: 'j-game-player-form', class:'biao'} do |f|%>
+            <%= f.hidden_field 'store_id' %>
+            <%= f.hidden_field 'game_round_id', value: @game_round.id %>
+            <%= f.hidden_field 'openid', value: cookies.signed_or_encrypted[:we_openid] %>
+            <div class="form-group clearfix">
+               <label for="game_player_realname" class="chang">姓名</label>
+               <input class="form-control string changin" type="text" value="<%=@game_player_by_openid.try(:realname)%>" placeholder="" required name="game_player[realname]" id="game_player_realname">
+            </div>
+            <div class="form-group clearfix">
+              <label for="game_player_cellphone" class="chang">电话</label>
+              <input class="form-control string tel  changin" type="tel" value="<%=@game_player_by_openid.try(:cellphone)%>" placeholder="" required name="game_player[cellphone]" id="game_player_cellphone">
+            </div>
+            <div class="form-group clearfix">
+              <p class="chang" >出生日期</p>
+              <div class="changin clearfix" style="border: 0;">
+                <input type="number" name="game_player[birth(1i)]" class="duanin" style="width:24%;"  min="1950" max="2010" value="<%=@game_player_by_openid.try(:birth).try(:year)%>"><label class="duan">年</label>
+                <input type="number" name="game_player[birth(2i)]" class="duanin" value="<%=@game_player_by_openid.try(:birth).try(:month)%>"><label class="duan" >月</label>
+                <input type="number" name="game_player[birth(3i)]" class="duanin" value="<%=@game_player_by_openid.try(:birth).try(:day)%>"><label class="duan" >日</label>
+              </div>
+            </div>
+            <div class="form-group ">
+             <% unless @game_player_by_openid %>
+             <%= f.button :button, '提交报名', id:'j-submit-player-btn', type: 'button', class: 'submit' %>
+             <% end %>
+           </div>
+          <% end %>
+          </div>
+          <div class="btnWrap" >
+            <h1 class="ido"> </h1>
+          </div>
+        </div>
+        <div class="swiper-slide slide5 swiper-no-swiping" data-step='5'>
+          <div class="obg qiqiu-wrap">
+        		<div id="j_qiqiu" class="qqbg qiqiu qiqiu0">
+              <%= image_tag 'game/yhzy_ido/five.png'%>
+          		<p class="realname"> <%= @game_player_by_openid.try(:realname) %></p>
+          	</div>
+          	<div class="qqbg1 qiqiu1">
+              <%= image_tag 'game/yhzy_ido/five.png'%>
+          		<p class="realname">志玲</p>
+          	</div>
+          	<div class="qqbg2 qiqiu2">
+              <%= image_tag 'game/yhzy_ido/five.png'%>
+          		<p class="realname">苏哲</p>
+          	</div>
+          	<div class="qqbg3 qiqiu3">
+              <%= image_tag 'game/yhzy_ido/five.png'%>
+          		<p class="realname">白凤九</p>
+          	</div>
+          	<div class="qqbg4 qiqiu4">
+              <%= image_tag 'game/yhzy_ido/five.png'%>
+          		<p class="realname">鹿迷</p>
+          	</div>
+        	</div>
+        </div>
+        <div class="swiper-slide slide6 swiper-no-swiping" data-step='6'>
+          <div  class="twobg">
+          	<div class="two_head"><h2><%= image_tag 'game/yhzy_ido/logo.png', class:'logo' %></h2></div>
+          </div>
+          <div id="j-game-player" class="game-player clearfix" style="">
+            <% # 页面初始化时 点赞对象 @game_player，可能为nil %>
+            <span class="votes_count"> <%= @game_player.try(:realname) %>已经解锁了<%= @game_player.try(:votes_count) %>个 </span>
+            <%= link_to '我也要解锁', step_game_round_path( @game_round ), id: "j-apply-btn", class:'woye', style: "display: none;" %>
+          </div>
+          <div  class="two_body" style="">
+          	<h3>解锁好礼</h3>
+          	<p class="lipin">
+          	分享链接可邀请好友解锁气球<br>
+          	每个微信号每日均可解锁一次<br>
+          	活动获赠礼品不可折现或替换<br>
+          	解锁礼品只可以在报名店铺领取<br>
+            I Do钻饰需双11当天在百年城店铺领取<br>
+          	截止至11月10号24:00
+          	</p>
+            <% Prize::VotePrize.all.each{|prize| %>
+              <%= content_tag :div, class: "jiek j-prize", data: { score: prize.score  } do %>
+                <%= content_tag :div, class: "js js#{prize.position}" do %>
+                  <%= image_tag 'game/yhzy_ido/six_17.png'%>
+                <% end %>
+            		<div class="j">
+                  <div class="progressbar">
+                    <div class="bg">
+                      <div class="progress"> </div>
+                    </div>
+                  </div>
+                  <p class="jjwz"><%=prize.name %><%= prize.prize_count==0 ? '奖品已发放完毕': "剩余#{prize.prize_count}"%></p>
+                </div>
+              <% end %>
+            <% } %>
+        	</div>
+          <%= simple_form_for :vote, url: votes_path, class: 'form-horizontal', html: { id: 'j-vote-form'} do |f|%>
+            <%= f.hidden_field 'openid', value: session[:openid] %>
+            <%= f.hidden_field 'game_player_id' %>
+
+            <a id="j-unlock-btn" href="#" class="yu"> <%= image_tag 'game/yhzy_ido/six_20.png', class:'yu'%> </a>
+          <% end %>
+
+        </div>
+        <div class="swiper-slide slide8 swiper-no-swiping" data-step='8'>
+          <div  class="tu1" >
+          </div>
+        	<div class="video-wrap clearfix">
+            <iframe class="video" frameborder="0" width="100%" height="200" src="https://v.qq.com/iframe/player.html?vid=s0568h4qpou&tiny=0&auto=0" allowfullscreen></iframe>
+          </div>
+        	<p class="tu3">I Do说<br>
+        	爱是一根心链<br>
+        	拴紧你我彼此的心<br>
+        	串起一个个爱的故事<br>
+        	并且承载着所有人的美好感情<br>
+        	飘散到世界的各个角落<br>
+        	向全世界宣布I Do
+        	</p>
+          <div class="btnWrap" >
+        	  <p class="zhengming "><%= link_to '领取结婚证', step_game_round_path(3) %></p>
+          </div>
+        </div>
+
+    </div>
+    <!-- Add Pagination -->
+    <div class="swiper-pagination"></div>
+</div>
+<!-- Swiper JS -->
+<%= javascript_tag do %>
+WechatMore.game_player_id = <%= @game_player.try(:id).to_i %>;
+WechatMore.game_player_votes_count = <%= @game_player.try(:votes_count).to_i %>;
+WechatMore.isGamePlayerExist = <%= !!@game_player_by_openid.try(:id) %>;
+<% end %>

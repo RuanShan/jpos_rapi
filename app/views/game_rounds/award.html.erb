@@ -1,0 +1,7 @@
+<% content_for :sidebar do %>
+  <%= render  "game_rounds/games/#{@game.code}_nav" %>
+<% end %>
+
+<div class="game-wrapper" style="">
+  <%= render "game_rounds/games/#{@game.code}_award" %>
+</div>

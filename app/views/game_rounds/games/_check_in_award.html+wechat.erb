@@ -1,0 +1,16 @@
+<h2> 获奖名单</h2>
+<% @game_awards.each{ |award|%>
+  <div class="container">
+    <p class="h5 mb-2"> <%= award.name %></p>
+    <div class="row">
+      <% award.game_award_players.each{|player| %>
+      <div class="col-8 offset-2 d-flex mb-2">
+        <%= tag('img', src: player.avatar, width: 50, height: 50) %>
+        <div class="align-self-center ml-3">
+          <%= content_tag 'span', player.nickname, class: 'h5' %>
+        </div>
+      </div>
+      <% } %>
+    </div>
+  </div>
+<% } %>

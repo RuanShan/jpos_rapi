@@ -1,0 +1,32 @@
+%table.table.table-hover.table-condensed.footable.footable-sortable
+  %thead
+    %tr
+      %th{data: {sort: {ignore: 'true'}}} #
+      %th{nowrap: true}= t('label.username')
+      - if current_user.role?('admin')
+        %th{nowrap: true}= t('label.email')
+        %th{nowrap: true}= t('label.ip')
+        %th{nowrap: true}= t('label.role')
+      %th{nowrap: true, data: {type: 'numeric', sort: {initial: 'descending'}}}= t('label.last_login')
+      %th{nowrap: true, data: {type: 'numeric'}}= t('label.login_count')
+      %th{data: {sort: {ignore: 'true'}}}
+  %tbody
+    - @users.each do |user|
+      - present user do |user_presenter|
+        %tr
+          %td= user_presenter.id
+          %td= user_presenter.user_name
+          - if current_user.role?('admin')
+            %td= user_presenter.email
+            %td= user_presenter.last_ip
+            %td= user_presenter.role
+          %td{data: {value: user_presenter.last_login_int}}= user_presenter.last_login
+          %td{data: {value: user_presenter.sign_in_count.to_i}}= user_presenter.sign_in_count
+          %td
+            - if current_user.role?('admin') && user.username.downcase.casecmp(current_user.username)
+              = link_to t('button.edit'), edit_profile_path(id: user.id),
+                        title: t('tooltip.edit_user'), rel: :tooltip,
+                        data: {toggle: 'modal', target: 'edit_user_modal'},
+                        remote: true, class: 'btn btn-success btn-xs'
+
+.modal#edit_user_modal{aria: {labelledby: 'myModalLabel', hidden: true}, role: 'dialog', tabindex: '-1'}

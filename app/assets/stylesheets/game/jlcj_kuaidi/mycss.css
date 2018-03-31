@@ -1,0 +1,187 @@
+body, html {
+    height: 100%;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/*#contend input{*/
+    /*color: #DE0000;*/
+/*}*/
+
+.demos-title {
+    text-align: center;
+    font-size: 34px;
+    color: #3cc51f;
+    font-weight: 400;
+    margin: 0 15%;
+}
+
+.demos-sub-title {
+    text-align: center;
+    color: #888;
+    font-size: 14px;
+}
+
+.demos-header {
+    padding: 35px 0;
+}
+
+.demos-content-padded {
+    padding: 0 15px;
+}
+
+.demos-second-title {
+    text-align: center;
+    font-size: 24px;
+    color: #3cc51f;
+    font-weight: 400;
+    margin: 0 15%;
+}
+
+footer {
+    text-align: center;
+    font-size: 14px;
+    padding: 20px;
+}
+
+footer a {
+    color: #999;
+    text-decoration: none;
+}
+
+.placeholder {
+    margin: 5px;
+    padding: 0 10px;
+    background-color: #0bb20c;
+    line-height: 36.8px;
+    text-align: center;
+    color: white;
+}
+
+.title {
+    padding: 0 10px;
+    background-color: #8ec31f;
+    line-height: 50px;
+    text-align: center;
+    color: white;
+}
+
+#from {
+    border: 1px solid darkgrey;
+    margin-top: 4px;
+    padding: 2px;
+}
+
+.content-padded {
+  padding: 0 15px;
+}
+
+.fromReminder {
+    text-align: right;
+    color: lightgray;
+}
+
+.putTimeTitle {
+    color: #0bb20c;
+}
+
+.verify {
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+.putTimeChoice {
+    background-color: #f1fff4;
+    font-size: 14px;
+}
+
+.box {
+    /*width: 100px;*/
+    /*height: 100px;*/
+    display: flex;
+    flex-wrap: wrap;
+    align-content: space-between;
+}
+
+.column {
+    flex-basis: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.item{
+    border: 1px solid #ce3c39;
+    background-color: #adadad;
+}
+
+.remark{
+    margin-left: 12px;
+    color: powderblue;
+    margin-right: -210px;
+    /*padding-left: 15px;*/
+    /*padding-right: 15px;*/
+    color: #999;
+}
+
+.beizhu{
+    border-bottom: 1px solid #f1f1f1;
+    padding-bottom: 8px;
+    padding-top: 8px;
+}
+
+.receiverPhone{
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.message{
+    font-size: 17px;
+    background-color: #edffed;
+}
+
+.hint{
+    width: 50px;
+}
+
+.kaojin{
+    display: inline-flex;
+}
+
+#massageTime label{
+    margin: auto;
+}
+
+.colors{
+    color: black;
+}
+.game-wrapper
+{
+  .weui-btn_primary
+  {
+    background-color: #8ec31f;
+  }
+  .weui-cell.after-border{
+    &:after{
+      border-bottom: 1px solid #e5e5e5;
+      content: " ";
+      position: absolute;
+      left: 15px;
+      right: 15px;
+      bottom: 0;
+      height: 1px;
+      color: #e5e5e5;
+      z-index: 2;
+    }
+  }
+  .weui-cells.no-before-border{
+    &:before{
+      height: 0;
+      border: 0 none;
+    }
+    .weui-cell{
+      &:before{
+        height: 0;
+        border: 0 none;        
+      }
+    }
+  }
+}

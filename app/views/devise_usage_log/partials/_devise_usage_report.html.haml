@@ -1,0 +1,25 @@
+%h3 Devise Usage Log for Past #{@num_days} Days
+.container
+  .row
+    .col-md-offset-8.col-md-4
+      (#{link_to t('label.close_report').downcase, close_devise_usage_report_path, remote: true})
+  .row
+    .col-md-8
+      <table class='table table-hover table-condensed'>
+      - prev_date = ''
+      - @log_entries.each do |entry|
+        - curr_date = entry.created_at.strftime('%m/%d/%Y')
+        - if curr_date != prev_date
+          - if prev_date != ''
+            </tr><tr><td colspan=5><br /><td></tr></tbody>
+          %thead
+            %tr
+              %th= entry.created_at.strftime('%m/%d/%Y')
+              %th= t('label.ip')
+              %th= t('label.user')
+              %th= t('label.role')
+              %th= t('label.action')
+          <tbody>
+        = render 'devise_usage_log/partials/devise_report_row', entry: entry
+        - prev_date = curr_date
+      </table>

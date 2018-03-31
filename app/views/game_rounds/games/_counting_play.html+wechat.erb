@@ -1,0 +1,101 @@
+<% content_for :game_asset_css do %>
+  <%= stylesheet_link_tag    'game_round_wechat'  %>
+<% end %>
+<% content_for :game_asset_js do %>
+  <%= javascript_include_tag "game_counting_wechat"  %>
+<% end %>
+
+<div class="game mobile counting_wechat">
+
+  <div id="game_box" class="step step-1">
+    <% if Rails.env.development? %>
+    <div id="b_debug_msg" style="position:absolute; font-size:14px; color:red;z-index:999;"> </div>
+    <% end %>
+    <div id="wrap" class="">
+      <div class="header">
+        <div>   <%=image_tag "logo.png", class: 'logo' %>    </div>
+        <div class="heading"> <span > <%=@game_round.name %> </span> </div>
+      </div>
+
+      <div class="b-state b-state-ready" style="">
+        <p class="game_name">
+           <%= image_tag "game/counting/screen/name1.png" %>
+        </p>
+        <div class="msg"> 活动尚未开始，请关注大屏幕</div>
+        <p>
+          <div class="b_countdown"><span> 等待<br>开始 </span></div>
+          <% image_tag "game/counting/screen/ready.png", class: 'state-ready-sign'  %>
+        </p>
+      </div>
+      <div class="rmb-container">
+
+        <%= image_tag "game/counting/screen/rmb#{@game_round.gear}.png", class: 'rmb' %>
+
+      </div>
+      <%= image_tag "game/counting/hand.png", class: 'hand' %>
+      <div class="iphone_cover"> </div>
+    </div>
+
+    <!-- 游戏开始玩的界面 -->
+    <div id="running" class="hide step step-2">
+      <div class="header">
+        <div class="b_heading heading">
+           <%=game_name_image @game_round %>
+          <span class="b_name">距本轮结束还剩：<%= @game_round.duration %> 秒</span>
+          <%=image_tag "logo.png",  class: 'logo'  %>
+        </div>
+      </div>
+      <div class="profile">
+        <div class="ava"> <%=tag :img, src: @game_player.avatar %> </div>
+        <p class="score"> <span class="b_score"> 0 </span> </p>
+      </div>
+
+      <div class="b_overing overing hide"> 游戏结束中 </div>
+
+      <div class="money">
+        <% 15.times{ %>
+          <%= image_tag "game/counting/rmb#{@game_round.gear}.png" %>
+        <% } %>
+        <div></div>
+      </div>
+      <div class="iphone_cover"> </div>
+    </div>
+    <!-- 结果界面 -->
+    <div id="result" class="hide step step-3">
+      <div class="award_list_wrapper">
+        <a id="b_show_award_list" style="float:right;"> 查看成绩 </a>
+        <div id="b_award_list " class="poupInfoBox">
+          <div class="poupClose"></div>
+          <div class="weui-tab">
+            <div class="weui-navbar" style="background-color:transparent;">
+              <div class="weui-navbar__item">   获奖名单       </div>
+            </div>
+            <div class="weui-tab__panel">
+              <%= render partial: 'final_rank' %>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="header">
+        <div>   <%=image_tag "logo.png", class: 'logo' %>    </div>
+        <div class="heading"> <span > <%=@game_round.name %> </span> </div>
+      </div>
+
+      <div class="b-state state" style="">
+        <p>你太客气了，这不是你的挑战极限吧</p>
+        <p>本轮数了<span class="b_score score"><%=@game_player.score %></span>张 获得第<span class="b_rank rank"><%=@game_player.rank %></span>名</p>
+      </div>
+
+
+      <div class="rmb-container">
+        <%= image_tag "game/counting/screen/rmb#{@game_round.gear}.png", class: 'rmb' %>
+      </div>
+      <div class="iphone_cover"> </div>
+
+    </div>
+
+  </div>
+
+</div>

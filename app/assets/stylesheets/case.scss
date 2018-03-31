@@ -1,0 +1,21 @@
+/*
+*= require common
+*= require adminlte/adminlte
+*= require adminlte/skins/skin-blue
+*= require font-awesome
+*= require bootstrap-datetimepicker
+*/
+
+.main-footer
+{
+  margin-top: 0;
+}
+
+#game_result_search{
+  input[type="search"] {
+    width: 120px;
+  }
+  input.datetimepicker-delivery-time-at{
+    width: 140px;    
+  }
+}

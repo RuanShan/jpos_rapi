@@ -1,0 +1,50 @@
+<%= stylesheet_link_tag "game_round" %>
+
+	 <script type="text/javascript">
+	 var need_login = 1;
+	var SCENE_INFO = {
+        "title": "{$xianchang['title']}",
+        "top_title":  "",
+        "top_font_size": "{$basic_config['top_font_size']}",
+        "memo": "{$basic_config['title']}",
+        "top_img": "{php echo tomedia($basic_config['top_img'])}",
+        "bottom_img": "{php echo tomedia($basic_config['bottom_img'])}",
+				"logo": <%== @game_round.logo.try{ attachment.url.to_json } || asset_path('game/default/logo').to_json %>,
+				"screen_bg_img": <%== @game_round.screen_background.try{ attachment.url.to_json } || asset_path('game/default/screen').to_json %>,
+				"mobile_bg_img": <%== @game_round.mobile_background.try{ attachment.url.to_json } || asset_path('game/default/mobile').to_json %>,
+        "diy_css": "{$basic_config['diy_css']}",
+        "keyword": "{$basic_config['title']}",
+        "mp_username": "{$basic_config['mp_name']}",
+        "func": {
+          "wall": "1",
+          "lottery": "1",
+          "shake": "1"
+        },
+        "navbar": {
+          "wall": "1",
+          "lottery": "1",
+          "lottery_free": "1",
+          "shake": "1",
+          "shake_free": "1"
+        }
+      };
+      var WALL_INFO = {
+        "id": 0,
+        "scene_id": 0,
+        "title": "{$wall_config['title']}",//网页顶部标题
+        "show_style": "{$wall_config['show_style']}",//滚动 或者 翻转
+        "show_type": "{$wall_config['show_type']}",//最新不循环或者随机循环
+        "re_time": "{$wall_config['re_time']}",
+        "chistory": "{$wall_config['chistory']}",
+		"show_big":"{$wall_config['show_big']}",
+		"show_big_time":"{$wall_config['show_big_time']}"
+      };
+	  var PATH_URL = "{MODULE_URL}template/mobile/app/images/piao/";
+
+	  </script>
+	  <style>
+		#show_hide_nav{width: 100%;position: fixed;bottom: -10px;text-align: center;z-index:9998}
+		.Panel.Top{z-index:1}
+	  </style>
+	<%= render "shared/initialize_js" %>
+	<%= javascript_include_tag "game_round" %>

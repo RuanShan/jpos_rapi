@@ -1,0 +1,7 @@
+ps aux|grep puma
+kill
+
+bundle exec rake assets:precompile RAILS_ENV=production
+
+
+bundle exec puma -e production -b unix:///home/deploy/www/wechatmore/tmp/sockets/puma.socket -d

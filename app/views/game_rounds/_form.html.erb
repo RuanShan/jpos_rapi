@@ -1,0 +1,49 @@
+<%= simple_form_for(game_round) do |f| %>
+  <% if game_round.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(game_round.errors.count, "error") %> prohibited this game_round from being saved:</h2>
+
+      <ul>
+      <% game_round.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :game %>
+    <%= f.text_field :game %>
+  </div>
+
+  <div class="field">
+    <%= f.label :name %>
+    <%= f.text_field :name %>
+  </div>
+
+  <div class="field">
+    <%= f.label :start_at %>
+    <%= f.datetime_select :start_at %>
+  </div>
+
+  <div class="field">
+    <%= f.label :end_at %>
+    <%= f.datetime_select :end_at %>
+  </div>
+
+  <div class="field">
+    <%= f.label :contact_required, '用户需要输入姓名电话' %>
+    <%= f.check_box :contact_required %>
+    <%= f.input :accepts, as: :boolean, checked_value: 1, unchecked_value: 0 %>
+
+  </div>
+
+  <div class="field">
+    <%= f.label :awards, '选择奖项' %>
+    <%= f.input :awards, collection: 1..5, hint: '共多少等奖' %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

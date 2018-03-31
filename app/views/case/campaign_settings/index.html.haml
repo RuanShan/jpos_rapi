@@ -1,0 +1,25 @@
+%h1 Listing game_settings
+
+%table
+  %thead
+    %tr
+      %th Wx name
+      %th Game
+      %th Wx status
+      %th
+      %th
+      %th
+
+  %tbody
+    - @game_settings.each do |game_setting|
+      %tr
+        %td= game_setting.wx_name
+        %td= game_setting.game_id
+        %td= game_setting.wx_status
+        %td= link_to 'Show', game_setting
+        %td= link_to 'Edit', edit_game_setting_path(game_setting)
+        %td= link_to 'Destroy', game_setting, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New Game setting', new_game_setting_path

@@ -1,0 +1,2 @@
+class GameSetting < ApplicationRecord
+end

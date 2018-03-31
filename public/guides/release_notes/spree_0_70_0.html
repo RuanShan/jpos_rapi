@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>    <html class="lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>    <html class="lt-ie9"> <![endif]-->
+<!--[if IE 9]>    <html class="ie9"> <![endif]-->
+<!--[if gt IE 9]><!--> <html lang="en" > <!--<![endif]-->
+<head>
+  <title>Spree 0.70.0 - Release Notes | Spree - Ruby on Rails e-commerce platform</title>
+
+  <meta charset="utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta name="section" content="version" />
+
+<link href="/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+<link href="/shared/css/icons.css" media="screen" rel="stylesheet" type="text/css">
+<link href="/shared/css/icons-codes.css" media="screen" rel="stylesheet" type="text/css">
+
+<link href="/shared/css/skeleton.css" media="screen" rel="stylesheet" type="text/css">
+<link href="/shared/css/documentation.css" media="screen" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="/assets/stylesheets/guides.css" media="screen" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/docsearch.js/2/docsearch.min.css" />
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-migrate/1.1.1/jquery-migrate.min.js"></script>
+<script src="/assets/javascripts/css_browser_selector_dev.js" type="text/javascript"></script>
+<script src="/assets/javascripts/jquery.toc.js" type="text/javascript"></script>
+<script src="/assets/javascripts/documentation.js" type="text/javascript"></script>
+
+
+</head>
+<body class="integration">
+  
+  <header id="header">
+    <div id="top-header">
+  <div class="container">
+    <div class="row">
+      <div class="two columns">
+  <a class="logo" href="http://spreecommerce.org">
+    <img src='/images/logo.png' alt="Spree Commerce - Ruby on Rails e-commerce platform" />
+  </a>
+</div>
+
+      <div class="three columns">
+  <input type="text" id="search-field" placeholder="Search..." />
+</div>
+
+      <nav id="main-menu" class="eleven columns">
+  <ul class="inline">
+    <li><a href="../api/">API</a></li>
+    <li><a href="../developer/">Developer</a></li>
+    <li><a href="../user/">User</a></li>
+    <li><a href="../release_notes/">Release Notes</a></li>
+    <li>
+      <a href="http://slack.spreecommerce.org" target="_blank">Slack</a>
+    </li>
+    <li>
+      <a href="https://heroku.com/deploy?template=https://github.com/spree/spree" target="_blank" rel="nofollow">Demo</a>
+    </li>
+  </ul>
+</nav>
+
+    </div>
+  </div>
+</div>
+
+
+    <div id="subheader">
+      <div class="container">
+        <div class="twelve columns">
+          <h1 class="page-title">Spree 0.70.0 - Release Notes</h1>
+        </div>
+      </div>
+    </div>
+
+  </header>
+
+  <div class="container">
+    <section id="main-content">
+
+      <div class="twelve columns">
+        <div id="content">
+          
+<h1 id="summary">Summary</h1>
+
+<p>This 0.70.0 release is the first Spree release to support Rails 3.1 and
+contains several exciting new features including a complete overhaul of
+the theming system and major improvements to the Promotions system.</p>
+
+<div class="note"><p>We’re always looking for more help with the Spree documentation.
+If you’d like to offer assistance please contact us on the spree-user
+mailing list and we can give you commit access to the documentation
+project.</p>
+</div>
+
+<h1 id="theming-improvments">Theming Improvments</h1>
+
+<p>Theming support in this release has change significantly and all the new
+features are covered in detail in the following guides:</p>
+
+<ul>
+  <li><a href="http://guides.spreecommerce.org/legacy/0-70-x/customization.html">Customization Overview</a> - provides a high level
+introduction to all the customization and theming options now
+provided by Spree.</li>
+  <li><a href="http://guides.spreecommerce.org/legacy/0-70-x/view_customization.html">View Customization</a> - introduces and
+explains how to use Deface to customize Spree’s views.</li>
+  <li><a href="http://guides.spreecommerce.org/legacy/0-70-x/asset_customization.html">Asset Customization</a> - explains how Spree
+uses Rails’ new asset pipeline, and how you can use it to customize
+the stylesheets, javascripts and images provided by Spree.</li>
+</ul>
+
+<div class="note"><p>While the upgrade instructions that follow briefly cover the new
+asset pipeline features we suggest you review the guides above as part
+of your upgrade preparation.</p>
+</div>
+
+<h2 id="themes-as-engines">Themes as engines</h2>
+
+<p>In previous versions (0.11.x and earlier) Spree encouraged the approach
+of bundling themes in their own extensions, with the advent of the asset
+pipeline in Rails 3.1 and the upcoming Theme Editor we’re bringing back
+this approach as a suitable model for distributing and sharing themes.</p>
+
+<p>While the distinction between themes and extensions is covered in the
+<a href="http://guides.spreecommerce.org/legacy/0-70-x/extensions.html">Extensions &amp; Themes</a> guide they are both just Rails
+engines and can be treated as such.</p>
+
+<p>We’ve created two front-end themes to help show this new approach in
+action:</p>
+
+<ul>
+  <li>
+    <p><a href="https://github.com/spree/spree_blue_theme">Spree Blue</a> - Recreates
+the original “blue” theme of 0.60.x as a stand alone theme.</p>
+  </li>
+  <li>
+    <p><a href="https://github.com/spree/spree_rdr_theme">Rails Dog Radio</a> - This
+recreates some of the aspects of the Rails Dog Radio demo
+application for a default Spree application.</p>
+  </li>
+</ul>
+
+<p>Both themes can be installed by just adding a reference to the git
+repository to your Gemfile, ie:</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>gem <span class="string"><span class="delimiter">'</span><span class="content">spree_blue_theme</span><span class="delimiter">'</span></span>, <span class="key">git</span>: <span class="string"><span class="delimiter">'</span><span class="content">git://github.com/spree/spree_blue_theme.git</span><span class="delimiter">'</span></span>
+
+</pre></div>
+</div>
+</div>
+
+<h1 id="experimental-scsssass-theme">Experimental SCSS/SASS Theme</h1>
+
+<p>LESS proves to be unpopular amongst Spree developers so it is decided to
+retire LESS stylesheets of <code>spree_blue_theme</code> in favor for all-in-one
+<code>screen.css</code>.</p>
+
+<p>Yet with the recently adopted SCSS/SASS in Rails 3.1, we believe this
+technology could become de-facto standard for CSS someday. Thus, we
+create the experimental SCSS/SASS version of
+<a href="&quot;https://github.com/spree/spree_blue_sass_theme&quot;">spree_blue_sass_theme</a>
+to collect feedbacks before we could come up with a decision to opt for
+SCSS/SASS in future version of Spree.</p>
+
+<h1 id="the-asset-pipeline">The Asset Pipeline</h1>
+
+<p>One of the more interesting new features included in Rails 3.1 is the
+asset pipeline, and a lot of the customization improvements in Spree are
+enabled by this feature. While the asset pipeline provides excellent
+flexibility and improved organization for all of Spree’s assets (images,
+javascripts and stylesheets) it does add a significant overhead as all
+asset requests are now being handled by Rails itself (and not being
+handed off to the web server).</p>
+
+<p>This can be especially noticeable in development mode when using a
+single process application server like Webrick. This release of Spree
+includes a small tweak to the standard pre-compiling rake task that
+allows pre-compiling of assets for development mode.</p>
+
+<h2 id="pre-compiling-in-production">Pre-compiling in production</h2>
+
+<p>Rails supports pre-compiling of assets which is intended to offload the
+overhead of generating and serving assets from the application server in
+production environments.</p>
+
+<p>Pre-compiling is not required for the asset pipeline to function
+correctly in production, if you choose to not pre-compile Rails will
+generate each asset only once and serve each subsequent request using
+Rack::Cache.</p>
+
+<p>Rack::Cache is generally sufficient for lower traffic sites, but
+pre-compiling will provide some additional speed increases by allowing
+the web server to serve all assets, including gzipped versions of
+javascript and css files.</p>
+
+<p>To pre-compile assets for production you would normally execute the
+following rake task (on the production server).</p>
+
+<div class="language-bash highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>$ bundle exec rake assets:precompile
+
+</pre></div>
+</div>
+</div>
+
+<p>This would write all the assets to the <code>public/assets</code> directory while
+including an MD5 fingerprint in the filename for added caching benefits.</p>
+
+<div class="note"><p>In production all references to assets from views using
+image_tag, asset_path, javascript_include_tag, etc. will
+automatically include this fingerprint in the file name so the correct
+version will be served.</p>
+</div>
+
+<h2 id="pre-compiling-for-development">Pre-compiling for development</h2>
+
+<p>Spree alters the behaviour of the precompile rake task as follows:</p>
+
+<div class="language-bash highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>$ bundle exec rake assets:precompile:nondigest
+</pre></div>
+</div>
+</div>
+
+<p>It will still output the assets to <code>public/assets</code> but it will not
+include the MD5 fingerprint in the filename, hence the files will be
+served in development directly by the web server (and not processed by
+Rails).</p>
+
+<div class="warning"><p>Using the precompile rake task in development will prevent any
+changes to asset files from being automatically included in when you
+reload the page. You must re-run the precompile task for changes to
+become available.</p>
+</div>
+
+<p>Rail’s also provides the following rake task that will delete the entire
+<code>public/assets</code> directory, this can be helpful to clear out development
+assets before committing.</p>
+
+<div class="language-bash highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>$ bundle exec rake assets:clean
+</pre></div>
+</div>
+</div>
+
+<p>It might also be worthwhile to include the <code>public/assets</code> directory in
+your <code>.gitignore</code> file.</p>
+
+<h1 id="promotions">Promotions</h1>
+
+<p>Promotions have been extended well beyond their coupon roots to include
+new <code>activator</code> support, which can now fire or activate a promotion for
+a variety of different user triggered events, including:</p>
+
+<ul>
+  <li>Adding items to a cart</li>
+  <li>Visiting specific pages</li>
+  <li>Adjusting cart contents</li>
+  <li>Using a coupon code</li>
+</ul>
+
+<p>Promotions also includes a new <code>Actions</code> feature which can perform an
+action as a result of a promotion being actived, these actions currently
+include creating an adjustment or adding additional items to a cart.</p>
+
+<p>For more details on these new promotions feature please refer to the
+<a href="http://guides.spreecommerce.org/legacy/0-70-x/promotions.html">Promotions</a> guide.</p>
+
+<h1 id="new-extension-generator">New Extension Generator</h1>
+
+<p>There is a new extension generator available as part of this release.
+The generator is utilized by a new executable contained within the gem.</p>
+
+<p>You can generate new extensions inside an existing rails application or
+as a standalone git repository using the following command</p>
+
+<div class="language-bash highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>$ spree extension foofah
+
+</pre></div>
+</div>
+</div>
+
+<p>One of the most important advances in this new generator is that you can
+now easily run specs for extensions in their own standalone repository.
+You just need to create a test application (one time only) as a context
+before running your specs.</p>
+
+<div class="language-bash highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>$ bundle exec rake test_app
+$ bundle exec rspec spec
+
+</pre></div>
+</div>
+</div>
+
+<p>You can get more information on the extension generator in the <a href="http://guides.spreecommerce.org/legacy/0-70-x/creating_extensions.html">Creating
+Extensions</a> guide.</p>
+
+<div class="note"><p>You must install the spree gem in order to use the new extension
+generator.</p>
+</div>
+
+<h1 id="upgrade-instructions">Upgrade Instructions</h1>
+
+<p>These instructions are mainly concerned with upgrading Spree
+applications, extension developers should jump straight to the “Asset
+Customization”asset_customization.html and <a href="http://guides.spreecommerce.org/legacy/0-70-x/view_customization.html">View
+Customization</a> guides for details on the
+changes that are required for extensions to fulling support 0.70.0.</p>
+
+<h2 id="before-you-begin">Before you begin</h2>
+
+<p>To prevent problems later please ensure that you’ve copied all the
+migrations from your current version of Spree and all the extensions
+that you are running. While this is normal practice when setting up
+Spree and extensions any missing migrations will cause issues later in
+the upgrade process.</p>
+
+<p>You can check that all Spree migrations are copied by running:</p>
+
+<div class="language-bash highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>$ bundle exec rake spree:install:migrations
+
+</pre></div>
+</div>
+</div>
+
+<p>Each extension will provide it’s own rake task (or generator) for
+copying migrations so please refer to the extensions README for
+instructions.</p>
+
+<div class="warning"><p>It’s vital that you confirm this first before starting the
+upgrade process as Rails 3.1 has altered how engine migrations are
+handled and incorrectly copying migrations later could result in data
+loss.</p>
+</div>
+
+<h2 id="changes-required-for-rails-31">Changes required for Rails 3.1</h2>
+
+<p>Most of the changes required to upgrade a Spree application to 0.70.0 is
+same for any Rails 3.0.x application upgrading to 3.1.</p>
+
+<h3 id="gemfile-changes">Gemfile changes</h3>
+
+<p>You’ll need to make several additions and changes to your Gemfile:</p>
+
+<ul>
+  <li>Update spree to 0.70.0</li>
+  <li>Update rails to 3.1.1</li>
+  <li>Update mysql2 to 0.3.6 - if your using it.</li>
+  <li>Ensure the assets group is present:</li>
+</ul>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>group <span class="symbol">:assets</span> <span class="keyword">do</span>
+  gem <span class="string"><span class="delimiter">'</span><span class="content">sass-rails</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">~&gt; 3.1.1</span><span class="delimiter">&quot;</span></span>
+  gem <span class="string"><span class="delimiter">'</span><span class="content">coffee-rails</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">~&gt; 3.1.1</span><span class="delimiter">&quot;</span></span>
+  gem <span class="string"><span class="delimiter">'</span><span class="content">uglifier</span><span class="delimiter">'</span></span>
+<span class="keyword">end</span>
+
+</pre></div>
+</div>
+</div>
+
+<h3 id="update-configbootrb">Update config/boot.rb</h3>
+
+<p>Rails 3.1 simplifies the <code>config/boot.rb</code> file significantly, so update
+yours to match:</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>require <span class="string"><span class="delimiter">'</span><span class="content">rubygems</span><span class="delimiter">'</span></span>
+
+<span class="comment"># Set up gems listed in the Gemfile.</span>
+<span class="predefined-constant">ENV</span>[<span class="string"><span class="delimiter">'</span><span class="content">BUNDLE_GEMFILE</span><span class="delimiter">'</span></span>] ||= <span class="constant">File</span>.expand_path(<span class="string"><span class="delimiter">'</span><span class="content">../../Gemfile</span><span class="delimiter">'</span></span>, *<span class="constant">FILE</span>*)
+
+require <span class="string"><span class="delimiter">'</span><span class="content">bundler/setup</span><span class="delimiter">'</span></span> <span class="keyword">if</span> <span class="constant">File</span>.exists?(<span class="predefined-constant">ENV</span>[<span class="string"><span class="delimiter">'</span><span class="content">BUNDLE_GEMFILE</span><span class="delimiter">'</span></span>])
+
+</pre></div>
+</div>
+</div>
+
+<h3 id="enable-the-asset-pipeline">Enable the asset pipeline</h3>
+
+<p>Add the following line to <code>config/application.rb</code>, this will enable the
+Asset Pipeline feature (required by 0.70.0):</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>config.assets.enabled = <span class="predefined-constant">true</span>
+
+</pre></div>
+</div>
+</div>
+
+<h3 id="remove-deprecated-configuration">Remove deprecated configuration</h3>
+
+<p>Remove the following line from <code>config/environments/development.rb</code>.</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>config.action_view.debug_rjs = <span class="predefined-constant">true</span>
+
+</pre></div>
+</div>
+</div>
+
+<h3 id="retire-libspreesiterb">Retire lib/spree_site.rb</h3>
+
+<p>The spree_site.rb file is no longer required so it’s important to
+migrate any existing code out of this file and into the correct
+location.</p>
+
+<ul>
+  <li>Model, controller or helper evals should be relocated to a suitable
+_decorator.rb file.</li>
+  <li>Configuration settings should be moved to initializers.</li>
+  <li>If you are activating custom Abilities or Calculators, you should
+remove then for now. You can re-add them to config/application.rb
+after you’ve ran the spree:site generator below. They will need to
+be inside the <code>config.to_prepare</code> block.</li>
+</ul>
+
+<div class="note"><p>The decorator initialization block will be automatically included
+in config/application.rb for you, when you run the spree:site generator
+below.</p>
+</div>
+
+<h3 id="remove-spreesite-from-configapplicationrb">Remove spree_site from config/application.rb</h3>
+
+<p>Also ensure the following line is <strong>not</strong> present in
+config/application.rb:</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>require <span class="string"><span class="delimiter">'</span><span class="content">spree_site</span><span class="delimiter">'</span></span>
+
+</pre></div>
+</div>
+</div>
+
+<h2 id="update-gems--generate-spree-files">Update gems &amp; generate Spree files</h2>
+
+<p>Once you’ve completed all the Rails 3.1 steps above, you can now update
+your dependencies and start generating the new asset pipeline
+placeholders.</p>
+
+<h3 id="install-dependencies">Install dependencies</h3>
+
+<p>Install all the required gems, and lock your dependencies by running:</p>
+
+<div class="language-bash highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>    $ bundle update
+</pre></div>
+</div>
+</div>
+
+<h3 id="generate--copy-required-files">Generate &amp; copy required files</h3>
+
+<p>Running the <code>spree:site</code> generator will create the skeleton structure
+for the asset pipeline, and also copy missing migrations.</p>
+
+<div class="language-bash highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>    $ rails g spree:site
+</pre></div>
+</div>
+</div>
+
+<p>After running the generator above, it’s best to check to make sure you
+do not have multiple copies of the following line, in
+<code>config/application.rb</code>:</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>config.middleware.use <span class="string"><span class="delimiter">&quot;</span><span class="content">RedirectLegacyProductUrl</span><span class="delimiter">&quot;</span></span>
+config.middleware.use <span class="string"><span class="delimiter">&quot;</span><span class="content">SeoAssist</span><span class="delimiter">&quot;</span></span>
+
+</pre></div>
+</div>
+</div>
+
+<h3 id="update-your-database">Update your database</h3>
+
+<p>If you encounter any issues with this step please ensure you’ve
+completed the <a href="#before-you-begin">Before you
+begin</a> section above.</p>
+
+<div class="warning"><p>Make sure you’ve taken a backup of the database before
+attempting this step.</p>
+</div>
+
+<div class="language-bash highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>$ bundle exec rake db:migrate
+</pre></div>
+</div>
+</div>
+
+<h2 id="migrating-your-assets">Migrating your assets</h2>
+
+<p>Cleaning up your <code>/public</code> directory is one major advantage of using
+Rails 3.1. The main task required here is to separate your application
+specific assets (javascript, stylesheets and images) from all of Spree’s
+(and all those belonging to all the extensions installed) which have
+been mingled together in your public directory.</p>
+
+<h3 id="asset-organization">Asset Organization</h3>
+
+<p>Assets should be placed inside your application in one of three
+locations: <code>app/assets</code>, <code>lib/assets</code> or <code>vendor/assets</code>.</p>
+
+<p><code>app/assets</code> is for assets that are owned by the application, such as
+custom images, JavaScript files or stylesheets.</p>
+
+<p><code>lib/assets</code> is for your own libraries’ code that doesn’t really fit
+into the scope of the application or those libraries which are shared
+across applications.</p>
+
+<p><code>vendor/assets</code> is for assets that are owned by outside entities, such
+as code for JavaScript plugins.</p>
+
+<div class="note"><p>If you are using a library like Jammit solely for concatenating
+and minifying your javascript and stylesheet files then we suggest you
+remove it from your application as part of the Rails 3.1 upgrade.</p>
+</div>
+
+<p>For a full explanation of how Spree uses Rails’ asset pipeline and how
+to update your site to use these new features please refer to the <a href="http://guides.spreecommerce.org/legacy/0-70-x/asset_customization.html">Asset
+Customization</a> guide.</p>
+
+<h3 id="cleaning-up-public">Cleaning up /public</h3>
+
+<p>Once you’ve relocated all <b>your</b> applications assets, the only
+remaining directories and files in <code>/public</code> should be images that
+you’ve uploaded for your Products (or taxonomies). If you are using the
+default Spree configuration these will be in <code>/public/assets</code>.</p>
+
+<div class="warning"><p>Leaving any javascript, stylesheet or image files in the public
+directory will override those provided by Spree or it’s extensions. So
+it’s vital that you delete all remaining files from the <code>/public</code>
+directory, <b>EXCEPT YOUR PRODUCT IMAGES!</b>.</p>
+</div>
+
+<div class="note"><p>If you are using S3 (or another cloud storage system) for your
+Product images then your <code>/public</code> directory should be completly empty.</p>
+</div>
+
+<h2 id="including-old-style-theming-hooks">Including old style theming hooks</h2>
+
+<p>With the introduction of Deface the old style theming hooks have been
+deprecated, the old hooks will continue to function after the upgrade as
+they are automatically upgraded to Deface overrides, we strongly suggest
+you upgrade them as soon as possible.</p>
+
+<p>To include your previously defined old style theming hooks from
+<code>lib/site_hooks.rb</code> add the following to the bottom of
+<code>config/application.rb</code></p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>require <span class="string"><span class="delimiter">'</span><span class="content">lib/site_hooks</span><span class="delimiter">'</span></span>
+
+</pre></div>
+</div>
+</div>
+
+<div class="note"><p>The development log will include suggested replacement Deface
+overrides anytime Rails encounters a old style hook call. These
+suggestions are a best effort replacement, but might need some tweaks as
+some elements have been moved while removing the old hook calls from
+Spree’s view files.</p>
+</div>
+
+<p>For more information about using Deface overrides, please refer to the
+<a href="http://guides.spreecommerce.org/legacy/0-70-x/view_customization.html">View Customization</a> guide.</p>
+
+<h1 id="new-way-to-register-calculators">New way to register Calculators</h1>
+
+<p>Calculators no longer can be registered with <em>register</em> method. The
+register method is refactored to take advantage of default Rails
+application configuration <em>Rails.application.config.spree.calculators</em>.</p>
+
+<p>For more information about this new change, please refer to the
+<a href="http://guides.spreecommerce.org/legacy/0-70-x/adjustments.html">Ajustments</a> guide.</p>
+
+        </div>
+      </div>
+
+    </section>
+
+    <aside id="sidebar" class="four columns">
+  <nav id="sidebar-menu">
+    <ul>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-version-menu"><i class="icon-right-open"></i></a>
+          <a href='#.html'>Versions</a>
+        </h3>
+        <ul class="js-guides">
+          <li><i class="icon-dot"></i><a href='spree_3_4_0.html'>3.4.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_3_3_0.html'>3.3.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_3_2_0.html'>3.2.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_3_1_0.html'>3.1.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_3_0_0.html'>3.0.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_2_4_0.html'>2.4.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_2_3_0.html'>2.3.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_2_2_0.html'>2.2.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_2_1_0.html'>2.1.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_2_0_0.html'>2.0.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_1_3_0.html'>1.3.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_1_2_2.html'>1.2.2</a></li>
+          <li><i class="icon-dot"></i><a href='spree_1_2_0.html'>1.2.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_1_1_4.html'>1.1.4</a></li>
+          <li><i class="icon-dot"></i><a href='spree_1_1_0.html'>1.1.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_1_0_0.html'>1.0.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_0_70_0.html'>0.70.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_0_60_0.html'>0.60.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_0_50_0.html'>0.50.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_0_40_0.html'>0.40.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_0_30_0.html'>0.30.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_0_10_0.html'>0.10.0</a></li>
+          <li><i class="icon-dot"></i><a href='spree_0_9_0.html'>0.9.0</a></li>
+        </ul>
+      </li>
+    </ul>
+  </nav>
+</aside>
+
+  </div>
+
+  <footer id="main-footer">
+
+  <div class="footer-top">
+    <div class="container">
+      <div id="link-blocks" class="row">
+        <div class="link-block six columns">
+          <h3 class="block-title">Developers</h3>
+          <ul>
+            <li><a href="https://slack.spreecommerce.org" target="_blank" rel="nofollow">Slack</a></li>
+            <li><a href="https://github.com/spree-contrib" target="_blank">Extensions</a></li>
+            <li><a href="https://github.com/spree/spree/blob/master/license.md" target="_blank">License</a></li>
+          </ul>
+        </div>
+        <div class="link-block seven columns">
+          <h3 class="block-title">About Spree</h3>
+          <p>
+            <strong><a href="https://spreecommerce.org">Spree Commerce</a></strong>
+            is a complete modular, API-driven open source e-commerce solution
+            built with Ruby on Rails.
+          </p>
+          <p>
+            Guides are hosted and maintained by
+            <a href="http://sparksolutions.co" target="_blank">Spark Solutions</a>
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</footer>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-104990445-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/docsearch.js/2/docsearch.min.js"></script>
+<script type="text/javascript"> docsearch({
+apiKey: 'fb697cd2d04591b036ea172259c05ba8',
+indexName: 'spreecommerce',
+inputSelector: '#search-field',
+debug: false // Set debug to true if you want to inspect the dropdown
+});
+</script>
+
+
+  </body>
+</html>

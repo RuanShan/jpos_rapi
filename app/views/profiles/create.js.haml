@@ -1,0 +1,5 @@
+- if @error_message
+  $('#add_user_errors').html(alert_box('danger','y',"#{@error_message.html_safe}"))
+- else
+  $('#user_list').html('#{escape_javascript(render 'admin/partials/users')}')
+  $('#add_new_user').html('#{escape_javascript(render 'admin/partials/add_user')}')

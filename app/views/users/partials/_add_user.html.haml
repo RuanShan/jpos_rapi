@@ -1,0 +1,16 @@
+= form_for User.new, url: profiles_path, html: {class: 'form-inline', role: 'form', id: 'admin_new_user', data: {remote: true, spinner: '#admin_new_user_spinner'}} do |f|
+  #add_user_errors
+  .row
+    .form-group
+      %label.sr-only{for: 'username'}= t('label.username')
+      = f.text_field :username, class: 'form-control form-control-sm',
+                                placeholder: t('label.username').downcase,
+                                autocomplete: 'off', id: 'username'
+    .form-group
+      %label.sr-only{for: 'email'}= t('label.email')
+      = f.email_field :email, class: 'form-control form-control-sm',
+                              placeholder: t('label.email_example').downcase,
+                              autocomplete: 'off', id: 'email'
+    .form-group
+      = f.submit t('button.save'), class: 'btn btn-success btn-sm'
+      = spinner_tag('admin_new_user_spinner').html_safe

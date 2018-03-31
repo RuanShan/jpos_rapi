@@ -1,0 +1,45 @@
+<%= simple_form_for([:case, game_round]) do |f| %>
+  <% if game_round.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(game_round.errors.count, "error") %> prohibited this game_round from being saved:</h2>
+
+      <ul>
+      <% game_round.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <%= f.hidden_field :game_id %>
+
+  <div class="field">
+     <%= f.input :name %>
+  </div>
+
+  <div class="field">
+     <%= f.input :start_at %>
+  </div>
+
+  <div class="field">
+     <%= f.input :end_at %>
+  </div>
+
+  <div class="field">
+    <%= f.input :contact_required, as: :boolean, checked_value: 1, unchecked_value: 0 %>
+  </div>
+
+  <div class="field">
+     <%= f.input :display_players, hint: '最多显示前10名' %>
+  </div>
+  <div class="field">
+    <%= f.collection_radio_buttons :gear ,[[100,'100元'],[50,'50元'], [1,'1元']],:first,:last %>
+  </div>
+  <div class="field">
+     <%= f.input :duration, hint: '最多90秒' %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

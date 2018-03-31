@@ -1,0 +1,5 @@
+%p
+  - if current_user.role?('admin')
+    = link_to 'Devise Usage Log for Past 30 Days', devise_usage_report_path(num_days: 30), remote: true
+  - else
+    Need 'admin' access to see Devise Usage Log report.

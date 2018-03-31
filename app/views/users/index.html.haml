@@ -1,0 +1,25 @@
+%h1= get_view_text('h1')
+.container
+  .row
+    .col-sm-4
+      %ul.nav.nav-pills#tabs{data: {tabs: 'tabs'}}
+
+        %li.nav-item
+          %a.active.nav-link{data: {toggle: 'tab'}, aria: {expanded: 'true'}, href: '#users'}
+            %b= t('label.manage_users')
+
+        %li.nav-item
+          %a.nav-link{data: {toggle: 'tab'}, href: '#logs'}
+            %b= t('label.logs')
+    .col-sm-8.text-sm-right
+      #add_new_user
+        = render 'admin/partials/add_user'
+  .tab-content#my-tab-content
+    .tab-pane.active#users
+      %br/
+      #user_list
+        = render 'admin/partials/users'
+    .tab-pane#logs
+      %br/
+      #devise_usage_report_block
+        = render 'devise_usage_log/partials/devise_usage_report_link'

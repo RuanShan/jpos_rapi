@@ -1,0 +1,2 @@
+class WechatAccount < ApplicationRecord
+end

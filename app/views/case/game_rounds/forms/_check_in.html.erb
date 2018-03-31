@@ -1,0 +1,88 @@
+<%
+  game_round.logo || game_round.build_logo
+  game_round.mobile_background || game_round.build_mobile_background
+  game_round.screen_background || game_round.build_screen_background
+%>
+
+<%= simple_form_for([:case, game_round], html: { multipart: true } ) do |f| %>
+  <% if game_round.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(game_round.errors.count, "error") %> prohibited this game_round from being saved:</h2>
+
+      <ul>
+      <% game_round.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <%= f.hidden_field :game_id %>
+
+  <div class="field">
+     <%= f.input :name %>
+  </div>
+
+  <div class="field">
+     <%= f.input :open_at %>
+  </div>
+
+  <div class="field">
+     <%= f.input :close_at %>
+  </div>
+
+  <div class="field">
+    <%= f.input :contact_required, as: :boolean, checked_value: 1, unchecked_value: 0 %>
+  </div>
+
+  <div class="field">
+     <%= f.input :awards, collection: 1..5, placeholder: '共多少等奖', hint: '最多5等奖' %>
+  </div>
+  <div class="field">
+
+    <div class="form-group">
+      设置每个奖项数量：（一等奖到五等奖获奖人数递增）
+      <%  game_awards = game_round.game_awards.to_a
+          (game_awards.length...5).each{ |i|
+            game_awards[i] = game_round.build_game_award_by_position( i+1 )
+          }
+      %>
+           <%= f.fields_for :game_awards, game_awards do |award_fields| %>
+          <div>
+            <%= award_fields.hidden_field :name  %>
+            <%= award_fields.hidden_field :position %>
+            <%= award_fields.label "prize_count", award_fields.object.name %>
+            <%= award_fields.text_field :prize_count %>
+          </div>
+          <% end %>
+      </div>
+  </div>
+  <div class="field">
+    <div class="form-group">
+      <%= f.fields_for :logo  do |logo_fields| %>
+        <%= logo_fields.label :attachment %>
+        <%= logo_fields.file_field :attachment %>
+      <% end %>
+    </div>
+  </div>
+  <div class="field">
+    <div class="form-group">
+      <%= f.fields_for :mobile_background  do |logo_fields| %>
+        <%= logo_fields.label :attachment %>
+        <%= logo_fields.file_field :attachment %>
+      <% end %>
+    </div>
+  </div>
+  <div class="field">
+    <div class="form-group">
+      <%= f.fields_for :screen_background  do |logo_fields| %>
+        <%= logo_fields.label :attachment %>
+        <%= logo_fields.file_field :attachment %>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

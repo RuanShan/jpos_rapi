@@ -1,0 +1,79 @@
+
+<section class=" sidebar" style="height: auto;">
+
+  <ul class="nav sidebar-menu tree" data-widget="tree">
+    <li class="treeview">
+      <a><i class=" fa fa-home"></i> <span>基本概况</span> </a>
+    </li>
+    <li style="display:none;">
+      <a class="" href="#">
+        <i class=" fa fa-birthday-cake"></i>
+          <span class=""> 活动管理 </span>
+          <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+          </span>
+      </a>
+        <ul class=" treeview-menu">
+          <li><%= build_nav_link "活动列表", case_campaigns_path%></li>
+        </ul>
+    </li>
+
+    <li class="treeview">
+      <a class="" href="#">
+        <i class=" fa fa-tachometer"></i>
+        <span class=" "> <%=GameRound.model_name.human%>管理 </span>
+        <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+        </span>
+      </a>
+      <ul class=" treeview-menu">
+          <li><%= build_nav_link "#{GameRound.model_name.human}列表", case_game_rounds_path( ) %></li>
+      </ul>
+    </li>
+
+
+    <li class="treeview">
+      <a class="" href="#">
+          <i class=" fa fa-users"></i>
+          <span class=""> 会员管理 </span>
+          <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+          </span>
+      </a>
+      <ul class=" treeview-menu">
+    		<li class="cur">
+    			<%= build_nav_link "会员管理", "#"%>
+    		</li>
+    		<li class="cur">
+    			<%= build_nav_link "代理管理", "#"%>
+    		</li>
+      </ul>
+    </li>
+    <li class="treeview">
+      <a class="" href="#">
+        <i class=" fa fa-sitemap"></i>
+        <span class=""> 部门管理 </span>
+        <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+        </span>
+      </a>
+      <ul class=" treeview-menu">
+        <li><%= build_nav_link "人员管理",  "#"%> </li>
+      </ul>
+    </li>
+
+  	<li class="treeview">
+      <a class="" href="#">
+        <i class=" fa fa-cogs"></i>
+        <span class=""> 系统管理 </span>
+        <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+        </span>
+      </a>
+      <ul class=" treeview-menu">
+       <li><%= build_nav_link "系统通知",  "#"%> </li>
+      </ul>
+  	</li>
+
+  </ul>
+</section>

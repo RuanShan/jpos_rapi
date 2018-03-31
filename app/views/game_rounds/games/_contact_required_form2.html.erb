@@ -1,0 +1,35 @@
+<div id="contact_info" class="" style="height: 100%">
+  <div class="weui-flex p-2" style="height: 100%">
+    <div class="weui-flex__item" style="height: 100%">
+
+      <h3  class="text-center"> <%= @game_round.name %></h3>
+      <p class="text-center">
+          <img class="touxiang" src="<%=@game_player.avatar%>" >
+      <p>
+      <div class="weui-cells weui-cells_form  ">
+
+         <%= simple_form_for @game_player, url: create_player_game_round_path( @game_round), class: 'form-horizontal' do |f|%>
+         <%= hidden_field_tag 'openid', @game_player.openid %>
+          <div class="weui-cell">
+              <div class="weui-cell__hd">
+                <label for="game_player_realname" class="weui-label"><%= fa_icon "user 2x" %></label>
+              </div>
+              <div class="weui-cell__bd ">
+              <input class="weui-input" type="text" value="" placeholder="姓名" required name="game_player[realname]" id="game_player_realname">
+            </div>
+          </div>
+          <div class="weui-cell ">
+            <div class="weui-cell__hd"> <label for="game_player_cellphone" class="weui-label"> <%= fa_icon "phone-square 2x" %>   </label>     </div>
+            <div class="weui-cell__bd ">
+              <input class="weui-input" type="number" pattern="[0-9]*" value="" placeholder="电话" required  name="game_player[cellphone]" id="game_player_cellphone">
+            </div>
+          </div>
+          <div class="weui-btn-area">
+            <%= f.button :button, '报名参加', class:'weui-btn weui-btn_primary', id:'b-player-contact' %>
+          </div>
+        <% end %>
+
+      </div>
+    </div>
+  </div>
+</div>

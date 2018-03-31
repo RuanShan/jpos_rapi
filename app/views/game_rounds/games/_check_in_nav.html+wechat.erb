@@ -1,0 +1,20 @@
+<nav class="navbar navbar-inverse bg-inverse">
+     <a id="sidebar" href="#sidr"  >
+       <span class="navbar-toggler-icon"></span>
+     </a>
+</nav>
+
+<nav id="sidr">
+   <nav class="navbar ">&nbsp;
+   </nav>
+
+   <ul>
+     <li>
+       <%= link_to "签到", check_in_game_round_path( @game_round) %>
+      </li>
+     <li class="">
+       <%= link_to "中奖名单", awards_game_round_path( @game_round) %>
+      </li>
+     <li><a href="#">个人中心</a></li>
+   </ul>
+</nav>

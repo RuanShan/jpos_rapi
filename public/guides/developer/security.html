@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>    <html class="lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>    <html class="lt-ie9"> <![endif]-->
+<!--[if IE 9]>    <html class="ie9"> <![endif]-->
+<!--[if gt IE 9]><!--> <html lang="en" > <!--<![endif]-->
+<head>
+  <title>Security - Developer Guide | Spree - Ruby on Rails e-commerce platform</title>
+
+  <meta charset="utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta name="section" content="advanced" />
+
+<link href="/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+<link href="/shared/css/icons.css" media="screen" rel="stylesheet" type="text/css">
+<link href="/shared/css/icons-codes.css" media="screen" rel="stylesheet" type="text/css">
+
+<link href="/shared/css/skeleton.css" media="screen" rel="stylesheet" type="text/css">
+<link href="/shared/css/documentation.css" media="screen" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="/assets/stylesheets/guides.css" media="screen" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/docsearch.js/2/docsearch.min.css" />
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-migrate/1.1.1/jquery-migrate.min.js"></script>
+<script src="/assets/javascripts/css_browser_selector_dev.js" type="text/javascript"></script>
+<script src="/assets/javascripts/jquery.toc.js" type="text/javascript"></script>
+<script src="/assets/javascripts/documentation.js" type="text/javascript"></script>
+
+
+</head>
+<body class="developer">
+  
+  <header id="header">
+    <div id="top-header">
+  <div class="container">
+    <div class="row">
+      <div class="two columns">
+  <a class="logo" href="http://spreecommerce.org">
+    <img src='/images/logo.png' alt="Spree Commerce - Ruby on Rails e-commerce platform" />
+  </a>
+</div>
+
+      <div class="three columns">
+  <input type="text" id="search-field" placeholder="Search..." />
+</div>
+
+      <nav id="main-menu" class="eleven columns">
+  <ul class="inline">
+    <li><a href="../api/">API</a></li>
+    <li><a href="../developer/">Developer</a></li>
+    <li><a href="../user/">User</a></li>
+    <li><a href="../release_notes/">Release Notes</a></li>
+    <li>
+      <a href="http://slack.spreecommerce.org" target="_blank">Slack</a>
+    </li>
+    <li>
+      <a href="https://heroku.com/deploy?template=https://github.com/spree/spree" target="_blank" rel="nofollow">Demo</a>
+    </li>
+  </ul>
+</nav>
+
+    </div>
+  </div>
+</div>
+
+
+    <div id="subheader">
+      <div class="container">
+        <div class="sixteen columns">
+          <h1 class="page-title">Security - Developer Guide | Spree - Ruby on Rails e-commerce platform</h1>
+        </div>
+      </div>
+    </div>
+
+  </header>
+
+  <div class="container" id="main">
+    <section id="main-content">
+
+      <div class="twelve columns">
+        <div id="content">
+          
+<h2 id="overview">Overview</h2>
+
+<p>Proper application design, intelligent programming, and secure infrastructure are all essential in creating a secure e-commerce store using any software (Spree included). The Spree team has done its best to provide you with the tools to create a secure and profitable web presence, but it is up to you to take these tools and put them in good practice. We highly recommend reading and understanding the <a href="http://guides.rubyonrails.org/security.html">Rails Security Guide</a>.</p>
+
+<h2 id="reporting-security-issues">Reporting Security Issues</h2>
+
+<p>Please do not announce potential security vulnerabilities in public. We have a <a href="mailto:security@spreecommerce.com">dedicated email address</a>. We will work quickly to determine the severity of the issue and provide a fix for the appropriate versions. We will credit you with the discovery of this patch by naming you in a blog post.</p>
+
+<p>If you would like to provide a patch yourself for the security issue <strong>do not open a pull request for it</strong>. Instead, create a commit on your fork of Spree and run this command:</p>
+
+<div class="language-bash highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>$ git format-patch HEAD~1..HEAD --stdout &gt; patch.txt
+
+</pre></div>
+</div>
+</div>
+
+<p>This command will generate a file called <code>patch.txt</code> with your changes. Please email a description of the patch along with the patch itself to our <a href="mailto:security@spreecommerce.com">dedicated email address</a>.</p>
+
+<h2 id="authentication">Authentication</h2>
+
+<p>If you install spree_auth_devise when setting up your app, we use a third party authentication library for Ruby known as <a href="https://github.com/plataformatec/devise">Devise</a>. This library provides a host of useful functionality that is in turn available to Spree, including the following features:</p>
+
+<ul>
+  <li>Authentication</li>
+  <li>Strong password encryption (with the ability to specify your own algorithms)</li>
+  <li>“Remember Me” cookies</li>
+  <li>“Forgot my password” emails</li>
+  <li>Token-based access (for REST API)</li>
+</ul>
+
+<h3 id="devise-configuration">Devise Configuration</h3>
+
+<div class="note"><p>A default Spree install comes with the <a href="https://github.com/spree/spree_auth_devise">spree_auth_devise</a> gem, which provides authentication for Spree using Devise. This section of the guide covers the default setup. If you’re using your own authentication, please consult the manual for that authentication engine.</p>
+</div>
+
+<p>We have configured Devise to handle only what is needed to authenticate with a Spree site. The following details cover the default configurations:</p>
+
+<ul>
+  <li>Passwords are stored in the database encrypted with the salt.</li>
+  <li>User authentication is done through the database query.</li>
+  <li>User registration is enabled and the user’s login is available immediately (no validation emails).</li>
+  <li>There is a remember me and password recovery tool built in and enabled through Devise.</li>
+</ul>
+
+<p>These configurations represent a reasonable starting point for a typical e-commerce site. Devise can be configured extensively to allow for a different feature set but that is currently beyond the scope of this document. Developers are encouraged to visit the <a href="https://github.com/plataformatec/devise/wiki">Devise wiki</a> for more details.</p>
+
+<h3 id="rest-api">REST API</h3>
+
+<p>The REST API behaves slightly differently than a standard user. First, an admin has to create the access key before any user can query the REST API. This includes generating the key for the admin him/herself. This is not the case if <code>Spree::Api::Config[:requires_authentication]</code> is set to <code>false</code>.</p>
+
+<p>In cases where <code>Spree::Api::Config[:requires_authentication]</code> is set to <code>false</code>, read-only requests in the API will be possible for all users. For actions that modify data within Spree, a user will need to have an API key and then their user record would need to have permission to perform those actions.</p>
+
+<p>It is up to you to communicate that key. As an added measure, this authentication has to occur on every request made through the REST API as no session or cookies are created or stored for the REST API.</p>
+
+<h3 id="authorization">Authorization</h3>
+
+<p>Spree uses the excellent <a href="https://github.com/ryanb/cancan">CanCan</a> gem to provide authorization services. If you are unfamiliar with it, you should take a look at Ryan Bates’ <a href="http://railscasts.com/episodes/192-authorization-with-cancan">excellent screencast</a> on the topic (or read the <a href="http://asciicasts.com/episodes/192-authorization-with-cancan">transcribed version</a>). A detailed explanation of CanCan is beyond the scope of this guide.</p>
+
+<h3 id="default-rules">Default Rules</h3>
+
+<p>The follow Spree source code is taken from <code>ability.rb</code> and provides some insight into the default authorization rules:</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="keyword">if</span> user.respond_to?(<span class="symbol">:has_spree_role?</span>) &amp;&amp; user.has_spree_role?(<span class="string"><span class="delimiter">'</span><span class="content">admin</span><span class="delimiter">'</span></span>)
+  can <span class="symbol">:manage</span>, <span class="symbol">:all</span>
+<span class="keyword">else</span>
+  <span class="comment">#############################</span>
+  can [<span class="symbol">:read</span>,<span class="symbol">:update</span>,<span class="symbol">:destroy</span>], <span class="constant">Spree</span>.user_class, <span class="key">id</span>: user.id
+  can <span class="symbol">:create</span>, <span class="constant">Spree</span>.user_class
+  <span class="comment">#############################</span>
+  can <span class="symbol">:read</span>, <span class="constant">Order</span> <span class="keyword">do</span> |order, token|
+    order.user == user || order.token &amp;&amp; token == order.token
+  <span class="keyword">end</span>
+  can <span class="symbol">:update</span>, <span class="constant">Order</span> <span class="keyword">do</span> |order, token|
+    order.user == user || order.token &amp;&amp; token == order.token
+  <span class="keyword">end</span>
+  can <span class="symbol">:create</span>, <span class="constant">Order</span>
+
+  can <span class="symbol">:read</span>, <span class="constant">Address</span> <span class="keyword">do</span> |address|
+    address.user == user
+  <span class="keyword">end</span>
+
+  <span class="comment">#############################</span>
+  can <span class="symbol">:read</span>, <span class="constant">Product</span>
+  can <span class="symbol">:index</span>, <span class="constant">Product</span>
+  <span class="comment">#############################</span>
+  can <span class="symbol">:read</span>, <span class="constant">Taxon</span>
+  can <span class="symbol">:index</span>, <span class="constant">Taxon</span>
+  <span class="comment">#############################</span>
+<span class="keyword">end</span>
+
+</pre></div>
+</div>
+</div>
+
+<p>The above rule set has the following practical effects for Spree users</p>
+
+<ul>
+  <li>Admin role can access anything (the rest of the rules are ignored)</li>
+  <li>Anyone can create a <code>User</code>, only the user associated with an account can perform read or update operations for that user.</li>
+  <li>Anyone can create an <code>Order</code>, only the user associated with the order can perform read or update operations.</li>
+  <li>Anyone can read product pages and look at lists of <code>Products</code> (including search operations).</li>
+  <li>Anyone can read or view a list of <code>Taxons</code>.</li>
+</ul>
+
+<h3 id="enforcing-the-rules">Enforcing the Rules</h3>
+
+<p>CanCan is only effective in enforcing authorization rules if it’s asked. In other words, if the source code does not check permissions there is no way to deny access based on those permissions. This is generally handled by adding the appropriate code to your Rails controllers. For more information please see the <a href="https://github.com/ryanb/cancan/wiki">CanCan Wiki</a>.</p>
+
+<h3 id="custom-authorization-rules">Custom Authorization Rules</h3>
+
+<p>We have modified the original CanCan concept to make it easier for extension developers and end users to add their own custom authorization rules. For instance, if you have an “artwork extension” that allows users to attach custom artwork to an order, you will need to add rules so that they have permissions to do so.</p>
+
+<p>The trick to adding custom authorization rules is to add an <code>AbilityDecorator</code> to your extension and then to register these abilities. The following code is an example of how to restrict access so that only the owner of the artwork can update it or view it.</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="keyword">class</span> <span class="class">AbilityDecorator</span>
+  include <span class="constant">CanCan</span>::<span class="constant">Ability</span>
+  <span class="keyword">def</span> <span class="function">initialize</span>(user)
+    can <span class="symbol">:read</span>, <span class="constant">Artwork</span> <span class="keyword">do</span> |artwork|
+      artwork.order &amp;&amp; artwork.order.user == user
+    <span class="keyword">end</span>
+    can <span class="symbol">:update</span>, <span class="constant">Artwork</span> <span class="keyword">do</span> |artwork|
+      artwork.order &amp;&amp; artwork.order.user == user
+    <span class="keyword">end</span>
+  <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="constant">Spree</span>::<span class="constant">Ability</span>.register_ability(<span class="constant">AbilityDecorator</span>)
+
+</pre></div>
+</div>
+</div>
+
+<h3 id="custom-roles-in-the-admin-namespace">Custom Roles in the Admin Namespace</h3>
+
+<p>If you plan on allowing a custom role you create to access the Spree administrative
+panels, there are a couple of considerations to keep in mind.</p>
+
+<p>Spree authorizes all of its administrative panels with two CanCan authorization
+commands: <code>:admin</code> and the name of the action being authorized. If you want a
+custom role to be able to access a particular admin panel, you have to specify
+that your role <em>can</em> access both :admin and the name of the action on the relevant
+resource. For example, if you want your Sales Representatives to be able to access the Admin
+Orders panel without giving them access to anything else in the Admin namespace,
+you would have to specify the following in an <code>AbilityDecorator</code>:</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="keyword">class</span> <span class="class">AbilityDecorator</span>
+  include <span class="constant">CanCan</span>::<span class="constant">Ability</span>
+  <span class="keyword">def</span> <span class="function">initialize</span>(user)
+    <span class="keyword">if</span> user.respond_to?(<span class="symbol">:has_spree_role?</span>) &amp;&amp; user.has_spree_role?(<span class="string"><span class="delimiter">'</span><span class="content">sales_rep</span><span class="delimiter">'</span></span>)
+      can [<span class="symbol">:admin</span>, <span class="symbol">:index</span>, <span class="symbol">:show</span>], <span class="constant">Spree</span>::<span class="constant">Order</span>
+    <span class="keyword">end</span>
+  <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="constant">Spree</span>::<span class="constant">Ability</span>.register_ability(<span class="constant">AbilityDecorator</span>)
+
+</pre></div>
+</div>
+</div>
+
+<p>This is required by the following code in Spree’s <code>Admin::BaseController</code> which
+is the controller every controller in the Admin namespace inherits from.</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="keyword">def</span> <span class="function">authorize_admin</span>
+  <span class="keyword">if</span> respond_to?(<span class="symbol">:model_class</span>, <span class="predefined-constant">true</span>) &amp;&amp; model_class
+    record = model_class
+  <span class="keyword">else</span>
+    record = <span class="constant">Object</span>
+  <span class="keyword">end</span>
+  authorize! <span class="symbol">:admin</span>, record
+  authorize! action, record
+<span class="keyword">end</span>
+
+</pre></div>
+</div>
+</div>
+
+<p>If you need to create custom controllers for your own models under the Admin
+namespace, you will need to manually specify the model your controller manipulates
+by defining a <code>model_class</code> method in that controller.</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="keyword">module</span> <span class="class">Spree</span>
+  <span class="keyword">module</span> <span class="class">Admin</span>
+    <span class="keyword">class</span> <span class="class">WidgetsController</span> &lt; <span class="constant">BaseController</span>
+      <span class="keyword">def</span> <span class="function">index</span>
+        <span class="comment"># Relevant code in here</span>
+      <span class="keyword">end</span>
+    private
+      <span class="keyword">def</span> <span class="function">model_class</span>
+        <span class="constant">Widget</span>
+      <span class="keyword">end</span>
+    <span class="keyword">end</span>
+  <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+</pre></div>
+</div>
+</div>
+
+<p>This is necessary because CanCan cannot, by default, detect the model used to
+authorize controllers under the Admin namespace. By specifying <code>model_class</code>, Spree
+knows what to tell CanCan to use to authorize your controller.</p>
+
+<p>If you inherit from <code>ResourceController</code> instead of directly <code>BaseController</code>, and if you define new
+collection actions, you need to override  <code>ResourceController#collection_actions</code> which contains only <code>[:index]</code> by default.</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="keyword">module</span> <span class="class">Spree</span>
+  <span class="keyword">module</span> <span class="class">Admin</span>
+    <span class="keyword">class</span> <span class="class">WidgetsController</span> &lt; <span class="constant">ResourceController</span>
+      <span class="keyword">def</span> <span class="function">index</span>
+        <span class="comment"># Relevant code in here</span>
+      <span class="keyword">end</span>
+
+     <span class="keyword">def</span> <span class="function">new_coll_action</span>
+        <span class="comment"># relevant code</span>
+     <span class="keyword">end</span>
+
+    <span class="keyword">def</span> <span class="function">collection_actions</span>
+        [<span class="symbol">:index</span>, <span class="symbol">:new_coll_action</span>]
+    <span class="keyword">end</span>
+    private
+      <span class="keyword">def</span> <span class="function">model_class</span>
+        <span class="constant">Widget</span>
+      <span class="keyword">end</span>
+    <span class="keyword">end</span>
+  <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+</pre></div>
+</div>
+</div>
+
+<h3 id="tokenized-permissions">Tokenized Permissions</h3>
+
+<p>There are situations where it may be desirable to restrict access to a particular resource without requiring a user to authenticate in order to have that access. Spree allows so-called “guest checkouts” where users just supply an email address and they’re not required to create an account. In these cases you still want to restrict access to that order so only the original customer can see it. The solution is to use a “tokenized” URL.</p>
+
+<p>http://example.com/orders?token=aidik313dsfs49d</p>
+
+<p>Spree provides a <code>TokenizedPermission</code> model used to grant access to various resources through a secure token. This model works in conjunction with the <code>Spree::TokenResource</code> module which can be used to add tokenized access functionality to any Spree resource.</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="keyword">module</span> <span class="class">Spree</span>
+  <span class="keyword">module</span> <span class="class">Core</span>
+    <span class="keyword">module</span> <span class="class">TokenResource</span>
+      <span class="keyword">module</span> <span class="class">ClassMethods</span>
+        <span class="keyword">def</span> <span class="function">token_resource</span>
+          has_one <span class="symbol">:tokenized_permission</span>, <span class="key">as</span>: <span class="symbol">:permissable</span>
+          delegate <span class="symbol">:token</span>, <span class="key">to</span>: <span class="symbol">:tokenized_permission</span>, <span class="key">allow_nil</span>: <span class="predefined-constant">true</span>
+          after_create <span class="symbol">:create_token</span>
+        <span class="keyword">end</span>
+      <span class="keyword">end</span>
+
+      <span class="keyword">def</span> <span class="function">create_token</span>
+        permission = build_tokenized_permission
+        permission.token = token = ::<span class="constant">SecureRandom</span>::hex(<span class="integer">8</span>)
+        permission.save!
+        token
+      <span class="keyword">end</span>
+
+      <span class="keyword">def</span> <span class="predefined-constant">self</span>.<span class="function">included</span>(receiver)
+        receiver.extend <span class="constant">ClassMethods</span>
+      <span class="keyword">end</span>
+    <span class="keyword">end</span>
+  <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="constant">ActiveRecord</span>::<span class="constant">Base</span>.class_eval { include <span class="constant">Spree</span>::<span class="constant">Core</span>::<span class="constant">TokenResource</span> }
+
+</pre></div>
+</div>
+</div>
+
+<p>The <code>Order</code> model is one such model in Spree where this interface is already in use. The following code snippet shows how to add this functionality through the use of the <code>token_resource</code> declaration:</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="constant">Spree</span>::<span class="constant">Order</span>.class_eval <span class="keyword">do</span>
+  token_resource
+<span class="keyword">end</span>
+
+</pre></div>
+</div>
+</div>
+
+<p>If we examine the default CanCan permissions for <code>Order</code> we can see how tokens can be used to grant access in cases where the user is not authenticated.</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>can <span class="symbol">:read</span>, <span class="constant">Spree</span>::<span class="constant">Order</span> <span class="keyword">do</span> |order, token|
+  order.user == user || order.token &amp;&amp; token == order.token
+<span class="keyword">end</span>
+
+can <span class="symbol">:update</span>, <span class="constant">Spree</span>::<span class="constant">Order</span> <span class="keyword">do</span> |order, token|
+  order.user == user || order.token &amp;&amp; token == order.token
+<span class="keyword">end</span>
+
+can <span class="symbol">:create</span>, <span class="constant">Spree</span>::<span class="constant">Order</span>
+
+</pre></div>
+</div>
+</div>
+
+<p>This configuration states that in order to read or update an order, you must be either authenticated as the correct user, or supply the correct authorizing token.</p>
+
+<p>The final step is to ensure that the token is passed to CanCan when the authorization is performed, which is done in the controller.</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre>authorize! action, resource, session[<span class="symbol">:access_token</span>]
+
+</pre></div>
+</div>
+</div>
+
+<h2 id="credit-card-data">Credit Card Data</h2>
+
+<h3 id="pci-compliance">PCI Compliance</h3>
+
+<p>All store owners wishing to process credit card transactions should be familiar with <a href="http://en.wikipedia.org/wiki/Pci_compliance">PCI Compliance</a>. Spree makes
+absolutely no warranty regarding PCI compliance (or anything else for that matter - see the <a href="https://github.com/spree/spree/blob/master/license.md">LICENSE</a> for details.) We do, however, follow common sense security practices in handling credit card data.</p>
+
+<h3 id="transmit-exactly-once">Transmit Exactly Once</h3>
+
+<p>Spree uses extreme caution in its handling of credit cards. In production mode, credit card data is transmitted to Spree via SSL. The data is immediately relayed to your chosen payment gateway and then discarded. The credit card data is never stored in the database (not even temporarily) and it exists in memory on the server for only a fraction of a second before it is discarded.</p>
+
+<p>Spree does store the last four digits of the credit card and the expiration month and date.  You could easily customize Spree further if you wanted and opt out of storing even that little bit of information.</p>
+
+<h3 id="payment-profiles">Payment Profiles</h3>
+
+<p>Spree also supports the use of “payment profiles.” This means that you can “store” a customer’s credit card information in your database securely. More precisely you store a “token” that allows you to use the credit card again. The credit card gateway is actually the place where the credit card is stored. Spree ends up storing a token that can be used to authorize new charges on that same card without having to store sensitive credit card details.</p>
+
+<p>Spree has out of the box support for <a href="http://www.authorize.net/solutions/merchantsolutions/merchantservices/cim/">Authorize.net CIM</a> payment profiles.</p>
+
+<h3 id="other-options">Other Options</h3>
+
+<p>There are also third-party extensions for Paypal’s <a href="https://developer.paypal.com/docs/classic/products/express-checkout/">Express Checkout</a> (formerly called Paypal Express.) These types of checkout services handle processing of the credit card information offsite (the data never touches your server) and greatly simplify the requirements for PCI compliance.</p>
+
+<p><a href="https://braintreepayments.com">Braintree</a> also offers a very interesting gateway option that achieves a similar benefit to Express Checkout but allows the entire process to appear to be taking place on the site. In other words, the customer never appears to leave the store during the checkout. They describe this as a “transparent redirect.” The Braintree team is very interested in helping other Ruby developers use their gateway and have provided support to Spree developers in the past who were interested in using their product.</p>
+
+        </div>
+      </div>
+
+    </section>
+
+    <aside id="sidebar" class="four columns">
+  <nav id="sidebar-menu">
+    <ul>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-tutorial-menu"><i class="icon-right-open"></i></a>
+          <a href='/developer/getting_started_tutorial.html'>Tutorials</a>
+        </h3>
+        <ul class="js-guides">
+          <li><i class="icon-dot"></i><a href='/developer/getting_started_tutorial.html'>Getting Started</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/extensions_tutorial.html'>Extensions</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/deface_overrides_tutorial.html'>Deface Overrides</a> <div class="toc"></div> </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-source-code-menu"><i class="icon-right-open"></i></a>
+          <a href='/developer/about.html'>Source Code</a>
+        </h3>
+        <ul class="js-guides">
+          <li><i class="icon-dot"></i><a href='/developer/about.html'>About</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/navigating.html'>Navigating</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/getting_help.html'>Getting Help</a> <div class="toc"></div> </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href="https://github.com/spree/spree/blob/master/.github/CONTRIBUTING.md" target="_blank" rel="nofollow">
+              Contributing
+            </a>
+            <div class="toc"></div>
+          </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-core-menu"><i class="icon-right-open"></i></a>
+          <a href='/developer/addresses.html'>The Core</a>
+        </h3>
+        <ul class="js-guides">
+          <li><i class="icon-dot"></i><a href='/developer/addresses.html'>Addresses</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/adjustments.html'>Adjustments</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/calculators.html'>Calculators</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/inventory.html'>Inventory</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/orders.html'>Orders</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/payments.html'>Payments</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/preferences.html'>Preferences</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/products.html'>Products</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/promotions.html'>Promotions</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/shipments.html'>Shipments</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/taxation.html'>Taxation</a> <div class="toc"></div> </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-customization-menu"><i class="icon-right-open"></i></a>
+          <a href='/developer/authentication.html'>Customization</a>
+        </h3>
+        <ul class="js-guides">
+          <li><i class="icon-dot"></i><a href='/developer/authentication.html'>Authentication</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/i18n.html'>Internationalization (i18n)</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/view.html'>View</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/asset.html'>Asset</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/logic.html'>Logic</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/s3_storage.html'>Use S3</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/checkout.html'>Checkout</a> <div class="toc"></div> </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-deployment-menu"><i class="icon-right-open"></i></a>
+          <a href='/developer/deployment_tips.html'>Deployment</a>
+        </h3>
+        <ul class="js-guides">
+          <li><i class="icon-dot"></i><a href='/developer/heroku.html'>Heroku</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/ansible-ubuntu.html'>Ansible Ubuntu Deployment</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/manual-ubuntu.html'>Manual Ubuntu Deployment</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/deployment_options.html'>Deployment Options</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/deployment_tips.html'>Deployment Tips</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/requesting_and_configuring_ssl.html'>Requesting/Configuring SSL</a> <div class="toc"></div> </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-advanced-menu"><i class="icon-right-open"></i></a>
+          <a href='/developer/seo.html'>Advanced Topics</a>
+        </h3>
+        <ul class="js-guides">
+          <li><i class="icon-dot"></i><a href='/developer/developer_tips.html'>Developer Tips</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/gateway_specific_information.html'>Gateway Specific Information</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/migration.html'>Migrating to Spree</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/seo.html'>Search Engine Optimization</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/security.html'>Security</a> <div class="toc"></div> </li>
+          <li><i class="icon-dot"></i><a href='/developer/testing.html'>Testing Spree Applications</a> <div class="toc"></div> </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-upgrades-menu"><i class="icon-right-open"></i></a>
+          <a href='/developer/upgrade_guides.html'>Upgrade Guides</a>
+        </h3>
+        <ul class="js-guides">
+          <li><i class="icon-dot"></i><a href='/developer/point-sixty-to-point-seventy.html'>0.60.x to 0.70.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/point-seventy-to-one-dot-oh.html'>0.70.x to 1.0.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/one-dot-oh-to-one-dot-one.html'>1.0.x to 1.1.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/one-dot-one-to-one-dot-two.html'>1.1.x to 1.2.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/one-dot-two-to-one-dot-three.html'>1.2.x to 1.3.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/one-dot-three-to-two-dot-oh.html'>1.3.x to 2.0.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/two-dot-oh-to-two-dot-one.html'>2.0.x to 2.1.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/two-dot-one-to-two-dot-two.html'>2.1.x to 2.2.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/two-dot-two-to-two-dot-three.html'>2.2.x to 2.3.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/two-dot-three-to-two-dot-four.html'>2.3.x to 2.4.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/three-dot-oh-to-three-dot-one.html'>3.0.x to 3.1.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/three-dot-one-to-three-dot-two.html'>3.1.x to 3.2.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/three-dot-two-to-three-dot-three.html'>3.2.x to 3.3.x</a> <div
+          class="toc"></div></li>
+          <li><i class="icon-dot"></i><a href='/developer/three-dot-three-to-three-dot-four.html'>3.3.x to 3.4.x</a> <div
+          class="toc"></div></li>
+        </ul>
+      </li>
+    </ul>
+  </nav>
+</aside>
+
+  </div>
+
+  <footer id="main-footer">
+
+  <div class="footer-top">
+    <div class="container">
+      <div id="link-blocks" class="row">
+        <div class="link-block six columns">
+          <h3 class="block-title">Developers</h3>
+          <ul>
+            <li><a href="https://slack.spreecommerce.org" target="_blank" rel="nofollow">Slack</a></li>
+            <li><a href="https://github.com/spree-contrib" target="_blank">Extensions</a></li>
+            <li><a href="https://github.com/spree/spree/blob/master/license.md" target="_blank">License</a></li>
+          </ul>
+        </div>
+        <div class="link-block seven columns">
+          <h3 class="block-title">About Spree</h3>
+          <p>
+            <strong><a href="https://spreecommerce.org">Spree Commerce</a></strong>
+            is a complete modular, API-driven open source e-commerce solution
+            built with Ruby on Rails.
+          </p>
+          <p>
+            Guides are hosted and maintained by
+            <a href="http://sparksolutions.co" target="_blank">Spark Solutions</a>
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</footer>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-104990445-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/docsearch.js/2/docsearch.min.js"></script>
+<script type="text/javascript"> docsearch({
+apiKey: 'fb697cd2d04591b036ea172259c05ba8',
+indexName: 'spreecommerce',
+inputSelector: '#search-field',
+debug: false // Set debug to true if you want to inspect the dropdown
+});
+</script>
+
+
+  </body>
+</html>

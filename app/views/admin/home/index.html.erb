@@ -1,0 +1,40 @@
+
+
+<h1> <%= get_view_text('h1') %> </h1>
+        <div class='container'>
+          <div class='row'>
+            <div class='col-sm-4'>
+              <ul class='nav nav-pills' id='tabs'>
+                <li class='nav-item'>
+                  <a class='active nav-link'>
+                    <b><%= t('label.manage_users') %></b>
+                  </a>
+                </li>
+                <li class='nav-item'>
+                  <a class='nav-link'>
+                    <b> <%= t('label.logs') %> </b>
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <div class='col-sm-8 text-sm-right'>
+              <div id='add_new_user'>
+              <%=  render 'admin/partials/add_user' %>
+              </div>
+            </div>
+          </div>
+          <div class='tab-content' id='my-tab-content'>
+            <div class='tab-pane active' id='users'>
+              <br>
+              <div id='user_list'>
+              <% #= render 'admin/partials/users' %>
+              </div>
+            </div>
+            <div class='tab-pane' id='logs'>
+              <br>
+              <div id='devise_usage_report_block'>
+              <% #= render 'devise_usage_log/partials/devise_usage_report_link' %>
+              </div>
+            </div>
+          </div>
+        </div>

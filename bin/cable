@@ -1,0 +1,2 @@
+#!/bin/sh
+exec env NOEXEC_EXCLUDE=passenger passenger start -p 20 -R cable/config.ru --force-max-concurrent-requests-per-process 0

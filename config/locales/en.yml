@@ -1,0 +1,90 @@
+# Files in the config/locales directory are used for internationalization
+# and are automatically loaded by Rails. If you want to use locales other
+# than English, add the necessary files in this directory.
+#
+# To use the locales, use `I18n.t`:
+#
+#     I18n.t 'hello'
+#
+# In views, this is aliased to just `t`:
+#
+#     <%= t('hello') %>
+#
+# To use a different locale, set it with `I18n.locale`:
+#
+#     I18n.locale = :es
+#
+# This would use the information in config/locales/es.yml.
+#
+# To learn more, please read the Rails Internationalization guide
+# available at http://guides.rubyonrails.org/i18n.html.
+
+en:
+  menu:
+    login: "Sign In"
+    logout: "Sign Out"
+    register: "Sign Up"
+    messages: "Messages"
+    home: "Home"
+    profile: "Profile"
+    details: "Details"
+    education: "Education"
+    licensing: "Licensing"
+    reports: "Reports"
+    admin: "Admin"
+    help: "Help"
+  button:
+    save: "Save"
+    login: "Sign In"
+    register: "Sign Up"
+    update: "Update"
+    delete_user: "Delete User Account: \"%{username}\""
+    resend_unlock: "Resend unlock instructions"
+    resend_confirm: "Resend confirmation instructions"
+    forgot_password: "Send me reset password instructions"
+    update_password: "Change my password"
+    confirm_delete_user: "Are you sure you want to delete \"%{username}\"?"
+    edit: "Edit"
+    save_changes: "Save changes"
+    send_email: "Send Email"
+    add_new_user: "Add New User"
+  label:
+    username: "Username"
+    user: "User"
+    email: "Email"
+    email_example: "user@example.com"
+    password: "Password"
+    password_confirmation: "Confirm Password"
+    remember_me: "Remember me"
+    edit_user: "Edit my account"
+    delete_user: "Cancel my account"
+    new_password: "New password"
+    confirm_new_password: "Confirm new password"
+    current_password: "Current password"
+    role: "Role"
+    login_type: "Type"
+    last_login: "Last Login"
+    ip: "IP"
+    login_count: "Count"
+    add_new_user: "Add new user"
+    manage_users: "Manage Users"
+    logs: "Logs"
+    pending: "Pending"
+    action: "Action"
+    close_report: "Close Report"
+    unconfirmed: "Unconfirmed"
+    loading: "Loading..."
+  tooltip:
+    delete_user: "Delete user"
+    edit_user: "Edit or delete user"
+  error:
+    general: "An error has occurred?"
+  classy_enum:
+    devise_action:
+      new: "New Account"
+      confirmed: "Confirmed"
+      login: "Login"
+      password: "New Password"
+      unlocked: "Unlocked"
+      edit: "Edit Account"
+      delete: "Delete Account"

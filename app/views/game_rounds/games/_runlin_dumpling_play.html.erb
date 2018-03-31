@@ -1,0 +1,143 @@
+
+<% content_for :game_asset_js do %>
+<script type='text/javascript'>
+
+WechatMore = {
+	openid: "<%= session[:openid] %>",
+	game_code:  <%== @game_round.game_code.to_json %>,
+	game_round_id:  <%= @game_round.id %>,
+	game_round_name:  <%== @game_round.name.to_json %>,
+	game_countdown: <%= @game_round.duration %>,
+	terminal: 'screen',
+	panelState: 'opended',
+	playerState: 'unknown',
+	ip: "<%= request.ip %>",
+	is_paid:  <%== @game_player.game_today.is_paid?.to_json %>,
+	game_player_id: <%== @game_player.id %>,
+	game_player_name: <%== @game_player.nickname.to_json %>,
+	game_player_head_img: <%== @game_player.avatar.to_json %>,
+	game_player_token: <%== @game_player.score_token.to_json %>,
+	routes: {},
+	assets: {}
+}
+WechatMore.routes.play_url = <%== play_game_round_url(@game_round).to_json %>;
+WechatMore.routes.final_rank_url = <%== final_rank_game_round_url(@game_round).to_json %>;
+//game_player maybe nil
+WechatMore.routes.game_players_path = <%== game_players_path.to_json %>;
+WechatMore.routes.game_results_path = <%== game_results_path.to_json %>;
+WechatMore.routes.votes_path = <%== votes_path.to_json %>;
+WechatMore.routes.score_game_player_path =<%== score_game_player_path(@game_player).to_json %>
+
+WechatMore.assets.image_dust_sheet_url = <%== image_url("game/rl_dumpling/xjtx/dust-sheet0.png").to_json %>;
+
+WechatMore.assets.image_robot_url = <%== image_url("game/rl_dumpling/4/robot.png").to_json %>;
+WechatMore.assets.image_zaw_url = <%== image_url("game/rl_dumpling/4/zaw.png").to_json %>;
+WechatMore.assets.image_zaw01_url = <%== image_url("game/rl_dumpling/4/zaw01.png").to_json %>;
+WechatMore.assets.image_zaw02_url = <%== image_url("game/rl_dumpling/4/zaw02.png").to_json %>;
+WechatMore.assets.image_wp01_url = <%== image_url("game/rl_dumpling/4/wp01.png").to_json %>;
+WechatMore.assets.image_wp02_url = <%== image_url("game/rl_dumpling/4/wp02.png").to_json %>;
+WechatMore.assets.image_wp03_url = <%== image_url("game/rl_dumpling/4/wp03.png").to_json %>;
+WechatMore.assets.image_wp04_url = <%== image_url("game/rl_dumpling/4/wp04.png").to_json %>;
+WechatMore.assets.image_wp05_url = <%== image_url("game/rl_dumpling/4/wp05.png").to_json %>;
+WechatMore.assets.image_wp06_url = <%== image_url("game/rl_dumpling/4/wp06.png").to_json %>;
+WechatMore.assets.image_wp07_url = <%== image_url("game/rl_dumpling/4/wp07.png").to_json %>;
+WechatMore.assets.image_wp08_url = <%== image_url("game/rl_dumpling/4/wp08.png").to_json %>;
+WechatMore.assets.image_wp09_url = <%== image_url("game/rl_dumpling/4/wp09.png").to_json %>;
+WechatMore.assets.image_wp10_url = <%== image_url("game/rl_dumpling/4/wp10.png").to_json %>;
+WechatMore.assets.image_wp11_url = <%== image_url("game/rl_dumpling/4/wp11.png").to_json %>;
+WechatMore.assets.image_wp12_url = <%== image_url("game/rl_dumpling/4/wp12.png").to_json %>;
+WechatMore.assets.image_wp13_url = <%== image_url("game/rl_dumpling/4/wp13.png").to_json %>;
+WechatMore.assets.image_wp14_url = <%== image_url("game/rl_dumpling/4/wp14.png").to_json %>;
+WechatMore.assets.image_wp15_url = <%== image_url("game/rl_dumpling/4/wp15.png").to_json %>;
+WechatMore.assets.image_wp16_url = <%== image_url("game/rl_dumpling/4/wp16.png").to_json %>;
+WechatMore.assets.image_wp17_url = <%== image_url("game/rl_dumpling/4/wp17.png").to_json %>;
+WechatMore.assets.image_wp18_url = <%== image_url("game/rl_dumpling/4/wp18.png").to_json %>;
+WechatMore.assets.image_wp19_url = <%== image_url("game/rl_dumpling/4/wp19.png").to_json %>;
+WechatMore.assets.image_wp20_url = <%== image_url("game/rl_dumpling/4/wp20.png").to_json %>;
+WechatMore.assets.image_wp21_url = <%== image_url("game/rl_dumpling/4/wp21.png").to_json %>;
+WechatMore.assets.image_wp22_url = <%== image_url("game/rl_dumpling/4/wp22.png").to_json %>;
+
+WechatMore.assets.image_theGetPricePic_url = <%== image_url("game/rl_dumpling/faiImg.png").to_json %>;
+WechatMore.assets.image_theGetPricePicTwo_url = <%== image_url("game/rl_dumpling/faiImg2.png").to_json %>;
+WechatMore.assets.image_theGetPricePicThree_url = <%== image_url("game/rl_dumpling/faiImg3.png").to_json %>;
+WechatMore.assets.image_lotsPot_url = <%== image_url("game/rl_dumpling/lots1.png").to_json %>;
+WechatMore.assets.image_lotsShakeHand_url = <%== image_url("game/rl_dumpling/gg.jpg").to_json %>;
+
+WechatMore.assets.image_ori_robot_url = <%== image_url("game/rl_dumpling/xjtx/robot01.png").to_json %>;
+WechatMore.assets.image_ori_zaw_url = <%== image_url("game/rl_dumpling/xjtx/zaw.png").to_json %>;
+WechatMore.assets.image_ori_wp01_url = <%== image_url("game/rl_dumpling/xjtx/wp01.png").to_json %>;
+WechatMore.assets.image_ori_wp02_url = <%== image_url("game/rl_dumpling/xjtx/wp02.png").to_json %>;
+WechatMore.assets.image_ori_wp03_url = <%== image_url("game/rl_dumpling/xjtx/wp03.png").to_json %>;
+WechatMore.assets.image_ori_wp04_url = <%== image_url("game/rl_dumpling/xjtx/wp04.png").to_json %>;
+WechatMore.assets.image_ori_wp05_url = <%== image_url("game/rl_dumpling/xjtx/wp01.png").to_json %>;
+WechatMore.assets.image_ori_wp06_url = <%== image_url("game/rl_dumpling/xjtx/wp02.png").to_json %>;
+WechatMore.assets.image_ori_wp07_url = <%== image_url("game/rl_dumpling/xjtx/wp03.png").to_json %>;
+WechatMore.assets.image_ori_wp08_url = <%== image_url("game/rl_dumpling/xjtx/wp04.png").to_json %>;
+WechatMore.assets.image_ori_wp09_url = <%== image_url("game/rl_dumpling/xjtx/wp04.png").to_json %>;
+WechatMore.assets.image_ori_wp10_url = <%== image_url("game/rl_dumpling/xjtx/wp04.png").to_json %>;
+WechatMore.assets.image_ori_wp11_url = <%== image_url("game/rl_dumpling/xjtx/wp01.png").to_json %>;
+WechatMore.assets.image_ori_wp12_url = <%== image_url("game/rl_dumpling/xjtx/wp02.png").to_json %>;
+WechatMore.assets.image_ori_wp13_url = <%== image_url("game/rl_dumpling/xjtx/wp03.png").to_json %>;
+WechatMore.assets.image_ori_wp14_url = <%== image_url("game/rl_dumpling/xjtx/wp04.png").to_json %>;
+WechatMore.assets.image_ori_wp15_url = <%== image_url("game/rl_dumpling/xjtx/wp01.png").to_json %>;
+WechatMore.assets.image_ori_wp16_url = <%== image_url("game/rl_dumpling/xjtx/wp02.png").to_json %>;
+WechatMore.assets.image_ori_wp17_url = <%== image_url("game/rl_dumpling/xjtx/wp03.png").to_json %>;
+WechatMore.assets.image_ori_wp18_url = <%== image_url("game/rl_dumpling/xjtx/wp04.png").to_json %>;
+WechatMore.assets.image_ori_wp19_url = <%== image_url("game/rl_dumpling/xjtx/wp04.png").to_json %>;
+WechatMore.assets.image_ori_wp20_url = <%== image_url("game/rl_dumpling/xjtx/wp04.png").to_json %>;
+WechatMore.assets.image_ori_wp21_url = <%== image_url("game/rl_dumpling/xjtx/wp04.png").to_json %>;
+WechatMore.assets.image_ori_wp22_url = <%== image_url("game/rl_dumpling/xjtx/wp04.png").to_json %>;
+
+WechatMore.assets.image_ori_theGetPricePic_url = <%== image_url("game/rl_dumpling/faiImg1-2.png").to_json %>;
+WechatMore.assets.image_ori_theGetPricePicTwo_url = <%== image_url("game/rl_dumpling/faiImg2-2.png").to_json %>;
+WechatMore.assets.image_ori_theGetPricePicThree_url = <%== image_url("game/rl_dumpling/faiImg3-2.png").to_json %>;
+WechatMore.assets.image_ori_lotsPot_url = <%== image_url("game/rl_dumpling/lots1.png").to_json %>;
+WechatMore.assets.image_ori_lotsShakeHand_url = <%== image_url("game/rl_dumpling/gg.jpg").to_json %>;
+
+
+WechatMore.assets.image_bg_url = <%== image_url("game/rl_dumpling/2/bg.jpg").to_json %>;
+WechatMore.assets.image_logo_url = <%== image_url("game/rl_dumpling/logo.jpg").to_json %>;
+WechatMore.assets.image_ruleImg_url = <%== image_url("game/rl_dumpling/ruleImg.png").to_json %>;
+WechatMore.assets.image_success_url = <%== image_url("game/rl_dumpling/success.png").to_json %>;
+WechatMore.assets.image_light_url = <%== image_url("game/rl_dumpling/light.png").to_json %>;
+WechatMore.assets.image_bird_url = <%== image_url("game/rl_dumpling/bird.png").to_json %>;
+WechatMore.assets.image_musicOff_url = <%== image_url("game/rl_dumpling/musicOff.png").to_json %>;
+WechatMore.assets.image_musicOn_url = <%== image_url("game/rl_dumpling/musicOn.png").to_json %>;
+WechatMore.assets.image_auBg_url = <%== image_url("game/rl_dumpling/auBg.jpg").to_json %>;
+WechatMore.assets.image_qlogo_url = WechatMore.game_player_head_img;
+WechatMore.assets.image_game_url = <%== image_url("game/rl_dumpling/4/game.png").to_json %>;
+WechatMore.assets.image_ksyx_url = <%== image_url("game/rl_dumpling/4/18/ksyx.png").to_json %>;
+WechatMore.assets.image_hdjn_url = <%== image_url("game/rl_dumpling/4/18/hdjn.png").to_json %>;
+WechatMore.assets.image_play_bg_url = <%== image_url("game/rl_dumpling/2/play-bg.jpg").to_json %>;
+WechatMore.assets.image_play_logo_url = <%== image_url("game/rl_dumpling/2/logo.png").to_json %>;
+WechatMore.assets.image_share_url = <%== image_url("game/rl_dumpling/2/share.jpg").to_json %>;
+WechatMore.assets.image_lots1_url = <%== image_url("game/rl_dumpling/lots1.png").to_json %>;
+WechatMore.assets.image_lots2_url = <%== image_url("game/rl_dumpling/lots2.png").to_json %>;
+WechatMore.assets.image_faiImg_url = <%== image_url("game/rl_dumpling/faiImg.png").to_json %>;
+
+//"/image/2/ACgIABACGAAg2OiUswUo6NHOwQIwgAU4wAw.jpg","/image/logo.jpg","/image/ruleImg.png","/image/success.png","/image/light.png","/image/bird.png","/image/musicOff.png","/image/musicOn.png",
+// "/image/auBg.jpg","http://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTJR8XicKtnzHnBNlVDlus4ljibQtfWtgNDzgTmnHQJuMoMjmXx3jGSMNERzvl1YFvKxWy6icvBAYkwSA/132",
+//"/image/4/ACgIABAEGAAg5uiUswUo0Mjz1QMwxAQ4yAE.png","/image/4/18/ACgIABAEGAAgiPakyQUozoqSSjDjAjhr.png","/image/2/ACgIABACGAAgj_mUswUowpXxqAQwgAU4wAw.jpg","/image/lots1.png","/image/lots2.png",
+//'/image/faiImg.png?v=201509171041',
+
+WechatMore.assets.audio_bgmusic_url = <%== audio_url("game/rl_dumpling/bgmusic04h.mp3").to_json %>;
+WechatMore.assets.audio_bonus_url = <%== audio_url("game/rl_dumpling/bonus.mp3").to_json %>;
+WechatMore.assets.audio_start_url = <%== audio_url("game/rl_dumpling/button.mp3").to_json %>;
+WechatMore.assets.audio_yaoyiyao_url = <%== audio_url("game/rl_dumpling/yaoyiyao.wav").to_json %>;
+
+WechatMore.assets.image_gift_url = <%== image_url("game/rl_dumpling/gift.png").to_json %>;
+WechatMore.assets.image_clickView_url = <%== image_url("game/rl_dumpling/clickView.png").to_json %>;
+WechatMore.assets.image_xjtx_title_url = <%== image_url("game/rl_dumpling/xjtx/title.png").to_json %>;
+WechatMore.assets.image_xjtx_startBtn_url = <%== image_url("game/rl_dumpling/xjtx/startBtn.png").to_json %>;
+WechatMore.assets.image_xjtx_homeBg_url = <%== image_url("game/rl_dumpling/xjtx/homeBg.jpg").to_json %>;
+WechatMore.assets.image_xjtx_gameBg_url = <%== image_url("game/rl_dumpling/xjtx/gameBg.jpg").to_json %>;
+WechatMore.assets.image_ruleImg_red_url = <%== image_url("game/rl_dumpling/ruleImg_red.png").to_json %>;
+
+WechatMore.assets.image_caewm_red_url = <%== image_url("game/rl_dumpling/caewm.jpg").to_json %>;
+WechatMore.assets.image_poup_bg_url = <%== image_url("game/rl_dumpling/poup-bg.png").to_json %>;
+
+WechatMore.weixin_config = <%== wechat_config_params(api:['onMenuShareTimeline','onMenuShareAppMessage']).to_json %>
+
+
+</script>
+<% end %>

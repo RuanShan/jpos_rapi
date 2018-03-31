@@ -1,0 +1,18 @@
+<%
+# locals
+#  game_player
+%>
+<div class="poupSection">
+<% if @game_player.game_awards.present? %>
+  <% @game_player.game_awards.each{|game_award| %>
+    <div class="award">
+      <div>
+        <div class="djq"> </div>
+        <div><%= game_award.name %> : <%= game_award.prize_name%></div>
+      </div>
+    </div>
+  <% } %>
+<% else %>
+暂无中奖记录
+<% end %>
+</div>

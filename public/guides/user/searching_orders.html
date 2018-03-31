@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>    <html class="lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>    <html class="lt-ie9"> <![endif]-->
+<!--[if IE 9]>    <html class="ie9"> <![endif]-->
+<!--[if gt IE 9]><!--> <html lang="en" > <!--<![endif]-->
+<head>
+  <title>Searching Orders - User Guide | Spree - Ruby on Rails e-commerce platform</title>
+
+  <meta charset="utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta name="section" content="searching_orders" />
+
+<link href="/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+<link href="/shared/css/icons.css" media="screen" rel="stylesheet" type="text/css">
+<link href="/shared/css/icons-codes.css" media="screen" rel="stylesheet" type="text/css">
+
+<link href="/shared/css/skeleton.css" media="screen" rel="stylesheet" type="text/css">
+<link href="/shared/css/documentation.css" media="screen" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="/assets/stylesheets/guides.css" media="screen" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/docsearch.js/2/docsearch.min.css" />
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-migrate/1.1.1/jquery-migrate.min.js"></script>
+<script src="/assets/javascripts/css_browser_selector_dev.js" type="text/javascript"></script>
+<script src="/assets/javascripts/jquery.toc.js" type="text/javascript"></script>
+<script src="/assets/javascripts/documentation.js" type="text/javascript"></script>
+
+
+</head>
+<body class="api">
+  
+  <header id="header">
+    <div id="top-header">
+  <div class="container">
+    <div class="row">
+      <div class="two columns">
+  <a class="logo" href="http://spreecommerce.org">
+    <img src='/images/logo.png' alt="Spree Commerce - Ruby on Rails e-commerce platform" />
+  </a>
+</div>
+
+      <div class="three columns">
+  <input type="text" id="search-field" placeholder="Search..." />
+</div>
+
+      <nav id="main-menu" class="eleven columns">
+  <ul class="inline">
+    <li><a href="../api/">API</a></li>
+    <li><a href="../developer/">Developer</a></li>
+    <li><a href="../user/">User</a></li>
+    <li><a href="../release_notes/">Release Notes</a></li>
+    <li>
+      <a href="http://slack.spreecommerce.org" target="_blank">Slack</a>
+    </li>
+    <li>
+      <a href="https://heroku.com/deploy?template=https://github.com/spree/spree" target="_blank" rel="nofollow">Demo</a>
+    </li>
+  </ul>
+</nav>
+
+    </div>
+  </div>
+</div>
+
+
+    <div id="subheader">
+      <div class="container">
+        <div class="twelve columns">
+          <h1 class="page-title">Searching Orders - User Guide</h1>
+        </div>
+      </div>
+    </div>
+
+  </header>
+
+  <div class="container">
+    <section id="main-content">
+
+      <div class="twelve columns">
+        <div id="content">
+          
+<p>When you click the <strong>Orders</strong> tab on the Admin Interface, you are instantly presented with a summary of the most recent orders your store has received.</p>
+
+<p><img src="/images/user/orders/list_of_orders.jpg" alt="Initial List of Orders" /></p>
+
+<p>The list shows you the following information about each order:</p>
+
+<ul>
+  <li><strong>Completed At</strong> - The date on which the user finalized their order.</li>
+  <li><strong>Number</strong> - The Spree-generated order number.</li>
+  <li><strong>State</strong> - The current state of the order. You can learn more about <a href="order_states.html">order states in another guide</a>.</li>
+  <li><strong>Payment State</strong> - Spree tracks the state of an order’s payment separately from the state of the order itself. As payment is received, the state of the order progresses.</li>
+  <li><strong>Shipment State</strong> - Having the Shipment State pictured separately lets you quickly see which orders are paid and need to be packed and shipped, improving your store’s workflow.</li>
+  <li><strong>Customer Email</strong></li>
+  <li><strong>Total</strong> - This amount includes item totals, tax, shipping, and any promotions or adjustments made to the order.</li>
+</ul>
+
+<p>Next to each row is an “Edit” icon. Clicking this icon allows you to <a href="editing.html">make changes to an order</a>.</p>
+
+<h1 id="filtering-results">Filtering Results</h1>
+
+<p>You may not always want to see all of the most recent orders - the Spree default. You may want to view only those orders that you need to pack and ship, or only those from a particular customer. Spree gives you the flexibility to quickly find only those orders you need.</p>
+
+<p><img src="/images/user/orders/filter_options.jpg" alt="Order Filter Options" /></p>
+
+<p>You can choose one or more of the following options to narrow your order search, then click the <strong>Filter Results</strong> button to update the results.</p>
+
+<h2 id="date-range">Date Range</h2>
+
+<p>You can input a <strong>Start</strong> and/or <strong>Stop</strong> date. If you enter both, the results shown will be all orders that fall on or between those dates.</p>
+
+<p>If you input only a <strong>Start</strong> date, you will get all orders placed on or after that date.</p>
+
+<p>If you input only a <strong>Stop</strong> date, the results will include all orders placed up to and on that date.</p>
+
+<h2 id="status">Status</h2>
+
+<p>You can restrict orders to only those with a particular status. Available status options include:</p>
+
+<ul>
+  <li><strong>cart</strong> - Customer has added items to a shopping cart, but has not yet checked out.</li>
+  <li><strong>address</strong> - Customer has entered the checkout process, but has not yet completed input of shipping and/or billing address(es).</li>
+  <li><strong>delivery</strong> - Customer has completed entry of addresses, but has not yet completed selection of delivery method(s).</li>
+  <li><strong>payment</strong> - Customer has entered addresses and chosen a delivery method, but still needs to enter a payment method.</li>
+  <li><strong>confirm</strong> - All required information has been entered; customer just needs to confirm the order.</li>
+  <li><strong>complete</strong> - All required information is present, customer has confirmed the order, payment has not yet been received or processed.</li>
+  <li><strong>canceled</strong> - Either customer or store admin has chosen to cancel the order.</li>
+  <li><strong>awaiting return</strong> - Customer has elected to return products, but they have not yet been received.</li>
+  <li><strong>return</strong> - A return has been processed.</li>
+  <li><strong>resumed</strong> - A formerly canceled order has been reactivated.</li>
+</ul>
+
+<h2 id="order-number">Order Number</h2>
+
+<p>Spree generates a unique order number for each order when the first item is added to a shopping cart. Order numbers begin with the letter R, followed by 9 random numbers. If you are searching for a particular order, you can just input the entire order number and that order is all that will be returned.</p>
+
+<h2 id="email">Email</h2>
+
+<p>At this time, the filter does not allow you to search for only part of an email address. If you want to find all orders from <code>jane_doe@example.com</code>, you will have to use the full address. Inputting only “jane_doe” will result in a pop-up alert to enter a valid email address.</p>
+
+<h2 id="name">Name</h2>
+
+<p>The <strong>First Name Begins With</strong> and <strong>Last Name Begins With</strong> fields will let you filter order results based on the <em>billing address</em>, not on the shipping address. You can use any number of letters, from just an initial to the full first and/or last name.</p>
+
+<h2 id="complete">Complete</h2>
+
+<p>By default, the filter restricts results to only orders that have reached the <code>complete</code> order state. To remove this restriction, uncheck the box that is marked <strong>Only Show Complete Orders</strong>.</p>
+
+<h2 id="unfulfilled">Unfulfilled</h2>
+
+<p>If you only want to review orders that have not been shipped, you can check the box marked <strong>Show Only Unfulfilled Orders</strong>.</p>
+
+
+        </div>
+      </div>
+
+    </section>
+
+    <aside id="sidebar" class="four columns">
+  <nav id="sidebar-menu">
+    <ul>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-tutorial-menu"><i class="icon-right-open"></i></a>
+          <a href='products.html'>Products</a>
+        </h3>
+        <ul class="js-guides">
+          <li>
+            <i class="icon-dot"></i>
+            <a href='creating_products.html'>Creating Products</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='deleting_products.html'>Deleting Products</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='editing_products.html'>Editing Products</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='cloning_products.html'>Cloning Products</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='product_options.html'>Options</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='product_properties.html'>Properties</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='product_prototypes.html'>Prototypes</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='searching_products.html'>Searching Products</a>
+          </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-tutorial-menu"><i class="icon-right-open"></i></a>
+          <a href='orders.html'>Orders</a>
+        </h3>
+        <ul class="js-guides">
+          <li>
+            <i class="icon-dot"></i>
+            <a href='processing_orders.html'>Processing Orders</a>
+          </li>
+
+          <li>
+            <i class="icon-dot"></i>
+            <a href='entering_orders.html'>Entering Orders</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='editing_orders.html'>Editing Orders</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='order_states.html'>Order States</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='returning_orders.html'>Returning Orders</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='searching_orders.html'>Searching Orders</a>
+          </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-tutorial-menu"><i class="icon-right-open"></i></a>
+          <a href='users.html'>Users</a>
+        </h3>
+        <ul class="js-guides">
+          <li>
+            <i class="icon-dot"></i>
+            <a href='creating_users.html'>Creating Users</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='searching_users.html'>Searching Users</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='deleting_users.html'>Deleting Users</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='editing_users.html'>Editing Users</a>
+          </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-tutorial-menu"><i class="icon-right-open"></i></a>
+          <a href='payments.html'>Payments</a>
+        </h3>
+        <ul class="js-guides">
+          <li>
+            <i class="icon-dot"></i>
+            <a href='payment_methods.html'>Payment Methods</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='payment_states.html'>Payment States</a>
+          </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-tutorial-menu"><i class="icon-right-open"></i></a>
+          <a href='shipments.html'>Shipments</a>
+        </h3>
+        <ul class="js-guides">
+          <li>
+            <i class="icon-dot"></i>
+            <a href='shipping_categories.html'>Shipping Categories</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='zones.html'>Zones</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='calculators.html'>Calculators</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='shipping_methods.html'>Shipping Methods</a>
+          </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-tutorial-menu"><i class="icon-right-open"></i></a>
+          <a href='configuration.html'>Configuration</a>
+        </h3>
+        <ul class="js-guides">
+          <li>
+            <i class="icon-dot"></i>
+            <a href='configuring_general_settings.html'>General Settings</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='configuring_mail_methods.html'>Mail Methods</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='configuring_taxes.html'>Taxation</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='configuring_geography.html'>Zones, Countries, and States</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='payment_methods.html'>Payment Methods</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='configuring_taxonomies.html'>Taxonomies</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='shipments.html'>Shipping Methods and Categories</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='configuring_inventory.html'>Inventory Settings</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='configuring_analytics.html'>Analytic Trackers</a>
+          </li>
+          <li>
+            <i class="icon-dot"></i>
+            <a href='configuring_store_credit_categories.html'>Store Credits</a>
+          </li>
+        </ul>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-source-code-menu"><i class="icon-right-open"></i></a>
+          <a href='promotions.html'>Promotions</a>
+        </h3>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed toggle-source-code-menu"><i class="icon-right-open"></i></a>
+          <a href='reports.html'>Reports</a>
+        </h3>
+      </li>
+      <li class='js-topic'>
+        <h3>
+          <a href="#" class="js-expand-btn collapsed"><i class="icon-right-open"></i></a>
+          <a href='extensions.html'>Extensions</a>
+        </h3>
+      </li>
+    </ul>
+  </nav>
+</aside>
+
+  </div>
+
+  <footer id="main-footer">
+
+  <div class="footer-top">
+    <div class="container">
+      <div id="link-blocks" class="row">
+        <div class="link-block six columns">
+          <h3 class="block-title">Developers</h3>
+          <ul>
+            <li><a href="https://slack.spreecommerce.org" target="_blank" rel="nofollow">Slack</a></li>
+            <li><a href="https://github.com/spree-contrib" target="_blank">Extensions</a></li>
+            <li><a href="https://github.com/spree/spree/blob/master/license.md" target="_blank">License</a></li>
+          </ul>
+        </div>
+        <div class="link-block seven columns">
+          <h3 class="block-title">About Spree</h3>
+          <p>
+            <strong><a href="https://spreecommerce.org">Spree Commerce</a></strong>
+            is a complete modular, API-driven open source e-commerce solution
+            built with Ruby on Rails.
+          </p>
+          <p>
+            Guides are hosted and maintained by
+            <a href="http://sparksolutions.co" target="_blank">Spark Solutions</a>
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</footer>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-104990445-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/docsearch.js/2/docsearch.min.js"></script>
+<script type="text/javascript"> docsearch({
+apiKey: 'fb697cd2d04591b036ea172259c05ba8',
+indexName: 'spreecommerce',
+inputSelector: '#search-field',
+debug: false // Set debug to true if you want to inspect the dropdown
+});
+</script>
+
+
+  </body>
+</html>

@@ -1,0 +1,1 @@
+json.partial! "game_settings/game_setting", game_setting: @game_setting

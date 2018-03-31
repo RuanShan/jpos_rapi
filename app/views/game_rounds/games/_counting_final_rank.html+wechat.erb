@@ -1,0 +1,21 @@
+<% if @game_players.count > 0 %>
+<table class="table">
+  <tr><th class="rank">排名 </th> <th class="avatar nickname" colspan="2">昵称 </th> <th class="score">分数 </th>   </tr>
+  <% @game_players.first(@game_round.display_players).each_with_index{ |player, i|%>
+    <tr class="player<%=i%>">
+      <td> <%= content_tag :span, player.rank, class: "rank rank-#{player.rank}"  %> </td>
+      <td class="avatar">  <%= tag :img, src: player.avatar, class: 'avatar' %>  </td>
+      <td class="nickname"> <span class="nickname"> <%= player.nickname  %></span>  </td>
+      <td> <span class="score">  <%= player.score  %></span>  </td>
+    </tr>
+  <% } %>
+  <% unless @game_players.first(@game_round.display_players).index( @game_player ) %>
+  <tr  class="b_self">
+    <td class="self"> <%= content_tag :span, @game_player.rank, class: "rank rank-self"  %> </td>
+    <td class="self avatar">  <%= tag :img, src: @game_player.avatar, class: 'avatar' %>  </td>
+    <td class="self nickname"> <span class="nickname"> <%= @game_player.nickname  %></span>  </td>
+    <td class="self"> <span class="score">  <%= @game_player.score  %></span>  </td>
+  </tr>
+  <% end %>
+  </table>
+<% end %>

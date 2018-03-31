@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Game round user:</strong>
+  <%= @game_lucky_user.game_player_id %>
+</p>
+
+<p>
+  <strong>Award level:</strong>
+  <%= @game_lucky_user.award_level %>
+</p>
+
+<p>
+  <strong>Award code:</strong>
+  <%= @game_lucky_user.award_code %>
+</p>
+
+<%= link_to 'Edit', edit_game_lucky_user_path(@game_lucky_user) %> |
+<%= link_to 'Back', game_lucky_users_path %>

@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Game round:</strong>
+  <%= @game_award.game_round_id %>
+</p>
+
+<p>
+  <strong>Position:</strong>
+  <%= @game_award.position %>
+</p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @game_award.name %>
+</p>
+
+<p>
+  <strong>Prize count:</strong>
+  <%= @game_award.prize_count %>
+</p>
+
+<p>
+  <strong>Prize name:</strong>
+  <%= @game_award.prize_name %>
+</p>
+
+<%= link_to 'Edit', edit_game_award_path(@game_award) %> |
+<%= link_to 'Back', game_awards_path %>
