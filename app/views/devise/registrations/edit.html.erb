@@ -1,0 +1,102 @@
+<%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: {method: :put, role: 'form'}) do |f| %>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-offset-3 col-md-7">
+        <div class="card card-block round-box devise">
+          <h4 class="card-header devise">
+            <%= t('label.edit_user') %>
+          </h4>
+          <div class="card-body devise">
+            <%= devise_error_messages! %>
+            <div class="row form-group">
+              <label class="col-sm-4 form-control-label text-sm-right devise">
+                <%= t('label.username') %>
+              </label>
+              <div class="col-sm-8">
+                <p class="form-control-static">
+                  <%= current_user.username %>
+                </p>
+              </div>
+            </div>
+            <div class="row form-group">
+              <label class="col-sm-4 form-control-label text-sm-right devise" for="inputCurrentPassword1">
+                <%= t('label.current_password') %>
+              </label>
+              <div class="col-md-8">
+                <%= f.password_field :current_password, class: 'form-control form-control-sm', id: 'inputCurrentPassword1',
+                  placeholder: t('label.current_password').downcase %>
+                <span class="help-block devise">(need current password to confirm changes)</span>
+              </div>
+            </div>
+            <hr class="devise"/>
+            <div class="row form-group">
+              <label class="col-sm-4 form-control-label text-sm-right devise" for="inputEmail1">
+                <%= t('label.email') %>
+              </label>
+              <div class="col-sm-8">
+                <%= f.email_field :email, class: 'form-control form-control-sm', id: 'inputEmail1',
+                  placeholder: t('label.email_example').downcase,
+                  type: 'email' %>
+
+              </div>
+            </div>
+            <% if resource.pending_reconfirmation? %>
+              <div class="help-block devise text-sm-right">
+                Currently waiting confirmation for: #{resource.unconfirmed_email}
+              </div>
+            <% end %>
+            <div class="row form-group">
+              <label class="col-sm-4 form-control-label text-sm-right devise" for="inputPassword1">
+                <%= t('label.new_password') %>
+              </label>
+              <div class="col-sm-8">
+                <%= f.password_field :password, class: 'form-control form-control-sm', id: 'inputPassword1',
+                  placeholder: t('label.new_password').downcase %>
+                <span class="help-block devise">(leave blank if you don't want to change it)</span>
+              </div>
+            </div>
+            <div class="row form-group">
+              <label class="col-sm-4 form-control-label text-sm-right devise" for="inputConfirmPassword1">
+                <%= t('label.confirm_new_password') %>
+              </label>
+              <div class="col-sm-8">
+                <%= f.password_field :password_confirmation, class: 'form-control form-control-sm', id: 'inputConfirmPassword1',
+                  placeholder: t('label.confirm_new_password').downcase %>
+              </div>
+            </div>
+            <div class="row form-group">
+              <div class="col-sm-offset-4 col-sm-8">
+                <%= f.submit t('button.update'), class: 'btn btn-success' %>
+              </div>
+            </div>
+          </div>
+          <div class="card-footer text-sm-right devise">
+            <%= render 'devise/shared/links' %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
+<% if current_user %>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-offset-3 col-md-7">
+        <div class="card card-block round-box devise">
+          <h4 class="card-header devise">
+            <%= t('label.delete_user') %>
+          </h4>
+          <div class="card-body devise">
+            <p>
+              <%= t('devise.confirmations.confirm_delete_user') %>
+            </p>
+            <%= button_to t('button.delete_user', username: current_user.username), registration_path(resource_name),
+              data: {confirm: 'Are you sure?'}, method: :delete, class: 'btn btn-danger' %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
+<br/>
+<br/>
