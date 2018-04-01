@@ -7,7 +7,7 @@ module Wechatmore
     end
 
     def stub_authenticate_with_api_key
-      allow(User).to receive(:find_by).with(hash_including(:api_token)) { current_api_user }
+      allow(User).to receive(:find_by).with(hash_including(:api_key)) { current_api_user }
     end
 
     # This method can be overriden (with a let block) inside a context

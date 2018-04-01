@@ -1878,16 +1878,31 @@ ActiveRecord::Schema.define(version: 20180310114129) do
     t.integer "failed_attempts", default: 0, null: false
     t.string "unlock_token", limit: 128
     t.datetime "locked_at"
-    t.datetime "created_at"
-    t.datetime "updated_at"
     t.string "image_url"
     t.string "role", default: "guest"
     t.string "username", limit: 64, default: "", null: false
-    t.string "api_token", default: "", null: false
+    t.string "api_key", limit: 48, default: "", null: false
     t.integer "company_id"
+    t.string "password_salt", limit: 128
+    t.string "remember_token"
+    t.string "persistence_token"
+    t.string "perishable_token"
+    t.datetime "last_request_at"
+    t.integer "ship_address_id"
+    t.integer "bill_address_id"
+    t.string "authentication_token"
+    t.integer "store_id"
+    t.datetime "deleted_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["api_key"], name: "index_spree_users_on_api_key"
+    t.index ["bill_address_id"], name: "index_spree_users_on_bill_address_id"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
+    t.index ["deleted_at"], name: "index_spree_users_on_deleted_at"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+    t.index ["ship_address_id"], name: "index_spree_users_on_ship_address_id"
+    t.index ["store_id", "email"], name: "email_idx_unique", unique: true
     t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true
     t.index ["username"], name: "index_users_on_username", unique: true
   end

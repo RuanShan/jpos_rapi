@@ -10,7 +10,7 @@
 
   <body class="FUN WALL" style="background-image:url(<%= screen_background_url(@game_round)%>)">
     <%= javascript_tag defer: 'defer' do -%>
-      WechatMore.api_key = <%== current_user.try(:api_token).to_json %>
+      WechatMore.api_key = <%== current_user.try(:api_key).to_json %>
     <% end -%>
     <%= render "top_panel" %>
     <%= yield %>

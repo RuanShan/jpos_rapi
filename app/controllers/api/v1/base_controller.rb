@@ -81,7 +81,7 @@ class Api::V1::BaseController < ApplicationController
 
   def authenticate_with_api_key
      api_key = request.headers["Authorization"] || params[:api_key]
-     self.current_api_user =  User.find_by_api_token(api_key)
+     self.current_api_user =  User.find_by_api_key(api_key)
      unless self.current_api_user
        return unauthenticated!
      end

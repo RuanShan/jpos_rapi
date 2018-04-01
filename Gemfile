@@ -8,6 +8,7 @@ gem 'spree_api',   path: './spree/api'
 
 ################################################################################
   gem 'rails', '~> 5.1'
+  gem 'rack-cors', :require => 'rack/cors'
 
   gem 'mysql2'
 

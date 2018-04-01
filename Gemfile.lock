@@ -271,6 +271,7 @@ GEM
     rabl (0.13.1)
       activesupport (>= 2.3.14)
     rack (2.0.4)
+    rack-cors (1.0.2)
     rack-protection (2.0.1)
       rack
     rack-test (1.0.0)
@@ -456,6 +457,7 @@ DEPENDENCIES
   pry!
   pry-rails!
   puma (~> 3.0)!
+  rack-cors!
   rails (~> 5.1)!
   rails-adminlte!
   ransack!

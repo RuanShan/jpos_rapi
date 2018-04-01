@@ -41,5 +41,14 @@ module RailsStarter
     config.i18n.load_path += Dir[Rails.root.join('config', 'locales', '**', '*.{rb,yml}')]
     config.i18n.default_locale = :"zh-CN"
 
+
+    config.middleware.insert_before 0, Rack::Cors do
+      allow do
+        origins /localhost(:\d+)/, /127.0.0.1(:\d+)/
+        resource '/api/v1/*', :headers => :any, :methods => [:get, :post, :delete, :put, :patch, :options, :head], :credentials => true
+        resource '/users/*', :headers => :any, :methods => [:get, :post, :options], :credentials => true
+      end
+    end
+
   end
 end

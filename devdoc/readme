@@ -57,7 +57,7 @@ http://simplemodal.plasm.it
 # https://ruby-china.org/topics/25822
 
 # api 使用前提
-# 1. 創建用戶，設置用戶 api_token
+# 1. 創建用戶，設置用戶 api_key
 # 2.
 
 #api 使用

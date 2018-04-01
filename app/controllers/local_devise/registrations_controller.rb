@@ -1,5 +1,9 @@
 class LocalDevise::RegistrationsController < Devise::RegistrationsController
 
+  def show
+    send(:"authenticate_#{resource_name}!")
+    self.resource = send(:"current_#{resource_name}")
+  end
 
   private
 

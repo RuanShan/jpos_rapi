@@ -1,5 +1,4 @@
-User.where(username: 'admin')
-    .first_or_create(username: 'admin', email: 'admin@example.com', role: 'admin',
+admin =User.where(username: 'admin').first_or_create(username: 'admin', email: 'admin@example.com', role: 'admin',
                      password: '123123', password_confirmation: '123123', confirmed_at: Time.zone.now)
 User.where(username: 'manager')
     .first_or_create(username: 'manager', email: 'manager@example.com', role: 'manager',
@@ -7,6 +6,17 @@ User.where(username: 'manager')
 User.where(username: 'guest')
     .first_or_create(username: 'guest', email: 'guest@example.com', role: 'guest',
                      password: '123123', password_confirmation: '123123', confirmed_at: Time.zone.now)
-User.where(username: 'test')
+waiter = User.where(username: 'waiter')
     .first_or_create(username: 'waiter', email: 'waiter@example.com', role: 'waiter',
                      password: '123123', password_confirmation: '123123', confirmed_at: Time.zone.now)
+
+role = Spree::Role.find_or_create_by(name: 'admin')
+admin.spree_roles << role
+admin.save
+admin.generate_spree_api_key!
+
+
+role = Spree::Role.find_or_create_by(name: 'waiter')
+waiter.spree_roles << role
+waiter.save
+waiter.generate_spree_api_key!

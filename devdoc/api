@@ -2,4 +2,13 @@
 curl -i -X POST  \
   -H "Accept: application/json" \
   -d "user[username]=waiter&user[password]=123123" \
-  http://127.0.0.1:3003/users/sign_in
+  http://127.0.0.1:3001/users/sign_in
+
+2. user info
+curl -i -X GET  \
+  -H "Accept: application/json" \
+  http://127.0.0.1:3003/users/info
+
+success: response.id>0
+{"id":1,"email":"admin@example.com","created_at":"2018-03-31T17:07:07.000+08:00","updated_at":"2018-04-01T13:51:36.000+08:00","image_url":null,"role":"admin","username":"admin","api_key":"WFWOZexP7jCHNLAmUBqWoBtWBcNYjeWzQwYzWUeIj5j1/6PJmcXjqGrPUj5gfeRXRbCpk51IaNoHnlxEWm7ESA==","company_id":null}
+fail:
