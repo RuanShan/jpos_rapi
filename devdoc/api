@@ -1,10 +1,15 @@
-1. user sign in
+################################################################################
+基本规则
+1. 调用api时，即 /api 开头的请求路径， 需传入请求头 X-Spree-Token: api_key
+
+################################################################################
+1. 用户登录
 curl -i -X POST  \
   -H "Accept: application/json" \
   -d "user[username]=waiter&user[password]=123123" \
   http://127.0.0.1:3001/users/sign_in
 
-2. user info
+2. 获取用户信息
 curl -i -X GET  \
   -H "Accept: application/json" \
   http://127.0.0.1:3003/users/info
@@ -13,7 +18,7 @@ success: response.id>0
 {"id":1,"email":"admin@example.com","created_at":"2018-03-31T17:07:07.000+08:00","updated_at":"2018-04-01T13:51:36.000+08:00","image_url":null,"role":"admin","username":"admin","api_key":"WFWOZexP7jCHNLAmUBqWoBtWBcNYjeWzQwYzWUeIj5j1/6PJmcXjqGrPUj5gfeRXRbCpk51IaNoHnlxEWm7ESA==","company_id":null}
 fail:
 
-3. add order
+3. 创建订单
 POST /api/v1/orders
 {
   "order": {
@@ -23,6 +28,8 @@ POST /api/v1/orders
   }
 }
 
+# api_key 使用客户的api_key, 这样创建的订单是属于这个客户的订单
+# created_by 使用店员的id, 表示店员创建的这个订单
 curl -i -X POST  \
   -H "Accept: application/json" \
   -H "Content-Type: application/json" \
