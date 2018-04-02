@@ -1,5 +1,7 @@
+# user -> store
+#
 # company -> store
-#           store -> account
+#           store -> menu
 #
 # category -> product
 #

@@ -1495,7 +1495,7 @@ class SpreeEcommerce < ActiveRecord::Migration[5.1]
       t.string "medium_width", limit: 128
     end
 
-    create_table "spree_users", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    create_table "spree_customers", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
       t.string "encrypted_password", limit: 128
       t.string "password_salt", limit: 128
       t.string "email"

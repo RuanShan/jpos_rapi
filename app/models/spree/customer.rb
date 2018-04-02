@@ -1,5 +1,5 @@
 module Spree
-  class User < Spree::Base
+  class Customer < Spree::Base
     include UserAddress
     include UserPaymentSource
     include UserMethods

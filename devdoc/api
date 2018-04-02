@@ -12,3 +12,19 @@ curl -i -X GET  \
 success: response.id>0
 {"id":1,"email":"admin@example.com","created_at":"2018-03-31T17:07:07.000+08:00","updated_at":"2018-04-01T13:51:36.000+08:00","image_url":null,"role":"admin","username":"admin","api_key":"WFWOZexP7jCHNLAmUBqWoBtWBcNYjeWzQwYzWUeIj5j1/6PJmcXjqGrPUj5gfeRXRbCpk51IaNoHnlxEWm7ESA==","company_id":null}
 fail:
+
+3. add order
+POST /api/v1/orders
+{
+  "order": {
+    "line_items": [
+      { "variant_id": 1, "quantity": 5 }
+    ]
+  }
+}
+
+curl -i -X POST  \
+  -H "Accept: application/json" \
+  -H "Content-Type: application/json" \
+  --data '{ "order": { "line_items": [{ "variant_id": 1, "quantity": 5 }] }}' \
+  http://127.0.0.1:3001/api/v1/orders

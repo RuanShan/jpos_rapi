@@ -72,6 +72,7 @@ module Spree
     end
 
     def filter_order_items(params)
+      return params 
       return params if params[:line_items_attributes].nil? || params[:line_items_attributes][:id]
 
       line_item_ids = order.line_items.pluck(:id)

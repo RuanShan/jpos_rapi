@@ -6,4 +6,9 @@ unless Spree::Store.where(code: 'spree').exists?
     s.url               = 'example.com'
     s.mail_from_address = 'spree@example.com'
   end.save!
+
+
+  # create shipping_method for pos
+  # create payment_method for pos
+
 end
