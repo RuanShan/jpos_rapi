@@ -53,8 +53,15 @@ module Spree
         can :display, Product
         can :display, ProductProperty
         can :display, Property
-        can :create, Spree.user_class
-        can [:read, :update, :destroy], Spree.user_class, id: user.id
+
+        # waiter could create/read/update/destroy customer
+        if user.has_spree_role?('waiter')
+          can :manage, Spree.user_class
+        else
+          can :create, Spree.user_class
+          can [:read, :update, :destroy], Spree.user_class, id: user.id
+        end
+
         can :display, State
         can :display, Taxon
         can :display, Taxonomy
