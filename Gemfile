@@ -10,7 +10,7 @@ gem 'spree_api',   path: './spree/api'
   gem 'rails', '~> 5.1'
   gem 'rack-cors', :require => 'rack/cors'
 
-  gem 'mysql2'
+  gem 'mysql2', '~> 0.4.10'
 
   # Use Puma as the app server
   gem 'puma', '~> 3.0'
@@ -89,6 +89,7 @@ gem 'spree_api',   path: './spree/api'
   #gem 'wechat_open',   path: './wechat_open'
   gem 'httparty'
   gem 'rest-client'
+  gem 'tzinfo-data', platforms: [:mingw, :mswin , :x64_mingw]
 
 end
 
