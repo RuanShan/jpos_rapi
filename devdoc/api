@@ -1,4 +1,19 @@
 ################################################################################
+role and privilege
+################################################################################
+customer
+store waiter:  can create customer
+store manager
+factory manager
+company cfo
+company ceo
+system admin
+
+
+
+
+
+################################################################################
 基本规则
 1. 调用api时，即 /api 开头的请求路径， 需传入请求头 X-Spree-Token: api_key
 
@@ -13,6 +28,16 @@ curl -i -X POST  \
 curl -i -X DELETE  \
   -H "Accept: application/json" \
   http://127.0.0.1:3001/users/sign_out
+
+1.2 create customer
+curl -i -X POST  \
+  -H "Accept: application/json" \
+  -d "user[email]=waiter@getstore.cn&user[password]=123123" \
+  http://127.0.0.1:3001/api/v1/users
+
+response:
+
+{"id":5,"email":"waiter@getstore.cn","created_at":"2018-04-05T14:11:53.000+08:00","updated_at":"2018-04-05T14:11:53.000+08:00","bill_address":null,"ship_address":null}
 
 2. 获取用户信息
 curl -i -X GET  \
