@@ -7,7 +7,7 @@ capybara-*.html
 /db/*.sqlite3-journal
 /public/system
 /public/spree
-/public/spree/*.*
+/public/spree/*
 /coverage/
 /spec/tmp
 *.orig
