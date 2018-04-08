@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180310114129) do
+ActiveRecord::Schema.define(version: 20180408053417) do
 
   create_table "campaign_settings", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.integer "campaign_id"
@@ -499,6 +499,44 @@ ActiveRecord::Schema.define(version: 20180310114129) do
     t.index ["stock_location_id"], name: "index_spree_customer_returns_on_stock_location_id"
   end
 
+  create_table "spree_customers", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.string "encrypted_password", limit: 128
+    t.string "password_salt", limit: 128
+    t.string "email"
+    t.string "remember_token"
+    t.string "persistence_token"
+    t.string "reset_password_token"
+    t.string "perishable_token"
+    t.integer "sign_in_count", default: 0, null: false
+    t.integer "failed_attempts", default: 0, null: false
+    t.datetime "last_request_at"
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.string "current_sign_in_ip"
+    t.string "last_sign_in_ip"
+    t.string "login"
+    t.integer "ship_address_id"
+    t.integer "bill_address_id"
+    t.string "authentication_token"
+    t.string "unlock_token"
+    t.datetime "locked_at"
+    t.datetime "reset_password_sent_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer "site_id"
+    t.datetime "remember_created_at"
+    t.string "spree_api_key", limit: 48
+    t.datetime "deleted_at"
+    t.string "confirmation_token"
+    t.datetime "confirmed_at"
+    t.datetime "confirmation_sent_at"
+    t.index ["bill_address_id"], name: "index_spree_users_on_bill_address_id"
+    t.index ["deleted_at"], name: "index_spree_users_on_deleted_at"
+    t.index ["ship_address_id"], name: "index_spree_users_on_ship_address_id"
+    t.index ["site_id", "email"], name: "email_idx_unique", unique: true
+    t.index ["spree_api_key"], name: "index_spree_users_on_spree_api_key"
+  end
+
   create_table "spree_customizable_product_options", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer "product_customization_type_id"
     t.integer "position"
@@ -711,6 +749,7 @@ ActiveRecord::Schema.define(version: 20180310114129) do
     t.integer "user_terminal_id"
     t.decimal "taxable_adjustment_total", precision: 10, scale: 2, default: "0.0", null: false
     t.decimal "non_taxable_adjustment_total", precision: 10, scale: 2, default: "0.0", null: false
+    t.boolean "is_pos", default: false
     t.index ["approver_id"], name: "index_spree_orders_on_approver_id"
     t.index ["bill_address_id"], name: "index_spree_orders_on_bill_address_id"
     t.index ["canceler_id"], name: "index_spree_orders_on_canceler_id"
@@ -719,6 +758,7 @@ ActiveRecord::Schema.define(version: 20180310114129) do
     t.index ["considered_risky"], name: "index_spree_orders_on_considered_risky"
     t.index ["created_by_id"], name: "index_spree_orders_on_created_by_id"
     t.index ["guest_token"], name: "index_spree_orders_on_guest_token"
+    t.index ["is_pos"], name: "index_spree_orders_on_is_pos"
     t.index ["number", "store_id"], name: "index_spree_orders_on_number_and_store_id", unique: true
     t.index ["number"], name: "index_spree_orders_on_number"
     t.index ["ship_address_id"], name: "index_spree_orders_on_ship_address_id"
@@ -1743,44 +1783,6 @@ ActiveRecord::Schema.define(version: 20180310114129) do
   create_table "spree_user_terminals", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "name", limit: 64
     t.string "medium_width", limit: 128
-  end
-
-  create_table "spree_users", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.string "encrypted_password", limit: 128
-    t.string "password_salt", limit: 128
-    t.string "email"
-    t.string "remember_token"
-    t.string "persistence_token"
-    t.string "reset_password_token"
-    t.string "perishable_token"
-    t.integer "sign_in_count", default: 0, null: false
-    t.integer "failed_attempts", default: 0, null: false
-    t.datetime "last_request_at"
-    t.datetime "current_sign_in_at"
-    t.datetime "last_sign_in_at"
-    t.string "current_sign_in_ip"
-    t.string "last_sign_in_ip"
-    t.string "login"
-    t.integer "ship_address_id"
-    t.integer "bill_address_id"
-    t.string "authentication_token"
-    t.string "unlock_token"
-    t.datetime "locked_at"
-    t.datetime "reset_password_sent_at"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer "site_id"
-    t.datetime "remember_created_at"
-    t.string "spree_api_key", limit: 48
-    t.datetime "deleted_at"
-    t.string "confirmation_token"
-    t.datetime "confirmed_at"
-    t.datetime "confirmation_sent_at"
-    t.index ["bill_address_id"], name: "index_spree_users_on_bill_address_id"
-    t.index ["deleted_at"], name: "index_spree_users_on_deleted_at"
-    t.index ["ship_address_id"], name: "index_spree_users_on_ship_address_id"
-    t.index ["site_id", "email"], name: "email_idx_unique", unique: true
-    t.index ["spree_api_key"], name: "index_spree_users_on_spree_api_key"
   end
 
   create_table "spree_variants", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
