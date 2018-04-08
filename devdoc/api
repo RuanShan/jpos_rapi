@@ -24,12 +24,12 @@ curl -i -X POST  \
   -d "user[username]=waiter&user[password]=123123" \
   http://127.0.0.1:3001/users/sign_in
 
-1.1 user sign_out
+1.1 用户退出
 curl -i -X DELETE  \
   -H "Accept: application/json" \
   http://127.0.0.1:3001/users/sign_out
 
-1.2 create customer
+1.2 创建客户
 curl -i -X POST  \
   -H "Accept: application/json" \
   -d "user[email]=waiter@getstore.cn&user[password]=123123" \
@@ -52,9 +52,36 @@ fail:
 POST /api/v1/orders
 {
   "order": {
+    "is_pos": true,
     "line_items": [
       { "variant_id": 1, "quantity": 5 }
     ]
+  }
+}
+3.1 创建orders with payment method
+POST /api/v1/orders
+
+curl -i -X POST -H "Accept: application/json" -H "content-type: application/json" -d @test/json/order.json  http://127.0.0.1:3001/api/v1/orders
+请求数据示例：
+{
+  "order": {
+    "line_items": [
+      { "variant_id": 1, "quantity": 5 }
+    ]
+    "payments_attributes": [
+      {
+        "payment_method_id": "1"
+      }
+    ]
+  },
+  "payment_source": {
+    "1": {
+      "number": "4111111111111111",
+      "month": "1",
+      "year": "2017",
+      "verification_value": "123",
+      "name": "John Smith"
+    }
   }
 }
 

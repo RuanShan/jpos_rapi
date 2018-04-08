@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180310114129) do
+ActiveRecord::Schema.define(version: 20180408053417) do
 
   create_table "campaign_settings", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.integer "campaign_id"
@@ -749,6 +749,7 @@ ActiveRecord::Schema.define(version: 20180310114129) do
     t.integer "user_terminal_id"
     t.decimal "taxable_adjustment_total", precision: 10, scale: 2, default: "0.0", null: false
     t.decimal "non_taxable_adjustment_total", precision: 10, scale: 2, default: "0.0", null: false
+    t.boolean "is_pos", default: false
     t.index ["approver_id"], name: "index_spree_orders_on_approver_id"
     t.index ["bill_address_id"], name: "index_spree_orders_on_bill_address_id"
     t.index ["canceler_id"], name: "index_spree_orders_on_canceler_id"
@@ -757,6 +758,7 @@ ActiveRecord::Schema.define(version: 20180310114129) do
     t.index ["considered_risky"], name: "index_spree_orders_on_considered_risky"
     t.index ["created_by_id"], name: "index_spree_orders_on_created_by_id"
     t.index ["guest_token"], name: "index_spree_orders_on_guest_token"
+    t.index ["is_pos"], name: "index_spree_orders_on_is_pos"
     t.index ["number", "store_id"], name: "index_spree_orders_on_number_and_store_id", unique: true
     t.index ["number"], name: "index_spree_orders_on_number"
     t.index ["ship_address_id"], name: "index_spree_orders_on_ship_address_id"
