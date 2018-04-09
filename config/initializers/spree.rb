@@ -13,10 +13,13 @@ Spree.config do |config|
   # Example:
   # Uncomment to stop tracking inventory levels in the application
   # config.track_inventory_levels = false
-  config.default_country_id = 41 #china
+  config.default_country_id = 48 #china
   config.currency = 'CNY'
 end
 
 Spree.user_class = "User"
 
 Spree::Api::Config.requires_authentication = false
+
+#https://guides.spreecommerce.org/developer/shipments.html
+Rails.application.config.spree.stock_splitters = []

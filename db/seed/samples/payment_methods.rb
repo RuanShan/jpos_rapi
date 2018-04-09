@@ -1,7 +1,7 @@
 Spree::Gateway::Bogus.where(
   name: "Credit Card",
   description: "Bogus payment gateway.",
-  active: false
+  active: true
 ).first_or_create!
 
 Spree::PaymentMethod::Check.where(

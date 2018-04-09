@@ -120,6 +120,7 @@ module Spree
 
     before_create :create_token
     before_create :link_by_email
+    before_create :associate_store_address, if: :is_pos?
     before_update :homogenize_line_item_currencies, if: :currency_changed?
 
     with_options presence: true do
@@ -639,6 +640,10 @@ module Spree
     end
 
     private
+    def associate_store_address
+      self.bill_address = Store.address
+      self.ship_address = Store.address
+    end
 
     def link_by_email
       self.email = user.email if user

@@ -102,7 +102,7 @@ products = [
 default_shipping_category = Spree::ShippingCategory.find_by!(name: "Default")
 
 products.each do |product_attrs|
-  Spree::Config[:currency] = "USD"
+  Spree::Config[:currency] = "CNY"
   eur_price = product_attrs.delete(:eur_price)
 
   new_product = Spree::Product.where(name: product_attrs[:name],
@@ -121,4 +121,4 @@ products.each do |product_attrs|
   end
 end
 
-Spree::Config[:currency] = "USD"
+Spree::Config[:currency] = "CNY"

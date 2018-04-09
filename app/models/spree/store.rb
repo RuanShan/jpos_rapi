@@ -1,6 +1,7 @@
 module Spree
   class Store < Spree::Base
     has_many :orders, class_name: 'Spree::Order'
+    has_one :address, class_name: 'Spree::Address'
 
     with_options presence: true do
       validates :code, uniqueness: { case_sensitive: false, allow_blank: true }

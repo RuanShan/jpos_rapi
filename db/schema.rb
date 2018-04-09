@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180408053417) do
+ActiveRecord::Schema.define(version: 20180409053417) do
 
   create_table "campaign_settings", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.integer "campaign_id"
@@ -356,10 +356,12 @@ ActiveRecord::Schema.define(version: 20180408053417) do
     t.integer "city_id", default: 0
     t.string "city_name"
     t.integer "district_id", default: 0
+    t.bigint "store_id"
     t.index ["country_id"], name: "index_spree_addresses_on_country_id"
     t.index ["firstname"], name: "index_addresses_on_firstname"
     t.index ["lastname"], name: "index_addresses_on_lastname"
     t.index ["state_id"], name: "index_spree_addresses_on_state_id"
+    t.index ["store_id"], name: "index_spree_addresses_on_store_id"
   end
 
   create_table "spree_adjustments", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
