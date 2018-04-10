@@ -27,6 +27,8 @@ module Spree
 
     def include?(address)
       return false unless address
+      # address is belongs_to store, it is a pos order, hard code 'is_pos'
+      return true if address.store_id>0 && pos?
       zones.includes(:zone_members).any? do |zone|
         zone.include?(address)
       end
@@ -60,6 +62,10 @@ module Spree
 
     def backend?
       display_on.in?(['both', 'back_end'])
+    end
+
+    def pos?
+      self.code == 'pos'
     end
 
     def at_least_one_shipping_category

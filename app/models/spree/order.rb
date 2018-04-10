@@ -641,8 +641,9 @@ module Spree
 
     private
     def associate_store_address
-      self.bill_address = Store.address
-      self.ship_address = Store.address
+      Rails.logger.debug "in associate_store_address"
+      self.bill_address = Store.current.address
+      self.ship_address = Store.current.address
     end
 
     def link_by_email

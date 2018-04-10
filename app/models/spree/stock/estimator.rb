@@ -12,6 +12,7 @@ module Spree
 
       def shipping_rates(package, shipping_method_filter = ShippingMethod::DISPLAY_ON_FRONT_END)
         rates = calculate_shipping_rates(package, shipping_method_filter)
+        Rails.logger.debug "rates======================== #{rates.inspect}"
         choose_default_shipping_rate(rates)
         sort_shipping_rates(rates)
       end
@@ -29,9 +30,10 @@ module Spree
       end
 
       def calculate_shipping_rates(package, ui_filter)
+Rails.logger.debug "-------------------before shipping_methods "
         shipping_methods(package, ui_filter).map do |shipping_method|
           cost = shipping_method.calculator.compute(package)
-
+Rails.logger.debug "shipping_method=#{shipping_method.id}, cost=#{cost} "
           next unless cost
           shipping_method.shipping_rates.new(
             cost: gross_amount(cost, taxation_options_for(shipping_method)),
@@ -57,6 +59,7 @@ module Spree
       end
 
       def shipping_methods(package, display_filter)
+Rails.logger.debug "----------------package.shipping_methods=#{package.shipping_methods}--------------"
         package.shipping_methods.select do |ship_method|
           calculator = ship_method.calculator
 

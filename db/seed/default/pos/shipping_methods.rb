@@ -4,7 +4,8 @@ shipping_category = Spree::ShippingCategory.find_or_create_by!(name: 'Default')
 shipping_methods = [
   {
     name: "PointOfSale",
-    display_on: 'back_end',
+    display_on: 'both', # Estimator.shipping_rates required
+    code: 'pos'
     shipping_categories: [shipping_category]
   }]
 
