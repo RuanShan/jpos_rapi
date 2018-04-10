@@ -639,6 +639,31 @@ module Spree
       end
     end
 
+    ############################################################################
+    # handle pos
+    ############################################################################
+    def complete_via_pos
+      create_proposed_shipments
+
+      # lock all adjustments (coupon promotions, etc.)
+      all_adjustments.each(&:close)
+
+      # update payment and shipment(s) states, and save
+      updater.update_payment_state
+      shipments.each do |shipment|
+        shipment.update!(self)
+        shipment.finalize!
+      end
+
+      updater.update_shipment_state
+      save!
+      updater.run_hooks
+
+      touch :completed_at
+    end
+
+
+
     private
     def associate_store_address
       Rails.logger.debug "in associate_store_address"
