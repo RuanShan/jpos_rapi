@@ -1,3 +1,11 @@
+# 记录商品的处理流程
+# pending : 店里收到商品
+# ready_for_factory: 准备发货到工厂
+# processing: 工厂处理
+# ready_for_store: 准备发货到店里
+# ready: 可以交给客户了
+# shipped: 已交付客户
+
 require 'ostruct'
 
 module Spree
@@ -78,6 +86,31 @@ module Spree
           next_state:     transition.to,
           name:           'shipment'
         )
+      end
+
+      #########################################################################
+      # For POS
+      #########################################################################
+      #准备发到工厂
+      event :prepare_for_factory do
+        transition to: :ready_for_factory, from: %i(pending ready)
+      end
+      #进入工厂
+      event :admit do
+        transition to: :processing, from: %i(ready_for_factory)
+      end
+      #准备发到店铺
+      event :prepare_for_store do
+        transition to: :ready_for_store, from: %i(processing)
+      end
+      #店铺接收
+      event :approve do
+        transition to: :ready, from: %i(ready_for_store)
+      end
+
+      event :rollback do
+        #                
+        transition   prepare_for_factory: :pending, ready_for_store: :processing
       end
     end
 

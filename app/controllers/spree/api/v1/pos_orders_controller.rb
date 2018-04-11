@@ -11,6 +11,7 @@ module Spree
 
           @order = Spree::Order.create!(user: current_api_user, store: current_store, is_pos: true)
           if @order.contents.update_cart(order_params)
+            @order.complete_via_pos
             respond_with(@order, default_template: :show, status: 201)
           else
             invalid_resource!(@order)

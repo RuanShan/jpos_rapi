@@ -11,9 +11,11 @@ module Spree
 
         def split_by_lineitem(package)
           if package.order.is_pos?
-            package.contents.map(&method(:build_package))
+            package.contents.map{| content_item|
+              build_package( [content_item] )
+            }
           else
-            package
+            [package]
           end
         end
 
