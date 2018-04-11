@@ -50,8 +50,8 @@ module Spree
       remove_transition from: :delivery, to: :confirm
     end
 
-    self.whitelisted_ransackable_associations = %w[shipments user promotions bill_address ship_address line_items]
-    self.whitelisted_ransackable_attributes = %w[completed_at email number state payment_state shipment_state total considered_risky]
+    self.whitelisted_ransackable_associations = %w[shipments user promotions bill_address ship_address line_items store]
+    self.whitelisted_ransackable_attributes = %w[store_id completed_at email number state payment_state shipment_state total considered_risky]
 
     attr_reader :coupon_code
     attr_accessor :temporary_address, :temporary_credit_card

@@ -97,6 +97,19 @@ curl -i -X POST  \
   --data '{ "order": { "line_items": [{ "variant_id": 1, "quantity": 5 }] }}' \
   http://127.0.0.1:3001/api/v1/orders
 
+3.2 get orders
+This action is only accessible by an admin user.
+
+file:///var/www/apps/jpos_rapi/public/guides/api/orders.html
+GET /api/v1/orders
+
+curl -i -g \
+  -H "X-Spree-Token: 36b3845f5390d0ce1ee3a055465be49bdd1109ed6dc0ff15" \
+  -H "Accept: application/json" \
+  http://127.0.0.1:3001/api/v1/orders?q[store_id_eq]=1
+
+getOrderList
+
 4. create customer
 api_key of user has to be waiter or admin
 
