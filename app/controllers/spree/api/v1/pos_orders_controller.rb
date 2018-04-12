@@ -27,7 +27,9 @@ module Spree
 
         def index
           authorize! :index, Order
-          @orders = Order.ransack(params[:q]).result.page(params[:page]).per(params[:per_page])
+          @q = Order.ransack(params[:q]).result
+          @total_count = @q.count
+          @orders = @q.includes(:user).page(params[:page]).per(params[:per_page])
           respond_with(@orders)
         end
 

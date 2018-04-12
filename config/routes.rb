@@ -70,6 +70,7 @@ scope module: 'spree' do
       resources :orders, concerns: :order_routes
 
       post '/pos_orders', to: 'pos_orders#create', as: 'create_pos_orders'
+      get '/pos_orders', to: 'pos_orders#index', as: 'pos_orders'
 
       resources :zones
       resources :countries, only: [:index, :show] do
