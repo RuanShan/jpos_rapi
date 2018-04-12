@@ -53,6 +53,30 @@ module Spree
           end
         end
 
+        ########################################################################
+        # for POS
+        ########################################################################
+        def update_all
+          authorize! :index, Order
+          pos_order_numbers = params[:pos_order_numbers]
+
+          @orders = Order.where number: pos_order_numbers
+          @orders.update_all order_params
+
+          Rails.logger.debug( @orders )
+
+          respond_with(@orders)
+        end
+
+        def next_shipment_step
+          find_order(true)
+          authorize! :update, @order, order_token
+
+          @order.next!
+          respond_with(@order, default_template: :show)
+
+        end
+
         def current
           @order = find_current_order
           if @order

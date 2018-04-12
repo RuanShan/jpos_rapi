@@ -71,6 +71,7 @@ scope module: 'spree' do
 
       post '/pos_orders', to: 'pos_orders#create', as: 'create_pos_orders'
       get '/pos_orders', to: 'pos_orders#index', as: 'pos_orders'
+      put '/pos_orders', to: 'pos_orders#update_all', as: 'update_all_pos_orders'
 
       resources :zones
       resources :countries, only: [:index, :show] do
@@ -85,6 +86,7 @@ scope module: 'spree' do
         end
 
         member do
+          put :next
           put :ready
           put :ship
           put :add

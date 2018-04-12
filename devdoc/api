@@ -118,3 +118,6 @@ api_key of user has to be waiter or admin
 
 5. get taxons
 http://localhost:3001/api/v1/taxonomies/1/taxons
+
+6. update shipments state
+PUT /api/v1/shipments/H123456789/next

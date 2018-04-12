@@ -109,9 +109,17 @@ module Spree
       end
 
       event :rollback do
-        #                
-        transition   prepare_for_factory: :pending, ready_for_store: :processing
+        #
+        transition prepare_for_factory: :pending, ready_for_store: :processing
       end
+
+      event :next do
+        transition pending: :ready_for_factory,  ready_for_factory: :processing,
+          processing: :ready_for_store, ready_for_store: :ready, ready: :shipped
+      end
+
+      after_transition :on => :next, :do => :after_next
+
     end
 
     self.whitelisted_ransackable_attributes = ['number']
@@ -146,6 +154,10 @@ module Spree
     # shipped    if already shipped (ie. does not change the state)
     # ready      all other cases
     def determine_state(order)
+      if order.is_pos?
+
+      end
+
       return 'canceled' if order.canceled?
       return 'pending' unless order.can_ship?
       return 'pending' if inventory_units.any? &:backordered?
@@ -408,6 +420,10 @@ module Spree
     end
 
     private
+    def after_next
+      order.updater.update_shipment_state
+      order.save!
+    end
 
     def after_ship
       ShipmentHandler.factory(self).perform
