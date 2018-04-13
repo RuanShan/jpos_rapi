@@ -4,7 +4,7 @@ module Spree
       class PosOrdersController < OrdersController
         skip_before_action :authenticate_user, only: :apply_coupon_code
 
-        before_action :find_order, except: [:create, :mine, :current, :index, :update]
+        before_action :find_order, except: [:create, :mine, :current, :index, :update, :all_step]
 
         def create
           authorize! :create, Spree::Order
@@ -59,13 +59,13 @@ module Spree
         def all_step
           authorize! :index, Order
           pos_order_numbers = params[:order_numbers]
-          forward = params[:forward].blank? || !!params[:forward]
+          forward = params[:forward].nil? || !!params[:forward]
+          Rails.logger.debug "forward1=#{forward} "
+
           @orders = Order.where number: pos_order_numbers
           @orders.each{ |order|
             order.one_step!(forward)
           }
-
-          Rails.logger.debug( @orders )
 
           respond_with(@orders)
         end

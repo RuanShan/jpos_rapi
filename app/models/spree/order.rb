@@ -392,6 +392,7 @@ module Spree
     end
     #商品流程，进行下一步处理
     def one_step!( forward=true)
+Rails.logger.debug "forward=#{forward} "      
       if forward
         shipments.each { |shipment| shipment.next!(self) }
       else

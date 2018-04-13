@@ -109,18 +109,24 @@ curl -i -g \
   http://127.0.0.1:3001/api/v1/orders?q[store_id_eq]=1
 
 3.3 更新一个订单状态
-curl -i -g \
+curl -i -g -X PUT \
   -H "X-Spree-Token: 36b3845f5390d0ce1ee3a055465be49bdd1109ed6dc0ff15" \
   -H "Accept: application/json" \
-  http://127.0.0.1:3001/api/v1/pos_orders/R176235818/one_step
-
+  http://127.0.0.1:3001/api/v1/pos_orders/R095401088/one_step
 
 3.4 更新订单的单个产品流程状态 shipment
-curl -i -g \
+curl -i -g  -X PUT  \
   -H "X-Spree-Token: 36b3845f5390d0ce1ee3a055465be49bdd1109ed6dc0ff15" \
   -H "Accept: application/json" \
   http://127.0.0.1:3001/api/v1/pos_shipments/H31557434127/one_step
 
+3.5 更新duo个订单状态
+curl -i -g -X PUT \
+  -H "X-Spree-Token: 36b3845f5390d0ce1ee3a055465be49bdd1109ed6dc0ff15" \
+  -H "Accept: application/json" \
+  -H "Content-Type: application/json" \
+  --data '{ "order_numbers":["R095401088"] }' \
+  http://127.0.0.1:3001/api/v1/pos_orders/all_step
 
 4. create customer
 api_key of user has to be waiter or admin
