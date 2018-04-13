@@ -56,23 +56,26 @@ module Spree
         ########################################################################
         # for POS
         ########################################################################
-        def update_all
+        def all_step
           authorize! :index, Order
-          pos_order_numbers = params[:pos_order_numbers]
-
+          pos_order_numbers = params[:order_numbers]
+          forward = params[:forward].blank? || !!params[:forward]
           @orders = Order.where number: pos_order_numbers
-          @orders.update_all order_params
+          @orders.each{ |order|
+            order.one_step!(forward)
+          }
 
           Rails.logger.debug( @orders )
 
           respond_with(@orders)
         end
-
-        def next_shipment_step
+        #订单的下一步流程
+        def one_step
           find_order(true)
           authorize! :update, @order, order_token
+          forward = params[:forward].blank? || !!params[:forward]
 
-          @order.next!
+          @order.one_step!(forward)
           respond_with(@order, default_template: :show)
 
         end

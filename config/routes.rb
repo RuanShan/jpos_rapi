@@ -71,7 +71,10 @@ scope module: 'spree' do
 
       post '/pos_orders', to: 'pos_orders#create', as: 'create_pos_orders'
       get '/pos_orders', to: 'pos_orders#index', as: 'pos_orders'
-      put '/pos_orders', to: 'pos_orders#update_all', as: 'update_all_pos_orders'
+      put '/pos_orders/all_step', to: 'pos_orders#all_step', as: 'all_step_pos_orders'
+      put '/pos_orders/:id/one_step', to: 'pos_orders#one_step', as: 'one_step_pos_orders'
+      put '/pos_shipments/:id/one_step', to: 'pos_shipments#one_step', as: 'one_step_pos_shipments'
+
 
       resources :zones
       resources :countries, only: [:index, :show] do

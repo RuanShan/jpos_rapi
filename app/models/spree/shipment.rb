@@ -108,7 +108,7 @@ module Spree
         transition to: :ready, from: %i(ready_for_store)
       end
 
-      event :rollback do
+      event :draw_back do
         #
         transition prepare_for_factory: :pending, ready_for_store: :processing
       end
@@ -118,7 +118,7 @@ module Spree
           processing: :ready_for_store, ready_for_store: :ready, ready: :shipped
       end
 
-      after_transition :on => :next, :do => :after_next
+      #after_transition :on => [:next, :draw_back], :do => :after_step
 
     end
 
@@ -127,6 +127,13 @@ module Spree
     extend DisplayMoney
     money_methods :cost, :discounted_cost, :final_price, :item_cost
     alias display_amount display_cost
+
+    def make_step_and_order( forward= true )
+      forward ? next! : draw_back!
+
+      order.updater.update_shipment_state
+      order.save!
+    end
 
     def add_shipping_method(shipping_method, selected = false)
       shipping_rates.create(shipping_method: shipping_method, selected: selected, cost: cost)
@@ -420,10 +427,6 @@ module Spree
     end
 
     private
-    def after_next
-      order.updater.update_shipment_state
-      order.save!
-    end
 
     def after_ship
       ShipmentHandler.factory(self).perform

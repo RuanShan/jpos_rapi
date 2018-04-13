@@ -97,7 +97,7 @@ curl -i -X POST  \
   --data '{ "order": { "line_items": [{ "variant_id": 1, "quantity": 5 }] }}' \
   http://127.0.0.1:3001/api/v1/orders
 
-3.2 get orders
+3.2 取得订单,支持条件查询，分页
 This action is only accessible by an admin user.
 
 file:///var/www/apps/jpos_rapi/public/guides/api/orders.html
@@ -108,7 +108,19 @@ curl -i -g \
   -H "Accept: application/json" \
   http://127.0.0.1:3001/api/v1/orders?q[store_id_eq]=1
 
-getOrderList
+3.3 更新一个订单状态
+curl -i -g \
+  -H "X-Spree-Token: 36b3845f5390d0ce1ee3a055465be49bdd1109ed6dc0ff15" \
+  -H "Accept: application/json" \
+  http://127.0.0.1:3001/api/v1/pos_orders/R176235818/one_step
+
+
+3.4 更新订单的单个产品流程状态 shipment
+curl -i -g \
+  -H "X-Spree-Token: 36b3845f5390d0ce1ee3a055465be49bdd1109ed6dc0ff15" \
+  -H "Accept: application/json" \
+  http://127.0.0.1:3001/api/v1/pos_shipments/H31557434127/one_step
+
 
 4. create customer
 api_key of user has to be waiter or admin

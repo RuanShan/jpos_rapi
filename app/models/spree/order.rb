@@ -390,6 +390,16 @@ module Spree
       updater.update_shipment_state
       save!
     end
+    #商品流程，进行下一步处理
+    def one_step!( forward=true)
+      if forward
+        shipments.each { |shipment| shipment.next!(self) }
+      else
+        shipments.each { |shipment| shipment.draw_back!(self) }
+      end
+      updater.update_shipment_state
+      save!
+    end
 
     def deliver_order_confirmation_email
       OrderMailer.confirm_email(id).deliver_later

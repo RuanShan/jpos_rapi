@@ -4,8 +4,12 @@ module Spree
       class PosShipmentsController < Spree::Api::BaseController
         before_action :find_and_update_shipment, only: [:ship, :ready, :add, :remove]
 
-        def next
-          @shipment.next!
+        # 只修改订单中一个商品的流程
+        #
+        def one_step
+          forward = params[:forward].blank? || !!params[:forward]
+          @shipment.make_step_and_order forward
+
           respond_with(@shipment, default_template: :show)
         end
 
