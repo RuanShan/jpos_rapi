@@ -65,7 +65,7 @@ POST /api/v1/orders
 3.1 创建orders with payment method
 POST /api/v1/orders
 
-curl -i -X POST -H "Accept: application/json" -H "content-type: application/json" -d @test/json/order.json  http://127.0.0.1:3001/api/v1/orders
+curl -i -X POST -H "Accept: application/json" -H "content-type: application/json" -d @test/json/pay_order.json  http://127.0.0.1:3001/api/v1/pos_orders
 请求数据示例：
 {
   "order": {

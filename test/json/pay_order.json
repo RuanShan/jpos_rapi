@@ -2,8 +2,9 @@
   "order": {
     "is_pos": true,
     "line_items": [
-      { "variant_id": 1, "quantity": 5 },
-      { "variant_id": 2, "quantity": 2 }
+      { "variant_id": 1, "quantity": 1, "group_number": "2018041418010001" },
+      { "variant_id": 1, "quantity": 2, "group_number": "2018041418010001" },
+      { "variant_id": 2, "quantity": 2, "group_number": "2018041418010002" }
     ],
     "payments_attributes": [
       {

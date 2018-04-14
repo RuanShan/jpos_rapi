@@ -2,7 +2,7 @@
   "order": {
     "is_pos": true,
     "line_items": [
-      { "variant_id": 1, "quantity": 5 }
+      { "variant_id": 1, "quantity": 1 },
     ]
   }
 }

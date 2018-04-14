@@ -392,7 +392,7 @@ module Spree
     end
     #商品流程，进行下一步处理
     def one_step!( forward=true)
-Rails.logger.debug "forward=#{forward} "      
+Rails.logger.debug "forward=#{forward} "
       if forward
         shipments.each { |shipment| shipment.next!(self) }
       else
@@ -654,7 +654,7 @@ Rails.logger.debug "forward=#{forward} "
     # handle pos
     ############################################################################
     def complete_via_pos
-      create_proposed_shipments
+      create_pos_shipments
 
       # lock all adjustments (coupon promotions, etc.)
       all_adjustments.each(&:close)
@@ -665,7 +665,6 @@ Rails.logger.debug "forward=#{forward} "
         shipment.update!(self)
         shipment.finalize!
       end
-
       updater.update_shipment_state
       save!
       updater.run_hooks
@@ -673,7 +672,11 @@ Rails.logger.debug "forward=#{forward} "
       touch :completed_at
     end
 
+    def create_pos_shipments
 
+      self.shipments = Spree::Stock::PosCoordinator.new(self).shipments
+
+    end
 
     private
     def associate_store_address

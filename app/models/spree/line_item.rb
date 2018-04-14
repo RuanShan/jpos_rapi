@@ -1,6 +1,8 @@
 module Spree
   class LineItem < Spree::Base
     before_validation :ensure_valid_quantity
+    before_validation :ensure_valid_group_number
+
 
     with_options inverse_of: :line_items do
       belongs_to :order, class_name: 'Spree::Order', touch: true
@@ -111,6 +113,15 @@ module Spree
 
     def ensure_valid_quantity
       self.quantity = 0 if quantity.nil? || quantity < 0
+    end
+
+    def ensure_valid_group_number
+      self.group_number ||= generate_group_number
+    end
+
+    def generate_group_number
+      #"2018-04-14T15:39:30+08:00" =>"20180414154023"
+      DateTime.current.to_s(:number) + ("%04d" % order.store_id)
     end
 
     def update_price_from_modifier(currency, opts)

@@ -15,6 +15,7 @@ Spree.config do |config|
   # config.track_inventory_levels = false
   config.default_country_id = 48 #china
   config.currency = 'CNY'
+  config.track_inventory_levels = false
 end
 
 Spree.user_class = "User"
