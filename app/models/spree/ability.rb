@@ -45,7 +45,8 @@ module Spree
         can :create, Order
         if user.has_spree_role?('waiter')
           can :manage, Order
-        else            
+          can :read, Store
+        else
           can :read, Order do |order, token|
             order.user == user || order.guest_token && token == order.guest_token
           end
