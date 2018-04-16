@@ -3,8 +3,8 @@ require 'spree/order/checkout'
 module Spree
   class Order < Spree::Base
     PAYMENT_STATES = %w(balance_due credit_owed failed paid void)
+    POS_SHIPMENT_PROCESS_STATES = %w(pending ready_for_factory processing ready_for_store ready)
     SHIPMENT_STATES = %w(backorder canceled partial pending ready shipped ready_for_factory processing ready_for_store)
-
     include Spree::Order::Checkout
     include Spree::Order::CurrencyUpdater
     include Spree::Order::Payments

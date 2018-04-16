@@ -128,6 +128,14 @@ curl -i -g -X PUT \
   --data '{ "order_numbers":["R095401088"] }' \
   http://127.0.0.1:3001/api/v1/pos_orders/all_step
 
+3.6 order count on states
+curl -i -g \
+  -H "X-Spree-Token: 36b3845f5390d0ce1ee3a055465be49bdd1109ed6dc0ff15" \
+  -H "Accept: application/json" \
+  -H "Content-Type: application/json" \
+  http://127.0.0.1:3001/api/v1/pos_orders/count
+
+
 4. create customer
 api_key of user has to be waiter or admin
 

@@ -4,7 +4,7 @@ module Spree
       class PosOrdersController < OrdersController
         skip_before_action :authenticate_user, only: :apply_coupon_code
 
-        before_action :find_order, except: [:create, :mine, :current, :index, :update, :all_step]
+        before_action :find_order, except: [:create, :mine, :current, :index, :update, :all_step, :count]
 
         def create
           authorize! :create, Spree::Order
@@ -87,6 +87,16 @@ module Spree
           else
             head :no_content
           end
+        end
+
+        # count order on param states
+        # states - is an array of state
+        def count
+          @order_counts = {}
+          Order::POS_SHIPMENT_PROCESS_STATES.each{|state|
+            @order_counts[state] = Order.where( shipment_state: state ).count
+          }
+          @order_counts
         end
 
         def mine
