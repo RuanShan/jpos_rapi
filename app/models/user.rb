@@ -54,6 +54,7 @@ class User < ActiveRecord::Base
   self.whitelisted_ransackable_attributes = %w[id email username]
 
   alias_attribute :spree_api_key, :api_key
+  alias_attribute :name, :username # order.user_name required
 
   def self.admin_created?
     User.admin.count > 0

@@ -142,6 +142,8 @@ module Spree
     delegate :update_totals, :persist_totals, to: :updater
     delegate :merge!, to: :merger
     delegate :firstname, :lastname, to: :bill_address, prefix: true, allow_nil: true
+    delegate :name, to: :user, prefix: true, allow_nil: true
+    delegate :name, to: :store, prefix: true, allow_nil: true
 
     class_attribute :update_hooks
     self.update_hooks = Set.new
