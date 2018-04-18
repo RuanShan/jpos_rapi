@@ -111,7 +111,7 @@ module Spree
       event :draw_back do
         #
         transition ready_for_factory: :pending, ready_for_store: :processing,
-          shipped: :ready, ready: :pending
+          processing: :ready_for_factory, shipped: :ready, ready: :pending
       end
 
       event :next do
