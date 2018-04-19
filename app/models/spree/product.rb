@@ -103,6 +103,8 @@ module Spree
     validates :slug, presence: true, uniqueness: { allow_blank: true }
     validate :discontinue_on_must_be_later_than_available_on, if: -> { available_on && discontinue_on }
 
+    enum type_id: { standard: 1, prepaid_card: 2, once_card: 3 }
+
     attr_accessor :option_values_hash
 
     accepts_nested_attributes_for :product_properties, allow_destroy: true, reject_if: ->(pp) { pp[:property_name].blank? }

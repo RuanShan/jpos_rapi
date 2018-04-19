@@ -29,6 +29,12 @@ company has_many users
 数据说明
 users:  用户表，系统用户, 客户, 都保存在这个表
 
-
 1. 在订单表中，需要知道哪个店员，添加了哪个客户的订单
 2. spree api 中使用 spree.user_class 表的 api_key
+
+
+实现充值（打折）卡和次卡的功能
+1. 各种卡实际上也是商品，具有价格，购买时，产生订单和支付。
+
+添加 product_types 表，表示产品的类型，有充值卡，服务和一般商品
+在 products表，添加type_id,表示这个产品的类型
