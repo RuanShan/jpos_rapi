@@ -103,7 +103,7 @@ module Spree
     validates :slug, presence: true, uniqueness: { allow_blank: true }
     validate :discontinue_on_must_be_later_than_available_on, if: -> { available_on && discontinue_on }
 
-    enum type_id: { standard: 1, prepaid_card: 2, once_card: 3 }
+    enum type_id: { standard: 1, service: 2, once_card: 3, prepaid_card: 4}
 
     attr_accessor :option_values_hash
 
@@ -256,6 +256,10 @@ module Spree
 
     def category
       taxons.joins(:taxonomy).find_by(spree_taxonomies: { name: Spree.t(:taxonomy_categories_name) })
+    end
+
+    def is_card?
+      !!( type =~ /Card/ )
     end
 
     private

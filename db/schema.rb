@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180414053417) do
+ActiveRecord::Schema.define(version: 20180418115306) do
 
   create_table "campaign_settings", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.integer "campaign_id"
@@ -429,6 +429,35 @@ ActiveRecord::Schema.define(version: 20180414053417) do
     t.index ["calculable_id", "calculable_type"], name: "index_spree_calculators_on_calculable_id_and_calculable_type"
     t.index ["deleted_at"], name: "index_spree_calculators_on_deleted_at"
     t.index ["id", "type"], name: "index_spree_calculators_on_id_and_type"
+  end
+
+  create_table "spree_card_transactions", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
+    t.decimal "amount", precision: 6, scale: 2
+    t.bigint "card_id"
+    t.bigint "order_id"
+    t.bigint "line_item_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["card_id"], name: "index_spree_card_transactions_on_card_id"
+    t.index ["line_item_id"], name: "index_spree_card_transactions_on_line_item_id"
+    t.index ["order_id"], name: "index_spree_card_transactions_on_order_id"
+  end
+
+  create_table "spree_cards", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
+    t.bigint "user_id"
+    t.string "code", null: false
+    t.integer "variant_id", null: false
+    t.integer "line_item_id"
+    t.string "email", null: false
+    t.string "name"
+    t.text "note"
+    t.datetime "sent_at"
+    t.decimal "discount", precision: 10
+    t.decimal "current_value", precision: 8, scale: 2, null: false
+    t.decimal "original_value", precision: 8, scale: 2, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_spree_cards_on_user_id"
   end
 
   create_table "spree_cities", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -987,6 +1016,8 @@ ActiveRecord::Schema.define(version: 20180414053417) do
     t.string "meta_title"
     t.string "summary"
     t.datetime "discontinue_on"
+    t.integer "type_id", default: 1, null: false
+    t.string "type", limit: 24
     t.index ["available_on"], name: "index_spree_products_on_available_on"
     t.index ["deleted_at"], name: "index_spree_products_on_deleted_at"
     t.index ["discontinue_on"], name: "index_spree_products_on_discontinue_on"

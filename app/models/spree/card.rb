@@ -1,7 +1,7 @@
 require 'spree/core/validators/email'
 
 module Spree
-  class GiftCard < ActiveRecord::Base
+  class Card < ActiveRecord::Base
     include CalculatedAdjustments
 
     UNACTIVATABLE_ORDER_STATES = ["complete", "awaiting_return", "returned"]

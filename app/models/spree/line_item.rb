@@ -4,6 +4,12 @@ module Spree
     before_validation :ensure_valid_group_number
 
 
+
+    with_options if: :is_card? do
+      validates :card, presence: true
+      validates :quantity,  numericality: { less_than_or_equal_to: 1 }, allow_nil: true
+    end
+
     with_options inverse_of: :line_items do
       belongs_to :order, class_name: 'Spree::Order', touch: true
       belongs_to :variant, class_name: 'Spree::Variant'
@@ -11,6 +17,8 @@ module Spree
     belongs_to :tax_category, class_name: 'Spree::TaxCategory'
 
     has_one :product, through: :variant
+    # create card once order a card
+    has_one :card, dependent: :destroy
 
     has_many :adjustments, as: :adjustable, dependent: :destroy
     has_many :inventory_units, inverse_of: :line_item
@@ -37,6 +45,8 @@ module Spree
     delegate :name, :description, :sku, :should_track_inventory?, :product, :options_text, to: :variant
     delegate :brand, :category, to: :product
     delegate :tax_zone, to: :order
+
+    delegate :is_card?, to: :product
 
     attr_accessor :target_shipment
 
