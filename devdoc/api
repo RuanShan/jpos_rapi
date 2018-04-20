@@ -62,6 +62,8 @@ POST /api/v1/orders
     ]
   }
 }
+curl -i -X POST -H "Accept: application/json" -H "content-type: application/json" -d @test/json/order.json  http://127.0.0.1:3001/api/v1/pos_orders
+
 3.1 创建orders with payment method
 POST /api/v1/orders
 
@@ -154,3 +156,11 @@ http://localhost:3001/api/v1/taxonomies/1/taxons
 
 6. update shipments state
 PUT /api/v1/shipments/H123456789/next
+
+6.1 get shipment
+GET /api/v1/pos_shipments/H123456789/
+curl -i \
+  -H "X-Spree-Token: 36b3845f5390d0ce1ee3a055465be49bdd1109ed6dc0ff15" \
+  -H "Accept: application/json" \
+  -H "Content-Type: application/json" \
+  http://127.0.0.1:3001/api/v1/pos_shipments/H25384585360
