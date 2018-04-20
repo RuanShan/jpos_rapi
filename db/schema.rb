@@ -669,6 +669,7 @@ ActiveRecord::Schema.define(version: 20180418115306) do
     t.decimal "non_taxable_adjustment_total", precision: 10, scale: 2, default: "0.0", null: false
     t.string "group_number", limit: 24
     t.integer "group_position"
+    t.integer "card_id"
     t.index ["order_id"], name: "index_spree_line_items_on_order_id"
     t.index ["tax_category_id"], name: "index_spree_line_items_on_tax_category_id"
     t.index ["variant_id"], name: "index_spree_line_items_on_variant_id"

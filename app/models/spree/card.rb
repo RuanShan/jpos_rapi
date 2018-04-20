@@ -1,6 +1,6 @@
 module Spree
   class Card < ActiveRecord::Base
-    include CalculatedAdjustments
+    #include CalculatedAdjustments
 
     UNACTIVATABLE_ORDER_STATES = ["complete", "awaiting_return", "returned"]
 

@@ -1,6 +1,6 @@
 if Selling::PrepaidCard.count == 0
   puts "\tCreating default PrepaidCard..."
-  shipping_category = Spree::ShippingCategory.create(name: 'Gift Card')
+  shipping_category = Spree::ShippingCategory.find_or_create_by(name: 'Gift Card')
   product = Selling::PrepaidCard.new(available_on: Time.now, name: "Gift Card", slug: 'gift-card', price: 0, shipping_category_id: shipping_category.id)
   option_type = Spree::OptionType.new(name: "is-gift-card", presentation: "Value")
   product.option_types << option_type
@@ -12,7 +12,7 @@ if Selling::PrepaidCard.count == 0
     variant.option_values << option_value
     product.variants << variant
   end
-  product.save
+  product.save!
 
 end
 
@@ -24,7 +24,7 @@ unless Spree::PaymentMethod::PrepaidCard.all.exists?
     display_on: :both
   )
 end
-# 
+#
 # unless Spree::PaymentMethod::AnnualCard.all.exists?
 #   Spree::PaymentMethod::AnnualCard.create(
 #     name: "AnnualCard",

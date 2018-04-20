@@ -30,7 +30,7 @@ module Spree
 
     before_destroy :destroy_inventory_units
 
-    before_create :create_associated_card, if: :is_card?
+    before_create :associate_with_card, if: :is_card?
 
     after_save :update_inventory
     after_save :update_adjustments
@@ -114,10 +114,13 @@ module Spree
     end
 
     private
-    def create_associated_card
+    def associate_with_card
+Rails.logger.debug "----------start associate_with_card----------"
+Rails.logger.debug "self.card=#{self.card.inspect} self.card_id=#{self.card_id}"
       if is_card?
-        create_card( variant: variant, user: self.user)
+          self.card ||= create_card!( variant: variant, user: self.user, name: variant.descriptive_name)
       end
+Rails.logger.debug "----------end associate_with_card----------"
     end
 
     def ensure_valid_quantity

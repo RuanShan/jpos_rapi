@@ -136,9 +136,11 @@ curl -i -g \
   http://127.0.0.1:3001/api/v1/pos_orders/count
 
 3.7 创建充值卡订单
+'load db/seed/default/pos/card.rb'
 curl -i -X POST -H "Accept: application/json" -H "content-type: application/json" -d @test/json/card_order.json  http://127.0.0.1:3001/api/v1/pos_orders
 
 3.8 对购买的充值卡充值
+curl -i -X POST -H "Accept: application/json" -H "content-type: application/json" -d @test/json/exist_card_order.json  http://127.0.0.1:3001/api/v1/pos_orders
 
 
 4. create customer
