@@ -1,26 +1,20 @@
-require 'spree/core/validators/email'
-
 module Spree
   class Card < ActiveRecord::Base
     include CalculatedAdjustments
 
     UNACTIVATABLE_ORDER_STATES = ["complete", "awaiting_return", "returned"]
-    AUTHORIZE_ACTION = 'authorize'
-    CAPTURE_ACTION = 'capture'
-    VOID_ACTION = 'void'
-    CREDIT_ACTION = 'credit'
 
     belongs_to :variant
-    belongs_to :line_item
+    belongs_to :user
 
-    has_many :transactions, class_name: 'Spree::GiftCardTransaction'
+    has_many :line_items, class_name: 'Spree::LineItem'
+    has_many :transactions, class_name: 'Spree::CardTransaction'
 
-    validates :current_value, :name, :original_value, :code, :email, presence: true
+    validates :current_value, :name, :original_value, :code, :user,  presence: true
 
     with_options allow_blank: true do
       validates :code, uniqueness: { case_sensitive: false }
       validates :current_value, numericality: { greater_than_or_equal_to: 0 }
-      validates :email, email: true
     end
 
     validate :amount_remaining_is_positive, if: :current_value
@@ -41,99 +35,15 @@ module Spree
     end
 
     def amount_remaining
-      current_value - authorized_amount
-    end
-
-    def authorize(amount, options = {})
-      authorization_code = options[:action_authorization_code]
-      if authorization_code
-        if transactions.find_by(action: AUTHORIZE_ACTION, authorization_code: authorization_code)
-          return true
-        else
-          errors.add(:base, Spree.t('gift_card_payment_method.unable_to_capture', auth_code: authorization_code))
-          return false
-        end
-      else
-        authorization_code = generate_authorization_code
-      end
-
-      if valid_authorization?(amount)
-        transaction = self.transactions.build(action: AUTHORIZE_ACTION, amount: amount, authorization_code: authorization_code)
-        transaction.order = Spree::Order.find_by(number: options[:order_number]) if options[:order_number]
-        self.authorized_amount = self.authorized_amount + amount
-        self.save!
-        authorization_code
-      else
-        false
-      end
-    end
-
-    def valid_authorization?(amount)
-      if amount_remaining.to_d < amount.to_d
-        errors.add(:base, Spree.t('gift_card_payment_method.insufficient_funds'))
-        false
-      else
-        true
-      end
-    end
-
-    def capture(amount, authorization_code, options = {})
-      return false unless authorize(amount, action_authorization_code: authorization_code)
-
-      if amount <= authorized_amount
-        transaction = self.transactions.build(action: CAPTURE_ACTION, amount: amount, authorization_code: authorization_code)
-        transaction.order = Spree::Order.find_by(number: options[:order_number]) if options[:order_number]
-        self.authorized_amount = self.authorized_amount - amount
-        self.current_value = self.current_value - amount
-        self.save!
-        authorization_code
-      else
-        errors.add(:base, Spree.t('gift_card_payment_method.insufficient_authorized_amount'))
-        false
-      end
-    end
-
-    def void(authorization_code, options = {})
-      if auth_transaction = transactions.find_by(action: AUTHORIZE_ACTION, authorization_code: authorization_code)
-        amount = auth_transaction.amount
-        transaction = self.transactions.build(action: VOID_ACTION, amount: amount, authorization_code: authorization_code)
-        transaction.order = Spree::Order.find_by(number: options[:order_number]) if options[:order_number]
-        self.authorized_amount = self.authorized_amount - amount
-        self.save!
-        true
-      else
-        errors.add(:base, Spree.t('gift_card_payment_method.unable_to_void', auth_code: authorization_code))
-        false
-      end
-    end
-
-    def credit(amount, authorization_code, options = {})
-      capture_transaction = transactions.find_by(action: CAPTURE_ACTION, authorization_code: authorization_code)
-      if capture_transaction && amount <= capture_transaction.amount
-        transaction = self.transactions.build(action: CREDIT_ACTION, amount: amount, authorization_code: authorization_code)
-        transaction.order = Spree::Order.find_by(number: options[:order_number]) if options[:order_number]
-        self.current_value = self.current_value + amount
-        self.save!
-        true
-      else
-        errors.add(:base, Spree.t('gift_card_payment_method.unable_to_credit', auth_code: authorization_code))
-        false
-      end
+      current_value
     end
 
     # Calculate the amount to be used when creating an adjustment
     def compute_amount(calculable)
-      self.calculator.compute(calculable, self)
+      0
+      #self.calculator.compute(calculable, self)
     end
 
-    def debit(amount, order = nil)
-      raise 'Cannot debit gift card by amount greater than current value.' if (amount_remaining - amount.to_f.abs) < 0
-      transaction = self.transactions.build
-      transaction.amount = amount
-      transaction.order  = order if order
-      self.current_value = self.current_value - amount.abs
-      self.save
-    end
 
     def price
       self.line_item ? self.line_item.price * self.line_item.quantity : self.variant.price
@@ -147,7 +57,7 @@ module Spree
     end
 
     def calculator
-      @calculator ||= Spree::Calculator::GiftCardCalculator.new
+      #@calculator ||= Spree::Calculator::GiftCardCalculator.new
     end
 
     def actions

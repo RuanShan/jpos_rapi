@@ -120,7 +120,7 @@ curl -i -g  -X PUT  \
   -H "Accept: application/json" \
   http://127.0.0.1:3001/api/v1/pos_shipments/H31557434127/one_step
 
-3.5 更新duo个订单状态
+3.5 更新多个订单状态
 curl -i -g -X PUT \
   -H "X-Spree-Token: 36b3845f5390d0ce1ee3a055465be49bdd1109ed6dc0ff15" \
   -H "Accept: application/json" \
@@ -128,12 +128,17 @@ curl -i -g -X PUT \
   --data '{ "order_numbers":["R095401088"] }' \
   http://127.0.0.1:3001/api/v1/pos_orders/all_step
 
-3.6 order count on states
+3.6 查询各个状态的订单数量
 curl -i -g \
   -H "X-Spree-Token: 36b3845f5390d0ce1ee3a055465be49bdd1109ed6dc0ff15" \
   -H "Accept: application/json" \
   -H "Content-Type: application/json" \
   http://127.0.0.1:3001/api/v1/pos_orders/count
+
+3.7 创建充值卡订单
+curl -i -X POST -H "Accept: application/json" -H "content-type: application/json" -d @test/json/card_order.json  http://127.0.0.1:3001/api/v1/pos_orders
+
+3.8 对购买的充值卡充值
 
 
 4. create customer
