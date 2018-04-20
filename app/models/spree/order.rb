@@ -659,7 +659,7 @@ Rails.logger.debug "forward=#{forward} "
       create_pos_shipments
 
       # lock all adjustments (coupon promotions, etc.)
-      all_adjustments.each(&:close)
+      #all_adjustments.each(&:close)
 
       # update payment and shipment(s) states, and save
       updater.update_payment_state

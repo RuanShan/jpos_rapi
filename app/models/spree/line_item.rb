@@ -115,12 +115,10 @@ module Spree
 
     private
     def associate_with_card
-Rails.logger.debug "----------start associate_with_card----------"
-Rails.logger.debug "self.card=#{self.card.inspect} self.card_id=#{self.card_id}"
       if is_card?
           self.card ||= create_card!( variant: variant, user: self.user, name: variant.descriptive_name)
+          self.card.transactions.create!( order: order, amount: self.price)
       end
-Rails.logger.debug "----------end associate_with_card----------"
     end
 
     def ensure_valid_quantity

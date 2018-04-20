@@ -9,7 +9,11 @@ module Spree
         def create
           authorize! :create, Spree::Order
 
-          @order = Spree::Order.create!(user: current_api_user, store: current_store, is_pos: true)
+          # enable shipment_state
+          order_attributes = params.require(:order).permit(permitted_checkout_attributes)
+          order_attributes[:user] = current_api_user
+          order_attributes[:store] = current_store
+          @order = Spree::Order.create!(order_attributes)
           if @order.contents.update_cart(order_params)
             @order.complete_via_pos
             respond_with(@order, default_template: :show, status: 201)
