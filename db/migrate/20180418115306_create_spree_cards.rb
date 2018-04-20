@@ -13,6 +13,9 @@ class CreateSpreeCards < ActiveRecord::Migration[5.1]
       t.decimal :original_value, :precision => 8, :scale => 2, :null => false
       t.timestamps
     end
+    #spree_payment 保存商品支付记录，
+    #用户购买打折卡，充值打折卡或使用打折卡支付，会导致卡的余额变化，
+    #spree_card_transactions，用户记录每一笔余额变化，可能有正也有负
     create_table :spree_card_transactions do |t|
       t.decimal :amount, scale: 2, precision: 6
       t.belongs_to :card
