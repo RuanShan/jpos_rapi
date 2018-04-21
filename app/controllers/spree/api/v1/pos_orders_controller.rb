@@ -43,11 +43,6 @@ module Spree
           respond_with(@order)
         end
 
-        def find_by_group_number
-          @line_item_group = Spree::LineItemGroup.find_by!(number: params[:group_number])
-          @order = @line_item_group.order
-          respond_with(@order, default_template: :show)
-        end
 
         def update
           find_order(true)
@@ -67,6 +62,13 @@ module Spree
         ########################################################################
         # for POS
         ########################################################################
+
+        def find_by_group_number
+          @line_item_group = Spree::LineItemGroup.find_by!(number: params[:group_number])
+          @order = @line_item_group.order
+          respond_with(@order, default_template: :show)
+        end
+
         def all_step
           authorize! :index, Order
           pos_order_numbers = params[:order_numbers]
