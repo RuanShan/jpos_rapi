@@ -129,13 +129,6 @@ module Spree
     money_methods :cost, :discounted_cost, :final_price, :item_cost
     alias display_amount display_cost
 
-    def make_step_and_order( forward= true )
-      forward ? next! : draw_back!
-
-      order.updater.update_shipment_state
-      order.save!
-    end
-
     def add_shipping_method(shipping_method, selected = false)
       shipping_rates.create(shipping_method: shipping_method, selected: selected, cost: cost)
     end

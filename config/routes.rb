@@ -74,8 +74,12 @@ scope module: 'spree' do
       get '/pos_orders/count', to: 'pos_orders#count', as: 'count_pos_orders'
       put '/pos_orders/all_step', to: 'pos_orders#all_step', as: 'all_step_pos_orders'
       put '/pos_orders/:id/one_step', to: 'pos_orders#one_step', as: 'one_step_pos_orders'
-      get '/pos_shipments/:id', to: 'pos_shipments#show', as: 'pos_shipment'
-      put '/pos_shipments/:id/one_step', to: 'pos_shipments#one_step', as: 'one_step_pos_shipments'
+
+      resources :line_item_groups do
+        member do
+          put :one_step
+        end
+      end
 
 
       resources :zones

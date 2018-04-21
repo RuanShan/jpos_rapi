@@ -1,7 +1,7 @@
 module Spree
   class OrderUpdater
     attr_reader :order
-    delegate :payments, :line_items, :adjustments, :all_adjustments, :shipments, :update_hooks, :quantity, to: :order
+    delegate :payments, :line_items, :line_item_groups, :adjustments, :all_adjustments, :shipments, :update_hooks, :quantity, to: :order
 
     def initialize(order)
       @order = order
@@ -115,6 +115,13 @@ module Spree
       )
     end
 
+    def update_group_state
+
+        group_states =  line_item_groups.states.uniq
+        #only all line_item_groups has same state, then update order.group_state
+        order.group_state =  group_states.first if group_states.size > 1
+    end
+
     # Updates the +shipment_state+ attribute according to the following logic:
     #
     # shipped   when all Shipments are in the "shipped" state
@@ -134,7 +141,7 @@ module Spree
         order.shipment_state = if shipment_states.size > 1
           # multiple shiment states means it's most likely partially shipped
           # david: for pos order, do not change it any more
-                                 order.shipment_state #'partial'
+                                 'partial'
                                else
           # will return nil if no shipments are found
                                  shipment_states.first

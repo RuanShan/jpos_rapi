@@ -9,11 +9,12 @@ module Spree
         def create
           authorize! :create, Spree::Order
 
-          # enable shipment_state
+          # enable group_state
           order_attributes = params.require(:order).permit(permitted_checkout_attributes)
           order_attributes[:user] = current_api_user
           order_attributes[:store] = current_store
           @order = Spree::Order.create!(order_attributes)
+
           if @order.contents.update_cart(order_params)
             @order.complete_via_pos
             respond_with(@order, default_template: :show, status: 201)
@@ -97,8 +98,8 @@ module Spree
         # states - is an array of state
         def count
           @order_counts = {}
-          Order::POS_SHIPMENT_PROCESS_STATES.each{|state|
-            @order_counts[state] = Order.where( shipment_state: state ).count
+          Order::GROUP_STATES.each{|state|
+            @order_counts[state] = Order.where( group_state: state ).count
           }
           @order_counts
         end

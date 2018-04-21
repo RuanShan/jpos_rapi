@@ -3,7 +3,7 @@ require 'spree/order/checkout'
 module Spree
   class Order < Spree::Base
     PAYMENT_STATES = %w(balance_due credit_owed failed paid void)
-    POS_SHIPMENT_PROCESS_STATES = %w(pending ready_for_factory processing ready_for_store ready)
+    GROUP_STATES = %w(pending ready_for_factory processing ready_for_store ready)
     SHIPMENT_STATES = %w(backorder canceled partial pending ready shipped ready_for_factory processing ready_for_store)
     include Spree::Order::Checkout
     include Spree::Order::CurrencyUpdater
@@ -105,6 +105,12 @@ module Spree
         pluck(:state).uniq
       end
     end
+    has_many :line_item_groups, dependent: :destroy, inverse_of: :order do
+      def states
+        pluck(:state).uniq
+      end
+    end
+
     has_many :shipment_adjustments, through: :shipments, source: :adjustments
 
     accepts_nested_attributes_for :line_items
@@ -394,13 +400,13 @@ module Spree
     end
     #商品流程，进行下一步处理
     def one_step!( forward=true)
-Rails.logger.debug "forward=#{forward} "
+
       if forward
-        shipments.each { |shipment| shipment.next!(self) }
+        line_item_groups.each { |item| item.next!(self) }
       else
-        shipments.each { |shipment| shipment.draw_back!(self) }
+        line_item_groups.each { |item| item.draw_back!(self) }
       end
-      updater.update_shipment_state
+      updater.update_group_state
       save!
     end
 
@@ -656,7 +662,8 @@ Rails.logger.debug "forward=#{forward} "
     # handle pos
     ############################################################################
     def complete_via_pos
-      create_pos_shipments
+
+      create_line_item_groups
 
       # lock all adjustments (coupon promotions, etc.)
       #all_adjustments.each(&:close)
@@ -674,10 +681,22 @@ Rails.logger.debug "forward=#{forward} "
       touch :completed_at
     end
 
-    def create_pos_shipments
+    def create_line_item_groups
+      groups_map = {}
 
-      self.shipments = Spree::Stock::PosCoordinator.new(self).shipments
-
+      line_items.each{|line_item|
+        if groups_map[line_item.group_number].blank?
+          groups_map[line_item.group_number] = Spree::LineItemGroup.create(
+            order: self,
+            number: line_item.group_number,
+            cost: line_item.price
+          )
+        else
+          groups_map[line_item.group_number].cost += line_item.price
+          groups_map[line_item.group_number].save
+        end
+      }
+      groups_map.values
     end
 
     private

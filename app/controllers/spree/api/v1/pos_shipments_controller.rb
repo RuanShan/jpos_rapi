@@ -38,38 +38,6 @@ module Spree
           @variant ||= Spree::Variant.unscoped.find(params.fetch(:variant_id))
         end
 
-        def mine_includes
-          {
-            order: {
-              bill_address: {
-                state: {},
-                country: {},
-              },
-              ship_address: {
-                state: {},
-                country: {},
-              },
-              adjustments: {},
-              payments: {
-                order: {},
-                payment_method: {},
-              },
-            },
-            inventory_units: {
-              line_item: {
-                product: {},
-                variant: {},
-              },
-              variant: {
-                product: {},
-                default_price: {},
-                option_values: {
-                  option_type: {},
-                },
-              },
-            },
-          }
-        end
       end
     end
   end

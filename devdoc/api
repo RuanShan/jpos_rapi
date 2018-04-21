@@ -116,11 +116,11 @@ curl -i -g -X PUT \
   -H "Accept: application/json" \
   http://127.0.0.1:3001/api/v1/pos_orders/R095401088/one_step
 
-3.4 更新订单的单个产品流程状态 shipment
+3.4 更新订单的单个产品流程状态 line_item_group
 curl -i -g  -X PUT  \
   -H "X-Spree-Token: 36b3845f5390d0ce1ee3a055465be49bdd1109ed6dc0ff15" \
   -H "Accept: application/json" \
-  http://127.0.0.1:3001/api/v1/pos_shipments/H31557434127/one_step
+  http://127.0.0.1:3001/api/v1/line_item_groups/H31557434127/one_step
 
 3.5 更新多个订单状态
 curl -i -g -X PUT \
