@@ -4,7 +4,7 @@ module Spree
       class PosOrdersController < OrdersController
         skip_before_action :authenticate_user, only: :apply_coupon_code
 
-        before_action :find_order, except: [:create, :mine, :current, :index, :update, :all_step, :count]
+        before_action :find_order, except: [:create, :mine, :current, :index, :update, :all_step, :count, :find_by_group_number]
 
         def create
           authorize! :create, Spree::Order
@@ -41,6 +41,12 @@ module Spree
         def show
           authorize! :show, @order, order_token
           respond_with(@order)
+        end
+
+        def find_by_group_number
+          @line_item_group = Spree::LineItemGroup.find_by!(number: params[:group_number])
+          @order = @line_item_group.order
+          respond_with(@order, default_template: :show)
         end
 
         def update

@@ -6,7 +6,6 @@ module Spree
 
 
         def show
-          @line_item_group = Spree::LineItemGroup.accessible_by(current_ability, :read).includes(mine_includes).find_by!(number: params[:id])
 
           respond_with(@line_item_group, default_template: :show)
         end
@@ -34,42 +33,6 @@ module Spree
           @line_item_group = Spree::LineItemGroup.accessible_by(current_ability, :update).readonly(false).find_by!(number: params[:id])
         end
 
-        def variant
-          @variant ||= Spree::Variant.unscoped.find(params.fetch(:variant_id))
-        end
-
-        def mine_includes
-          {
-            order: {
-              bill_address: {
-                state: {},
-                country: {},
-              },
-              ship_address: {
-                state: {},
-                country: {},
-              },
-              adjustments: {},
-              payments: {
-                order: {},
-                payment_method: {},
-              },
-            },
-            inventory_units: {
-              line_item: {
-                product: {},
-                variant: {},
-              },
-              variant: {
-                product: {},
-                default_price: {},
-                option_values: {
-                  option_type: {},
-                },
-              },
-            },
-          }
-        end
       end
     end
   end
