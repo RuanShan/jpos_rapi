@@ -43,6 +43,7 @@ class User < ActiveRecord::Base
   after_destroy :scramble_email_and_password
 
   has_many :orders
+  belongs_to :store, class_name: 'Spree::Store'
 
   before_validation :set_login
 

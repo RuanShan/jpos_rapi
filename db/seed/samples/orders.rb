@@ -4,6 +4,7 @@ orders = []
 orders << Spree::Order.where(
   number: "R123456789",
   email: "spree@example.com").first_or_create! do |order|
+    order.store = Spree::Store.first
     order.item_total = 150.95
     order.adjustment_total = 150.95
     order.total = 301.90
@@ -12,6 +13,7 @@ orders << Spree::Order.where(
 orders << Spree::Order.where(
   number: "R987654321",
   email: "spree@example.com").first_or_create! do |order|
+    order.store = Spree::Store.first
     order.item_total = 15.95
     order.adjustment_total = 15.95
     order.total = 31.90

@@ -50,8 +50,8 @@ module Spree
       remove_transition from: :delivery, to: :confirm
     end
 
-    self.whitelisted_ransackable_associations = %w[shipments user promotions bill_address ship_address line_items store]
-    self.whitelisted_ransackable_attributes = %w[store_id completed_at email number state payment_state shipment_state total considered_risky]
+    self.whitelisted_ransackable_associations = %w[shipments user promotions bill_address ship_address line_items line_item_groups store]
+    self.whitelisted_ransackable_attributes = %w[store_id completed_at email number state payment_state group_state shipment_state total considered_risky]
 
     attr_reader :coupon_code
     attr_accessor :temporary_address, :temporary_credit_card
@@ -670,11 +670,12 @@ module Spree
 
       # update payment and shipment(s) states, and save
       updater.update_payment_state
-      shipments.each do |shipment|
-        shipment.update!(self)
-        shipment.finalize!
-      end
-      updater.update_shipment_state
+      #shipments.each do |shipment|
+      #  shipment.update!(self)
+      #  shipment.finalize!
+      #end
+      #updater.update_shipment_state
+      updater.update_group_state
       save!
       updater.run_hooks
 
@@ -701,6 +702,7 @@ module Spree
 
     private
     def associate_store_address
+      self.store_id ||= user.store_id
       Rails.logger.debug "in associate_store_address"
       self.bill_address = Store.current.address
       self.ship_address = Store.current.address

@@ -448,7 +448,6 @@ ActiveRecord::Schema.define(version: 20180418115306) do
     t.string "code", null: false
     t.integer "variant_id", null: false
     t.integer "line_item_id"
-    t.string "email", null: false
     t.string "name"
     t.text "note"
     t.datetime "sent_at"
@@ -650,6 +649,17 @@ ActiveRecord::Schema.define(version: 20180418115306) do
     t.index ["variant_id"], name: "index_inventory_units_on_variant_id"
   end
 
+  create_table "spree_line_item_groups", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.string "name"
+    t.string "number"
+    t.decimal "cost", precision: 10, scale: 2, default: "0.0"
+    t.datetime "shipped_at"
+    t.string "state"
+    t.integer "order_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "spree_line_items", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer "variant_id"
     t.integer "order_id"
@@ -784,6 +794,7 @@ ActiveRecord::Schema.define(version: 20180418115306) do
     t.decimal "taxable_adjustment_total", precision: 10, scale: 2, default: "0.0", null: false
     t.decimal "non_taxable_adjustment_total", precision: 10, scale: 2, default: "0.0", null: false
     t.boolean "is_pos", default: false
+    t.string "group_state", limit: 24
     t.index ["approver_id"], name: "index_spree_orders_on_approver_id"
     t.index ["bill_address_id"], name: "index_spree_orders_on_bill_address_id"
     t.index ["canceler_id"], name: "index_spree_orders_on_canceler_id"

@@ -17,6 +17,10 @@ child line_items: :line_items do
   extends 'spree/api/v1/line_items/show'
 end
 
+child line_item_groups: :line_item_groups do
+  extends 'spree/api/v1/line_item_groups/show'
+end
+
 child payments: :payments do
   attributes *payment_attributes
 

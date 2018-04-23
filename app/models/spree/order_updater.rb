@@ -119,7 +119,7 @@ module Spree
 
         group_states =  line_item_groups.states.uniq
         #only all line_item_groups has same state, then update order.group_state
-        order.group_state =  group_states.first if group_states.size > 1
+        order.group_state =  group_states.first if group_states.size == 1
     end
 
     # Updates the +shipment_state+ attribute according to the following logic:
