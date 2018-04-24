@@ -80,6 +80,9 @@ scope module: 'spree' do
         member do
           put :one_step
         end
+        collection do
+          put :all_step
+        end
       end
 
 

@@ -70,7 +70,7 @@ module Spree
         shipment.state_changes.create!(
           previous_state: transition.from,
           next_state:     transition.to,
-          name:           'shipment'
+          name:           'line_item_group'
         )
       end
 

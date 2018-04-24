@@ -73,7 +73,6 @@ module Spree
           authorize! :index, Order
           pos_order_numbers = params[:order_numbers]
           forward = params[:forward].nil? || !!params[:forward]
-          Rails.logger.debug "forward1=#{forward} "
 
           @orders = Order.where number: pos_order_numbers
           @orders.each{ |order|

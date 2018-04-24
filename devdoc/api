@@ -160,8 +160,13 @@ api_key of user has to be waiter or admin
 5. get taxons
 http://localhost:3001/api/v1/taxonomies/1/taxons
 
-6. update shipments state
-PUT /api/v1/shipments/H123456789/next
+6. update line_item_group state
+PUT /api/v1/line_item_groups/2018041418010001/one_step
+curl -i -X PUT \
+  -H "X-Spree-Token: 1d00bad6675be472529436ad03d06ee4d6addb67f35ef316" \
+  -H "Accept: application/json" \
+  -H "Content-Type: application/json" \
+  http://127.0.0.1:3001/api/v1/line_item_groups/2018041418010001/one_step
 
 6.1 get line_item_group
 GET /api/v1/pos_shipments/2018041418010001/
@@ -170,3 +175,12 @@ curl -i \
   -H "Accept: application/json" \
   -H "Content-Type: application/json" \
   http://127.0.0.1:3001/api/v1/line_item_groups/2018041418010001
+
+6.2 update several line_item_group state
+  PUT /api/v1/line_item_groups/all_step?numbers=[2018041418010001]
+  curl -i -g -X PUT \
+    -H "X-Spree-Token: 1d00bad6675be472529436ad03d06ee4d6addb67f35ef316" \
+    -H "Accept: application/json" \
+    -H "Content-Type: application/json" \
+    --data '{"numbers":[1,2]}' \
+    http://127.0.0.1:3001/api/v1/line_item_groups/all_step
