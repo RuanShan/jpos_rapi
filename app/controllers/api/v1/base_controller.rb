@@ -34,7 +34,7 @@ class Api::V1::BaseController < ApplicationController
   protect_from_forgery with: :null_session
 
   # disable cookies (no set-cookies header in response)
-  before_action :destroy_session
+  #before_action :destroy_session
   #before_action :authenticate_with_api_key
 
   # disable the CSRF token
