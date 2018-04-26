@@ -125,6 +125,14 @@ scope module: 'spree' do
 
       resources :users do
         resources :credit_cards, only: [:index]
+        member do
+          get :cards
+        end
+      end
+      resources :cards do
+        member do
+          get :transactions
+        end
       end
 
       resources :properties

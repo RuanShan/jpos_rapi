@@ -2,6 +2,8 @@ module Spree
   module Api
     module ApiHelpers
       ATTRIBUTES = [
+        :card_attributes,
+        :card_transaction_attributes,
         :product_attributes,
         :product_property_attributes,
         :variant_attributes,
@@ -49,6 +51,13 @@ module Spree
         required_fields.delete('slug')
         required_fields
       end
+
+      @@card_attributes = [
+        :id, :user_id, :code, :current_value, :name
+      ]
+      @@card_transaction_attributes = [
+        :id, :card_id, :order_id, :amount, :created_at
+      ]
 
       @@product_attributes = [
         :id, :name, :description, :price, :display_price, :available_on,

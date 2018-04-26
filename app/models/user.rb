@@ -42,7 +42,8 @@ class User < ActiveRecord::Base
   acts_as_paranoid
   after_destroy :scramble_email_and_password
 
-  has_many :orders
+  has_many :orders, class_name: 'Spree::Order'
+  has_many :cards, class_name: 'Spree::Card'
   belongs_to :store, class_name: 'Spree::Store'
   belongs_to :sale_day, ->{ today }, class_name: 'SaleDay', primary_key: 'seller_id', foreign_key: 'created_by_id'
 
