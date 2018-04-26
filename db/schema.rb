@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180418115306) do
+ActiveRecord::Schema.define(version: 20180425115306) do
 
   create_table "campaign_settings", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.integer "campaign_id"
@@ -295,6 +295,30 @@ ActiveRecord::Schema.define(version: 20180418115306) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "sale_days", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.string "seller_type"
+    t.integer "seller_id"
+    t.date "effective_on"
+    t.integer "order_count", default: 0, null: false
+    t.integer "new_customer_count", default: 0, null: false
+    t.integer "new_card_count", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["seller_type", "seller_id", "effective_on"], name: "index_sale_days_on_seller_type_and_seller_id_and_effective_on"
+  end
+
+  create_table "sale_months", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.string "seller_type"
+    t.integer "seller_id"
+    t.date "effective_on"
+    t.integer "order_count", default: 0, null: false
+    t.integer "new_customer_count", default: 0, null: false
+    t.integer "new_card_count", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["seller_type", "seller_id", "effective_on"], name: "index_sale_months_on_seller_type_and_seller_id_and_effective_on"
+  end
+
   create_table "sessions", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "session_id", null: false
     t.text "data"
@@ -448,6 +472,7 @@ ActiveRecord::Schema.define(version: 20180418115306) do
     t.string "code", null: false
     t.integer "variant_id", null: false
     t.integer "line_item_id"
+    t.string "email", null: false
     t.string "name"
     t.text "note"
     t.datetime "sent_at"
@@ -456,6 +481,7 @@ ActiveRecord::Schema.define(version: 20180418115306) do
     t.decimal "original_value", precision: 8, scale: 2, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "created_by_id"
     t.index ["user_id"], name: "index_spree_cards_on_user_id"
   end
 
@@ -649,17 +675,6 @@ ActiveRecord::Schema.define(version: 20180418115306) do
     t.index ["variant_id"], name: "index_inventory_units_on_variant_id"
   end
 
-  create_table "spree_line_item_groups", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.string "name"
-    t.string "number"
-    t.decimal "cost", precision: 10, scale: 2, default: "0.0"
-    t.datetime "shipped_at"
-    t.string "state"
-    t.integer "order_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "spree_line_items", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer "variant_id"
     t.integer "order_id"
@@ -679,7 +694,6 @@ ActiveRecord::Schema.define(version: 20180418115306) do
     t.decimal "non_taxable_adjustment_total", precision: 10, scale: 2, default: "0.0", null: false
     t.string "group_number", limit: 24
     t.integer "group_position"
-    t.integer "card_id"
     t.index ["order_id"], name: "index_spree_line_items_on_order_id"
     t.index ["tax_category_id"], name: "index_spree_line_items_on_tax_category_id"
     t.index ["variant_id"], name: "index_spree_line_items_on_variant_id"
@@ -794,7 +808,6 @@ ActiveRecord::Schema.define(version: 20180418115306) do
     t.decimal "taxable_adjustment_total", precision: 10, scale: 2, default: "0.0", null: false
     t.decimal "non_taxable_adjustment_total", precision: 10, scale: 2, default: "0.0", null: false
     t.boolean "is_pos", default: false
-    t.string "group_state", limit: 24
     t.index ["approver_id"], name: "index_spree_orders_on_approver_id"
     t.index ["bill_address_id"], name: "index_spree_orders_on_bill_address_id"
     t.index ["canceler_id"], name: "index_spree_orders_on_canceler_id"
@@ -1945,6 +1958,7 @@ ActiveRecord::Schema.define(version: 20180418115306) do
     t.datetime "deleted_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "created_by_id"
     t.index ["api_key"], name: "index_spree_users_on_api_key"
     t.index ["bill_address_id"], name: "index_spree_users_on_bill_address_id"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true

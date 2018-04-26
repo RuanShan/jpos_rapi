@@ -1,4 +1,4 @@
-class Api::V1::GameDaysController  < Api::V1::BaseController
+class Api::V1::Statis::UsersController  < Api::V1::BaseController
   before_action :set_game_day, only: [:show, :edit, :update, :destroy]
 
 

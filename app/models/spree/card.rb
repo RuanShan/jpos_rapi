@@ -9,6 +9,7 @@ module Spree
 
     has_many :line_items, class_name: 'Spree::LineItem'
     has_many :transactions, class_name: 'Spree::CardTransaction'
+    belongs_to :sale_day, ->{ today }, class_name: 'SaleDay', primary_key: 'seller_id', foreign_key: 'created_by_id'
 
     validates :current_value, :name, :original_value, :code, :user,  presence: true
 

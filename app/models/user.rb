@@ -44,7 +44,9 @@ class User < ActiveRecord::Base
 
   has_many :orders
   belongs_to :store, class_name: 'Spree::Store'
+  belongs_to :sale_day, ->{ today }, class_name: 'SaleDay', primary_key: 'seller_id', foreign_key: 'created_by_id'
 
+  after_initialize :create_sale_today, :if => :persisted?
   before_validation :set_login
 
   users_table_name = User.table_name
@@ -85,6 +87,11 @@ class User < ActiveRecord::Base
       self.save
     end
 
+    def create_sale_today
+      if has_spree_role?(:waiter)
+
+      end
+    end
   #
   #
   # def self.new_with_password(user_params)
