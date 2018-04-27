@@ -144,7 +144,11 @@ curl -i -X POST -H "Accept: application/json" -H "content-type: application/json
 3.8 对购买的充值卡充值
 curl -i -X POST -H "Accept: application/json" -H "content-type: application/json" -d @test/json/exist_card_order.json  http://127.0.0.1:3001/api/v1/pos_orders
 
-3.9 find_by_group_number
+3.9 find 充值卡订单
+GET /api/v1/cards/:id/transactions
+curl -i  -H "Accept: application/json" -H "content-type: application/json"  http://127.0.0.1:3001/api/v1/cards/21fe5bc77010f394da4413ea6a80a9ba1e38c346/transitions
+
+3.20 find_by_group_number
 curl -i -g \
   -H "X-Spree-Token: 1d00bad6675be472529436ad03d06ee4d6addb67f35ef316" \
   -H "Accept: application/json" \
@@ -155,6 +159,10 @@ curl -i -g \
 api_key of user has to be waiter or admin
 
 /api/v1/users
+
+4.1 customer cards
+GET  /api/v1/users/:id/cards
+curl -i  -H "Accept: application/json" -H "content-type: application/json"  http://127.0.0.1:3001/api/v1/users/2/cards
 
 
 5. get taxons

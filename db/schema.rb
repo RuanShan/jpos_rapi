@@ -104,7 +104,7 @@ ActiveRecord::Schema.define(version: 20180425115306) do
     t.datetime "created_at"
     t.datetime "deleted_at"
     t.index ["deleted_at"], name: "index_friendly_id_slugs_on_deleted_at"
-    t.index ["slug", "sluggable_type", "scope"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type_and_scope", unique: true, length: { slug: 20, sluggable_type: 20, scope: 20 }
+    t.index ["slug", "sluggable_type", "scope"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type_and_scope", unique: true, length: { slug: 40, sluggable_type: 20, scope: 20 }
     t.index ["slug", "sluggable_type"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type", length: { slug: 20, sluggable_type: 20 }
     t.index ["sluggable_id"], name: "index_friendly_id_slugs_on_sluggable_id"
     t.index ["sluggable_type"], name: "index_friendly_id_slugs_on_sluggable_type"

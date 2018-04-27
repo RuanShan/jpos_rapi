@@ -50,6 +50,12 @@ module Spree
           respond_with(user, status: 204)
         end
 
+        def cards
+          authorize! :read, user
+          @cards = user.cards
+
+        end
+
         private
 
         def user

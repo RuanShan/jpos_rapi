@@ -22,6 +22,7 @@ class CreateSpreeCards < ActiveRecord::Migration[5.1]
       t.belongs_to :card
       t.belongs_to :order
       t.belongs_to :line_item
+      t.datetime :completed_at
       t.timestamps
     end
 
