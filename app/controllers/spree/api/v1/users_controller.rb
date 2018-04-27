@@ -27,7 +27,9 @@ module Spree
 
         def create
           authorize! :create, Spree.user_class
-          @user = Spree.user_class.new(user_params)
+          @user = Spree.user_class.new(user_params) do|user|
+            user.created_by = current_api_user
+          end
           if @user.save
             respond_with(@user, status: 201, default_template: :show)
           else

@@ -7,11 +7,11 @@ class CreateSaleDays < ActiveRecord::Migration[5.1]
 
       t.date     "effective_on" #统计有效日期
       #日订单统计
-      t.integer  "order_count",           default: 0, null: false
+      t.integer  "orders_count",           default: 0, null: false
       #新客户
-      t.integer  "new_customer_count",  default: 0, null: false
+      t.integer  "new_customers_count",  default: 0, null: false
       #新购卡
-      t.integer  "new_card_count", default: 0, null: false
+      t.integer  "new_cards_count", default: 0, null: false
       t.timestamps null: false
       t.index ["seller_type", "seller_id", "effective_on"]
     end

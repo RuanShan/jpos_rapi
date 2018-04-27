@@ -31,10 +31,12 @@ curl -i -X DELETE  \
 
 1.2 创建客户
 curl -i -X POST  \
+  -H "X-Spree-Token: 9eaa88af40fbb01c03416bfdacfa6c487ab03d51b423597e" \
   -H "Accept: application/json" \
   -d "user[email]=waiter@getstore.cn&user[password]=123123" \
   http://127.0.0.1:3001/api/v1/users
 
+  curl -i -X POST -H "X-Spree-Token: 9eaa88af40fbb01c03416bfdacfa6c487ab03d51b423597e" -H "Accept: application/json" -d "user[email]=waiter@getstore.cn&user[password]=123123" http://127.0.0.1:3001/api/v1/users
 response:
 
 {"id":5,"email":"waiter@getstore.cn","created_at":"2018-04-05T14:11:53.000+08:00","updated_at":"2018-04-05T14:11:53.000+08:00","bill_address":null,"ship_address":null}
