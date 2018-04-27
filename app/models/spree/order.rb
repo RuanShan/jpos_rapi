@@ -77,7 +77,7 @@ module Spree
     alias_attribute :shipping_address, :ship_address
 
     belongs_to :store, class_name: 'Spree::Store'
-    belongs_to :sale_day, ->{ today }, class_name: 'SaleDay', counter_cache: true,
+    belongs_to :sale_today, ->{ today }, class_name: 'SaleDay', counter_cache: true,
       primary_key: 'seller_id', foreign_key: 'created_by_id', inverse_of: 'orders'
 
     with_options dependent: :destroy do

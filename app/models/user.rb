@@ -44,7 +44,11 @@ class User < ActiveRecord::Base
 
   has_many :orders
   belongs_to :store, class_name: 'Spree::Store'
-  belongs_to :sale_day, ->{ today }, class_name: 'SaleDay', primary_key: 'seller_id', foreign_key: 'created_by_id'
+  #服务员创建新会员的日子，一天新注册了多少用户统计
+  belongs_to :sold_day, ->{ today }, class_name: 'SaleDay', counter_cache: 'new_users_count', 
+    primary_key: 'seller_id', foreign_key: 'created_by_id'
+  #服务员今天的统计信息
+  has_one :sale_today, ->{ today }, class_name: 'SaleDay'
 
   after_initialize :create_sale_today, :if => :persisted?
   before_validation :set_login
@@ -89,7 +93,9 @@ class User < ActiveRecord::Base
 
     def create_sale_today
       if has_spree_role?(:waiter)
-
+        day = broker.sale_today || broker.build_sale_today
+        day.member_count+=1
+        day.save!
       end
     end
   #

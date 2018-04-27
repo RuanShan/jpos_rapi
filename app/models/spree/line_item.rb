@@ -115,6 +115,7 @@ module Spree
 
     private
     def associate_with_card
+      #如果产品是一张充值卡
       if is_card?
           self.card ||= create_card!( variant: variant, user: self.user, name: variant.descriptive_name)
           self.card.transactions.create!( order: order, amount: self.price)

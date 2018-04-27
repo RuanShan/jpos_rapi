@@ -2,6 +2,7 @@ class CreateSpreeCards < ActiveRecord::Migration[5.1]
   def change
     create_table :spree_cards do |t|
       t.references(:user) #卡的所有者
+      t.integer :created_by_id #这个打折卡的创建者是谁
       t.string :code, :null => false
       t.integer :variant_id, :null => false
       t.integer :line_item_id

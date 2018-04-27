@@ -32,7 +32,6 @@ class CreateSaleDays < ActiveRecord::Migration[5.1]
 
 
     add_column :users, :created_by_id, :integer #这个客户的创建者是谁
-    add_column :spree_cards, :created_by_id, :integer #这个打折卡的创建者是谁
 
   end
 end

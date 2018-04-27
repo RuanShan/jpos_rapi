@@ -469,10 +469,10 @@ ActiveRecord::Schema.define(version: 20180425115306) do
 
   create_table "spree_cards", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.bigint "user_id"
+    t.integer "created_by_id"
     t.string "code", null: false
     t.integer "variant_id", null: false
     t.integer "line_item_id"
-    t.string "email", null: false
     t.string "name"
     t.text "note"
     t.datetime "sent_at"
@@ -481,7 +481,6 @@ ActiveRecord::Schema.define(version: 20180425115306) do
     t.decimal "original_value", precision: 8, scale: 2, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "created_by_id"
     t.index ["user_id"], name: "index_spree_cards_on_user_id"
   end
 
@@ -675,6 +674,17 @@ ActiveRecord::Schema.define(version: 20180425115306) do
     t.index ["variant_id"], name: "index_inventory_units_on_variant_id"
   end
 
+  create_table "spree_line_item_groups", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.string "name"
+    t.string "number"
+    t.decimal "cost", precision: 10, scale: 2, default: "0.0"
+    t.datetime "shipped_at"
+    t.string "state"
+    t.integer "order_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "spree_line_items", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer "variant_id"
     t.integer "order_id"
@@ -694,6 +704,8 @@ ActiveRecord::Schema.define(version: 20180425115306) do
     t.decimal "non_taxable_adjustment_total", precision: 10, scale: 2, default: "0.0", null: false
     t.string "group_number", limit: 24
     t.integer "group_position"
+    t.string "state", limit: 24
+    t.integer "card_id"
     t.index ["order_id"], name: "index_spree_line_items_on_order_id"
     t.index ["tax_category_id"], name: "index_spree_line_items_on_tax_category_id"
     t.index ["variant_id"], name: "index_spree_line_items_on_variant_id"
@@ -808,6 +820,7 @@ ActiveRecord::Schema.define(version: 20180425115306) do
     t.decimal "taxable_adjustment_total", precision: 10, scale: 2, default: "0.0", null: false
     t.decimal "non_taxable_adjustment_total", precision: 10, scale: 2, default: "0.0", null: false
     t.boolean "is_pos", default: false
+    t.string "group_state", limit: 24
     t.index ["approver_id"], name: "index_spree_orders_on_approver_id"
     t.index ["bill_address_id"], name: "index_spree_orders_on_bill_address_id"
     t.index ["canceler_id"], name: "index_spree_orders_on_canceler_id"
@@ -1398,7 +1411,6 @@ ActiveRecord::Schema.define(version: 20180425115306) do
     t.decimal "pre_tax_amount", precision: 12, scale: 4, default: "0.0", null: false
     t.decimal "taxable_adjustment_total", precision: 10, scale: 2, default: "0.0", null: false
     t.decimal "non_taxable_adjustment_total", precision: 10, scale: 2, default: "0.0", null: false
-    t.string "group_number", limit: 24
     t.index ["address_id"], name: "index_spree_shipments_on_address_id"
     t.index ["number"], name: "index_spree_shipments_on_number", unique: true
     t.index ["order_id"], name: "index_spree_shipments_on_order_id"
