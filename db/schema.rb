@@ -104,7 +104,7 @@ ActiveRecord::Schema.define(version: 20180425115306) do
     t.datetime "created_at"
     t.datetime "deleted_at"
     t.index ["deleted_at"], name: "index_friendly_id_slugs_on_deleted_at"
-    t.index ["slug", "sluggable_type", "scope"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type_and_scope", unique: true, length: { slug: 40, sluggable_type: 20, scope: 20 }
+    t.index ["slug", "sluggable_type", "scope"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type_and_scope", unique: true, length: { slug: 20, sluggable_type: 20, scope: 20 }
     t.index ["slug", "sluggable_type"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type", length: { slug: 20, sluggable_type: 20 }
     t.index ["sluggable_id"], name: "index_friendly_id_slugs_on_sluggable_id"
     t.index ["sluggable_type"], name: "index_friendly_id_slugs_on_sluggable_type"
@@ -299,9 +299,9 @@ ActiveRecord::Schema.define(version: 20180425115306) do
     t.string "seller_type"
     t.integer "seller_id"
     t.date "effective_on"
-    t.integer "order_count", default: 0, null: false
-    t.integer "new_customer_count", default: 0, null: false
-    t.integer "new_card_count", default: 0, null: false
+    t.integer "orders_count", default: 0, null: false
+    t.integer "new_customers_count", default: 0, null: false
+    t.integer "new_cards_count", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["seller_type", "seller_id", "effective_on"], name: "index_sale_days_on_seller_type_and_seller_id_and_effective_on"
@@ -460,6 +460,7 @@ ActiveRecord::Schema.define(version: 20180425115306) do
     t.bigint "card_id"
     t.bigint "order_id"
     t.bigint "line_item_id"
+    t.datetime "completed_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["card_id"], name: "index_spree_card_transactions_on_card_id"

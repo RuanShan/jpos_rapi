@@ -2,6 +2,7 @@ class CreateSaleDays < ActiveRecord::Migration[5.1]
   def change
     #服务员/店铺一天的销售统计
     create_table "sale_days", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+      t.references  "store"
       t.string   "seller_type"
       t.integer  "seller_id"
 
