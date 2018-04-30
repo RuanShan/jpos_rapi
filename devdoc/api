@@ -108,25 +108,25 @@ file:///var/www/apps/jpos_rapi/public/guides/api/orders.html
 GET /api/v1/orders
 
 curl -i -g \
-  -H "X-Spree-Token: 1d00bad6675be472529436ad03d06ee4d6addb67f35ef316" \
+  -H "X-Spree-Token: cfe62ba2b400cf58ad4e7cba698a542a6a9fbec2a7a45cce" \
   -H "Accept: application/json" \
   http://127.0.0.1:3001/api/v1/orders?q[store_id_eq]=1
 
 3.3 更新一个订单状态
 curl -i -g -X PUT \
-  -H "X-Spree-Token: 1d00bad6675be472529436ad03d06ee4d6addb67f35ef316" \
+  -H "X-Spree-Token: cfe62ba2b400cf58ad4e7cba698a542a6a9fbec2a7a45cce" \
   -H "Accept: application/json" \
   http://127.0.0.1:3001/api/v1/pos_orders/R095401088/one_step
 
 3.4 更新订单的单个产品流程状态 line_item_group
 curl -i -g  -X PUT  \
-  -H "X-Spree-Token: 1d00bad6675be472529436ad03d06ee4d6addb67f35ef316" \
+  -H "X-Spree-Token: cfe62ba2b400cf58ad4e7cba698a542a6a9fbec2a7a45cce" \
   -H "Accept: application/json" \
   http://127.0.0.1:3001/api/v1/line_item_groups/H31557434127/one_step
 
 3.5 更新多个订单状态
 curl -i -g -X PUT \
-  -H "X-Spree-Token: 1d00bad6675be472529436ad03d06ee4d6addb67f35ef316" \
+  -H "X-Spree-Token: cfe62ba2b400cf58ad4e7cba698a542a6a9fbec2a7a45cce" \
   -H "Accept: application/json" \
   -H "Content-Type: application/json" \
   --data '{ "order_numbers":["R095401088"] }' \
@@ -134,7 +134,7 @@ curl -i -g -X PUT \
 
 3.6 查询各个状态的订单数量
 curl -i -g \
-  -H "X-Spree-Token: 1d00bad6675be472529436ad03d06ee4d6addb67f35ef316" \
+  -H "X-Spree-Token: cfe62ba2b400cf58ad4e7cba698a542a6a9fbec2a7a45cce" \
   -H "Accept: application/json" \
   -H "Content-Type: application/json" \
   http://127.0.0.1:3001/api/v1/pos_orders/count
@@ -152,7 +152,7 @@ curl -i  -H "Accept: application/json" -H "content-type: application/json"  http
 
 3.20 find_by_group_number
 curl -i -g \
-  -H "X-Spree-Token: 1d00bad6675be472529436ad03d06ee4d6addb67f35ef316" \
+  -H "X-Spree-Token: cfe62ba2b400cf58ad4e7cba698a542a6a9fbec2a7a45cce" \
   -H "Accept: application/json" \
   -H "Content-Type: application/json" \
   http://127.0.0.1:3001/api/v1/pos_orders/find_by_group_number/2018041418010001
@@ -173,7 +173,7 @@ http://localhost:3001/api/v1/taxonomies/1/taxons
 6. update line_item_group state
 PUT /api/v1/line_item_groups/2018041418010001/one_step
 curl -i -X PUT \
-  -H "X-Spree-Token: 1d00bad6675be472529436ad03d06ee4d6addb67f35ef316" \
+  -H "X-Spree-Token: cfe62ba2b400cf58ad4e7cba698a542a6a9fbec2a7a45cce" \
   -H "Accept: application/json" \
   -H "Content-Type: application/json" \
   http://127.0.0.1:3001/api/v1/line_item_groups/2018041418010001/one_step
@@ -181,7 +181,7 @@ curl -i -X PUT \
 6.1 get line_item_group
 GET /api/v1/pos_shipments/2018041418010001/
 curl -i \
-  -H "X-Spree-Token: 1d00bad6675be472529436ad03d06ee4d6addb67f35ef316" \
+  -H "X-Spree-Token: cfe62ba2b400cf58ad4e7cba698a542a6a9fbec2a7a45cce" \
   -H "Accept: application/json" \
   -H "Content-Type: application/json" \
   http://127.0.0.1:3001/api/v1/line_item_groups/2018041418010001
@@ -189,8 +189,21 @@ curl -i \
 6.2 update several line_item_group state
   PUT /api/v1/line_item_groups/all_step?numbers=[2018041418010001]
   curl -i -g -X PUT \
-    -H "X-Spree-Token: 1d00bad6675be472529436ad03d06ee4d6addb67f35ef316" \
+    -H "X-Spree-Token: cfe62ba2b400cf58ad4e7cba698a542a6a9fbec2a7a45cce" \
     -H "Accept: application/json" \
     -H "Content-Type: application/json" \
     --data '{"numbers":[1,2]}' \
     http://127.0.0.1:3001/api/v1/line_item_groups/all_step
+
+
+################################################################################
+Statis
+################################################################################
+1 statis day sale
+GET /api/v1/statis/days/today
+
+curl -i -g \
+  -H "X-Spree-Token: cfe62ba2b400cf58ad4e7cba698a542a6a9fbec2a7a45cce" \
+  -H "Accept: application/json" \
+  -H "Content-Type: application/json" \
+  http://127.0.0.1:3001/api/v1/statis/days/today

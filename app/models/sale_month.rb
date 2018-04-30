@@ -1,7 +1,7 @@
 class SaleMonth < ApplicationRecord
   # 添加 日注册，月注册 scope
   extend BetterDateScope
-  better_month_scope effective_on: [:current_month]
+  better_month_scope day: [:current_month]
 
   belongs_to :broker
 
@@ -21,7 +21,7 @@ class SaleMonth < ApplicationRecord
   #   CSV.generate(options) do |csv|
   #     csv << ["月份", "点击数", "注册数", "新注册并存款", "注册存款转化率"]
   #     all.each do |sale_month|
-  #       values = [sale_month.effective_on.to_s(:year_month), sale_month.clink_visits, sale_month.member_count, sale_month.valuable_member_count, sale_month.display_valuable_rate]
+  #       values = [sale_month.day.to_s(:year_month), sale_month.clink_visits, sale_month.member_count, sale_month.valuable_member_count, sale_month.display_valuable_rate]
   #       csv << values
   #     end
   #   end

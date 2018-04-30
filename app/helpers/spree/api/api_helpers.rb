@@ -35,7 +35,8 @@ module Spree
         :store_attributes,
         :tag_attributes,
         :customer_return_attributes,
-        :reimbursement_attributes
+        :reimbursement_attributes,
+        :sale_day_attributes,
       ]
 
       mattr_reader *ATTRIBUTES
@@ -186,6 +187,10 @@ module Spree
       @@reimbursement_attributes = [
         :id, :reimbursement_status, :customer_return_id, :order_id,
         :number, :total, :created_at, :updated_at
+      ]
+
+      @@sale_day_attributes = [
+        :day, :new_orders_count, :new_customers_count, :new_cards_count
       ]
 
       def variant_attributes

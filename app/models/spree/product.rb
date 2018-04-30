@@ -75,11 +75,17 @@ module Spree
 
     has_many :variant_images, -> { order(:position) }, source: :images, through: :variants_including_master
 
+    has_many :relations, -> { order(:position) }, as: :relatable
+
     after_create :add_associations_from_prototype
     after_create :build_variants_from_option_values_hash, if: :option_values_hash
 
     after_destroy :punch_slug
     after_restore :update_slug_history
+    # When a Spree::Product is destroyed, we also want to destroy all Spree::Relations
+    # "from" it as well as "to" it.
+    after_destroy :destroy_product_relations
+
 
     after_initialize :ensure_master
 
@@ -126,6 +132,12 @@ module Spree
              :images, to: :find_or_build_master
 
     alias master_images images
+
+    ## Returns all the Spree::RelationType's which apply_to this class.
+    #def self.relation_types
+    #  Spree::RelationType.where(applies_to: to_s).order(:name)
+    #end
+
 
     def find_or_build_master
       master || build_master
@@ -404,6 +416,14 @@ module Spree
         errors.add(:discontinue_on, :invalid_date_range)
       end
     end
+
+    def destroy_product_relations
+      # First we destroy relationships "from" this Product to others.
+      relations.destroy_all
+      # Next we destroy relationships "to" this Product.
+      Spree::Relation.where(related_to_type: self.class.to_s).where(related_to_id: id).destroy_all
+    end
+
   end
 end
 

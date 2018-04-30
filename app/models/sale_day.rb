@@ -1,10 +1,10 @@
 class SaleDay < ApplicationRecord
   # 添加 日注册，月注册 scope
   extend BetterDateScope
-  better_date_scope effective_on: [:today]
+  better_date_scope day: [:today, :week]
 
   belongs_to :seller, class_name: "User"
-  has_many :orders, class_name: 'Spree::Order', primary_key: 'seller_id', foreign_key: 'created_by_id'
+  has_many :new_orders, class_name: 'Spree::Order', primary_key: 'seller_id', foreign_key: 'created_by_id'
   has_many :new_cards, class_name: 'Spree::Card', primary_key: 'seller_id', foreign_key: 'created_by_id'
   has_many :new_customers, class_name: 'Spree::User', primary_key: 'seller_id', foreign_key: 'created_by_id'
 
@@ -20,7 +20,7 @@ class SaleDay < ApplicationRecord
   #   CSV.generate(options) do |csv|
   #     csv << ["日期", "推广链接点击数", "注册数", "新注册并存款", "注册存款转化率"]
   #     all.each do |sale_day|
-  #       values = [sale_day.effective_on, sale_day.clink_visits, sale_day.member_count, sale_day.valuable_member_count, sale_day.display_valuable_rate]
+  #       values = [sale_day.day, sale_day.clink_visits, sale_day.member_count, sale_day.valuable_member_count, sale_day.display_valuable_rate]
   #       csv << values
   #     end
   #   end

@@ -9,6 +9,7 @@ class CreateSpreeCards < ActiveRecord::Migration[5.1]
       t.string :name
       t.text :note
       t.datetime :sent_at
+      t.datetime :expires_at
       t.decimal  :discount # percent
       t.decimal :current_value, :precision => 8, :scale => 2, :null => false
       t.decimal :original_value, :precision => 8, :scale => 2, :null => false

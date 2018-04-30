@@ -897,6 +897,7 @@ class SpreeEcommerce < ActiveRecord::Migration[5.1]
       t.string "related_to_type"
       t.datetime "created_at"
       t.datetime "updated_at"
+      t.decimal "discount_percent", precision: 8, scale: 2, default: "0.0"
       t.decimal "discount_amount", precision: 8, scale: 2, default: "0.0"
       t.integer "position"
     end

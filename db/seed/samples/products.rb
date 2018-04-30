@@ -105,7 +105,7 @@ products.each do |product_attrs|
   Spree::Config[:currency] = "CNY"
   eur_price = product_attrs.delete(:eur_price)
 
-  new_product = Spree::Product.where(name: product_attrs[:name],
+  new_product = Selling::Product.where(name: product_attrs[:name],
                                      tax_category: product_attrs[:tax_category]).first_or_create! do |product|
     product.price = product_attrs[:price]
     product.description = FFaker::Lorem.paragraph

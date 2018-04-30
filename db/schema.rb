@@ -296,6 +296,7 @@ ActiveRecord::Schema.define(version: 20180425115306) do
   end
 
   create_table "sale_days", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.bigint "store_id"
     t.string "seller_type"
     t.integer "seller_id"
     t.date "effective_on"
@@ -305,6 +306,7 @@ ActiveRecord::Schema.define(version: 20180425115306) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["seller_type", "seller_id", "effective_on"], name: "index_sale_days_on_seller_type_and_seller_id_and_effective_on"
+    t.index ["store_id"], name: "index_sale_days_on_store_id"
   end
 
   create_table "sale_months", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|

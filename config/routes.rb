@@ -14,6 +14,13 @@ scope module: 'spree' do
         resources :images
         resources :variants
         resources :product_properties
+
+        get :related, on: :member
+        resources :relations do
+          collection do
+            post :update_positions
+          end
+        end
       end
 
       concern :order_routes do
@@ -148,6 +155,16 @@ scope module: 'spree' do
 
       put '/classifications', to: 'classifications#update', as: :classifications
       get '/taxons/products', to: 'taxons#products', as: :taxon_products
+
+      resources :sale_days do
+        collection do
+          get 'today'
+          get 'selected_day'
+          get 'week'
+          put 'selected_days'
+          get 'total'
+        end
+      end
     end
 
     spree_path = Rails.application.routes.url_helpers.try(:spree_path, trailing_slash: true) || '/'

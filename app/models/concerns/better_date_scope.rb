@@ -40,8 +40,10 @@ module BetterDateScope
             scope :today, ->{ on_date( DateTime.current.to_date ) }
           when :yesterday
             scope :yesterday, ->{ on_date( DateTime.current.yesterday.to_date ) }
+          when :week
+            scope :week, ->{ between_dates(  DateTime.current.advance(days: -6).to_date, DateTime.current.to_date ) }
           when :ten_days
-            scope :ten_days, ->{ between_dates(  DateTime.current.advance(days: -10).to_date, DateTime.current.to_date ) }
+            scope :ten_days, ->{ between_dates(  DateTime.current.advance(days: -9).to_date, DateTime.current.to_date ) }
           end
         }
       end
