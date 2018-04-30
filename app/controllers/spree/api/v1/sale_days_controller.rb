@@ -1,9 +1,7 @@
 module Spree
   module Api
     module V1
-      class SaleDaysController  < Spree::Api::V1::BaseController
-
-
+      class SaleDaysController  < BaseController
 
         def selected_day
           day = get_selected_day
@@ -83,8 +81,8 @@ module Spree
         def get_selected_days
           days = []
           if params[:days].present?
-            params[:days].each{
-              days.push Date.pare(day)
+            params[:days].each{|day|
+              days.push( Date.parse(day) )
             }
           end
           days
