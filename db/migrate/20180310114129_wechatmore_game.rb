@@ -285,7 +285,9 @@ class WechatmoreGame < ActiveRecord::Migration[5.1]
       t.integer "ship_address_id"
       t.integer "bill_address_id"
       t.string "authentication_token"
-
+      t.boolean :is_staff, null: false, default: false
+      t.string "mobile"
+      
       t.integer "store_id"
       t.datetime "deleted_at"
 

@@ -136,6 +136,13 @@ scope module: 'spree' do
           get :cards
         end
       end
+
+      resources :customers, controller: 'users' do
+        collection do
+          get :list
+        end
+      end
+
       resources :cards do
         member do
           get :transactions

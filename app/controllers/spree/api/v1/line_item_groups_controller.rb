@@ -4,6 +4,13 @@ module Spree
       class LineItemGroupsController < Spree::Api::BaseController
         before_action :fine_line_item_group, only: [:one_step, :show]
 
+        def index
+          authorize! :index, LineItemGroup
+          @q = LineItemGroup.ransack(params[:q]).result
+          @total_count = @q.count
+          @line_item_groups = @q.includes(:user).page(params[:page]).per(params[:per_page])
+          respond_with(@line_item_groups)
+        end
 
         def show
 

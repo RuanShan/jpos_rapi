@@ -40,7 +40,7 @@ zh-CN:
     - 星期六
     formats:
       default: "%Y-%m-%d"
-      long: "%Y年%b%d日"
+      long: "%Y年%b月%d日"
       short: "%b%d日"
     month_names:
     -

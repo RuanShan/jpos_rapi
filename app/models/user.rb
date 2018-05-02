@@ -29,6 +29,8 @@
 
 class User < ActiveRecord::Base
   ROLES = {'guest' => 1, 'user' => 2, 'manager' => 3, 'admin' => 4}.freeze
+  extend Spree::DisplayDateTime
+
   include Spree::UserAddress
   include Spree::UserPaymentSource
   include Spree::UserMethods
@@ -61,9 +63,12 @@ class User < ActiveRecord::Base
   scope :admin, -> { includes(:spree_roles).where("#{roles_table_name}.name" => "admin") }
 
   self.whitelisted_ransackable_attributes = %w[id email username]
+  self.whitelisted_ransackable_associations = %w[roles]
 
   alias_attribute :spree_api_key, :api_key
   alias_attribute :name, :username # order.user_name required
+
+  date_time_methods :created_at, :updated_at
 
   def self.admin_created?
     User.admin.count > 0

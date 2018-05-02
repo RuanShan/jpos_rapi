@@ -162,7 +162,13 @@ api_key of user has to be waiter or admin
 
 /api/v1/users
 
-4.1 customer cards
+4.1 get customers
+GET  /api/v1/customers
+curl -i  -H "Accept: application/json" -H "content-type: application/json"  \
+  -H "X-Spree-Token: cfe62ba2b400cf58ad4e7cba698a542a6a9fbec2a7a45cce" \
+  http://127.0.0.1:3001/api/v1/customers
+
+4.2 customer cards
 GET  /api/v1/users/:id/cards
 curl -i  -H "Accept: application/json" -H "content-type: application/json"  http://127.0.0.1:3001/api/v1/users/2/cards
 
