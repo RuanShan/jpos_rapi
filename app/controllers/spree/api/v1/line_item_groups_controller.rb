@@ -8,7 +8,7 @@ module Spree
           authorize! :index, LineItemGroup
           @q = LineItemGroup.ransack(params[:q]).result
           @total_count = @q.count
-          @line_item_groups = @q.includes(:user).page(params[:page]).per(params[:per_page])
+          @line_item_groups = @q.page(params[:page]).per(params[:per_page])
           respond_with(@line_item_groups)
         end
 

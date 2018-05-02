@@ -184,13 +184,13 @@ curl -i -X PUT \
   -H "Content-Type: application/json" \
   http://127.0.0.1:3001/api/v1/line_item_groups/2018041418010001/one_step
 
-6.1 get line_item_group
-GET /api/v1/pos_shipments/2018041418010001/
+6.1 get line_item_groups
+GET /api/v1/line_item_groups/
 curl -i \
   -H "X-Spree-Token: cfe62ba2b400cf58ad4e7cba698a542a6a9fbec2a7a45cce" \
   -H "Accept: application/json" \
   -H "Content-Type: application/json" \
-  http://127.0.0.1:3001/api/v1/line_item_groups/2018041418010001
+  http://127.0.0.1:3001/api/v1/line_item_groups
 
 6.2 update several line_item_group state
   PUT /api/v1/line_item_groups/all_step?numbers=[2018041418010001]
@@ -201,6 +201,13 @@ curl -i \
     --data '{"numbers":[1,2]}' \
     http://127.0.0.1:3001/api/v1/line_item_groups/all_step
 
+6.3 get line_item_group
+GET /api/v1/pos_shipments/2018041418010001/
+curl -i \
+  -H "X-Spree-Token: cfe62ba2b400cf58ad4e7cba698a542a6a9fbec2a7a45cce" \
+  -H "Accept: application/json" \
+  -H "Content-Type: application/json" \
+  http://127.0.0.1:3001/api/v1/line_item_groups/2018041418010001
 
 ################################################################################
 Statis
