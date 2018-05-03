@@ -1,10 +1,11 @@
 module Spree
   module Api
     module V1
-      class CustomersController < UsersController
+      class StaffsController < UsersController
+        rescue_from Spree::Core::DestroyWithOrdersError, with: :error_during_processing
 
         def index
-          @users = Customer.accessible_by(current_ability, :read)
+          @users = Staff.accessible_by(current_ability, :read)
 
           @users = if params[:ids]
                      @users.ransack(id_in: params[:ids].split(','))

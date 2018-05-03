@@ -10,7 +10,7 @@ scope module: 'spree' do
       resources :customer_returns, only: [:index]
       resources :reimbursements, only: [:index]
 
-      resources :products do
+      concern :selling do
         resources :images
         resources :variants
         resources :product_properties
@@ -21,6 +21,15 @@ scope module: 'spree' do
             post :update_positions
           end
         end
+      end
+
+      resources :products , concerns: :selling do
+      end
+
+      resources :selling_services, concerns: :selling do
+      end
+
+      resources :selling_cards, concerns: :selling do
       end
 
       concern :order_routes do
@@ -138,10 +147,14 @@ scope module: 'spree' do
         end
       end
 
-      resources :customers, controller: 'users' do
-        collection do
-          get :list
+      resources :customers do
+        member do
+          get :cards
         end
+      end
+
+      resources :staffs do
+
       end
 
       resources :cards do

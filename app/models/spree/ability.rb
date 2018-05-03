@@ -46,6 +46,7 @@ module Spree
         if user.has_spree_role?('waiter')
           can :manage, Order
           can :manage, LineItemGroup
+          can :manage, Customer
           can :read, Store
         else
           can :read, Order do |order, token|
