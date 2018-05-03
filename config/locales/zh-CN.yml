@@ -207,3 +207,6 @@ zh-CN:
           mb: "MB"
           gb: "GB"
           tb: "TB"
+    spree:
+      taxonomy_categories_name: 服务分类
+      taxonomy_brands_name: 热门服务

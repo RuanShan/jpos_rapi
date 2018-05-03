@@ -1,51 +1,27 @@
 Spree::Sample.load_sample("option_types")
 
 size = Spree::OptionType.find_by!(presentation: "Size")
-color = Spree::OptionType.find_by!(presentation: "Color")
 
 option_values_attributes = [
   {
-    name: "Small",
+    name: "低规",
     presentation: "S",
     position: 1,
     option_type: size
   },
   {
-    name: "Medium",
+    name: "中规",
     presentation: "M",
     position: 2,
     option_type: size
   },
   {
-    name: "Large",
+    name: "高规",
     presentation: "L",
     position: 3,
     option_type: size
-  },
-  {
-    name: "Extra Large",
-    presentation: "XL",
-    position: 4,
-    option_type: size
-  },
-  {
-    name: "Red",
-    presentation: "Red",
-    position: 1,
-    option_type: color,
-  },
-  {
-    name: "Green",
-    presentation: "Green",
-    position: 2,
-    option_type: color,
-  },
-  {
-    name: "Blue",
-    presentation: "Blue",
-    position: 3,
-    option_type: color
   }
+
 ]
 
 option_values_attributes.each do |attrs|
