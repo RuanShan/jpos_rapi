@@ -46,6 +46,15 @@ module Spree
           respond_with(@line_item_group.reload, default_template: :show)
         end
 
+        # count order on param states
+        # states - is an array of state
+        def counts
+          @counts = {}
+          Order::GROUP_STATES.each{|state|
+            @counts[state] = LineItemGroup.where( state: state ).count
+          }
+          @counts
+        end
 
         private
 

@@ -88,6 +88,7 @@ scope module: 'spree' do
           put :one_step
         end
         collection do
+          get :counts
           put :all_step
         end
       end

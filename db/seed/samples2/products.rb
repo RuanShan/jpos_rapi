@@ -7,79 +7,95 @@ products = [
   {
     name: "Ruby on Rails Tote",
     tax_category: clothing,
-    price: 15.99
+    price: 15.99,
+    eur_price: 14,
   },
   {
     name: "Ruby on Rails Bag",
     tax_category: clothing,
-    price: 22.99
+    price: 22.99,
+    eur_price: 19,
   },
   {
     name: "Ruby on Rails Baseball Jersey",
     tax_category: clothing,
-    price: 19.99
+    price: 19.99,
+    eur_price: 16
   },
   {
     name: "Ruby on Rails Jr. Spaghetti",
     tax_category: clothing,
-    price: 19.99
+    price: 19.99,
+    eur_price: 16
 
   },
   {
     name: "Ruby on Rails Ringer T-Shirt",
     tax_category: clothing,
-    price: 19.99
+    price: 19.99,
+    eur_price: 16
   },
   {
     name: "Ruby Baseball Jersey",
     tax_category: clothing,
-    price: 19.99
+    price: 19.99,
+    eur_price: 16
   },
   {
     name: "Apache Baseball Jersey",
     tax_category: clothing,
-    price: 19.99
+    price: 19.99,
+    eur_price: 16
   },
   {
     name: "Spree Baseball Jersey",
     tax_category: clothing,
-    price: 19.99
+    price: 19.99,
+    eur_price: 16
   },
   {
     name: "Spree Jr. Spaghetti",
     tax_category: clothing,
-    price: 19.99
+    price: 19.99,
+    eur_price: 16
   },
   {
     name: "Spree Ringer T-Shirt",
     tax_category: clothing,
-    price: 19.99
+    price: 19.99,
+    eur_price: 16
   },
   {
     name: "Spree Tote",
     tax_category: clothing,
-    price: 15.99
+    price: 15.99,
+    eur_price: 14,
   },
   {
     name: "Spree Bag",
     tax_category: clothing,
-    price: 22.99
+    price: 22.99,
+    eur_price: 19
   },
   {
     name: "Ruby on Rails Mug",
-    price: 13.99
+    price: 13.99,
+    eur_price: 12
   },
   {
     name: "Ruby on Rails Stein",
-    price: 16.99
+    price: 16.99,
+    eur_price: 14
   },
   {
     name: "Spree Stein",
-    price: 16.99
+    price: 16.99,
+    eur_price: 14,
   },
   {
     name: "Spree Mug",
-    price: 13.99
+    price: 13.99,
+    eur_price: 12
   }
 ]
 
@@ -97,7 +113,12 @@ products.each do |product_attrs|
     product.shipping_category = default_shipping_category
   end
 
-
+  if new_product
+    Spree::Config[:currency] = "EUR"
+    new_product.reload
+    new_product.price = eur_price
+    new_product.save
+  end
 end
 
 Spree::Config[:currency] = "CNY"

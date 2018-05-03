@@ -209,6 +209,13 @@ curl -i \
   -H "Content-Type: application/json" \
   http://127.0.0.1:3001/api/v1/line_item_groups/2018041418010001
 
+6.4 查询各个状态的Group数量
+  curl -i -g \
+    -H "X-Spree-Token: cfe62ba2b400cf58ad4e7cba698a542a6a9fbec2a7a45cce" \
+    -H "Accept: application/json" \
+    -H "Content-Type: application/json" \
+    http://127.0.0.1:3001/api/v1/line_item_groups/counts
+
 ################################################################################
 Statis
 ################################################################################
