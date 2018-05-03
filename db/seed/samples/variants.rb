@@ -1,94 +1,34 @@
 Spree::Sample.load_sample("option_values")
 Spree::Sample.load_sample("products")
 
-ror_baseball_jersey = Spree::Product.find_by!(name: "Ruby on Rails Baseball Jersey")
-ror_tote = Spree::Product.find_by!(name: "Ruby on Rails Tote")
-ror_bag = Spree::Product.find_by!(name: "Ruby on Rails Bag")
-ror_jr_spaghetti = Spree::Product.find_by!(name: "Ruby on Rails Jr. Spaghetti")
-ror_mug = Spree::Product.find_by!(name: "Ruby on Rails Mug")
-ror_ringer = Spree::Product.find_by!(name: "Ruby on Rails Ringer T-Shirt")
-ror_stein = Spree::Product.find_by!(name: "Ruby on Rails Stein")
-spree_baseball_jersey = Spree::Product.find_by!(name: "Spree Baseball Jersey")
-spree_stein = Spree::Product.find_by!(name: "Spree Stein")
-spree_jr_spaghetti = Spree::Product.find_by!(name: "Spree Jr. Spaghetti")
-spree_mug = Spree::Product.find_by!(name: "Spree Mug")
-spree_ringer = Spree::Product.find_by!(name: "Spree Ringer T-Shirt")
-spree_tote = Spree::Product.find_by!(name: "Spree Tote")
-spree_bag = Spree::Product.find_by!(name: "Spree Bag")
-ruby_baseball_jersey = Spree::Product.find_by!(name: "Ruby Baseball Jersey")
-apache_baseball_jersey = Spree::Product.find_by!(name: "Apache Baseball Jersey")
+p1 = Spree::Product.find_by!(name: "保养鞋")
+p2 = Spree::Product.find_by!(name: "喷磨砂")
+p3 = Spree::Product.find_by!(name: "干洗鞋")
+p4 = Spree::Product.find_by!(name: "清洗鞋")
+p5 = Spree::Product.find_by!(name: "翻新鞋")
+p6 = Spree::Product.find_by!(name: "修复鞋")
 
-small = Spree::OptionValue.where(name: "Small").first
-medium = Spree::OptionValue.where(name: "Medium").first
-large = Spree::OptionValue.where(name: "Large").first
-extra_large = Spree::OptionValue.where(name: "Extra Large").first
+p11 = Spree::Product.find_by!(name: "清洗上色保养")
+p12 = Spree::Product.find_by!(name: "清洗特级保养")
+p13 = Spree::Product.find_by!(name: "封边油")
+p14 = Spree::Product.find_by!(name: "维修类")
 
-red = Spree::OptionValue.where(name: "Red").first
-blue = Spree::OptionValue.where(name: "Blue").first
-green = Spree::OptionValue.where(name: "Green").first
 
-variants = [
-  {
-    product: ror_baseball_jersey,
-    option_values: [small, red],
-    sku: "ROR-00001",
-    cost_price: 17
-  },
-  {
-    product: ror_baseball_jersey,
-    option_values: [small, blue],
-    sku: "ROR-00002",
-    cost_price: 17
-  },
-  {
-    product: ror_baseball_jersey,
-    option_values: [small, green],
-    sku: "ROR-00003",
-    cost_price: 17
-  },
-  {
-    product: ror_baseball_jersey,
-    option_values: [medium, red],
-    sku: "ROR-00004",
-    cost_price: 17
-  },
-  {
-    product: ror_baseball_jersey,
-    option_values: [medium, blue],
-    sku: "ROR-00005",
-    cost_price: 17
-  },
-  {
-    product: ror_baseball_jersey,
-    option_values: [medium, green],
-    sku: "ROR-00006",
-    cost_price: 17
-  },
-  {
-    product: ror_baseball_jersey,
-    option_values: [large, red],
-    sku: "ROR-00007",
-    cost_price: 17
-  },
-  {
-    product: ror_baseball_jersey,
-    option_values: [large, blue],
-    sku: "ROR-00008",
-    cost_price: 17
-  },
-  {
-    product: ror_baseball_jersey,
-    option_values: [large, green],
-    sku: "ROR-00009",
-    cost_price: 17
-  },
-  {
-    product: ror_baseball_jersey,
-    option_values: [extra_large, green],
-    sku: "ROR-00010",
-    cost_price: 17
-  },
-]
+
+small = Spree::OptionValue.where(name: "低规").first
+medium = Spree::OptionValue.where(name: "中规").first
+large = Spree::OptionValue.where(name: "高规").first
+
+products = [p1,p2,p3,p4,p5,p6, p11,p12,p13,p14]
+options = [small, medium, large]
+variants = []
+products.each_with_index{|pn,i|
+  options.each_with_index{|o,j|
+    variant = { product: pn, option_values: [o], sku: "YF-00#{i}#{j}", cost_price: rand(100) }
+    variants.push variant
+  }
+}
+
 
 masters = {
   ror_baseball_jersey => {
@@ -163,6 +103,6 @@ variants.each do |attrs|
   end
 end
 
-masters.each do |product, variant_attrs|
-  product.master.update_attributes!(variant_attrs)
-end
+#masters.each do |product, variant_attrs|
+#  product.master.update_attributes!(variant_attrs)
+#end
