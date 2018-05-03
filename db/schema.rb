@@ -299,26 +299,26 @@ ActiveRecord::Schema.define(version: 20180425115306) do
     t.bigint "store_id"
     t.string "seller_type"
     t.integer "seller_id"
-    t.date "effective_on"
-    t.integer "orders_count", default: 0, null: false
+    t.date "day"
+    t.integer "new_orders_count", default: 0, null: false
     t.integer "new_customers_count", default: 0, null: false
     t.integer "new_cards_count", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["seller_type", "seller_id", "effective_on"], name: "index_sale_days_on_seller_type_and_seller_id_and_effective_on"
+    t.index ["seller_type", "seller_id", "day"], name: "index_sale_days_on_seller_type_and_seller_id_and_day"
     t.index ["store_id"], name: "index_sale_days_on_store_id"
   end
 
   create_table "sale_months", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "seller_type"
     t.integer "seller_id"
-    t.date "effective_on"
-    t.integer "order_count", default: 0, null: false
+    t.date "day"
+    t.integer "new_order_count", default: 0, null: false
     t.integer "new_customer_count", default: 0, null: false
     t.integer "new_card_count", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["seller_type", "seller_id", "effective_on"], name: "index_sale_months_on_seller_type_and_seller_id_and_effective_on"
+    t.index ["seller_type", "seller_id", "day"], name: "index_sale_months_on_seller_type_and_seller_id_and_day"
   end
 
   create_table "sessions", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -479,6 +479,7 @@ ActiveRecord::Schema.define(version: 20180425115306) do
     t.string "name"
     t.text "note"
     t.datetime "sent_at"
+    t.datetime "expires_at"
     t.decimal "discount", precision: 10
     t.decimal "current_value", precision: 8, scale: 2, null: false
     t.decimal "original_value", precision: 8, scale: 2, null: false
@@ -1263,6 +1264,7 @@ ActiveRecord::Schema.define(version: 20180425115306) do
     t.string "related_to_type"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.decimal "discount_percent", precision: 8, scale: 2, default: "0.0"
     t.decimal "discount_amount", precision: 8, scale: 2, default: "0.0"
     t.integer "position"
   end
@@ -1969,6 +1971,8 @@ ActiveRecord::Schema.define(version: 20180425115306) do
     t.integer "ship_address_id"
     t.integer "bill_address_id"
     t.string "authentication_token"
+    t.boolean "is_staff", default: false, null: false
+    t.string "mobile"
     t.integer "store_id"
     t.datetime "deleted_at"
     t.datetime "created_at", null: false

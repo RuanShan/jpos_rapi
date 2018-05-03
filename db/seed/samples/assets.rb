@@ -3,22 +3,18 @@ unless ENV['SKIP_SAMPLE_IMAGES']
   Spree::Sample.load_sample("variants")
 
   products = {}
-  products[:ror_baseball_jersey] = Spree::Product.find_by!(name: "Ruby on Rails Baseball Jersey")
-  products[:ror_tote] = Spree::Product.find_by!(name: "Ruby on Rails Tote")
-  products[:ror_bag] = Spree::Product.find_by!(name: "Ruby on Rails Bag")
-  products[:ror_jr_spaghetti] = Spree::Product.find_by!(name: "Ruby on Rails Jr. Spaghetti")
-  products[:ror_mug] = Spree::Product.find_by!(name: "Ruby on Rails Mug")
-  products[:ror_ringer] = Spree::Product.find_by!(name: "Ruby on Rails Ringer T-Shirt")
-  products[:ror_stein] = Spree::Product.find_by!(name: "Ruby on Rails Stein")
-  products[:spree_baseball_jersey] = Spree::Product.find_by!(name: "Spree Baseball Jersey")
-  products[:spree_stein] = Spree::Product.find_by!(name: "Spree Stein")
-  products[:spree_jr_spaghetti] = Spree::Product.find_by!(name: "Spree Jr. Spaghetti")
-  products[:spree_mug] = Spree::Product.find_by!(name: "Spree Mug")
-  products[:spree_ringer] = Spree::Product.find_by!(name: "Spree Ringer T-Shirt")
-  products[:spree_tote] = Spree::Product.find_by!(name: "Spree Tote")
-  products[:spree_bag] = Spree::Product.find_by!(name: "Spree Bag")
-  products[:ruby_baseball_jersey] = Spree::Product.find_by!(name: "Ruby Baseball Jersey")
-  products[:apache_baseball_jersey] = Spree::Product.find_by!(name: "Apache Baseball Jersey")
+  products[:ror_baseball_jersey] = Spree::Product.find_by!(name: "保养鞋")
+  products[:ror_tote] = Spree::Product.find_by!(name: "喷磨砂")
+  products[:ror_bag] = Spree::Product.find_by!(name: "干洗鞋")
+  products[:ror_jr_spaghetti] = Spree::Product.find_by!(name: "清洗鞋")
+  products[:ror_mug] = Spree::Product.find_by!(name: "翻新鞋")
+  products[:ror_ringer] = Spree::Product.find_by!(name: "修复鞋")
+
+  products[:spree_baseball_jersey] = Spree::Product.find_by!(name: "清洗上色保养")
+  products[:spree_stein] = Spree::Product.find_by!(name: "清洗特级保养")
+  products[:spree_jr_spaghetti] = Spree::Product.find_by!(name: "封边油")
+  products[:spree_mug] = Spree::Product.find_by!(name: "维修类")
+
 
   def image(name, type = "jpeg")
     images_path = Pathname.new(File.dirname(__FILE__)) + "images"
@@ -84,54 +80,7 @@ unless ENV['SKIP_SAMPLE_IMAGES']
         attachment: image("ror_ringer_back")
       }
     ],
-    products[:ror_stein].master => [
-      {
-        name: file_name("ror_stein"),
-        attachment: image("ror_stein")
-      },
-      {
-        name: file_name("ror_stein_back"),
-        attachment: image("ror_stein_back")
-      }
-    ],
-    products[:apache_baseball_jersey].master => [
-      {
-        name: file_name("apache_baseball", "png"),
-        attachment: image("apache_baseball", "png")
-      },
-    ],
-    products[:ruby_baseball_jersey].master => [
-      {
-        name: file_name("ruby_baseball", "png"),
-        attachment: image("ruby_baseball", "png")
-      },
-    ],
-    products[:spree_bag].master => [
-      {
-        name: file_name("spree_bag"),
-        attachment: image("spree_bag")
-      },
-    ],
-    products[:spree_tote].master => [
-      {
-        name: file_name("spree_tote_front"),
-        attachment: image("spree_tote_front")
-      },
-      {
-        name: file_name("spree_tote_back"),
-        attachment: image("spree_tote_back")
-      }
-    ],
-    products[:spree_ringer].master => [
-      {
-        name: file_name("spree_ringer_t"),
-        attachment: image("spree_ringer_t")
-      },
-      {
-        name: file_name("spree_ringer_t_back"),
-        attachment: image("spree_ringer_t_back")
-      }
-    ],
+
     products[:spree_jr_spaghetti].master => [
       {
         name: file_name("spree_spaghetti"),
@@ -170,19 +119,19 @@ unless ENV['SKIP_SAMPLE_IMAGES']
     ],
   }
 
-  products[:ror_baseball_jersey].variants.each do |variant|
-    color = variant.option_value("tshirt-color").downcase
-
-    if variant.images.where(attachment_file_name: file_name("ror_baseball_jersey_#{color}", "png")).none?
-      main_image = image("ror_baseball_jersey_#{color}", "png")
-      variant.images.create!(attachment: main_image)
-    end
-
-    if variant.images.where(attachment_file_name: file_name("ror_baseball_jersey_back_#{color}", "png")).none?
-      back_image = image("ror_baseball_jersey_back_#{color}", "png")
-      variant.images.create!(attachment: back_image)
-    end
-  end
+  # products[:ror_baseball_jersey].variants.each do |variant|
+  #   color = variant.option_value("tshirt-color").downcase
+  #
+  #   if variant.images.where(attachment_file_name: file_name("ror_baseball_jersey_#{color}", "png")).none?
+  #     main_image = image("ror_baseball_jersey_#{color}", "png")
+  #     variant.images.create!(attachment: main_image)
+  #   end
+  #
+  #   if variant.images.where(attachment_file_name: file_name("ror_baseball_jersey_back_#{color}", "png")).none?
+  #     back_image = image("ror_baseball_jersey_back_#{color}", "png")
+  #     variant.images.create!(attachment: back_image)
+  #   end
+  # end
 
   images.each do |variant, attachments|
     puts "Loading images for #{variant.product.name}"

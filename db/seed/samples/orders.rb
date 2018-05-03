@@ -23,14 +23,14 @@ orders << Spree::Order.where(
 
 unless orders[0].line_items.any?
   orders[0].line_items.new(
-    variant: Spree::Product.find_by!(name: "Ruby on Rails Tote").master,
+    variant: Spree::Product.find_by!(name: "保养鞋").master,
     quantity: 1,
     price: 15.99).save!
 end
 
 unless orders[1].line_items.any?
   orders[1].line_items.new(
-    variant: Spree::Product.find_by!(name: "Ruby on Rails Bag").master,
+    variant: Spree::Product.find_by!(name: "干洗鞋").master,
     quantity: 1,
     price: 22.99).save!
 end

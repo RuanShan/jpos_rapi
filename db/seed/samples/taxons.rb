@@ -5,13 +5,13 @@ categories = Spree::Taxonomy.find_by!(name: I18n.t('spree.taxonomy_categories_na
 brands = Spree::Taxonomy.find_by!(name: I18n.t('spree.taxonomy_brands_name'))
 
 products = {
-  ror_tote: "清洗鞋",
+  ror_tote: "保养鞋",
   ror_bag: "喷磨砂",
   ror_mug: "干洗鞋",
   ror_stein: "清洗鞋",
   ror_baseball_jersey: "翻新鞋",
   ror_jr_spaghetti: "修复鞋",
-  spree_ringer: "清洗上色保养",
+  spree_bag: "清洗上色保养",
   spree_stein: "清洗特级保养",
   spree_mug: "封边油",
   spree_ringer: "维修类",
@@ -48,7 +48,7 @@ taxons = [
     parent: I18n.t('spree.taxonomy_categories_name'),
     position: 2,
     products: [
-      products[:spree_ringer],
+      products[:spree_bag],
       products[:spree_stein],
       products[:spree_mug],
       products[:spree_ringer]
