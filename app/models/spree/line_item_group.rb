@@ -66,8 +66,8 @@ module Spree
       end
       after_transition from: :canceled, to: %i(pending ready shipped), do: :after_resume
 
-      after_transition do |shipment, transition|
-        shipment.state_changes.create!(
+      after_transition do |line_item_group, transition|
+        line_item_group.state_changes.create!(
           previous_state: transition.from,
           next_state:     transition.to,
           name:           'line_item_group'
@@ -94,17 +94,18 @@ module Spree
         transition to: :ready, from: %i(ready_for_store)
       end
 
+      event :next do
+        # pending -> ready_for_factory -> processing -> processed -> ready_for_store -> ready -> shipped
+        transition pending: :ready_for_factory,  ready_for_factory: :processing,
+          processing: :processed, processed: :ready_for_store, ready_for_store: :ready, ready: :shipped
+      end
+
       event :draw_back do
         #
-        transition ready_for_factory: :pending, ready_for_store: :processing,
-          processing: :ready_for_factory, shipped: :ready, ready: :pending
+        transition ready_for_factory: :pending, ready_for_store: :processed,
+          processed: :processing,  processing: :ready_for_factory,
+          shipped: :ready, ready: :pending
       end
-
-      event :next do
-        transition pending: :ready_for_factory,  ready_for_factory: :processing,
-          processing: :ready_for_store, ready_for_store: :ready, ready: :shipped
-      end
-
       #after_transition :on => [:next, :draw_back], :do => :after_step
 
     end

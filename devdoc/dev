@@ -5,3 +5,8 @@ rails db:migrate
 rails db:seed
 
 rails spree_sample:load
+
+
+Web print
+################################################################################
+https://stackoverflow.com/questions/16894683/how-to-print-html-content-on-click-of-a-button-but-not-the-page

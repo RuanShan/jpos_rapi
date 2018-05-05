@@ -63,7 +63,7 @@ class User < ActiveRecord::Base
   scope :admin, -> { includes(:spree_roles).where("#{roles_table_name}.name" => "admin") }
 
   self.whitelisted_ransackable_attributes = %w[id email username]
-  self.whitelisted_ransackable_associations = %w[roles]
+  self.whitelisted_ransackable_associations = %w[spree_roles]
 
   alias_attribute :spree_api_key, :api_key
   alias_attribute :name, :username # order.user_name required

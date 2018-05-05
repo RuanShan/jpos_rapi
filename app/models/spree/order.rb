@@ -3,7 +3,7 @@ require 'spree/order/checkout'
 module Spree
   class Order < Spree::Base
     PAYMENT_STATES = %w(balance_due credit_owed failed paid void)
-    GROUP_STATES = %w(pending ready_for_factory processing ready_for_store ready)
+    GROUP_STATES = %w(pending ready_for_factory processing processed ready_for_store ready)
     SHIPMENT_STATES = %w(backorder canceled partial pending ready shipped ready_for_factory processing ready_for_store)
     include Spree::Order::Checkout
     include Spree::Order::CurrencyUpdater
@@ -692,10 +692,12 @@ module Spree
           groups_map[line_item.group_number] = Spree::LineItemGroup.create(
             order: self,
             number: line_item.group_number,
-            cost: line_item.price
+            cost: line_item.price,
+            name: "#{line_item.name}(#{line_item.options_text})"
           )
         else
           groups_map[line_item.group_number].cost += line_item.price
+          groups_map[line_item.group_number].name += " / #{line_item.name}(#{line_item.options_text})"
           groups_map[line_item.group_number].save
         end
       }

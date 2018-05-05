@@ -13,6 +13,10 @@ class CreateSaleDays < ActiveRecord::Migration[5.1]
       t.integer  "new_customers_count", default: 0, null: false
       #新购卡
       t.integer  "new_cards_count", default: 0, null: false
+
+      #works for each day
+      t.integer  "processed_line_items_count", default: 0, null: false
+
       t.timestamps null: false
       t.index ["seller_type", "seller_id", "day"]
     end

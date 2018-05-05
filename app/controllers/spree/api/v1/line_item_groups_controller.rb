@@ -29,9 +29,13 @@ module Spree
         def all_step
 
           numbers = params[:numbers]
+          ids = params[:ids]
           forward = params[:forward].nil? || !!params[:forward]
-
-          @line_item_groups = Spree::LineItemGroup.where number: numbers
+          if ids.present?
+            @line_item_groups = Spree::LineItemGroup.where id: ids
+          else
+            @line_item_groups = Spree::LineItemGroup.where number: numbers
+          end
           @line_item_groups.each{ |group|
             group.make_step_and_order forward
           }

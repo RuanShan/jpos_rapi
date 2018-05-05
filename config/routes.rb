@@ -97,11 +97,13 @@ scope module: 'spree' do
           put :one_step
         end
         collection do
+          # search, sansack has array paramter, post json is easy.
           get :counts
           put :all_step
         end
       end
-
+      post '/line_item_groups/search', to: 'line_item_groups#index'
+      put '/line_items/fulfill', to: 'line_items#fulfill'
 
       resources :zones
       resources :countries, only: [:index, :show] do
@@ -146,6 +148,7 @@ scope module: 'spree' do
           get :cards
         end
       end
+      post '/users/search', to: 'users#index'
 
       resources :customers do
         member do

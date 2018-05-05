@@ -6,6 +6,15 @@ module Spree
 
         self.line_item_options = []
 
+        # associate worker with line_items
+        def fulfill
+          worker_id = params[:worker_id]
+          ids = params[:ids]
+          @line_items = Spree::LineItem.find( ids )
+          Spree::LineItem.where( id: ids ).update( worker_id: worker_id )
+          respond_with(@line_items)
+        end
+
         def new; end
 
         def create
