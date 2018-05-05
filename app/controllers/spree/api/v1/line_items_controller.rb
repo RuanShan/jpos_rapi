@@ -11,7 +11,10 @@ module Spree
           worker_id = params[:worker_id]
           ids = params[:ids]
           @line_items = Spree::LineItem.find( ids )
-          Spree::LineItem.where( id: ids ).update( worker_id: worker_id )
+          # update_column skip callback, or cause error:
+          # NoMethodError: undefined method `set_up_inventory' for nil:NilClass
+          # from /var/www/apps/jpos_rapi/app/models/spree/order_inventory.rb:80:in `add_to_shipment'
+          Spree::LineItem.where( id: ids ).update_all( worker_id: worker_id )
           respond_with(@line_items)
         end
 

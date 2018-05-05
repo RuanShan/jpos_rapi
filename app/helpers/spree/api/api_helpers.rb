@@ -94,7 +94,7 @@ module Spree
         :canceler_id, :store_id, :group_state
       ]
 
-      @@line_item_attributes = [:id, :quantity, :price, :variant_id, :group_number]
+      @@line_item_attributes = [:id, :quantity, :price, :variant_id, :group_number, :worker_id]
 
       @@line_item_group_attributes = [:id, :order_id, :number, :cost, :state, :name]
 

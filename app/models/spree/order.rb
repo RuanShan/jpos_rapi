@@ -677,10 +677,9 @@ module Spree
       #  shipment.finalize!
       #end
       #updater.update_shipment_state
-      updater.update_group_state
+      updater.update_group_state      
       save!
       updater.run_hooks
-
       touch :completed_at
     end
 
