@@ -12,6 +12,7 @@ module Spree
     has_one :product, through: :variant
     # 一张卡可能多次充值，所以一张卡可能有多个line_item
     belongs_to :card, dependent: :destroy, required: false
+    belongs_to :worker, class_name: 'User', dependent: :destroy, required: false
 
     has_many :adjustments, as: :adjustable, dependent: :destroy
     has_many :inventory_units, inverse_of: :line_item
@@ -34,6 +35,7 @@ module Spree
 
     after_save :update_inventory
     after_save :update_adjustments
+    after_save :update_worker_sale_day
 
     after_create :update_tax_charge
 
@@ -149,9 +151,10 @@ module Spree
     end
 
     def update_inventory
-      if (saved_changes? || target_shipment.present?) && order.has_checkout_step?('delivery')
-        verify_order_inventory
-      end
+      # comment out, or update line_item.worker_id cause error
+      #if (saved_changes? || target_shipment.present?) && order.has_checkout_step?('delivery')
+      #  verify_order_inventory
+      #end
     end
 
     def verify_order_inventory
@@ -186,5 +189,17 @@ module Spree
         errors.add(:currency, :must_match_order_currency)
       end
     end
+
+    def update_worker_sale_day
+      if worker_id_previously_changed?
+        previous_worker_id = worker_id_previous_change.first.to_i
+        if previous_worker_id>0
+          #recompute previous by
+          previous_date = work_at_previous_change.first
+          User.find( previous_worker_id ).recompute_processed_line_items_count previous_date
+        end
+      end
+    end
+
   end
 end

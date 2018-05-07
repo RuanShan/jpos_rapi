@@ -30,7 +30,7 @@ module BetterDateScope
     args.each_pair do |field_name, dates|
       dates = [dates] unless dates.is_a? Array
       class_eval do
-        scope :on_date, ->(date){ where( field_name => date )}
+        scope :on_date, ->(date){ where( field_name => date ) }
         scope :between_dates, ->(from_date, to_date){ where( ["#{field_name}>=? AND #{field_name}<=?", from_date, to_date] )}
         scope :before_date, ->(date){ where(["#{field_name}<=?",date])}
 

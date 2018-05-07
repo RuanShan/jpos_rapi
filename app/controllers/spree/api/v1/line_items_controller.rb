@@ -11,10 +11,16 @@ module Spree
           worker_id = params[:worker_id]
           ids = params[:ids]
           @line_items = Spree::LineItem.find( ids )
+          worker_times = @line_items.select{|i| i.worker_id> 0 }.map{ |i| [i.worker_id, i.work_at] }.uniq
           # update_column skip callback, or cause error:
           # NoMethodError: undefined method `set_up_inventory' for nil:NilClass
           # from /var/www/apps/jpos_rapi/app/models/spree/order_inventory.rb:80:in `add_to_shipment'
-          Spree::LineItem.where( id: ids ).update_all( worker_id: worker_id )
+          Spree::LineItem.where( id: ids ).update_all( worker_id: worker_id, work_at: DateTime.current)
+
+          workers = User.find worker_times.keys
+
+          workers.each{|worker| worker.sale_today.compute_processed_line_items_count}
+
           respond_with(@line_items)
         end
 

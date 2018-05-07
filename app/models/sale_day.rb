@@ -25,4 +25,9 @@ class SaleDay < ApplicationRecord
   #     end
   #   end
   # end
+
+  def recompute_processed_line_items_count
+    #update processed_line_items_count: Spree::LineItem.where( worer_id: self.id, work)
+  end
+
 end

@@ -31,12 +31,16 @@ class CreateSaleDays < ActiveRecord::Migration[5.1]
       t.integer  "new_customer_count",  default: 0, null: false
       #新购卡
       t.integer  "new_card_count", default: 0, null: false
+
+      t.integer  "processed_line_items_count", default: 0, null: false
+
       t.timestamps null: false
       t.index ["seller_type", "seller_id", "day"]
     end
 
 
     add_column :users, :created_by_id, :integer #这个客户的创建者是谁
+    add_column :spree_line_items, :work_at, :datetime
 
   end
 end

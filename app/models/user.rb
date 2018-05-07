@@ -53,6 +53,7 @@ class User < ActiveRecord::Base
     primary_key: 'seller_id', foreign_key: 'created_by_id'
   #服务员今天的统计信息
   has_one :sale_today, ->{ today }, class_name: 'SaleDay', foreign_key: 'seller_id'
+  has_many :sale_days, class_name: 'SaleDay'
 
   after_initialize :create_sale_today_for_waiter, :if => :persisted?
   before_validation :set_login
@@ -102,6 +103,11 @@ class User < ActiveRecord::Base
       if has_spree_role?(:waiter)
         day = self.sale_today || self.create_sale_today
       end
+    end
+
+    def recompute_processed_line_items_count( date )
+      sale_day = sale_days.on_date( previous_date ).first
+      sale_day.recompute_processed_line_items_count
     end
   #
   #
