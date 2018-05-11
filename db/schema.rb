@@ -303,6 +303,7 @@ ActiveRecord::Schema.define(version: 20180425115306) do
     t.integer "new_orders_count", default: 0, null: false
     t.integer "new_customers_count", default: 0, null: false
     t.integer "new_cards_count", default: 0, null: false
+    t.integer "processed_line_items_count", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["seller_type", "seller_id", "day"], name: "index_sale_days_on_seller_type_and_seller_id_and_day"
@@ -316,6 +317,7 @@ ActiveRecord::Schema.define(version: 20180425115306) do
     t.integer "new_order_count", default: 0, null: false
     t.integer "new_customer_count", default: 0, null: false
     t.integer "new_card_count", default: 0, null: false
+    t.integer "processed_line_items_count", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["seller_type", "seller_id", "day"], name: "index_sale_months_on_seller_type_and_seller_id_and_day"
@@ -710,6 +712,8 @@ ActiveRecord::Schema.define(version: 20180425115306) do
     t.integer "group_position"
     t.string "state", limit: 24
     t.integer "card_id"
+    t.integer "worker_id"
+    t.datetime "work_at"
     t.index ["order_id"], name: "index_spree_line_items_on_order_id"
     t.index ["tax_category_id"], name: "index_spree_line_items_on_tax_category_id"
     t.index ["variant_id"], name: "index_spree_line_items_on_variant_id"
