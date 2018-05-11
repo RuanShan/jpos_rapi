@@ -44,7 +44,7 @@ module RailsStarter
 
     config.middleware.insert_before 0, Rack::Cors do
       allow do
-        origins /localhost(:\d+)/, /127.0.0.1(:\d+)/
+        origins /localhost(:\d+)/, /127.0.0.1(:\d+)/, /jpos_rapi/
         resource '/api/v1/*', :headers => :any, :methods => [:get, :post, :delete, :put, :patch, :options, :head], :credentials => true
         resource '/users/*', :headers => :any, :methods => [:get, :post, :delete, :options], :credentials => true
       end
