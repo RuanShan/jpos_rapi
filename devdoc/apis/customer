@@ -5,17 +5,26 @@ POST /api/v1/users
 
 4.1 get customers
 GET  /api/v1/customers
-curl -i  -H "Accept: application/json" -H "content-type: application/json"  \
-  -H "X-Spree-Token: cfe62ba2b400cf58ad4e7cba698a542a6a9fbec2a7a45cce" \
-  http://127.0.0.1:3001/api/v1/customers
+curl -i  -H "Accept: application/json" -H "content-type: application/json"  -H "X-Spree-Token: cfe62ba2b400cf58ad4e7cba698a542a6a9fbec2a7a45cce"  http://127.0.0.1:3001/api/v1/customers
 
 4.2 customer cards
 GET  /api/v1/users/:id/cards
 curl -i  -H "Accept: application/json" -H "content-type: application/json"  http://127.0.0.1:3001/api/v1/users/2/cards
 
-4.3 查询用户search users
+4.3 复合条件模糊查询会员
+路径 POST /api/v1/users/search
+参数
+  q: 查询条件， 示例： 邮箱包含worker, 角色为worker {"email_cont": "worker", "spree_roles_name_eq":"worker" }
+                     电话号码包含 138 {"mobile_cont": "128"}
+返回
+{
+  "users":[{"id":3,"email":"guest@example.com",
+    "created_at":"2018-05-11T18:29:37.000+08:00","display_created_at":"2018年5月11日18:29",
+    "updated_at":"2018-05-11T18:29:37.000+08:00","username":"guest","mobile":null,"bill_address":null,"ship_address":null}],
+  "count":1,"current_page":1,"pages":1,"total_count":1
+}
 
-POST /api/v1/users/search
+Curl示例
 curl -i -X POST \
   -H "X-Spree-Token: cfe62ba2b400cf58ad4e7cba698a542a6a9fbec2a7a45cce" \
   -H "Accept: application/json" \
@@ -23,7 +32,7 @@ curl -i -X POST \
   --data '{"q":{"email_cont": "worker", "spree_roles_name_eq":"worker" }}' \
   http://127.0.0.1:3001/api/v1/users/search
 
-4.4 根据唯一标识查询用户, 目前唯一标识为用户电话号码或会员号
+4.4 根据唯一标识查询用户, 目前唯一标识为用户电话号码或会员号 **暂未使用**
 路径
   GET /api/v1/users/search_one/:key
 参数
