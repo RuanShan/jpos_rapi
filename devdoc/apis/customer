@@ -12,6 +12,7 @@ GET  /api/v1/users/:id/cards
 curl -i  -H "Accept: application/json" -H "content-type: application/json"  http://127.0.0.1:3001/api/v1/users/2/cards
 
 4.3 复合条件模糊查询会员
+-------------------------------------------------------------------------------
 路径 POST /api/v1/users/search
 参数
   q: 查询条件， 示例： 邮箱包含worker, 角色为worker {"email_cont": "worker", "spree_roles_name_eq":"worker" }
@@ -33,6 +34,7 @@ curl -i -X POST \
   http://127.0.0.1:3001/api/v1/users/search
 
 4.4 根据唯一标识查询用户, 目前唯一标识为用户电话号码或会员号 **暂未使用**
+-------------------------------------------------------------------------------
 路径
   GET /api/v1/users/search_one/:key
 参数
