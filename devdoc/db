@@ -11,9 +11,11 @@
 # company -> store
 #           store -> menu
 #
-#
-# order -> line_item
 
+# 一个订单：表示一个用户一次进店所购买的所有服务
+# 物品：表示服务的标的物，如：清洗的鞋，打油的包
+# order(订单) -> line_item(服务项目)
+              -> line_item_groups(物品)
 
 game (has_many)-> game_round
 

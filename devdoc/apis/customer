@@ -1,0 +1,36 @@
+4. create customer
+api_key of user has to be waiter or admin
+
+POST /api/v1/users
+
+4.1 get customers
+GET  /api/v1/customers
+curl -i  -H "Accept: application/json" -H "content-type: application/json"  \
+  -H "X-Spree-Token: cfe62ba2b400cf58ad4e7cba698a542a6a9fbec2a7a45cce" \
+  http://127.0.0.1:3001/api/v1/customers
+
+4.2 customer cards
+GET  /api/v1/users/:id/cards
+curl -i  -H "Accept: application/json" -H "content-type: application/json"  http://127.0.0.1:3001/api/v1/users/2/cards
+
+4.3 查询用户search users
+
+POST /api/v1/users/search
+curl -i -X POST \
+  -H "X-Spree-Token: cfe62ba2b400cf58ad4e7cba698a542a6a9fbec2a7a45cce" \
+  -H "Accept: application/json" \
+  -H "Content-Type: application/json" \
+  --data '{"q":{"email_cont": "worker", "spree_roles_name_eq":"worker" }}' \
+  http://127.0.0.1:3001/api/v1/users/search
+
+4.4 根据唯一标识查询用户, 目前唯一标识为用户电话号码或会员号
+路径
+  GET /api/v1/users/search_one/:key
+参数
+  key： 用户电话号码或会员号
+返回
+  {
+    id: 用户ID， 如果没找到 id 为null
+    username: 用户名
+    mobile: 电话号码
+  }
