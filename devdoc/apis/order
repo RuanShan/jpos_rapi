@@ -33,3 +33,31 @@ POST /api/v1/orders
   }
 }
 curl -i -X POST -H "Accept: application/json" -H "content-type: application/json" -d @test/json/card_order.json  http://127.0.0.1:3001/api/v1/pos_orders
+
+
+3.1 创建服务订单，并结账
+POST /api/v1/orders
+
+curl -i -X POST -H "Accept: application/json" -H "content-type: application/json" -d @test/json/pay_order.json  http://127.0.0.1:3001/api/v1/pos_orders
+请求数据示例：
+{
+  "order": {
+    "line_items": [
+      { "variant_id": 1, "quantity": 5 }
+    ]
+    "payments_attributes": [
+      {
+        "payment_method_id": "1"
+      }
+    ]
+  },
+  "payment_source": {
+    "1": {
+      "number": "4111111111111111",
+      "month": "1",
+      "year": "2017",
+      "verification_value": "123",
+      "name": "John Smith"
+    }
+  }
+}

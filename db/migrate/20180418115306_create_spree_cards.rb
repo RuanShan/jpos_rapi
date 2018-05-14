@@ -31,7 +31,7 @@ class CreateSpreeCards < ActiveRecord::Migration[5.1]
     add_column :spree_products, :type_id, :integer, :default => 1, :null => false
     add_column :spree_products, :type, :string, limit: 24
     # line_item has many card
-    add_column :spree_line_items, :card_id, :integer
-    add_column :spree_line_items, :worker_id, :integer
+    add_column :spree_line_items, :card_id, :integer, :default => 0, :null => false
+    add_column :spree_line_items, :worker_id, :integer, :default => 0, :null => false
   end
 end

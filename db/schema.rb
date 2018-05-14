@@ -711,8 +711,8 @@ ActiveRecord::Schema.define(version: 20180425115306) do
     t.string "group_number", limit: 24
     t.integer "group_position"
     t.string "state", limit: 24
-    t.integer "card_id"
-    t.integer "worker_id"
+    t.integer "card_id", default: 0, null: false
+    t.integer "worker_id", default: 0, null: false
     t.datetime "work_at"
     t.index ["order_id"], name: "index_spree_line_items_on_order_id"
     t.index ["tax_category_id"], name: "index_spree_line_items_on_tax_category_id"

@@ -1,10 +1,11 @@
 {
   "order": {
     "is_pos": true,
+    "user_id": 8,
     "line_items": [
-      { "variant_id": 1, "quantity": 1, "group_number": "2018041418010001" },
-      { "variant_id": 1, "quantity": 2, "group_number": "2018041418010001" },
-      { "variant_id": 2, "quantity": 2, "group_number": "2018041418010002" }
+      { "variant_id": 15, "quantity": 1, "group_number": "2018041418010001" },
+      { "variant_id": 15, "quantity": 2, "group_number": "2018041418010001" },
+      { "variant_id": 16, "quantity": 2, "group_number": "2018041418010002" }
     ],
     "payments_attributes": [
       {
@@ -14,11 +15,7 @@
   },
   "payment_source": {
     "1": {
-      "number": "4111111111111111",
-      "month": "1",
-      "year": "2017",
-      "verification_value": "123",
-      "name": "John Smith"
+      "number": "4111111111111111"
     }
   }
 }

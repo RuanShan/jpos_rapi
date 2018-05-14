@@ -664,7 +664,6 @@ module Spree
     # handle pos
     ############################################################################
     def complete_via_pos
-
       create_line_item_groups
 
       # lock all adjustments (coupon promotions, etc.)
@@ -680,13 +679,18 @@ module Spree
       updater.update_group_state
       save!
       updater.run_hooks
-      touch :completed_at
+      #不能 touch completed_at, 删除时会导致 OrderInventory.verify 异常
+      #touch :completed_at
     end
 
     def create_line_item_groups
       groups_map = {}
 
       line_items.each{|line_item|
+        #如果 group_number 为空，说明这个line_item 不是一个服务，可能是充值卡，或鞋油等实物商品
+        #对于这些line_item无需创建line_item_group
+        #line_item_group, 代表的是一件客户物品
+        next if line_item.group_number.blank?
         if groups_map[line_item.group_number].blank?
           groups_map[line_item.group_number] = Spree::LineItemGroup.create(
             order: self,
