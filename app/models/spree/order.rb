@@ -677,7 +677,7 @@ module Spree
       #  shipment.finalize!
       #end
       #updater.update_shipment_state
-      updater.update_group_state      
+      updater.update_group_state
       save!
       updater.run_hooks
       touch :completed_at
@@ -707,8 +707,8 @@ module Spree
     def associate_store_address
       self.store_id ||= user.store_id
       Rails.logger.debug "in associate_store_address"
-      self.bill_address = Store.current.address
-      self.ship_address = Store.current.address
+      #self.bill_address = Store.current.address
+      #self.ship_address = Store.current.address
     end
 
     def link_by_email

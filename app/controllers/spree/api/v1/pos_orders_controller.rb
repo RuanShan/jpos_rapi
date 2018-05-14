@@ -11,7 +11,7 @@ module Spree
 
           # enable group_state
           order_attributes = params.require(:order).permit(permitted_checkout_attributes)
-          order_attributes[:user] = current_api_user
+          #order_attributes[:user] = current_api_user
           order_attributes[:store] = current_store
           @order = Spree::Order.create!(order_attributes)
 

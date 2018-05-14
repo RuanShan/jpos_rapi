@@ -1,9 +1,8 @@
 {
   "order": {
     "is_pos": true,
-    "created_by_id": 4,
     "line_items": [
-      { "variant_id": 1, "quantity": 1 }
+      { "variant_id": 15, "quantity": 1 }
     ]
   }
 }
