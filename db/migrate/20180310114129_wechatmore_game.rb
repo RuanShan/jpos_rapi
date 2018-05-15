@@ -271,7 +271,6 @@ class WechatmoreGame < ActiveRecord::Migration[5.1]
       t.string "api_key", default: "", limit: 48,  null: false
       t.integer "company_id"
       t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
-      t.index ["email"], name: "index_users_on_email", unique: true
       t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
       t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true
       t.index ["username"], name: "index_users_on_username", unique: true
@@ -287,7 +286,9 @@ class WechatmoreGame < ActiveRecord::Migration[5.1]
       t.string "authentication_token"
       t.boolean :is_staff, null: false, default: false
       t.string "mobile"
-      
+      t.datetime "birth"
+      t.string "address"
+      t.string "memo"
       t.integer "store_id"
       t.datetime "deleted_at"
 
