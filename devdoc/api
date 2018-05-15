@@ -40,6 +40,15 @@ Curl示例：
 curl -i -X DELETE -H "Accept: application/json"  http://127.0.0.1:3001/users/sign_out
 
 1.2 创建客户
+
+参数：
+   user: { username：用户名
+     mobile: 电话号码
+     password：密码
+     address： 联系地址
+     birth： 生日
+     memo: 备注
+     }
 curl -i -X POST  \
   -H "X-Spree-Token: cfe62ba2b400cf58ad4e7cba698a542a6a9fbec2a7a45cce" \
   -H "Accept: application/json" \
