@@ -1977,6 +1977,9 @@ ActiveRecord::Schema.define(version: 20180425115306) do
     t.string "authentication_token"
     t.boolean "is_staff", default: false, null: false
     t.string "mobile"
+    t.datetime "birth"
+    t.string "address"
+    t.string "memo"
     t.integer "store_id"
     t.datetime "deleted_at"
     t.datetime "created_at", null: false
@@ -1986,7 +1989,6 @@ ActiveRecord::Schema.define(version: 20180425115306) do
     t.index ["bill_address_id"], name: "index_spree_users_on_bill_address_id"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["deleted_at"], name: "index_spree_users_on_deleted_at"
-    t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["ship_address_id"], name: "index_spree_users_on_ship_address_id"
     t.index ["store_id", "email"], name: "email_idx_unique", unique: true
