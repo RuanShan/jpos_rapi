@@ -151,7 +151,7 @@ module Spree
         :id, :month, :year, :cc_type, :last_digits, :name
       ]
 
-      @@user_attributes = [:id, :email, :created_at, :display_created_at, :updated_at, :username, :mobile]
+      @@user_attributes = [:id, :email, :created_at, :updated_at, :username, :mobile, :address, :birth, :memo]
 
       @@property_attributes = [:id, :name, :presentation]
 
