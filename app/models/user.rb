@@ -100,9 +100,7 @@ class User < ActiveRecord::Base
     end
 
     def create_sale_today_for_waiter
-      if has_spree_role?(:waiter)
-        day = self.sale_today || self.create_sale_today
-      end
+        self.create_sale_today if self.sale_today.blank?
     end
 
     def recompute_processed_line_items_count( date )

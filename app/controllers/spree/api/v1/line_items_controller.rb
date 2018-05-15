@@ -17,9 +17,11 @@ module Spree
           # from /var/www/apps/jpos_rapi/app/models/spree/order_inventory.rb:80:in `add_to_shipment'
           Spree::LineItem.where( id: ids ).update_all( worker_id: worker_id, work_at: DateTime.current)
 
-          workers = User.find worker_times.keys
-
-          workers.each{|worker| worker.sale_today.compute_processed_line_items_count}
+          worker_times.each{ |worker_time_pair|
+            worker_id, time = worker_time_pair[0], worker_time_pair[1]
+            worker = User.find worker_id
+            worker.sale_today.recompute_processed_line_items_count
+          }
 
           respond_with(@line_items)
         end
