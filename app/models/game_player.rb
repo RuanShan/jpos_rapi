@@ -2,7 +2,7 @@
 class GamePlayer < ApplicationRecord
   Salt = '!%0505^&2?zc'
   include AASM
-  extend DisplayDateTime
+  extend Spree::DisplayDateTime
   #玩家签到是，按照position顺序显示
   acts_as_list scope: [:game_round_id]
 

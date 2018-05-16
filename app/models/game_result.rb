@@ -1,6 +1,6 @@
 class GameResult < ApplicationRecord
   include SmsParser
-  extend DisplayDateTime
+  extend Spree::DisplayDateTime
   date_time_methods :created_at, :updated_at
 
 

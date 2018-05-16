@@ -1,6 +1,6 @@
 class Campaign < ApplicationRecord
   include CampaignGenre
-  extend DisplayDateTime
+  extend Spree::DisplayDateTime
   date_time_methods :created_at
 
   belongs_to :creator, class_name: 'User'

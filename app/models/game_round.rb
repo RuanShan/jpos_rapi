@@ -3,7 +3,7 @@
 # start_at: 游戏开始时间，这个时间点开始，客户可以玩游戏。
 # end_at: 游戏结束时间，这个时间点以后，客户不可以玩游戏。
 class GameRound < ApplicationRecord
-  extend DisplayDateTime
+  extend Spree::DisplayDateTime
   date_time_methods :start_at, :end_at
 
   include GameRoundAasmState
