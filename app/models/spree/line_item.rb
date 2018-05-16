@@ -129,7 +129,7 @@ module Spree
     end
 
     def ensure_valid_group_number
-      self.group_number ||= generate_group_number
+      #self.group_number ||= generate_group_number
     end
 
     def generate_group_number

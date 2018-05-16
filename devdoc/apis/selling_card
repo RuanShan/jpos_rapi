@@ -1,0 +1,3 @@
+4.1 会员卡商品列表
+GET  /api/v1/selling_cards
+curl -i  -H "Accept: application/json" -H "content-type: application/json" -H "X-Spree-Token: 4ea91516400ef324dcf506969cd782739d778816f184333e"  http://127.0.0.1:3001/api/v1/selling_cards

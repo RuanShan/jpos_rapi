@@ -22,7 +22,7 @@ module Spree
         private
 
         def find_card
-          @card = Spree::Card.find_by!(code: params[:id])
+          @card = Spree::Card.find_by!(id: params[:id])
         end
       end
     end
