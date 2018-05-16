@@ -71,6 +71,9 @@ class User < ActiveRecord::Base
 
   date_time_methods :created_at, :updated_at
 
+  validates :username, presence: true, length: { in: 5..20 }, uniqueness: true
+  validates :mobile, presence: true, uniqueness: true
+
   def self.admin_created?
     User.admin.count > 0
   end

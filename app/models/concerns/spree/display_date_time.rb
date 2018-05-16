@@ -1,3 +1,4 @@
+module Spree
   module DisplayDateTime
     ##
     # Takes a list of methods that the base object wants to be able to use
@@ -30,3 +31,4 @@
       end
     end
   end
+end
