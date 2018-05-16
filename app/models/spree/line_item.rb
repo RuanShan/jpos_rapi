@@ -31,7 +31,7 @@ module Spree
 
     before_destroy :destroy_inventory_units
 
-    before_create :associate_with_card, if: :is_card?
+    after_create :associate_with_card, if: :is_card?
 
     after_save :update_inventory
     after_save :update_adjustments
@@ -119,12 +119,7 @@ module Spree
     def associate_with_card
       #如果产品是一张充值卡
       if is_card?
-Rails.logger.debug "before create_card"
-card = create_card( variant: variant, user: self.user, name: variant.descriptive_name, created_by: order.created_by)
-Rails.logger.debug "card #{card.errors.inspect}, #{order.inspect}"
-
           self.card ||= create_card!( variant: variant, user: self.user, name: variant.descriptive_name, created_by: order.created_by)
-Rails.logger.debug "after create_card"
           self.card.transactions.create!( order: order, amount: self.price)
       end
     end

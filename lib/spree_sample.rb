@@ -5,6 +5,8 @@ module SpreeSample
 
     # Needs to be here so we can access it inside the tests
     def self.load_samples
+      Spree::Sample.load_sample("customers")
+
       Spree::Sample.load_sample("payment_methods")
       Spree::Sample.load_sample("shipping_categories")
       Spree::Sample.load_sample("shipping_methods")
@@ -21,9 +23,9 @@ module SpreeSample
       Spree::Sample.load_sample("stock")
       Spree::Sample.load_sample("assets")
 
-      Spree::Sample.load_sample("orders")
-      Spree::Sample.load_sample("adjustments")
-      Spree::Sample.load_sample("payments")
-      Spree::Sample.load_sample("store_credit_categories")
+      #Spree::Sample.load_sample("orders")
+      #Spree::Sample.load_sample("adjustments")
+      #Spree::Sample.load_sample("payments")
+      #Spree::Sample.load_sample("store_credit_categories")
     end
 end
