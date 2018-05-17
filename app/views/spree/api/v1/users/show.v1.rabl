@@ -10,6 +10,6 @@ child(ship_address: :ship_address) do
   extends 'spree/api/v1/addresses/show'
 end
 
-child(@user.cards => :cards) do
+child(cards: :cards) do
   extends 'spree/api/v1/cards/show'
 end
