@@ -26,7 +26,7 @@ Spree::Country.where(iso: Spree::Address::NO_ZIPCODE_ISO_CODES).update_all(zipco
 
 states = YAML::load(File.read( File.join(File.dirname(__FILE__),'states.yml')))
 states.each_pair{|key,state|
-  Spree::State.create!({id: state['id'], name: state["name"], abbr: state["abbr"], country: country})
+#  Spree::State.create!({id: state['id'], name: state["name"], abbr: state["abbr"], country: country})
 }
 
 
@@ -40,7 +40,7 @@ Spree::State.all.each{|state|
   raise "missing cities for provice #{ state.name} " unless cities.present?
 
   cities.each{ |city_name, districts|
-    city = Spree::City.create!({ name: city_name, state: state})
+    #city = Spree::City.create!({ name: city_name, state: state})
     #districts.each{|district|
     #  Spree::District.create!({ name: district, city: city})
     #}
