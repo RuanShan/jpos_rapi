@@ -7,53 +7,53 @@ products = [
   {
     name: "保养鞋",
     tax_category: clothing,
-    price: 15.99
+    price: 20
   },
   {
     name: "喷磨砂",
     tax_category: clothing,
-    price: 22.99
+    price: 50
   },
   {
     name: "干洗鞋",
     tax_category: clothing,
-    price: 19.99
+    price: 10
   },
   {
     name: "清洗鞋",
     tax_category: clothing,
-    price: 19.99
+    price: 10
 
   },
   {
     name: "翻新鞋",
     tax_category: clothing,
-    price: 19.99
+    price: 10
   },
   {
     name: "修复鞋",
     tax_category: clothing,
-    price: 19.99
+    price: 10
   },
   {
     name: "清洗上色保养",
     tax_category: clothing,
-    price: 19.99
+    price: 10
   },
   {
     name: "清洗特级保养",
     tax_category: clothing,
-    price: 19.99
+    price: 10
   },
   {
     name: "封边油",
     tax_category: clothing,
-    price: 19.99
+    price: 10
   },
   {
     name: "维修类",
     tax_category: clothing,
-    price: 19.99
+    price: 10
   }
 ]
 
