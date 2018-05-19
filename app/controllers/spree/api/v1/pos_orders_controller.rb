@@ -104,6 +104,8 @@ module Spree
 
         # count order on param states
         # states - is an array of state
+        # 参数： store_id,计算这个店铺的订单统计
+        #
         def count
           @order_counts = {}
           Order::GROUP_STATES.each{|state|

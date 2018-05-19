@@ -1,6 +1,6 @@
 Spree::Sample.load_sample("products")
 
-size = Spree::OptionType.find_by!(presentation: "Size")
+size = Spree::OptionType.find_by!(presentation: "规格")
 
 ror_baseball_jersey = Spree::Product.all.each{|product|
   product.option_types = [size]

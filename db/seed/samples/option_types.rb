@@ -1,7 +1,7 @@
 option_types_attributes = [
   {
     name: "size",
-    presentation: "Size",
+    presentation: "规格",
     position: 1
   }
 ]

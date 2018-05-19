@@ -1,23 +1,23 @@
 Spree::Sample.load_sample("option_types")
 
-size = Spree::OptionType.find_by!(presentation: "Size")
+size = Spree::OptionType.find_by!(presentation: "规格")
 
 option_values_attributes = [
   {
     name: "低规",
-    presentation: "S",
+    presentation: "低规",
     position: 1,
     option_type: size
   },
   {
     name: "中规",
-    presentation: "M",
+    presentation: "中规",
     position: 2,
     option_type: size
   },
   {
     name: "高规",
-    presentation: "L",
+    presentation: "高规",
     position: 3,
     option_type: size
   }
