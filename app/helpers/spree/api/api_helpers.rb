@@ -2,41 +2,42 @@ module Spree
   module Api
     module ApiHelpers
       ATTRIBUTES = [
+        :address_attributes,
+        :adjustment_attributes,
+        :country_attributes,
         :card_attributes,
         :card_transaction_attributes,
-        :product_attributes,
-        :product_property_attributes,
-        :variant_attributes,
+        :creditcard_attributes,
+        :customer_return_attributes,
         :image_attributes,
-        :option_value_attributes,
-        :order_attributes,
+        :inventory_unit_attributes,
         :line_item_attributes,
         :line_item_group_attributes,
+        :option_value_attributes,
+        :order_attributes,
         :option_type_attributes,
         :payment_attributes,
         :payment_method_attributes,
-        :shipment_attributes,
-        :taxonomy_attributes,
-        :taxon_attributes,
-        :address_attributes,
-        :country_attributes,
-        :state_attributes,
-        :adjustment_attributes,
-        :inventory_unit_attributes,
-        :return_authorization_attributes,
-        :creditcard_attributes,
         :payment_source_attributes,
-        :user_attributes,
+        :promotion_attributes,
+        :product_attributes,
+        :product_property_attributes,
         :property_attributes,
+        :reimbursement_attributes,
+        :relation_attributes,
+        :return_authorization_attributes,
+        :sale_day_attributes,
+        :shipment_attributes,
+        :state_attributes,
         :stock_location_attributes,
         :stock_movement_attributes,
         :stock_item_attributes,
-        :promotion_attributes,
         :store_attributes,
         :tag_attributes,
-        :customer_return_attributes,
-        :reimbursement_attributes,
-        :sale_day_attributes,
+        :taxonomy_attributes,
+        :taxon_attributes,
+        :user_attributes,
+        :variant_attributes,
       ]
 
       mattr_reader *ATTRIBUTES
@@ -54,7 +55,7 @@ module Spree
       end
 
       @@card_attributes = [
-        :id, :user_id, :code, :current_value, :name
+        :id, :user_id, :code, :current_value, :name, :discount_percent, :discount_amount
       ]
       @@card_transaction_attributes = [
         :id, :card_id, :order_id, :amount, :created_at
@@ -188,7 +189,9 @@ module Spree
         :id, :reimbursement_status, :customer_return_id, :order_id,
         :number, :total, :created_at, :updated_at
       ]
-
+      @@relation_attributes = [
+        :id, :relation_type_id, :relatable_id, :related_to_id, :discount_amount, :discount_percent
+      ]
       @@sale_day_attributes = [
         :day, :new_orders_count, :new_customers_count, :new_cards_count
       ]

@@ -75,7 +75,10 @@ module Spree
 
     has_many :variant_images, -> { order(:position) }, source: :images, through: :variants_including_master
 
+    # 一张卡对应不同的产品有不同的打折关系
     has_many :relations, -> { order(:position) }, as: :relatable
+    # 一个产品对应不同的卡有不同的打折关系
+    has_many :relateds, class_name: 'Spree::Relation', as: :related_to
 
     after_create :add_associations_from_prototype
     after_create :build_variants_from_option_values_hash, if: :option_values_hash

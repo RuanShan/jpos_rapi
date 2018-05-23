@@ -482,7 +482,8 @@ ActiveRecord::Schema.define(version: 20180516115306) do
     t.text "note"
     t.datetime "sent_at"
     t.datetime "expires_at"
-    t.decimal "discount", precision: 10
+    t.integer "discount_percent"
+    t.integer "discount_amount"
     t.decimal "current_value", precision: 8, scale: 2, null: false
     t.decimal "original_value", precision: 8, scale: 2, null: false
     t.datetime "created_at", null: false
@@ -1268,8 +1269,8 @@ ActiveRecord::Schema.define(version: 20180516115306) do
     t.string "related_to_type"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.decimal "discount_percent", precision: 8, scale: 2, default: "0.0"
-    t.decimal "discount_amount", precision: 8, scale: 2, default: "0.0"
+    t.integer "discount_percent", default: 0
+    t.integer "discount_amount", default: 0
     t.integer "position"
   end
 

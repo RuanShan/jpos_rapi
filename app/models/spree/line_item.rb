@@ -24,7 +24,8 @@ module Spree
     validates :quantity, numericality: { only_integer: true, message: Spree.t('validation.must_be_int') }
     validates :price, numericality: true
 
-    validates_with Stock::AvailabilityValidator
+    #不需要检查库存
+    #validates_with Stock::AvailabilityValidator
     validate :ensure_proper_currency, if: -> { order.present? }
 
     before_destroy :verify_order_inventory_before_destroy, if: -> { order.has_checkout_step?('delivery') }
@@ -119,7 +120,7 @@ module Spree
     def associate_with_card
       #如果产品是一张充值卡
       if is_card?
-          self.card ||= create_card!( variant: variant, user: self.user, name: variant.descriptive_name, created_by: order.created_by)
+          self.card ||= create_card!( variant: variant, customer: self.user, name: variant.descriptive_name, created_by: order.created_by)
           self.card.transactions.create!( order: order, amount: self.price)
       end
     end

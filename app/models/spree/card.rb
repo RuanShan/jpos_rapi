@@ -5,7 +5,7 @@ module Spree
     UNACTIVATABLE_ORDER_STATES = ["complete", "awaiting_return", "returned"]
 
     belongs_to :variant
-    belongs_to :user
+    belongs_to :customer, foreign_key: 'user_id'
 
     has_many :line_items, class_name: 'Spree::LineItem'
     has_many :transactions, class_name: 'Spree::CardTransaction'
@@ -24,6 +24,8 @@ module Spree
 
     before_validation :generate_code, on: :create
     before_validation :set_values, on: :create
+
+    delegate :product, to: :variant
 
     def safely_redeem(user)
       if able_to_redeem?(user)
