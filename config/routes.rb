@@ -155,6 +155,7 @@ scope module: 'spree' do
           get :cards
         end
       end
+      post '/customers/search', to: 'customers#index'
 
       resources :staffs do
 
