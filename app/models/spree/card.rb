@@ -5,7 +5,7 @@ module Spree
     UNACTIVATABLE_ORDER_STATES = ["complete", "awaiting_return", "returned"]
 
     belongs_to :variant
-    belongs_to :customer, foreign_key: 'user_id'
+    belongs_to :customer, class_name: 'User', foreign_key: 'user_id'
 
     has_many :line_items, class_name: 'Spree::LineItem'
     has_many :transactions, class_name: 'Spree::CardTransaction'
@@ -13,7 +13,7 @@ module Spree
     belongs_to :sale_day, ->{ today }, class_name: 'SaleDay', counter_cache: "new_cards_count",
       primary_key: 'seller_id', foreign_key: 'created_by_id'
 
-    validates :current_value, :name, :original_value, :code, :user,  presence: true
+    validates :current_value, :name, :original_value, :code, :customer,  presence: true
 
     with_options allow_blank: true do
       validates :code, uniqueness: { case_sensitive: false }
