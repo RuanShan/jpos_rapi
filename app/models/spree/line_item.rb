@@ -120,8 +120,16 @@ module Spree
     def associate_with_card
       #如果产品是一张充值卡
       if is_card?
-          self.card ||= create_card!( line_item_id: self.id, variant: variant, customer: self.user, name: variant.descriptive_name, created_by: order.created_by)
-          self.card.transactions.create!( order: order, amount: self.price)
+        create_card!( variant: variant, customer: self.user) do |new_card|
+          new_card.name = variant.descriptive_name
+          new_card.created_by = order.created_by
+          if variant.card_expire_in > 0
+            new_card.expire_in =  DateTime.current.in( card_expire_in.day )        
+          end
+          new_card.discount_percent = variant.card_discount_percent
+          new_card.discount_amount = variant.card_discount_amount
+        end
+        self.card.transactions.create!( order: order, amount: self.price)
       end
     end
 

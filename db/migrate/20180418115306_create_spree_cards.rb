@@ -9,11 +9,12 @@ class CreateSpreeCards < ActiveRecord::Migration[5.1]
       t.string :name
       t.text :note
       t.datetime :sent_at
-      t.datetime :expires_at #卡的到期时间
+      t.datetime :expire_at #卡的到期时间
       t.integer  :discount_percent # percent
       t.integer  :discount_amount # percent
       t.decimal :current_value, :precision => 8, :scale => 2, :null => false
       t.decimal :original_value, :precision => 8, :scale => 2, :null => false
+      t.integer :status, :default => 0, :null => false #卡的状态，是否可用
       t.timestamps
     end
     #spree_payment 保存商品支付记录，

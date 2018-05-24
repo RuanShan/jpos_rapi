@@ -481,11 +481,12 @@ ActiveRecord::Schema.define(version: 20180516115306) do
     t.string "name"
     t.text "note"
     t.datetime "sent_at"
-    t.datetime "expires_at"
+    t.datetime "expire_at"
     t.integer "discount_percent"
     t.integer "discount_amount"
     t.decimal "current_value", precision: 8, scale: 2, null: false
     t.decimal "original_value", precision: 8, scale: 2, null: false
+    t.integer "status", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_spree_cards_on_user_id"
