@@ -5,13 +5,16 @@ class AddGroupToSpreeLineItems < ActiveRecord::Migration[5.1]
     add_column :spree_line_items, :group_number, :string, limit: 24
     #   0000000000   0000
     #   [datetime]   [rand(num)]  num: 4 byte random number
-    add_column :spree_line_items, :group_position, :integer
+    # 在客户端，店员设置 group_position，实现一个鞋子两个服务，同一个物品，设置相同的group_position
+    # 后台根据group_position生产相应的group_number
+    add_column :spree_line_items, :group_position, :integer, :default => 0, :null => false
     add_column :spree_line_items, :state, :string, limit: 24
 
     # 订单生成，一个鞋子可能有两项服务，修鞋和洗鞋，即生成两条子订单，子订单是和服务项目相对应的。
     # create line item group,
     # each line_item is service, each group is a customer shose,一个鞋子可能有两项服务
     create_table "spree_line_item_groups", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+      t.integer :store_id
       t.string "name"
       t.string "number" #物品条码
       t.decimal "cost", precision: 10, scale: 2, default: "0.0"

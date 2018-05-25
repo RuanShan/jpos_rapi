@@ -684,6 +684,7 @@ ActiveRecord::Schema.define(version: 20180516115306) do
   end
 
   create_table "spree_line_item_groups", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer "store_id"
     t.string "name"
     t.string "number"
     t.decimal "cost", precision: 10, scale: 2, default: "0.0"
@@ -712,7 +713,7 @@ ActiveRecord::Schema.define(version: 20180516115306) do
     t.decimal "taxable_adjustment_total", precision: 10, scale: 2, default: "0.0", null: false
     t.decimal "non_taxable_adjustment_total", precision: 10, scale: 2, default: "0.0", null: false
     t.string "group_number", limit: 24
-    t.integer "group_position"
+    t.integer "group_position", default: 0, null: false
     t.string "state", limit: 24
     t.integer "card_id", default: 0, null: false
     t.integer "worker_id", default: 0, null: false

@@ -10,11 +10,9 @@ require 'ostruct'
 
 module Spree
   class LineItemGroup < Spree::Base
-    include Spree::Core::NumberGenerator.new(prefix: 'G', length: 11)
-
-    include NumberAsParam
 
     with_options inverse_of: :line_item_groups do
+      belongs_to :store, class_name: 'Spree::Store'
       belongs_to :order, class_name: 'Spree::Order', touch: true
     end
 

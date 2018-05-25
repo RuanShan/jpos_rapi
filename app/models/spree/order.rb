@@ -688,21 +688,25 @@ module Spree
       groups_map = {}
 
       line_items.each{|line_item|
-        #如果 group_number 为空，说明这个line_item 不是一个服务，可能是充值卡，或鞋油等实物商品
+        #这个line_item 可能不是一个服务，可能是充值卡，或鞋油等实物商品
         #对于这些line_item无需创建line_item_group
         #line_item_group, 代表的是一件客户物品
-        next if line_item.group_number.blank?
-        if groups_map[line_item.group_number].blank?
-          groups_map[line_item.group_number] = Spree::LineItemGroup.create(
+        next unless line_item.product.is_a?(Selling::Service)
+        line_item_group = groups_map[line_item.group_position]
+        if line_item_group.blank?
+          group_number = generate_group_number
+          line_item.update_attributes group_number: group_number
+          groups_map[line_item.group_position] = Spree::LineItemGroup.create(
             order: self,
             number: line_item.group_number,
             cost: line_item.price,
             name: "#{line_item.name}(#{line_item.options_text})"
           )
         else
-          groups_map[line_item.group_number].cost += line_item.price
-          groups_map[line_item.group_number].name += " / #{line_item.name}(#{line_item.options_text})"
-          groups_map[line_item.group_number].save
+          line_item.update_attributes group_number: line_item_group.group_number
+          line_item_group.cost += line_item.price
+          line_item_group.name += " / #{line_item.name}(#{line_item.options_text})"
+          line_item_group.save
         end
       }
       groups_map.values
@@ -778,6 +782,14 @@ module Spree
 
     def credit_card_nil_payment?(attributes)
       payments.store_credits.present? && attributes[:amount].to_f.zero?
+    end
+
+    def generate_group_number
+      count = store.line_item_groups.count
+      #date.to_formatted_s(:number)        # => "20071110"
+      date = created_at.to_date
+      # 8byte(date)-3byte(store_id)-4byte(count)-2bytes(随机码)-1byte(校验码)
+      "%s%03d%04d%02d" % [date.to_formatted_s(:number)[2,6], store_id, count, rand(100)]
     end
   end
 end

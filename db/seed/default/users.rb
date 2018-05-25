@@ -9,8 +9,9 @@ User.where(username: 'guest')
     .first_or_create(store: store, username: 'guest', email: 'guest@example.com', role: 'guest',
                      password: '123123', password_confirmation: '123123', confirmed_at: Time.zone.now)
 waiter = User.where(username: 'waiter')
-    .first_or_create(store: store, username: 'waiter', email: 'waiter@example.com', role: 'waiter', api_key: '4ea91516400ef324dcf506969cd782739d778816f184333e',
+    .first_or_create(store: store, username: 'waiter', email: 'waiter@example.com', role: 'waiter',
                      password: '123123', password_confirmation: '123123', confirmed_at: Time.zone.now, is_staff: true)
+waiter.update_attributes( api_key: '4ea91516400ef324dcf506969cd782739d778816f184333e')                     
 
 role = Spree::Role.find_or_create_by(name: 'admin')
 admin.spree_roles << role
