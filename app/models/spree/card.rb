@@ -11,7 +11,9 @@ module Spree
     has_many :transactions, class_name: 'Spree::CardTransaction'
     belongs_to :created_by, class_name: 'User', optional: true
     belongs_to :sale_day, ->{ today }, class_name: 'SaleDay', counter_cache: "new_cards_count",
-      primary_key: 'seller_id', foreign_key: 'created_by_id'
+      primary_key: 'user_id', foreign_key: 'created_by_id'
+
+    enum  status:{ enable: 1, disable: 0 }, _prefix: true
 
     validates :current_value, :name, :original_value, :code, :customer,  presence: true
 

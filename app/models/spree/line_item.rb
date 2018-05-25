@@ -123,8 +123,9 @@ module Spree
         create_card!( variant: variant, customer: self.user) do |new_card|
           new_card.name = variant.descriptive_name
           new_card.created_by = order.created_by
+          new_card.style = variant.product.card_style #卡的种类
           if variant.card_expire_in > 0
-            new_card.expire_in =  DateTime.current.in( card_expire_in.day )        
+            new_card.expire_in =  DateTime.current.in( card_expire_in.day )
           end
           new_card.discount_percent = variant.card_discount_percent
           new_card.discount_amount = variant.card_discount_amount

@@ -298,7 +298,7 @@ ActiveRecord::Schema.define(version: 20180516115306) do
   create_table "sale_days", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.bigint "store_id"
     t.string "seller_type"
-    t.integer "seller_id"
+    t.integer "user_id"
     t.date "day"
     t.integer "new_orders_count", default: 0, null: false
     t.integer "new_customers_count", default: 0, null: false
@@ -306,13 +306,13 @@ ActiveRecord::Schema.define(version: 20180516115306) do
     t.integer "processed_line_items_count", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["seller_type", "seller_id", "day"], name: "index_sale_days_on_seller_type_and_seller_id_and_day"
+    t.index ["seller_type", "user_id", "day"], name: "index_sale_days_on_seller_type_and_user_id_and_day"
     t.index ["store_id"], name: "index_sale_days_on_store_id"
   end
 
   create_table "sale_months", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "seller_type"
-    t.integer "seller_id"
+    t.integer "user_id"
     t.date "day"
     t.integer "new_order_count", default: 0, null: false
     t.integer "new_customer_count", default: 0, null: false
@@ -320,7 +320,7 @@ ActiveRecord::Schema.define(version: 20180516115306) do
     t.integer "processed_line_items_count", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["seller_type", "seller_id", "day"], name: "index_sale_months_on_seller_type_and_seller_id_and_day"
+    t.index ["seller_type", "user_id", "day"], name: "index_sale_months_on_seller_type_and_user_id_and_day"
   end
 
   create_table "sessions", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -476,6 +476,7 @@ ActiveRecord::Schema.define(version: 20180516115306) do
     t.bigint "user_id"
     t.integer "created_by_id"
     t.string "code", null: false
+    t.integer "style", default: 0, null: false
     t.integer "variant_id", null: false
     t.integer "line_item_id"
     t.string "name"
@@ -1064,7 +1065,7 @@ ActiveRecord::Schema.define(version: 20180516115306) do
     t.string "meta_title"
     t.string "summary"
     t.datetime "discontinue_on"
-    t.integer "type_id", default: 1, null: false
+    t.integer "card_style", default: 0, null: false
     t.string "type", limit: 24
     t.index ["available_on"], name: "index_spree_products_on_available_on"
     t.index ["deleted_at"], name: "index_spree_products_on_deleted_at"
@@ -1952,6 +1953,7 @@ ActiveRecord::Schema.define(version: 20180516115306) do
   create_table "users", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.string "email", limit: 128, default: "", null: false
     t.string "encrypted_password", default: "", null: false
+    t.string "payment_password", default: "", null: false
     t.string "reset_password_token", limit: 128
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"

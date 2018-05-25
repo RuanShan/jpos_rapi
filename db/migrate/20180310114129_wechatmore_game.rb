@@ -250,6 +250,7 @@ class WechatmoreGame < ActiveRecord::Migration[5.1]
     create_table "users", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
       t.string "email", limit: 128, default: "", null: false
       t.string "encrypted_password", default: "", null: false
+      t.string "payment_password", default: "", null: false
       t.string "reset_password_token", limit: 128
       t.datetime "reset_password_sent_at"
       t.datetime "remember_created_at"

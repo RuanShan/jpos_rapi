@@ -103,7 +103,7 @@ module Spree
       :meta_description, :meta_keywords, :meta_title, :child_index]
 
     # TODO: Should probably use something like Spree.user_class.attributes
-    @@user_attributes = [:email, :username, :mobile, :password, :password_confirmation, :birth, :address, :memo]
+    @@user_attributes = [:email, :username, :mobile, :password, :password_confirmation, :payment_password, :payment_password_confirmation, :birth, :address, :memo]
 
     @@variant_attributes = [
       :name, :presentation, :cost_price, :discontinue_on, :lock_version,

@@ -55,7 +55,7 @@ module Spree
       end
 
       @@card_attributes = [
-        :id, :user_id, :code, :current_value, :name, :discount_percent, :discount_amount, :status
+        :id, :user_id, :code, :style, :current_value, :name, :discount_percent, :discount_amount, :status
       ]
       @@card_transaction_attributes = [
         :id, :card_id, :order_id, :amount, :created_at
@@ -152,7 +152,7 @@ module Spree
         :id, :month, :year, :cc_type, :last_digits, :name
       ]
 
-      @@user_attributes = [:id, :email, :created_at, :updated_at, :username, :mobile, :address, :birth, :memo]
+      @@user_attributes = [:id, :email, :created_at, :updated_at, :username, :mobile, :address, :birth, :memo, :payment_password]
 
       @@property_attributes = [:id, :name, :presentation]
 

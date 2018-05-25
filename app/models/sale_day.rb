@@ -4,9 +4,9 @@ class SaleDay < ApplicationRecord
   better_date_scope day: [:today, :week]
 
   belongs_to :seller, class_name: "User"
-  has_many :new_orders, class_name: 'Spree::Order', primary_key: 'seller_id', foreign_key: 'created_by_id'
-  has_many :new_cards, class_name: 'Spree::Card', primary_key: 'seller_id', foreign_key: 'created_by_id'
-  has_many :new_customers, class_name: 'Spree::User', primary_key: 'seller_id', foreign_key: 'created_by_id'
+  has_many :new_orders, class_name: 'Spree::Order', primary_key: 'user_id', foreign_key: 'created_by_id'
+  has_many :new_cards, class_name: 'Spree::Card', primary_key: 'user_id', foreign_key: 'created_by_id'
+  has_many :new_customers, class_name: 'Spree::User', primary_key: 'user_id', foreign_key: 'created_by_id'
 
   def valuable_rate
      valuable_member_count == 0 ? 0 : ( valuable_member_count/ member_count.to_f ).round(2)

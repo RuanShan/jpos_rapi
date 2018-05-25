@@ -49,9 +49,9 @@ class User < ActiveRecord::Base
   belongs_to :created_by, class_name: 'User', optional: true
   #服务员创建新会员的日子，一天新注册了多少用户统计
   belongs_to :sold_day, ->{ today }, class_name: 'SaleDay', counter_cache: 'new_customers_count',
-    primary_key: 'seller_id', foreign_key: 'created_by_id'
+    primary_key: 'user_id', foreign_key: 'created_by_id'
   #服务员今天的统计信息
-  has_one :sale_today, ->{ today }, class_name: 'SaleDay', foreign_key: 'seller_id'
+  has_one :sale_today, ->{ today }, class_name: 'SaleDay', foreign_key: 'user_id'
   has_many :sale_days, class_name: 'SaleDay'
 
   after_initialize :create_sale_today_for_waiter, :if => :persisted?

@@ -4,6 +4,8 @@ class CreateSpreeCards < ActiveRecord::Migration[5.1]
       t.references(:user) #卡的所有者
       t.integer :created_by_id #这个打折卡的创建者是谁
       t.string :code, :null => false
+      # 1：充值卡， 2：次卡
+      t.integer :style, :default => 0, :null => false
       t.integer :variant_id, :null => false
       t.integer :line_item_id
       t.string :name
@@ -14,7 +16,7 @@ class CreateSpreeCards < ActiveRecord::Migration[5.1]
       t.integer  :discount_amount # percent
       t.decimal :current_value, :precision => 8, :scale => 2, :null => false
       t.decimal :original_value, :precision => 8, :scale => 2, :null => false
-      t.integer :status, :default => 0, :null => false #卡的状态，是否可用
+      t.integer :status, :default => 0, :null => false #卡的状态，是否可用, 1:可用， 2：不可用
       t.timestamps
     end
     #spree_payment 保存商品支付记录，
@@ -29,8 +31,8 @@ class CreateSpreeCards < ActiveRecord::Migration[5.1]
       t.timestamps
     end
 
-    # 1 normal product, 2 充值卡, 3 次卡once card
-    add_column :spree_products, :type_id, :integer, :default => 1, :null => false
+    # 1 充值卡, 2 次卡once card
+    add_column :spree_products, :card_style, :integer, :default => 0, :null => false
     add_column :spree_products, :type, :string, limit: 24
     # line_item has many card
     add_column :spree_line_items, :card_id, :integer, :default => 0, :null => false

@@ -78,7 +78,7 @@ module Spree
 
     belongs_to :store, class_name: 'Spree::Store'
     belongs_to :sale_today, ->{ today }, class_name: 'SaleDay', counter_cache: 'new_orders_count',
-      primary_key: 'seller_id', foreign_key: 'created_by_id', inverse_of: 'new_orders'
+      primary_key: 'user_id', foreign_key: 'created_by_id', inverse_of: 'new_orders'
 
     with_options dependent: :destroy do
       has_many :state_changes, as: :stateful
