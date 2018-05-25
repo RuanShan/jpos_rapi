@@ -44,8 +44,7 @@ class User < ActiveRecord::Base
   acts_as_paranoid
   after_destroy :scramble_email_and_password
 
-  has_many :orders, class_name: 'Spree::Order'
-  has_many :cards, class_name: 'Spree::Card'
+
   belongs_to :store, class_name: 'Spree::Store'
   belongs_to :created_by, class_name: 'User', optional: true
   #服务员创建新会员的日子，一天新注册了多少用户统计
