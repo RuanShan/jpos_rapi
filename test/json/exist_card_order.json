@@ -1,6 +1,5 @@
 {
   "order": {
-    "is_pos": true,
     "line_items": [
       { "variant_id": 33, "quantity": 1, "price": 100, "card_id": 1
       }

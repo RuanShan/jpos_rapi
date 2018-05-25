@@ -45,7 +45,7 @@ module Spree
 
             respond_with(@order, default_template: :show, status: 201)
           else
-            @order = Spree::Order.create!(user: current_api_user, store: current_store, is_pos: !!order_params[:is_pos])
+            @order = Spree::Order.create!(user: current_api_user, store: current_store)
             if @order.contents.update_cart(order_params)
               respond_with(@order, default_template: :show, status: 201)
             else

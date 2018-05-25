@@ -128,7 +128,6 @@ module Spree
 
     before_create :create_token
     before_create :link_by_email
-    before_create :associate_store_address, if: :is_pos?
     before_update :homogenize_line_item_currencies, if: :currency_changed?
 
     with_options presence: true do
@@ -167,6 +166,7 @@ module Spree
     # shows completed orders first, by their completed_at date, then uncompleted orders by their created_at
     scope :reverse_chronological, -> { order(Arel.sql('spree_orders.completed_at IS NULL'), completed_at: :desc, created_at: :desc) }
 
+    enum order_type: { normal: 0,  new_card: 1, recharge: 2 }, _prefix: true
     # Use this method in other gems that wish to register their own custom logic
     # that should be called after Order#update
     def self.register_update_hook(hook)
@@ -664,8 +664,7 @@ module Spree
     # handle pos
     ############################################################################
     def complete_via_pos
-      create_line_item_groups
-
+      groups = create_line_item_groups
       # lock all adjustments (coupon promotions, etc.)
       #all_adjustments.each(&:close)
 
@@ -677,6 +676,8 @@ module Spree
       #end
       #updater.update_shipment_state
       updater.update_group_state
+      updater.update_order_type
+
       save!
       updater.run_hooks
       #不能 touch completed_at, 删除时会导致 OrderInventory.verify 异常

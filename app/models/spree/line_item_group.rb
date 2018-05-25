@@ -141,9 +141,6 @@ module Spree
     # shipped    if already shipped (ie. does not change the state)
     # ready      all other cases
     def determine_state(order)
-      if order.is_pos?
-
-      end
 
       return 'canceled' if order.canceled?
       return 'pending' unless order.can_ship?

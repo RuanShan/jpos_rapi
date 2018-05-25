@@ -15,7 +15,7 @@
  user_id: 客户ID，购买服务的人， 对于购买打折卡订单，user_id是必要参数
  created_by_id: 店员ID，创建订单的人
 
- is_pos: 订单是否来自店内pos系统
+ order.channel: 订单渠道， 'pos':来自店内pos系统
 
 
 #
@@ -25,7 +25,6 @@
 POST /api/v1/pos_orders
 {
   "order": {
-    "is_pos": true,
     "user_id": 1,
     "line_items": [
       { "variant_id": 1, "quantity": 5 }

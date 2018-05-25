@@ -116,10 +116,20 @@ module Spree
     end
 
     def update_group_state
+        order.group_count = line_item_groups.count
 
         group_states =  line_item_groups.states.uniq
         #only all line_item_groups has same state, then update order.group_state
         order.group_state =  group_states.first if group_states.size == 1
+    end
+
+    #检查是否为 客户办卡订单，会员卡充值订单
+    def update_order_type
+      if line_items.count  == 1
+        if line_items.first.product.is_a? Selling::PrepaidCard
+          order.order_type = Spree::Order.order_types[:new_card]
+        end
+      end
     end
 
     # Updates the +shipment_state+ attribute according to the following logic:

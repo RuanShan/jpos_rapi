@@ -1,6 +1,5 @@
 {
   "order": {
-    "is_pos": true,
     "user_id": 8,
     "line_items": [
       { "variant_id": 15, "quantity": 1, "group_number": "2018041418010001" },

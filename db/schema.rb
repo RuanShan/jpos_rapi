@@ -829,7 +829,8 @@ ActiveRecord::Schema.define(version: 20180516115306) do
     t.integer "user_terminal_id"
     t.decimal "taxable_adjustment_total", precision: 10, scale: 2, default: "0.0", null: false
     t.decimal "non_taxable_adjustment_total", precision: 10, scale: 2, default: "0.0", null: false
-    t.boolean "is_pos", default: false
+    t.integer "order_type", default: 0, null: false
+    t.integer "group_count", default: 0, null: false
     t.string "group_state", limit: 24
     t.index ["approver_id"], name: "index_spree_orders_on_approver_id"
     t.index ["bill_address_id"], name: "index_spree_orders_on_bill_address_id"
@@ -839,7 +840,6 @@ ActiveRecord::Schema.define(version: 20180516115306) do
     t.index ["considered_risky"], name: "index_spree_orders_on_considered_risky"
     t.index ["created_by_id"], name: "index_spree_orders_on_created_by_id"
     t.index ["guest_token"], name: "index_spree_orders_on_guest_token"
-    t.index ["is_pos"], name: "index_spree_orders_on_is_pos"
     t.index ["number", "store_id"], name: "index_spree_orders_on_number_and_store_id", unique: true
     t.index ["number"], name: "index_spree_orders_on_number"
     t.index ["ship_address_id"], name: "index_spree_orders_on_ship_address_id"

@@ -13,7 +13,7 @@ module Spree
           order_attributes = params.require(:order).permit(permitted_checkout_attributes)
           #order_attributes[:user] = current_api_user
           order_attributes[:store] = current_store
-          order_attributes[:is_pos] = true
+          order_attributes[:channel] = 'pos'
           @order = Spree::Order.create!(order_attributes)
 
           if @order.contents.update_cart(order_params)
