@@ -10,14 +10,7 @@ if Selling::PrepaidCard.count == 0
 
 end
 
-unless Spree::PaymentMethod::PrepaidCard.all.exists?
-  Spree::PaymentMethod::PrepaidCard.create(
-    name: "PrepaidCard",
-    description: "Pay by PrepaidCard",
-    active: true,
-    display_on: :both
-  )
-end
+
 #
 # unless Spree::PaymentMethod::AnnualCard.all.exists?
 #   Spree::PaymentMethod::AnnualCard.create(

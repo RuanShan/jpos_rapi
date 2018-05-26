@@ -7,6 +7,8 @@ scope module: 'spree' do
     namespace :v1 do
       resources :promotions, only: [:show]
 
+      resources :payment_methods, only: [:index]
+      
       resources :customer_returns, only: [:index]
       resources :reimbursements, only: [:index]
 
