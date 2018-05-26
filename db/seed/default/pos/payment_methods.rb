@@ -1,3 +1,12 @@
+unless Spree::PaymentMethod::PrepaidCard.all.exists?
+  Spree::PaymentMethod::PrepaidCard.create(
+    name: "PrepaidCard",
+    description: "Pay by PrepaidCard",
+    active: false,
+    display_on: :both
+  )
+end
+
 Spree::PaymentMethod::PointOfSale.where(
   name: "POS",
   description: "PointOfSale",
@@ -33,12 +42,3 @@ Spree::PaymentMethod::Unionpay.where(
   active: true,
   auto_capture: true
 ).first_or_create!
-
-unless Spree::PaymentMethod::PrepaidCard.all.exists?
-  Spree::PaymentMethod::PrepaidCard.create(
-    name: "PrepaidCard",
-    description: "Pay by PrepaidCard",
-    active: true,
-    display_on: :both
-  )
-end
