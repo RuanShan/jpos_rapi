@@ -21,7 +21,7 @@ module Spree
     end
 
 
-    before_validation :set_cost_zero_when_nil
+    before_validation :set_price_zero_when_nil
 
     validates :number, uniqueness: true
 
@@ -224,8 +224,8 @@ module Spree
 
     private
 
-    def set_cost_zero_when_nil
-      self.cost = 0 unless cost
+    def set_price_zero_when_nil
+      self.price = 0 unless price
     end
 
     def after_ship
