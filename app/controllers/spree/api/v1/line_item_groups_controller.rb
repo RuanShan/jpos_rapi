@@ -38,9 +38,18 @@ module Spree
           @line_item_groups.each{ |group|
             group.make_step_and_order forward
           }
-
           respond_with(@line_item_groups)
         end
+
+        def all_complete
+          ids = params[:ids]
+          @line_item_groups = Spree::LineItemGroup.where id: ids
+          @line_item_groups.each{ |group|
+            group.finalize!
+          }
+          respond_with(@line_item_groups)
+        end
+
 
         def update
           @line_item_group = Spree::LineItemGroup.accessible_by(current_ability, :update).readonly(false).find_by!(number: params[:id])

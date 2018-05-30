@@ -104,8 +104,10 @@ module Spree
           processed: :processing,  processing: :ready_for_factory,
           shipped: :ready, ready: :pending
       end
-      #after_transition :on => [:next, :draw_back], :do => :after_step
 
+      event :complete do
+        transition all => :shipped
+      end
     end
 
     self.whitelisted_ransackable_associations = %w[order]
@@ -121,14 +123,12 @@ module Spree
       order.save!
     end
 
-
-    def after_cancel
-      manifest.each { |item| manifest_restock(item) }
+    def finalize!
+      complete!
+      order.updater.update_group_state
+      order.save!
     end
 
-    def after_resume
-      manifest.each { |item| manifest_unstock(item) }
-    end
 
     def currency
       order ? order.currency : Spree::Config[:currency]
@@ -161,10 +161,6 @@ module Spree
       item_cost + final_price
     end
 
-    def finalize!
-      inventory_units.finalize_units!
-      after_resume
-    end
 
     def include?(variant)
       inventory_units_for(variant).present?
@@ -172,34 +168,12 @@ module Spree
 
 
 
-
-
-    def item_cost
-      manifest.map { |m| (m.line_item.price + (m.line_item.adjustment_total / m.line_item.quantity)) * m.quantity }.sum
-    end
-
     def line_items
 
       LineItem.where( group_number: number )
 
     end
 
-    ManifestItem = Struct.new(:line_item, :variant, :quantity, :states)
-
-    def manifest
-      # Grouping by the ID means that we don't have to call out to the association accessor
-      # This makes the grouping by faster because it results in less SQL cache hits.
-      inventory_units.group_by(&:variant_id).map do |_variant_id, units|
-        units.group_by(&:line_item_id).map do |_line_item_id, units|
-          states = {}
-          units.group_by(&:state).each { |state, iu| states[state] = iu.sum(&:quantity) }
-
-          line_item = units.first.line_item
-          variant = units.first.variant
-          ManifestItem.new(line_item, variant, units.sum(&:quantity), states)
-        end
-      end.flatten
-    end
 
     def shipped=(value)
       return unless value == '1' && shipped_at.nil?

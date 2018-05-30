@@ -103,6 +103,7 @@ scope module: 'spree' do
           # search, sansack has array paramter, post json is easy.
           get :counts
           put :all_step
+          put :all_complete # 交付选择的物品
         end
       end
       post '/line_item_groups/search', to: 'line_item_groups#index'
