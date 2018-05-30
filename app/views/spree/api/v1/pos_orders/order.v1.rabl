@@ -7,6 +7,10 @@ node(:display_adjustment_total, &:display_adjustment_total)
 node(:user_name, &:user_name)
 node(:store_name, &:store_name)
 
-child( :line_item_groups => :line_item_groups) do
-  extends 'spree/api/v1/line_item_groups/simple_line_item_group'
+child line_items: :line_items do
+  extends 'spree/api/v1/line_items/show'
+end
+
+child line_item_groups: :line_item_groups do
+  extends 'spree/api/v1/line_item_groups/simple'
 end

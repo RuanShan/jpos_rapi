@@ -96,7 +96,7 @@ module Spree
       ]
 
       @@line_item_attributes = [:id, :quantity, :price, :variant_id, :group_number,
-        :group_position, :worker_id]
+        :group_position, :worker_id, :cname, :memo]
 
       @@line_item_group_attributes = [:id, :order_id, :number, :cost, :state, :name]
 
