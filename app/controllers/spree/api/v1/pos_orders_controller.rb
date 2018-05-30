@@ -35,7 +35,7 @@ module Spree
           authorize! :index, Order
           @q = Order.ransack(params[:q]).result
           @total_count = @q.count
-          @orders = @q.includes(:user).page(params[:page]).per(params[:per_page])
+          @orders = @q.includes(:user, :line_item_groups).page(params[:page]).per(params[:per_page])
           respond_with(@orders)
         end
 
