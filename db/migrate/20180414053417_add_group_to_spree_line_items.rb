@@ -17,7 +17,7 @@ class AddGroupToSpreeLineItems < ActiveRecord::Migration[5.1]
       t.integer :store_id
       t.string "name"
       t.string "number" #物品条码
-      t.decimal "cost", precision: 10, scale: 2, default: "0.0"
+      t.decimal "price", precision: 10, scale: 2, default: "0.0"
       t.datetime "shipped_at"
       t.string "state"
       t.integer "order_id"
