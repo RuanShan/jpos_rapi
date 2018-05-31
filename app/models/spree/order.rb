@@ -700,7 +700,7 @@ module Spree
             store_id: self.store_id,
             order: self,
             number: line_item.group_number,
-            cost: line_item.price,
+            price: line_item.price,
             name: "#{line_item.name}(#{line_item.options_text})"
           )
         else
