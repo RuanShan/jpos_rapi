@@ -697,6 +697,7 @@ module Spree
           group_number = generate_group_number
           line_item.update_attributes group_number: group_number
           groups_map[line_item.group_position] = Spree::LineItemGroup.create(
+            store_id: self.store_id,
             order: self,
             number: line_item.group_number,
             cost: line_item.price,

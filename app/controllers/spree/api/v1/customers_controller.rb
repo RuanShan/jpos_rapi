@@ -19,6 +19,10 @@ module Spree
           respond_with(@users)
         end
 
+        private
+        def user
+          @user ||= Customer.accessible_by(current_ability, :read).find(params[:id])
+        end
 
       end
     end
