@@ -705,7 +705,7 @@ module Spree
           )
         else
           line_item.update_attributes group_number: line_item_group.number
-          line_item_group.cost += line_item.price
+          line_item_group.price += line_item.price
           line_item_group.name += " / #{line_item.name}(#{line_item.options_text})"
           line_item_group.save
         end
