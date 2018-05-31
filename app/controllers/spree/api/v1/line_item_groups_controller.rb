@@ -61,9 +61,11 @@ module Spree
         # count order on param states
         # states - is an array of state
         def counts
+          @q = LineItemGroup.ransack(params[:q]).result
+
           @counts = {}
           Order::GROUP_STATES.each{|state|
-            @counts[state] = LineItemGroup.where( state: state ).count
+            @counts[state] = @q.where( state: state ).count
           }
           @counts
         end

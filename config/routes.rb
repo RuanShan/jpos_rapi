@@ -100,8 +100,8 @@ scope module: 'spree' do
           put :one_step
         end
         collection do
-          # search, sansack has array paramter, post json is easy.
-          get :counts
+          # search/counts, sansack has array paramter, post json is easy.
+          post :counts
           put :all_step
           put :all_complete # 交付选择的物品
         end

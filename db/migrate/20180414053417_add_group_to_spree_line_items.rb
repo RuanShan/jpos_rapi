@@ -14,7 +14,7 @@ class AddGroupToSpreeLineItems < ActiveRecord::Migration[5.1]
     # create line item group,
     # each line_item is service, each group is a customer shose,一个鞋子可能有两项服务
     create_table "spree_line_item_groups", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-      t.integer :store_id
+      t.integer :store_id #统计不同门店的数据量
       t.string "name"
       t.string "number" #物品条码
       t.decimal "price", precision: 10, scale: 2, default: "0.0"
