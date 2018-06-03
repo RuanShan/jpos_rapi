@@ -38,8 +38,7 @@ class User < ActiveRecord::Base
 
 
   devise :database_authenticatable, :registerable, :recoverable, :lockable, :timeoutable,
-         :rememberable, :trackable, :validatable, :encryptable, :encryptor => 'authlogic_sha512'
-  #devise :confirmable if Spree::Auth::Config[:confirmable]
+         :rememberable, :trackable, :validatable, :encryptable
 
   acts_as_paranoid
   after_destroy :scramble_email_and_password
@@ -89,7 +88,7 @@ class User < ActiveRecord::Base
 
     def set_login
       # for now force login to be same as email, eventually we will make this configurable, etc.
-      self.username ||= self.email if self.email
+      self.username ||= self.moblie if self.moblie
     end
 
     def scramble_email_and_password
