@@ -45,10 +45,7 @@ class User < ActiveRecord::Base
 
 
   belongs_to :store, class_name: 'Spree::Store'
-  belongs_to :created_by, class_name: 'User', optional: true
-  #服务员创建新会员的日子，一天新注册了多少用户统计
-  belongs_to :sold_day, ->{ today }, class_name: 'SaleDay', counter_cache: 'new_customers_count',
-    primary_key: 'user_id', foreign_key: 'created_by_id'
+
   #服务员今天的统计信息
   has_one :sale_today, ->{ today }, class_name: 'SaleDay', foreign_key: 'user_id'
   has_many :sale_days, class_name: 'SaleDay'
@@ -88,12 +85,12 @@ class User < ActiveRecord::Base
 
     def set_login
       # for now force login to be same as email, eventually we will make this configurable, etc.
-      self.username ||= self.moblie if self.moblie
+      self.username ||= self.mobile if self.mobile
     end
 
     def scramble_email_and_password
       self.email = SecureRandom.uuid + "@example.net"
-      self.username = self.email
+      self.username = self.mobile
       self.password = SecureRandom.hex(8)
       self.password_confirmation = self.password
       self.save
@@ -152,20 +149,7 @@ class User < ActiveRecord::Base
   # end
   #
   #
-  # def reset_api_key!
-  #   generate_api_key
-  #   save
-  # end
-  #
-  # private
-  #
-  # def generate_api_key
-  #   loop do
-  #     self.api_key = SecureRandom.base64(48)
-  #     break if !User.find_by(api_key: api_key)
-  #   end
-  # end
-  #
+
   def email_required?
     false
   end

@@ -19,6 +19,18 @@ module Spree
           respond_with(@users)
         end
 
+        def create
+          @user = Customer.new(user_params) do|user|
+            user.created_by = current_api_user
+          end
+          if @user.save
+            respond_with(@user, status: 201, default_template: :show)
+          else
+            invalid_resource!(@user)
+          end
+        end
+
+
         private
         def user
           @user ||= Customer.accessible_by(current_ability, :read).find(params[:id])

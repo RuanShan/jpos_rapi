@@ -167,6 +167,10 @@ module Spree
     scope :reverse_chronological, -> { order(Arel.sql('spree_orders.completed_at IS NULL'), completed_at: :desc, created_at: :desc) }
 
     enum order_type: { normal: 0,  new_card: 1, recharge: 2 }, _prefix: true
+
+    alias_attribute :customer_id, :user_id
+    alias_attribute :customer, :user
+
     # Use this method in other gems that wish to register their own custom logic
     # that should be called after Order#update
     def self.register_update_hook(hook)
@@ -677,6 +681,7 @@ module Spree
       #updater.update_shipment_state
       updater.update_group_state
       updater.update_order_type
+      updater.update_sale_total
 
       save!
       updater.run_hooks

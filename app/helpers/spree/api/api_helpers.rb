@@ -8,6 +8,7 @@ module Spree
         :card_attributes,
         :card_transaction_attributes,
         :creditcard_attributes,
+        :customer_attributes,
         :customer_return_attributes,
         :image_attributes,
         :inventory_unit_attributes,
@@ -92,11 +93,12 @@ module Spree
         :shipment_state, :payment_state, :email, :special_instructions, :channel,
         :included_tax_total, :additional_tax_total, :display_included_tax_total,
         :display_additional_tax_total, :tax_total, :currency, :considered_risky,
-        :canceler_id, :store_id, :group_state
+        :canceler_id, :store_id, :group_state, :sale_total
       ]
 
+      #                                price：实收价格   sale_price：应收价格
       @@line_item_attributes = [:id, :quantity, :price, :variant_id, :group_number,
-        :group_position, :worker_id, :cname, :memo]
+        :group_position, :worker_id, :cname, :memo, :sale_price, :discount_percent]
 
       @@line_item_group_attributes = [:id, :order_id, :number, :price, :state, :name, :created_at, :updated_at]
 
@@ -135,6 +137,8 @@ module Spree
       ]
 
       @@country_attributes = [:id, :iso_name, :iso, :iso3, :name, :numcode]
+
+      @@customer_attributes = [:id, :created_at, :updated_at, :username, :mobile, :address, :birth, :memo, :payment_password]
 
       @@state_attributes = [:id, :name, :abbr, :country_id]
 

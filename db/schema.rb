@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180526115306) do
+ActiveRecord::Schema.define(version: 20180603115306) do
 
   create_table "campaign_settings", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.integer "campaign_id"
@@ -68,6 +68,53 @@ ActiveRecord::Schema.define(version: 20180526115306) do
     t.text "desc"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "customers", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
+    t.string "email", limit: 128, default: "", null: false
+    t.string "encrypted_password", default: "", null: false
+    t.string "payment_password", default: "", null: false
+    t.string "reset_password_token", limit: 128
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.integer "sign_in_count", default: 0, null: false
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.string "current_sign_in_ip"
+    t.string "last_sign_in_ip"
+    t.string "confirmation_token", limit: 128
+    t.datetime "confirmed_at"
+    t.datetime "confirmation_sent_at"
+    t.string "unconfirmed_email"
+    t.integer "failed_attempts", default: 0, null: false
+    t.string "unlock_token", limit: 128
+    t.datetime "locked_at"
+    t.string "image_url"
+    t.string "role", default: "guest"
+    t.string "username", limit: 64, default: "", null: false
+    t.integer "company_id"
+    t.string "password_salt", limit: 128
+    t.string "remember_token"
+    t.string "persistence_token"
+    t.string "perishable_token"
+    t.datetime "last_request_at"
+    t.integer "ship_address_id"
+    t.integer "bill_address_id"
+    t.string "authentication_token"
+    t.boolean "is_staff", default: false, null: false
+    t.string "mobile"
+    t.datetime "birth"
+    t.string "address"
+    t.string "memo"
+    t.integer "store_id"
+    t.datetime "deleted_at"
+    t.integer "created_by_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["bill_address_id"], name: "index_spree_users_on_bill_address_id"
+    t.index ["deleted_at"], name: "index_spree_users_on_deleted_at"
+    t.index ["ship_address_id"], name: "index_spree_users_on_ship_address_id"
+    t.index ["username"], name: "index_users_on_username", unique: true
   end
 
   create_table "delayed_jobs", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -687,7 +734,7 @@ ActiveRecord::Schema.define(version: 20180526115306) do
     t.integer "store_id"
     t.string "name"
     t.string "number"
-    t.decimal "cost", precision: 10, scale: 2, default: "0.0"
+    t.decimal "price", precision: 10, scale: 2, default: "0.0"
     t.datetime "shipped_at"
     t.string "state"
     t.integer "order_id"
@@ -720,6 +767,8 @@ ActiveRecord::Schema.define(version: 20180526115306) do
     t.datetime "work_at"
     t.string "cname", limit: 128
     t.string "memo", limit: 128
+    t.integer "sale_price", default: 0
+    t.integer "discount_percent", default: 0
     t.index ["order_id"], name: "index_spree_line_items_on_order_id"
     t.index ["tax_category_id"], name: "index_spree_line_items_on_tax_category_id"
     t.index ["variant_id"], name: "index_spree_line_items_on_variant_id"
@@ -836,6 +885,7 @@ ActiveRecord::Schema.define(version: 20180526115306) do
     t.integer "order_type", default: 0, null: false
     t.integer "group_count", default: 0, null: false
     t.string "group_state", limit: 24
+    t.integer "sale_total", default: 0
     t.index ["approver_id"], name: "index_spree_orders_on_approver_id"
     t.index ["bill_address_id"], name: "index_spree_orders_on_bill_address_id"
     t.index ["canceler_id"], name: "index_spree_orders_on_canceler_id"
@@ -1994,7 +2044,6 @@ ActiveRecord::Schema.define(version: 20180526115306) do
     t.datetime "deleted_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "created_by_id"
     t.index ["api_key"], name: "index_spree_users_on_api_key"
     t.index ["bill_address_id"], name: "index_spree_users_on_bill_address_id"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true

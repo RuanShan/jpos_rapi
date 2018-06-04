@@ -39,7 +39,6 @@ class CreateSaleDays < ActiveRecord::Migration[5.1]
     end
 
 
-    add_column :users, :created_by_id, :integer #这个客户的创建者是谁
     add_column :spree_line_items, :work_at, :datetime
 
   end

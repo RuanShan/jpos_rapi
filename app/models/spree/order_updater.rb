@@ -190,5 +190,9 @@ module Spree
       order.state_changed('payment') if last_state != order.payment_state
       order.payment_state
     end
+
+    def update_sale_total
+      order.sale_total = line_items.sum(:sale_price)
+    end
   end
 end
