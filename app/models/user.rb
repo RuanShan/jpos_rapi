@@ -38,7 +38,7 @@ class User < ActiveRecord::Base
 
 
   devise :database_authenticatable, :registerable, :recoverable, :lockable, :timeoutable,
-         :rememberable, :trackable, :validatable, :encryptable
+         :rememberable, :trackable, :validatable, :encryptable, :encryptor => 'authlogic_sha512'
 
   acts_as_paranoid
   after_destroy :scramble_email_and_password
