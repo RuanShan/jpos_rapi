@@ -36,8 +36,6 @@ module Spree
 
     after_save :update_inventory
     after_save :update_adjustments
-    after_save :update_worker_sale_day
-
     after_create :update_tax_charge
 
     delegate :name, :description, :sku, :should_track_inventory?, :product, :options_text, to: :variant
@@ -201,15 +199,17 @@ module Spree
       end
     end
 
-    def update_worker_sale_day
-      if worker_id_previously_changed?
-        previous_worker_id = worker_id_previous_change.first.to_i
-        if previous_worker_id>0
-          #recompute previous by
-          previous_date = work_at_previous_change.first
-          User.find( previous_worker_id ).recompute_processed_line_items_count previous_date
-        end
+    #工人工作量验收
+    def associate_with_worker( worker )
+      if work_at.present?
+        previous_date = work_at
+        User.find( self.worker_id ).recompute_processed_line_items_count previous_date
       end
+
+      self.worker  = worker
+      self.work_at = DateTime.current.to_date
+      self.save
+      User.find( self.worker_id ).recompute_processed_line_items_count
     end
 
   end

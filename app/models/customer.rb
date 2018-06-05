@@ -12,6 +12,8 @@ class Customer <  ApplicationRecord
   has_many :orders, class_name: 'Spree::Order', foreign_key: 'user_id'
   has_many :cards, class_name: 'Spree::Card', foreign_key: 'user_id'
 
+  before_validation :set_login
+  alias_attribute :name, :username # order.user_name required
 
   #总共消费金额
   def normal_order_total
@@ -21,4 +23,12 @@ class Customer <  ApplicationRecord
   def normal_order_count
     orders.where( order_type: :normal ).count
   end
+
+  private
+
+    def set_login
+      # for now force login to be same as email, eventually we will make this configurable, etc.
+      self.username = self.mobile if (self.mobile.present? && self.username.blank? )
+    end
+
 end

@@ -85,7 +85,7 @@ class User < ActiveRecord::Base
 
     def set_login
       # for now force login to be same as email, eventually we will make this configurable, etc.
-      self.username ||= self.mobile if self.mobile
+      self.username = self.mobile if (self.mobile.present? && self.username.blank? )
     end
 
     def scramble_email_and_password
@@ -101,7 +101,7 @@ class User < ActiveRecord::Base
     end
 
     def recompute_processed_line_items_count( date )
-      sale_day = sale_days.on_date( previous_date ).first
+      sale_day = sale_days.on_date( date ).first
       sale_day.recompute_processed_line_items_count
     end
   #

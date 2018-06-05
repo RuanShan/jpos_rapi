@@ -226,6 +226,7 @@ module Spree
     end
 
     def update_order
+Rails.logger.debug "=== before update_order"
       order.updater.update_payment_total if completed? || void?
 
       if order.completed?
@@ -233,6 +234,7 @@ module Spree
         order.updater.update_shipments
         order.updater.update_shipment_state
       end
+Rails.logger.debug "=== after update_order"
 
       order.persist_totals if completed? || order.completed?
     end
@@ -255,9 +257,12 @@ module Spree
       # invalid payment or store_credit payment shouldn't invalidate other payment types
       return if has_invalid_state? || store_credit?
 
+      Rails.logger.debug "=== before invalidate_old_payments"        
       order.payments.with_state('checkout').where.not(id: id).each do |payment|
         payment.invalidate! unless payment.store_credit?
       end
+      Rails.logger.debug "=== after invalidate_old_payments"
+
     end
   end
 end

@@ -56,17 +56,11 @@ module Spree
     attr_reader :coupon_code
     attr_accessor :temporary_address, :temporary_credit_card
 
-    if Spree.user_class
-      belongs_to :user, class_name: Spree.user_class.to_s, optional: true
-      belongs_to :created_by, class_name: Spree.user_class.to_s, optional: true
-      belongs_to :approver, class_name: Spree.user_class.to_s, optional: true
-      belongs_to :canceler, class_name: Spree.user_class.to_s, optional: true
-    else
-      belongs_to :user, optional: true
-      belongs_to :created_by, optional: true
-      belongs_to :approver, optional: true
-      belongs_to :canceler, optional: true
-    end
+      belongs_to :user, class_name: "Customer", optional: true
+      belongs_to :created_by, class_name: "User", optional: true
+      belongs_to :approver, class_name: "User", optional: true
+      belongs_to :canceler, class_name: "User", optional: true
+
 
     belongs_to :bill_address, foreign_key: :bill_address_id, class_name: 'Spree::Address',
                               optional: true
@@ -181,6 +175,17 @@ module Spree
     # that should be called when determining if two line items are equal.
     def self.register_line_item_comparison_hook(hook)
       line_item_comparison_hooks.add(hook)
+    end
+
+    # params
+    #  { "store_id": 1,
+    #    "user_id": 8,
+    #    "created_by_id": 4,
+    #    "line_items_attributes": [ { "variant_id": 15, "quantity": 1, "group_position": 1 }]
+    #  }
+    def self.make_order( params )
+      @order = self.create( params )
+      @order.complete_via_pos
     end
 
     # For compatiblity with Calculator::PriceSack
@@ -671,7 +676,6 @@ module Spree
       groups = create_line_item_groups
       # lock all adjustments (coupon promotions, etc.)
       #all_adjustments.each(&:close)
-
       # update payment and shipment(s) states, and save
       updater.update_payment_state
       #shipments.each do |shipment|
@@ -719,12 +723,6 @@ module Spree
     end
 
     private
-    def associate_store_address
-      self.store_id ||= user.store_id
-      Rails.logger.debug "in associate_store_address"
-      #self.bill_address = Store.current.address
-      #self.ship_address = Store.current.address
-    end
 
     def link_by_email
       self.email = user.email if user

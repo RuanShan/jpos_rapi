@@ -5,7 +5,7 @@ module Spree
     UNACTIVATABLE_ORDER_STATES = ["complete", "awaiting_return", "returned"]
 
     belongs_to :variant
-    belongs_to :customer, class_name: 'User', foreign_key: 'user_id'
+    belongs_to :customer, class_name: 'Customer', foreign_key: 'user_id'
 
     has_many :line_items, class_name: 'Spree::LineItem'
     has_many :transactions, class_name: 'Spree::CardTransaction'
