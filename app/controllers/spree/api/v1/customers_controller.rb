@@ -38,7 +38,7 @@ module Spree
           mobile = params[:mobile]
           valid_mobile = !!( mobile =~/^1[3,4,5,7,8]\d{9}$/ )
           if valid_mobile
-            valid_mobile = !( User.exists?( mobile: mobile ) )
+            valid_mobile = !Customer.exists?( mobile: mobile ) 
           end
           json = { result: valid_mobile }
           render json: json
