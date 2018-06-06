@@ -34,6 +34,16 @@ module Spree
           end
         end
 
+        def validate_mobile
+          mobile = params[:mobile]
+          valid_mobile = !!( mobile =~/^1[3,4,5,7,8]\d{9}$/ )
+          if valid_mobile
+            valid_mobile = !User.exists?( mobile: mobile )
+          end
+          json = { result: valid_mobile }
+          render json: json
+        end
+
         private
         def user
           @user ||= Customer.accessible_by(current_ability, :read).find(params[:id])

@@ -158,6 +158,9 @@ scope module: 'spree' do
         member do
           get :cards
         end
+        collection do
+          get :validate_mobile
+        end
       end
       post '/customers/search', to: 'customers#index'
 

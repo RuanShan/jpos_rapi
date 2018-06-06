@@ -114,6 +114,11 @@ module Spree
       Spree::Variant.unscoped { super }
     end
 
+    #应收价格
+    def sale_price
+      sale_unit_price * quantity * discount_percent / 100
+    end
+
     private
     def associate_with_card
       #如果产品是一张充值卡
