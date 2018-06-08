@@ -192,7 +192,7 @@ module Spree
     end
 
     def update_sale_total
-      order.sale_total = line_items.sum(:sale_price)
+      order.sale_total = line_items.sum(&:sale_price)
     end
   end
 end
