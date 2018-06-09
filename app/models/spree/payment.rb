@@ -35,6 +35,7 @@ module Spree
     # invalidate previously entered payments
     after_create :invalidate_old_payments
     after_create :create_eligible_credit_event
+    after_create :create_eligible_card_event
 
     attr_accessor :source_attributes, :request_env, :capture_on_dispatch
 
@@ -42,7 +43,7 @@ module Spree
 
     validates :amount, numericality: true
 
-    delegate :store_credit?, to: :payment_method, allow_nil: true
+    delegate :store_credit?, :member_card?, to: :payment_method, allow_nil: true
     default_scope { order(:created_at) }
 
     scope :from_credit_card, -> { where(source_type: 'Spree::CreditCard') }
@@ -59,6 +60,7 @@ module Spree
     scope :risky, -> { where("avs_response IN (?) OR (cvv_response_code IS NOT NULL and cvv_response_code != 'M') OR state = 'failed'", RISKY_AVS_CODES) }
     scope :valid, -> { where.not(state: INVALID_STATES) }
 
+    scope :member_cards, -> { where(source_type: Spree::Card.to_s) }
     scope :store_credits, -> { where(source_type: Spree::StoreCredit.to_s) }
     scope :not_store_credits, -> { where(arel_table[:source_type].not_eq(Spree::StoreCredit.to_s).or(arel_table[:source_type].eq(nil))) }
 
@@ -226,7 +228,6 @@ module Spree
     end
 
     def update_order
-Rails.logger.debug "=== before update_order"
       order.updater.update_payment_total if completed? || void?
 
       if order.completed?
@@ -234,7 +235,6 @@ Rails.logger.debug "=== before update_order"
         order.updater.update_shipments
         order.updater.update_shipment_state
       end
-Rails.logger.debug "=== after update_order"
 
       order.persist_totals if completed? || order.completed?
     end
@@ -253,11 +253,18 @@ Rails.logger.debug "=== after update_order"
                                 action_authorization_code: response_code)
     end
 
+    #支付方式为会员卡时，调整会员卡余额
+    def create_eligible_card_event
+Rails.logger.debug "member_card?=#{member_card?} source=#{source.inspect}"      
+      return unless member_card? && source.is_a?(Spree::Card)
+      source.capture!(self)
+    end
+
     def invalidate_old_payments
       # invalid payment or store_credit payment shouldn't invalidate other payment types
       return if has_invalid_state? || store_credit?
 
-      Rails.logger.debug "=== before invalidate_old_payments"        
+      Rails.logger.debug "=== before invalidate_old_payments"
       order.payments.with_state('checkout').where.not(id: id).each do |payment|
         payment.invalidate! unless payment.store_credit?
       end

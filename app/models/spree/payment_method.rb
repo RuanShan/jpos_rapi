@@ -70,6 +70,10 @@ module Spree
       self.class == Spree::PaymentMethod::StoreCredit
     end
 
+    def member_card?
+      self.class == Spree::PaymentMethod::PrepaidCard
+    end
+
     # Custom PaymentMethod/Gateway can redefine this method to check method
     # availability for concrete order.
     def available_for_order?(_order)

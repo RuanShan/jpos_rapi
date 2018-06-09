@@ -1,7 +1,7 @@
 module Spree
   class PaymentMethod::PrepaidCard < PaymentMethod
     def payment_source_class
-      ::Spree::PrepaidCard
+      ::Spree::Card
     end
 
     def actions
