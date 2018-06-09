@@ -88,6 +88,7 @@ module Spree
 
     def set_values
       self.amount ||= self.variant.try(:price)
+      self.amount_used = 0
     end
 
     def amount_remaining_is_positive

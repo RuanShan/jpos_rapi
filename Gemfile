@@ -62,6 +62,8 @@ gem 'spree_api',   path: './spree/api'
   gem 'ransack'
   #验证码
   #gem 'rucaptcha'
+  #https://github.com/nesquena/rabl/wiki/Rabl-In-Production
+  #gem 'oj'
 
   group :doc do
     # bundle exec rake doc:rails generates the API under doc/api.
