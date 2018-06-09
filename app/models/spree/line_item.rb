@@ -132,7 +132,7 @@ module Spree
           end
           new_card.discount_percent = variant.card_discount_percent
           new_card.discount_amount = variant.card_discount_amount
-          new_card.status = :enable
+          new_card.status = :enabled
         end
         self.card.transactions.create!( order: order, amount: self.price)
       end
