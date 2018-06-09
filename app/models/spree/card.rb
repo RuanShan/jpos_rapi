@@ -23,7 +23,7 @@ module Spree
       validates :amount_used, numericality: { greater_than_or_equal_to: 0 }
     end
 
-    validate :amount_remaining_is_positive, if: :amount_used
+    validate :amount_remaining_is_positive
 
     before_validation :generate_code, on: :create
     before_validation :set_values, on: :create
