@@ -548,7 +548,7 @@ class SpreeEcommerce < ActiveRecord::Migration[5.1]
       t.integer "site_id"
       t.boolean "auto_capture"
       t.text "preferences"
-      t.boolean "posable", default: false
+      t.boolean "posable", default: false # 是否可以在POS系统中使用这个支付方式
       t.integer "user_terminal_id"
       t.integer "position", default: 0
       t.index ["id", "type"], name: "index_spree_payment_methods_on_id_and_type"
