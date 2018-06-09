@@ -20,12 +20,14 @@ module Spree
         end
 
         def create
+
           @user = Customer.new(user_params) do|user|
             user.created_by = current_api_user
           end
           if @user.save
             if params[:order].present?
-              order_attributes = card_params( @user )
+              order_attributes = deposit_order_params( @user )
+Rails.logger.debug "order_attributes=#{order_attributes.inspect} "
               @order = Spree::Order.create!(order_attributes)
             end
             respond_with(@user, status: 201, default_template: :show)
@@ -38,7 +40,7 @@ module Spree
           mobile = params[:mobile]
           valid_mobile = !!( mobile =~/^1[3,4,5,7,8]\d{9}$/ )
           if valid_mobile
-            valid_mobile = !Customer.exists?( mobile: mobile ) 
+            valid_mobile = !Customer.exists?( mobile: mobile )
           end
           json = { result: valid_mobile }
           render json: json
@@ -51,13 +53,17 @@ module Spree
 
         def user_params
           params.require(:user).permit(permitted_user_attributes |
-                                         [bill_address_attributes: permitted_address_attributes,
-                                          ship_address_attributes: permitted_address_attributes])
+                                         [cards_attributes: permitted_card_attributes])
         end
 
-        def card_params( user  )
+        def deposit_order_params( user  )
+          card = user.cards.first
           params[:order][:payments_attributes] = params[:order].delete(:payments) if params[:order][:payments]
-          params[:order][:line_items_attributes] = params[:order].delete(:line_items) if params[:order][:line_items]
+
+          amount = params[:order][:payments_attributes].inject(0){ |sum,payment| sum + payment[:amount]  }
+Rails.logger.debug " amount=#{amount}"
+          params[:order][:line_items_attributes] = [{variant_id: card.variant_id, price: amount}]
+          params[:order][:line_items_attributes][0][:card_id] = card.id
 
           permitted_params = params.require(:order).permit(permitted_order_attributes)
 

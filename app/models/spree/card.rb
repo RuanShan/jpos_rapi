@@ -77,6 +77,11 @@ module Spree
       self.save!
     end
 
+    def deposit!( line_item )
+      self.amount += line_item.price
+      self.save!
+    end
+
     private
 
 
@@ -87,7 +92,19 @@ module Spree
     end
 
     def set_values
-      self.amount ||= self.variant.try(:price)
+      self.name ||= variant.try(:name)
+      self.amount ||= 0
+      if variant
+        self.style = product.try(:card_style) #卡的种类
+
+        if variant.card_expire_in > 0
+          self.expire_in =  DateTime.current.in( variant.card_expire_in.day )
+        end
+        self.discount_percent = variant.card_discount_percent
+        self.discount_amount = variant.card_discount_amount
+
+      end
+
       self.amount_used = 0
     end
 

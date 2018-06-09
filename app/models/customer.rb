@@ -10,7 +10,8 @@ class Customer <  ApplicationRecord
 
   # 包括客户 消费订单 和 购买会员卡，会员卡充值订单
   has_many :orders, class_name: 'Spree::Order', foreign_key: 'user_id'
-  has_many :cards, class_name: 'Spree::Card', foreign_key: 'user_id'
+  has_many :cards, class_name: 'Spree::Card', foreign_key: 'user_id', inverse_of: :customer
+  accepts_nested_attributes_for :cards
 
   before_validation :set_login
   alias_attribute :name, :username # order.user_name required

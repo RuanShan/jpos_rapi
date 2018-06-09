@@ -2,6 +2,7 @@ module Spree
   module PermittedAttributes
     ATTRIBUTES = [
       :address_attributes,
+      :card_attributes,
       :checkout_attributes,
       :customer_return_attributes,
       :customer_attributes,
@@ -37,6 +38,8 @@ module Spree
       country: [:iso, :name, :iso3, :iso_name],
       state: [:name, :abbr]
     ]
+
+    @@card_attributes = [ :code, :variant_id, :amount]
 
     @@checkout_attributes = [
       :coupon_code, :email, :shipping_method_id, :special_instructions, :use_billing, :user_id,
