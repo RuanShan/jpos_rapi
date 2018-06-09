@@ -92,6 +92,7 @@ module Spree
     end
 
     def set_values
+      self.status = :enabled
       self.name ||= variant.try(:name)
       self.amount ||= 0
       if variant
