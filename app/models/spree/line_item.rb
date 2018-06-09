@@ -32,6 +32,7 @@ module Spree
 
     before_destroy :destroy_inventory_units
 
+    attr_accessor :code  #客户端传过来的会员卡号
     after_create :associate_with_card, if: :is_card?
 
     after_save :update_inventory
@@ -124,6 +125,7 @@ module Spree
       #如果产品是一张充值卡
       if is_card?
         create_card!( variant: variant, customer: self.user) do |new_card|
+          new_card.code = self.code
           new_card.name = variant.name #产品名字
           new_card.created_by = order.created_by
           new_card.style = variant.product.card_style #卡的种类
