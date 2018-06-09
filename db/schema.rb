@@ -532,8 +532,8 @@ ActiveRecord::Schema.define(version: 20180603115306) do
     t.datetime "expire_at"
     t.integer "discount_percent"
     t.integer "discount_amount"
-    t.decimal "current_value", precision: 8, scale: 2, null: false
-    t.decimal "original_value", precision: 8, scale: 2, null: false
+    t.decimal "amount_used", precision: 8, scale: 2, null: false
+    t.decimal "amount", precision: 8, scale: 2, null: false
     t.integer "status", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -767,7 +767,7 @@ ActiveRecord::Schema.define(version: 20180603115306) do
     t.datetime "work_at"
     t.string "cname", limit: 128
     t.string "memo", limit: 128
-    t.integer "sale_price", default: 0
+    t.integer "sale_unit_price", default: 0
     t.integer "discount_percent", default: 0
     t.index ["order_id"], name: "index_spree_line_items_on_order_id"
     t.index ["tax_category_id"], name: "index_spree_line_items_on_tax_category_id"
@@ -973,6 +973,7 @@ ActiveRecord::Schema.define(version: 20180603115306) do
     t.integer "site_id"
     t.boolean "auto_capture"
     t.text "preferences"
+    t.boolean "posable", default: false
     t.integer "user_terminal_id"
     t.integer "position", default: 0
     t.index ["id", "type"], name: "index_spree_payment_methods_on_id_and_type"

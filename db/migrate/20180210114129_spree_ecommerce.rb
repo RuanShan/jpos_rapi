@@ -548,6 +548,7 @@ class SpreeEcommerce < ActiveRecord::Migration[5.1]
       t.integer "site_id"
       t.boolean "auto_capture"
       t.text "preferences"
+      t.boolean "posable", default: false
       t.integer "user_terminal_id"
       t.integer "position", default: 0
       t.index ["id", "type"], name: "index_spree_payment_methods_on_id_and_type"

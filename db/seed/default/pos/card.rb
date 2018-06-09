@@ -2,9 +2,13 @@ if Selling::PrepaidCard.count == 0
   puts "\tCreating default PrepaidCard..."
   shipping_category = Spree::ShippingCategory.find_or_create_by(name: 'Gift Card')
 
-  [1000, 3000, 8000].each{|i|
-    product = Selling::PrepaidCard.new(available_on: Time.now, name: "会员卡#{i}", price: i, shipping_category_id: shipping_category.id)
-    product.card_discount_percent = { 1000=> 70, 3000=> 60, 8000=> 50}.fetch( i )
+  [ {name: "会员卡1000打7折", price: 1000, card_discount_percent: 70},
+    {name: "会员卡3000打6折", price: 3000, card_discount_percent: 60},
+    {name: "会员卡8000打5折", price: 8000, card_discount_percent: 50}].each{|attrs|
+      product = Selling::PrepaidCard.new(attrs) do|card|
+        card.available_on = Time.now
+        card.shipping_category_id =  shipping_category.id
+      end
     product.save!
   }
 

@@ -124,7 +124,7 @@ module Spree
       #如果产品是一张充值卡
       if is_card?
         create_card!( variant: variant, customer: self.user) do |new_card|
-          new_card.name = variant.descriptive_name
+          new_card.name = variant.name #产品名字
           new_card.created_by = order.created_by
           new_card.style = variant.product.card_style #卡的种类
           if variant.card_expire_in > 0
