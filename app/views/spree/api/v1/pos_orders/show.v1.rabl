@@ -22,5 +22,5 @@ child payments: :payments do
 end
 
 child  customer: :customer do
-  extends 'spree/api/v1/customers/simple'
+  extends 'spree/api/v1/customers/show'
 end
