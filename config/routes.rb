@@ -87,6 +87,7 @@ scope module: 'spree' do
 
       resources :orders, concerns: :order_routes
 
+      get '/pos_orders/:id', to: 'pos_orders#show'
       post '/pos_orders', to: 'pos_orders#create', as: 'create_pos_orders'
       get '/pos_orders/find_by_group_number/:group_number', to: 'pos_orders#find_by_group_number'
       get '/pos_orders/count', to: 'pos_orders#count', as: 'count_pos_orders'
