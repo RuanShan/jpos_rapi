@@ -1,10 +1,6 @@
 object @order
 extends 'spree/api/v1/orders/order'
 
-if lookup_context.find_all("spree/api/v1/orders/#{root_object.state}").present?
-  extends "spree/api/v1/orders/#{root_object.state}"
-end
-
 child line_items: :line_items do
   extends 'spree/api/v1/line_items/show'
 end
@@ -21,10 +17,10 @@ child payments: :payments do
   end
 
   child source: :source do
-    if @current_user_roles.include?('admin')
-      attributes *payment_source_attributes + [:gateway_customer_profile_id, :gateway_payment_profile_id]
-    else
-      attributes *payment_source_attributes
-    end
+      attributes *card_attributes
   end
+end
+
+child  customer: :customer do
+  extends 'spree/api/v1/customers/simple'
 end

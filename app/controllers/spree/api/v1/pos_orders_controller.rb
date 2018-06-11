@@ -71,6 +71,11 @@ module Spree
           respond_with(@order, default_template: :show)
         end
 
+        def by_number
+          @order = Spree::Order.find_by!(number: params[:number])
+          respond_with(@order, default_template: :show)
+        end
+
         def all_step
           authorize! :index, Order
           pos_order_numbers = params[:order_numbers]
@@ -152,7 +157,7 @@ module Spree
         end
 
         def find_order(lock = false)
-          @order = Spree::Order.lock(lock).find_by!(number: params[:id])
+          @order = Spree::Order.lock(lock).find_by!(id: params[:id])
         end
 
         def find_current_order

@@ -16,6 +16,8 @@ class Customer <  ApplicationRecord
   before_validation :set_login
   alias_attribute :name, :username # order.user_name required
 
+  enum gender: { male: 1, female: 0 }
+
   #总共消费金额
   def normal_order_total
     orders.where( order_type: :normal ).sum(:total)

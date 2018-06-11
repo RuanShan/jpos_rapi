@@ -344,6 +344,7 @@ class WechatmoreGame < ActiveRecord::Migration[5.1]
       t.string "address"
       t.string "memo"
       t.integer "store_id"
+      t.integer "gender", default: 0, null: false
       t.datetime "deleted_at"
       t.integer :created_by_id #这个客户的创建者是谁
 

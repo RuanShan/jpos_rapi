@@ -138,7 +138,7 @@ module Spree
 
       @@country_attributes = [:id, :iso_name, :iso, :iso3, :name, :numcode]
 
-      @@customer_attributes = [:id, :created_at, :updated_at, :username, :mobile, :address, :birth, :memo, :payment_password]
+      @@customer_attributes = [:id, :created_at, :updated_at, :username, :mobile, :address, :birth, :memo, :payment_password, :gender]
 
       @@state_attributes = [:id, :name, :abbr, :country_id]
 

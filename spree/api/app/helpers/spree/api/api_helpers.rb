@@ -135,7 +135,9 @@ module Spree
       ]
 
       @@payment_source_attributes = [
-        :id, :month, :year, :cc_type, :last_digits, :name
+        :id, :month, :year, :cc_type, :last_digits, :name,
+        #会员卡信息
+        :code, :style, :name, :amount, :amount_used
       ]
 
       @@user_attributes = [:id, :email, :created_at, :updated_at]
