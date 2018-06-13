@@ -14,6 +14,7 @@ module Spree
       before_action :authorize_for_order, if: proc { order_token.present? }
       before_action :authenticate_user
       before_action :load_user_roles
+      after_action :set_user_last_request_at
 
       rescue_from ActionController::ParameterMissing, with: :error_during_processing
       rescue_from ActiveRecord::RecordInvalid, with: :error_during_processing
@@ -48,20 +49,18 @@ module Spree
       end
 
       def load_user
-        @current_api_user = Spree.user_class.find_by(spree_api_key: api_key.to_s)
+        @current_api_user = current_user
+        if Rails.env.development?
+          #@current_api_user ||= Spree.user_class.find_by(spree_api_key: api_key.to_s)
+        end
       end
 
       def authenticate_user
-        return if @current_api_user
-
-        if requires_authentication? && api_key.blank? && order_token.blank?
-          must_specify_api_key and return
-        elsif order_token.blank? && (requires_authentication? || api_key.present?)
-          invalid_api_key and return
-        else
-          # An anonymous user
-          @current_api_user = Spree.user_class.new
+        #检查用户session是否过期, jpos 每个API请求都需要检查
+        if @current_api_user.blank?
+          unauthorized
         end
+
       end
 
       def invalid_api_key
@@ -157,6 +156,11 @@ module Spree
       def authorize_for_order
         @order = Spree::Order.find_by(number: order_id)
         authorize! :read, @order, order_token
+      end
+
+      def set_user_last_request_at
+        #cookies['_jpos_api_timestamp'] =  DateTime.current.to_i
+        #@current_api_user.update_attributes last_request_at: DateTime.current
       end
     end
   end

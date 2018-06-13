@@ -76,12 +76,27 @@ class User < ActiveRecord::Base
     has_spree_role?('admin')
   end
 
+  def avatar_url
+    "xx"
+  end
   protected
     def password_required?
       !persisted? || password.present? || password_confirmation.present?
     end
 
   private
+    # override Devise::Trackable
+    def update_tracked_fields!(request)
+      # We have to check if the user is already persisted before running
+      # `save` here because invalid users can be saved if we don't.
+      # See https://github.com/plataformatec/devise/issues/4673 for more details.
+      return if new_record?
+
+      update_tracked_fields(request)
+
+      self.last_request_at = self.current_sign_in_at
+      save(validate: false)
+    end
 
     def set_login
       # for now force login to be same as email, eventually we will make this configurable, etc.
