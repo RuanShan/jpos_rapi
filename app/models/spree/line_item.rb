@@ -13,6 +13,7 @@ module Spree
     # 一张卡可能多次充值，所以一张卡可能有多个line_item
     belongs_to :card, dependent: :destroy, required: false
     belongs_to :worker, class_name: 'User', dependent: :destroy, required: false
+    belongs_to :line_item_group, foreign_key: 'group_number', primary_key: 'number'
 
     has_many :adjustments, as: :adjustable, dependent: :destroy
     has_many :inventory_units, inverse_of: :line_item
@@ -32,7 +33,7 @@ module Spree
 
     before_destroy :destroy_inventory_units
 
-    attr_accessor :code  #客户端传过来的会员卡号
+    #客户端传过来的会员卡ID
     after_create :associate_with_card, if: -> { card_id > 0 }
 
     after_save :update_inventory
@@ -44,7 +45,10 @@ module Spree
     delegate :tax_zone, :user, to: :order
 
     delegate :is_card?, to: :product
+
     attr_accessor :target_shipment
+
+    enum state: { done: 1, pending: 0 }
 
     self.whitelisted_ransackable_associations = ['variant']
     self.whitelisted_ransackable_attributes = ['variant_id']

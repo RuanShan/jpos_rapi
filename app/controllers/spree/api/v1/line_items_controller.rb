@@ -6,21 +6,30 @@ module Spree
 
         self.line_item_options = []
 
-        # associate worker with line_items
+        # 确认工作量，associate worker with line_items
         def fulfill
           worker_id = params[:worker_id]
           ids = params[:ids]
-          @line_items = Spree::LineItem.find( ids )
+          @line_items = Spree::LineItem.includes(:line_item_group, :order).find( ids )
           worker_times = @line_items.select{|i| i.worker_id> 0 }.map{ |i| [i.worker_id, i.work_at] }.uniq
           # update_column skip callback, or cause error:
           # NoMethodError: undefined method `set_up_inventory' for nil:NilClass
           # from /var/www/apps/jpos_rapi/app/models/spree/order_inventory.rb:80:in `add_to_shipment'
-          Spree::LineItem.where( id: ids ).update_all( worker_id: worker_id, work_at: DateTime.current)
+          Spree::LineItem.where( id: ids ).update_all( worker_id: worker_id, work_at: DateTime.current, state: 1 )
 
+          #重新统计工人每天工作量
           worker_times.each{ |worker_time_pair|
             worker_id, time = worker_time_pair[0], worker_time_pair[1]
             worker = User.find worker_id
             worker.sale_today.recompute_processed_line_items_count
+          }
+          #改变订单状态
+          @line_items.each{ |li|
+            states = li.order.line_items.pluck(:state)
+            #无需判断 状态为:done， 前一步已经更新为 done 了
+            if states.uniq.size == 1
+              li.line_item_group.next
+            end
           }
 
           respond_with(@line_items)
