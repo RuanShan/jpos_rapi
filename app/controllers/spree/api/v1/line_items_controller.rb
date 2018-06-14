@@ -28,7 +28,7 @@ module Spree
             states = li.order.line_items.pluck(:state)
             #无需判断 状态为:done， 前一步已经更新为 done 了
             if states.uniq.size == 1
-              li.line_item_group.next
+              li.line_item_group.fulfill
             end
           }
 

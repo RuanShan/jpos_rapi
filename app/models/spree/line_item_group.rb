@@ -92,6 +92,11 @@ module Spree
         transition to: :ready, from: %i(ready_for_store)
       end
 
+      #工厂确认工作量
+      event :fulfill do
+        transition to: :processed, from: %i(processed, processing)
+      end
+
       event :next do
         # pending -> ready_for_factory -> processing -> processed -> ready_for_store -> ready -> shipped
         transition pending: :ready_for_factory,  ready_for_factory: :processing,
