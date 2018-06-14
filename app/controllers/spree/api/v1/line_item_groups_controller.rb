@@ -6,7 +6,7 @@ module Spree
 
         def index
           authorize! :index, LineItemGroup
-          @q = LineItemGroup.ransack(params[:q]).result
+          @q = LineItemGroup.reverse_chronological.ransack(params[:q]).result
           @total_count = @q.count
           @line_item_groups = @q.includes(:order).page(params[:page]).per(params[:per_page])
           respond_with(@line_item_groups)
