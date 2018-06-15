@@ -164,7 +164,7 @@ module Spree
 
     scope :type_normal, -> { where( order_type: :normal ) }
     scope :type_card, -> { where.not( order_type: :normal ) }
-    enum order_type: { normal: 0,  new_card: 1, recharge: 2 }, _prefix: true
+    enum order_type: { normal: 0,  card: 1 }, _prefix: true
 
     alias_attribute :customer_id, :user_id
     alias_attribute :customer, :user

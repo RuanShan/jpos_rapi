@@ -127,7 +127,7 @@ module Spree
     def update_order_type
       if line_items.count  == 1
         if line_items.first.product.is_a? Selling::PrepaidCard
-          order.order_type = Spree::Order.order_types[:new_card]
+          order.order_type = Spree::Order.order_types[:card]
         end
       end
     end

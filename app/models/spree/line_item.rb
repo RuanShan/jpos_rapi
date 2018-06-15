@@ -152,6 +152,8 @@ module Spree
     end
 
     def ensure_valid_group_number
+      #如果为空，使用产品名称
+      self.cname = self.name if self.cname.blank?
       #self.group_number ||= generate_group_number
     end
 
