@@ -50,9 +50,9 @@ module Spree
 
       def load_user
         @current_api_user = current_user
-        if Rails.env.development?
+        if @current_api_user.blank?
           #postman 测试需要
-          @current_api_user ||= Spree.user_class.find_by(spree_api_key: api_key.to_s)
+          @current_api_user = Spree.user_class.find_by(spree_api_key: api_key.to_s)
         end
       end
 
