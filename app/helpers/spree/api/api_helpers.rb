@@ -100,7 +100,7 @@ module Spree
 
       #                                price：实收价格   sale_price：应收价格
       @@line_item_attributes = [:id, :quantity, :price, :variant_id, :group_number,
-        :group_position, :worker_id, :cname, :memo, :sale_price, :discount_percent]
+        :group_position, :worker_id, :cname, :memo, :sale_unit_price, :discount_percent]
 
       @@line_item_group_attributes = [:id, :order_id, :number, :price, :state, :name, :created_at, :updated_at]
 
