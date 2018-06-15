@@ -35,11 +35,11 @@ module Spree
           end
         end
 
-        def stat
+        def statis
           @user = user
-          @statistics = { order_total: 0, normal_order_total: 0, card_order_total: 0 }
-          @statistics[:normal_order_total] = @user.orders.type_normal.sum(:total)
-          @statistics[:card_order_total] = @user.orders.type_card.sum(:total)
+          @statis = { order_total: 0, normal_order_total: 0, card_order_total: 0 }
+          @statis[:normal_order_total] = @user.orders.type_normal.sum(:total)
+          @statis[:card_order_total] = @user.orders.type_card.sum(:total)
 
         end
 
