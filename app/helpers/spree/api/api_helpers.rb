@@ -56,7 +56,9 @@ module Spree
       end
 
       @@card_attributes = [
-        :id, :user_id, :code, :style, :amount, :amount_used, :amount_remaining, :name, :discount_percent, :discount_amount, :status, :created_at
+        :id, :store_id, :user_id, :code, :style, :amount, :amount_used, :amount_remaining,
+        :name, :discount_percent, :discount_amount, :status, :memo, :created_at,
+        :expire_at
       ]
       @@card_transaction_attributes = [
         :id, :card_id, :order_id, :amount, :created_at
@@ -93,7 +95,7 @@ module Spree
         :shipment_state, :payment_state, :email, :special_instructions, :channel,
         :included_tax_total, :additional_tax_total, :display_included_tax_total,
         :display_additional_tax_total, :tax_total, :currency, :considered_risky,
-        :canceler_id, :store_id, :group_state, :sale_total
+        :canceler_id, :store_id, :group_state, :sale_total, :order_type
       ]
 
       #                                price：实收价格   sale_price：应收价格

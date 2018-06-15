@@ -158,6 +158,7 @@ scope module: 'spree' do
       resources :customers do
         member do
           get :cards
+          get :stat
         end
         collection do
           get :validate_mobile

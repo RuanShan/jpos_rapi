@@ -160,6 +160,8 @@ module Spree
     # shows completed orders first, by their completed_at date, then uncompleted orders by their created_at
     scope :reverse_chronological, -> { order(Arel.sql('spree_orders.completed_at IS NULL'), completed_at: :desc, created_at: :desc) }
 
+    scope :type_normal, -> { where( order_type: :normal ) }
+    scope :type_card, -> { where.not( order_type: :normal ) }
     enum order_type: { normal: 0,  new_card: 1, recharge: 2 }, _prefix: true
 
     alias_attribute :customer_id, :user_id

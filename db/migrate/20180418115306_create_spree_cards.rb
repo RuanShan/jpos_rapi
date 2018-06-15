@@ -2,6 +2,7 @@ class CreateSpreeCards < ActiveRecord::Migration[5.1]
   def change
     create_table :spree_cards do |t|
       t.references(:user) #卡的所有者
+      t.integer :store_id #这个打折卡属于那个店铺的
       t.integer :created_by_id #这个打折卡的创建者是谁
       t.string :code, :null => false
       # 1：充值卡， 2：次卡
@@ -9,8 +10,9 @@ class CreateSpreeCards < ActiveRecord::Migration[5.1]
       t.integer :variant_id, :null => false
       t.integer :line_item_id
       t.string :name
-      t.text :note
+      t.text :memo
       t.datetime :sent_at
+      t.integer  :expire_in, default: 0 #卡的有效期限，0为无限期，可以为 1个月、1年
       t.datetime :expire_at #卡的到期时间
       t.integer  :discount_percent # percent
       t.integer  :discount_amount # percent

@@ -35,6 +35,14 @@ module Spree
           end
         end
 
+        def stat
+          @user = user
+          @statistics = { order_total: 0, normal_order_total: 0, card_order_total: 0 }
+          @statistics[:normal_order_total] = @user.orders.type_normal.sum(:total)
+          @statistics[:card_order_total] = @user.orders.type_card.sum(:total)
+
+        end
+
         def validate_mobile
           mobile = params[:mobile]
           valid_mobile = !!( mobile =~/^1[3,4,5,7,8]\d{9}$/ )
@@ -60,7 +68,6 @@ module Spree
           params[:order][:payments_attributes] = params[:order].delete(:payments) if params[:order][:payments]
 
           amount = params[:order][:payments_attributes].inject(0){ |sum,payment| sum + payment[:amount]  }
-Rails.logger.debug " amount=#{amount}"
           params[:order][:line_items_attributes] = [{variant_id: card.variant_id, price: amount}]
           params[:order][:line_items_attributes][0][:card_id] = card.id
 
@@ -70,6 +77,8 @@ Rails.logger.debug " amount=#{amount}"
           permitted_params[:store] = current_store
           permitted_params[:user] = user
           permitted_params[:created_by] = current_api_user
+          permitted_params[:order_type] = :new_card
+
           permitted_params
         end
       end
