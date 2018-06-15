@@ -27,7 +27,6 @@ module Spree
           if @user.save
             if params[:order].present?
               order_attributes = deposit_order_params( @user )
-Rails.logger.debug "order_attributes=#{order_attributes.inspect} "
               @order = Spree::Order.create!(order_attributes)
             end
             respond_with(@user, status: 201, default_template: :show)
