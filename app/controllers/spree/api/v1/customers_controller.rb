@@ -22,7 +22,7 @@ module Spree
         def create
 
           @user = Customer.new(user_params) do|user|
-            user.created_by = current_api_user
+            user.creator = current_api_user
           end
           if @user.save
             if params[:order].present?
@@ -76,7 +76,7 @@ module Spree
           permitted_params[:channel] = 'pos'
           permitted_params[:store] = current_store
           permitted_params[:user] = user
-          permitted_params[:created_by] = current_api_user
+          permitted_params[:creator] = current_api_user
           permitted_params[:order_type] = :new_card
 
           permitted_params

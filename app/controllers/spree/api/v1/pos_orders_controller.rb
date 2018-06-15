@@ -36,7 +36,7 @@ module Spree
           @q = Order.ransack(params[:q]).result
           @total_count = @q.count
           # 订单列表需要显示订单 物品和活的信息
-          @orders = @q.includes(:user, :line_item_groups, :line_items ).page(params[:page]).per(params[:per_page])
+          @orders = @q.includes(:user, :creator, :line_item_groups, :line_items ).page(params[:page]).per(params[:per_page])
           respond_with(@orders)
         end
 

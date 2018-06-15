@@ -57,7 +57,7 @@ module Spree
     attr_accessor :temporary_address, :temporary_credit_card
 
       belongs_to :user, class_name: "Customer", optional: true
-      belongs_to :created_by, class_name: "User", optional: true
+      belongs_to :creator, class_name: "User", foreign_key: "created_by_id", optional: true
       belongs_to :approver, class_name: "User", optional: true
       belongs_to :canceler, class_name: "User", optional: true
 
@@ -143,6 +143,8 @@ module Spree
     delegate :update_totals, :persist_totals, to: :updater
     delegate :merge!, to: :merger
     delegate :firstname, :lastname, to: :bill_address, prefix: true, allow_nil: true
+
+    delegate :name, to: :creator, prefix: true, allow_nil: true
     delegate :name, to: :user, prefix: true, allow_nil: true
     delegate :name, to: :store, prefix: true, allow_nil: true
 
@@ -288,7 +290,7 @@ module Spree
     def associate_user!(user, override_email = true)
       self.user           = user
       self.email          = user.email if override_email
-      self.created_by   ||= user
+      self.creator   ||= user
       self.bill_address ||= user.bill_address.try(:clone)
       self.ship_address ||= user.ship_address.try(:clone)
 

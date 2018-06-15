@@ -2,7 +2,7 @@ class Customer <  ApplicationRecord
 
   validates :mobile, presence: true, uniqueness: true
 
-  belongs_to :created_by, class_name: 'User', optional: true
+  belongs_to :creator, class_name: 'User', foreign_key: 'created_by_id', optional: true
   belongs_to :store, class_name: 'Spree::Store'
   #服务员创建新会员的日子，一天新注册了多少用户统计
   belongs_to :sold_day, ->{ today }, class_name: 'SaleDay', counter_cache: 'new_customers_count',

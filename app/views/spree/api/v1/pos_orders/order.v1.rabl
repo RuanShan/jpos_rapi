@@ -5,6 +5,7 @@ node(:total_quantity) { |o| o.line_items.sum(:quantity) }
 node(:display_total) { |o| o.display_total.to_s }
 node(:display_adjustment_total, &:display_adjustment_total)
 node(:user_name, &:user_name)
+node(:creator_name, &:creator_name)
 node(:store_name, &:store_name)
 
 child line_items: :line_items do
