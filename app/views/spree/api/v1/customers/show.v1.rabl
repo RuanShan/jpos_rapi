@@ -1,7 +1,7 @@
 object @user
 #cache [I18n.locale, root_object]
 
-attributes *user_attributes
+attributes *customer_attributes
 
 
 child(cards: :cards) do
