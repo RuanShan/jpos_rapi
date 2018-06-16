@@ -34,7 +34,7 @@ module Spree
     before_destroy :destroy_inventory_units
 
     #客户端传过来的会员卡ID
-    after_create :associate_with_card, if: -> { card_id > 0 }
+    before_create :associate_with_card, if: -> { card_id > 0 || code.present? }
 
     after_save :update_inventory
     after_save :update_adjustments
@@ -47,6 +47,7 @@ module Spree
     delegate :is_card?, to: :product
 
     attr_accessor :target_shipment
+    attr_accessor :code #会员卡号，老客购买新卡子订单，需要提供卡号
 
     enum state: { done: 1, pending: 0 }
 
@@ -126,22 +127,26 @@ module Spree
 
     private
     def associate_with_card
+      #客户没有卡，创建新卡
+      if self.code.present?
+        card = create_card!( variant: variant, customer: self.user) do |new_card|
+          new_card.code = self.code
+          new_card.amount = self.price
+          new_card.name = variant.name #产品名字
+          new_card.creator = order.creator
+          new_card.style = variant.product.card_style #卡的种类
+          if variant.card_expire_in > 0
+            new_card.expire_in =  DateTime.current.in( card_expire_in.day )
+          end
+          new_card.discount_percent = variant.card_discount_percent
+          new_card.discount_amount = variant.card_discount_amount
+          new_card.status = :enabled
+        end
+        self.card_id = card.id
+      end
       #如果产品是一张充值卡
-      if card_id > 0
+      if self.card_id > 0
         # 充值
-        # create_card!( variant: variant, customer: self.user) do |new_card|
-        #   new_card.code = self.code
-        #   new_card.amount = self.price
-        #   new_card.name = variant.name #产品名字
-        #   new_card.created_by = order.created_by
-        #   new_card.style = variant.product.card_style #卡的种类
-        #   if variant.card_expire_in > 0
-        #     new_card.expire_in =  DateTime.current.in( card_expire_in.day )
-        #   end
-        #   new_card.discount_percent = variant.card_discount_percent
-        #   new_card.discount_amount = variant.card_discount_amount
-        #   new_card.status = :enabled
-        # end
         #self.card.transactions.create!( order: order, amount: self.price)
         Spree::Card.find(card_id).deposit!( self )
       end
