@@ -59,7 +59,7 @@ module Spree
         end
 
         def user_params
-          params.require(:user).permit(permitted_user_attributes |
+          params.require(:user).permit(permitted_customer_attributes |
                                          [cards_attributes: permitted_card_attributes])
         end
 
