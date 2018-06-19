@@ -8,7 +8,7 @@ module Spree
     belongs_to :customer, class_name: 'Customer', foreign_key: 'user_id'
 
     has_many :line_items, class_name: 'Spree::LineItem'
-    #has_many :transactions, class_name: 'Spree::CardTransaction'
+    has_many :card_transactions, class_name: 'Spree::CardTransaction'
     belongs_to :creator, class_name: 'User', foreign_key: 'created_by_id', optional: true
     belongs_to :sale_day, ->{ today }, class_name: 'SaleDay', counter_cache: "new_cards_count",
     primary_key: 'user_id', foreign_key: 'created_by_id'
@@ -78,6 +78,7 @@ module Spree
     end
 
     def deposit!( line_item )
+      self.card_transactions.create!( order: line_item.order, amount: line_item.price, amount_left: self.amount )
       self.amount += line_item.price
       self.save!
     end

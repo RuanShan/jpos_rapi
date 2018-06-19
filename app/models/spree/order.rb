@@ -106,6 +106,7 @@ module Spree
         pluck(:state).uniq
       end
     end
+    has_many :card_transactions, dependent: :destroy, inverse_of: :order
 
     has_many :shipment_adjustments, through: :shipments, source: :adjustments
 

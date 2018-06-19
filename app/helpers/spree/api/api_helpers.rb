@@ -61,7 +61,7 @@ module Spree
         :expire_at, :variant_id
       ]
       @@card_transaction_attributes = [
-        :id, :card_id, :order_id, :amount, :created_at
+        :id, :card_id, :order_id, :amount,  :amount_left, :created_at
       ]
 
       @@product_attributes = [

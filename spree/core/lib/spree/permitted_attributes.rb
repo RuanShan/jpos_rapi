@@ -48,7 +48,9 @@ module Spree
 
     @@customer_return_attributes = [:stock_location_id, return_items_attributes: [:id, :inventory_unit_id, :return_authorization_id, :returned, :pre_tax_amount, :acceptance_status, :exchange_variant_id, :resellable]]
 
-    @@customer_attributes = [:store_id, :email, :username, :mobile, :payment_password, :payment_password_confirmation, :birth, :address, :memo]
+    @@customer_attributes = [:store_id, :email, :username, :mobile, :payment_password,
+
+      :payment_password_confirmation, :birth, :address, :memo, :gender]
 
     @@image_attributes = [:alt, :attachment, :position, :viewable_type, :viewable_id]
 
