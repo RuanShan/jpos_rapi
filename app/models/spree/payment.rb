@@ -64,6 +64,7 @@ module Spree
     scope :store_credits, -> { where(source_type: Spree::StoreCredit.to_s) }
     scope :not_store_credits, -> { where(arel_table[:source_type].not_eq(Spree::StoreCredit.to_s).or(arel_table[:source_type].eq(nil))) }
 
+    self.whitelisted_ransackable_attributes = %w[ source_id ]
     # transaction_id is much easier to understand
     def transaction_id
       response_code
@@ -255,7 +256,7 @@ module Spree
 
     #支付方式为会员卡时，调整会员卡余额
     def create_eligible_card_event
-Rails.logger.debug "member_card?=#{member_card?} source=#{source.inspect}"      
+Rails.logger.debug "member_card?=#{member_card?} source=#{source.inspect}"
       return unless member_card? && source.is_a?(Spree::Card)
       source.capture!(self)
     end
