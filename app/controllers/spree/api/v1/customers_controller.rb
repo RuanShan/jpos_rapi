@@ -43,11 +43,19 @@ module Spree
 
         end
 
+        # params
+        #   mobile: reqired, new mobile to validate
+        #   id: optional, except id of customer
         def validate_mobile
           mobile = params[:mobile]
+          id = params[:id]
           valid_mobile = !!( mobile =~/^1[3,4,5,7,8]\d{9}$/ )
           if valid_mobile
-            valid_mobile = !Customer.exists?( mobile: mobile )
+            if id.present?
+              valid_mobile = !Customer.where.not(id: id).exists?( mobile: mobile )
+            else
+              valid_mobile = !Customer.exists?( mobile: mobile )
+            end
           end
           json = { result: valid_mobile }
           render json: json

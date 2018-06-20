@@ -1,4 +1,5 @@
 class Customer <  ApplicationRecord
+  acts_as_paranoid
 
   validates :mobile, presence: true, uniqueness: true
 
