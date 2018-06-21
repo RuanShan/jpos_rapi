@@ -15,18 +15,22 @@ module Spree
     scope :by_url, ->(url) { where('url like ?', "%#{url}%") }
 
     after_commit :clear_cache
+    class << self
+      def current(domain = nil)
+        #Store.default is for test only
+        ::Thread.current[:store] || Store.default
+      end
 
-    def self.current(domain = nil)
-      current_store = domain ? Store.by_url(domain).first : nil
-      current_store || Store.default
-    end
+      def current=(store)
+        ::Thread.current[:store] = store
+      end
 
-    def self.default
-      Rails.cache.fetch('default_store') do
-        where(default: true).first_or_initialize
+      def default
+        Rails.cache.fetch('default_store') do
+          where(default: true).first_or_initialize
+        end
       end
     end
-
     private
 
     def ensure_default_exists_and_is_unique

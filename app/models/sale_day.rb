@@ -3,6 +3,7 @@ class SaleDay < ApplicationRecord
   extend BetterDateScope
   better_date_scope day: [:today, :week]
 
+  belongs_to :store, class_name: 'Spree::Store'
   belongs_to :seller, class_name: "User"
   has_many :new_orders, class_name: 'Spree::Order', primary_key: 'user_id', foreign_key: 'created_by_id'
   has_many :new_cards, class_name: 'Spree::Card', primary_key: 'user_id', foreign_key: 'created_by_id'

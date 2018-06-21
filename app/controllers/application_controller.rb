@@ -5,6 +5,7 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :reset_session # TODO: is this what I want?
 
+  before_action :set_store
   before_action :configure_permitted_parameters, if: :devise_controller?
 
 
@@ -28,7 +29,9 @@ class ApplicationController < ActionController::Base
     openid = ( params[:openid] || cookies.signed_or_encrypted[:we_openid]  )
   end
 
-
+  def set_store
+    Spree::Store.current= Spree::Store.where( id: request.headers['X-Jpos-Site-Id'] ).first
+  end
 
   def current_company
     return unless current_user

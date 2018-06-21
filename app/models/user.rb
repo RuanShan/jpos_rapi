@@ -47,7 +47,7 @@ class User < ActiveRecord::Base
   belongs_to :store, class_name: 'Spree::Store'
 
   #服务员今天的统计信息
-  has_one :sale_today, ->{ today }, class_name: 'SaleDay', foreign_key: 'user_id'
+  has_one :sale_today, ->{ today.where( store: Spree::Store.current ) }, class_name: 'SaleDay', foreign_key: 'user_id'
   has_many :sale_days, class_name: 'SaleDay'
 
   after_initialize :create_sale_today_for_waiter, :if => :persisted?
@@ -112,7 +112,7 @@ class User < ActiveRecord::Base
     end
 
     def create_sale_today_for_waiter
-        self.create_sale_today if self.sale_today.blank?
+        self.create_sale_today( store_id: store_id ) if self.sale_today.blank?
     end
 
     def recompute_processed_line_items_count( date )

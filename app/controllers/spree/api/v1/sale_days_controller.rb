@@ -3,10 +3,12 @@ module Spree
     module V1
       class SaleDaysController  < BaseController
 
-        def selected_day
-          day = get_selected_day
-          @sale_day = SaleDay.new(day: day)
-          sale_days = SaleDay.on_date day
+        # 查询某一天的统计信息
+        # 参数
+        #   q: ransack 参数
+        def day
+          @sale_day = SaleDay.new()
+          sale_days = get_selected_sale_days
           [:new_orders_count,:new_customers_count,:new_cards_count].each{|key|
             val = sale_days.sum(&key)
             @sale_day.send( "#{key}=", val )
@@ -14,8 +16,12 @@ module Spree
         end
 
         def today
-          @sale_day = SaleDay.new(day: get_selected_day)
-          sale_days = SaleDay.today
+          @sale_day = SaleDay.new()
+          if params[:q]
+            sale_days =get_selected_sale_days
+          else
+            sale_days = SaleDay.today
+          end
           [:new_orders_count,:new_customers_count,:new_cards_count].each{|key|
             val = sale_days.sum(&key)
             @sale_day.send( "#{key}=", val )
@@ -37,33 +43,54 @@ module Spree
             [:new_orders_count,:new_customers_count,:new_cards_count].each{|key|
               sale_day.send( "#{key}=", selected_sale_days.sum(&key) )
             }
-            @sale_days<<sale_day
+            @sale_days << sale_day
           }
 
         end
 
-        def selected_days
-          days = get_selected_days
-          @sale_days = []
+        # 功能：
+        # 取得一定期间，每一天的统计数据
+        # params
+        #   days - 选择日期数组
+        #   start_at - 选择日期开始时间
+        #   end_at - 选择日期结束时间
+        # 当参数 days 存在时，使用days指定的日期，
+        # 当参数 days 不存在， start_at, end_at存在时，选择这个区间的所有日期
+        def days
 
-          sale_days = SaleDay.where( day: days )
+          day_sale_days_map = {}
+          sale_days = get_selected_sale_days
 
-          days.each {|day|
-            sale_day = SaleDay.new(day: day)
+          sale_days.each {|sale_day|
+            day = sale_day.day
+            if day_sale_days_map[day].blank?
+               day_sale_days_map[day] = SaleDay.new(day: day)
+            end
+            sale_day_sum =  day_sale_days_map[day]
 
-            selected_sale_days = sale_days.select{|sale| sale.day == day}
+            sale_day_sum.new_orders_count += sale_day.new_orders_count
+            sale_day_sum.new_customers_count += sale_day.new_customers_count
+            sale_day_sum.new_cards_count += sale_day.new_cards_count
 
-            [:new_orders_count,:new_customers_count,:new_cards_count].each{|key|
-              sale_day.send( "#{key}=", selected_sale_days.sum(&key) )
-            }
-            @sale_days<<sale_day
           }
+          @sale_days = day_sale_days_map.fetch_values *day_sale_days_map.keys.sort
 
         end
 
+        # 功能
+        # 一定时间区间的汇总统计
+        # 参数
+        #   from - 开始日期
+        #   to - 结束日期
+        # 如果 from, to 为空， 表示取得所有的汇总统计
         def total
           @sale_day = SaleDay.new(day: Date.current)
-          sale_days = SaleDay.all
+
+          if params[:q]
+            sale_days = get_selected_sale_days
+          else
+            sale_days = SaleDay.all
+          end
           [:new_orders_count,:new_customers_count,:new_cards_count].each{|key|
             @sale_day.send( "#{key}=", sale_days.sum(&key) )
           }
@@ -78,14 +105,23 @@ module Spree
           end
         end
 
-        def get_selected_days
+
+        def get_selected_sale_days(  )
           days = []
-          if params[:days].present?
-            params[:days].each{|day|
-              days.push( Date.parse(day) )
-            }
-          end
-          days
+          # if params[:days].present?
+          #   params[:days].each{|day|
+          #     days.push( Date.parse(day) )
+          #   }
+          #   sale_days =  SaleDay.where( day: days ).order(:day)
+          # end
+          #
+          # if params[:start_at] && params[:end_at]
+          #   start_at = Date.parse(params[:start_at])
+          #   end_at = Date.parse(params[:end_at])
+          #   sale_days =  SaleDay.where( ["day>=? AND day<=?"], start_at, end_at ).order(:day)
+          # end
+          sale_days = SaleDay.ransack( params[:q] ).result
+
         end
 
       end

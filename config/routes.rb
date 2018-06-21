@@ -193,10 +193,10 @@ scope module: 'spree' do
       resources :sale_days do
         collection do
           get 'today'
-          get 'selected_day'
+          post 'day'
           get 'week'
-          put 'selected_days'
-          get 'total'
+          post 'days'
+          post 'total'
         end
       end
     end

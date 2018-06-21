@@ -9,7 +9,11 @@ class LocalDevise::SessionsController < Devise::SessionsController
     set_flash_message!(:notice, :signed_in)
     bypass_sign_in( resource )
     yield resource if block_given?
-    Rails.logger.debug "session=#{request.env['rack.session']} #{request.env['rack.session'].to_hash}"
+    #Rails.logger.debug "session=#{request.env['rack.session']} #{request.env['rack.session'].to_hash}"
+    # 登录之后，创建这个用户在当前商店的sale_day
+    #if resource.sale_today.blank?
+    #   resource.create_sale_today( store_id: Spree::Store.current.id )
+    #end
 
     respond_with resource, location: after_sign_in_path_for(resource)
   end
