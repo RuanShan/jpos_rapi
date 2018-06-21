@@ -2,7 +2,7 @@ module Spree
   module Api
     module V1
       class CardsController < Spree::Api::BaseController
-        before_action :find_card, only: [:transactions]
+        before_action :find_card, only: [:update, :transactions]
 
         def index
           @credit_cards = user.
@@ -11,6 +11,16 @@ module Spree
                           with_payment_profile.
                           ransack(params[:q]).result.page(params[:page]).per(params[:per_page])
           respond_with(@credit_cards)
+        end
+
+        def update
+          if @card
+            #authorize! :update, @card
+            @card.update_attributes(card_params)
+            respond_with(@card, status: 200, default_template: :show)
+          else
+            invalid_resource!(@card)
+          end
         end
 
         def transactions
@@ -24,6 +34,10 @@ module Spree
         def find_card
           @card = Spree::Card.find_by!(id: params[:id])
         end
+        def card_params
+          params.require(:card).permit(permitted_card_attributes)
+        end
+
       end
     end
   end

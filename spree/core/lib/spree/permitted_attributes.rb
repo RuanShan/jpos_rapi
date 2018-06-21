@@ -38,8 +38,8 @@ module Spree
       country: [:iso, :name, :iso3, :iso_name],
       state: [:name, :abbr]
     ]
-
-    @@card_attributes = [ :code, :variant_id, :amount]
+    # 状态，折扣，备注，过期时间
+    @@card_attributes = [ :code, :variant_id, :amount, :status, :discount_percent, :memo, :expire_at]
 
     @@checkout_attributes = [
       :coupon_code, :email, :shipping_method_id, :special_instructions, :use_billing, :user_id,
