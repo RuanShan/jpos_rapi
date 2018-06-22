@@ -120,12 +120,12 @@ module Spree
         # states - is an array of state
         # 参数： store_id,计算这个店铺的订单统计
         #
-        def state_statis
-          @state_statis = {}
+        def state_counts
+          @state_counts = {}
           Order::GROUP_STATES.each{|state|
-            @state_statis[state] = Order.where( group_state: state ).count
+            @state_counts[state] = Order.where( group_state: state ).count
           }
-          @state_statis
+          @state_counts
         end
 
         def mine
