@@ -40,6 +40,13 @@ module Spree
           respond_with(@orders)
         end
 
+        # 基于index的查询条件，统计订单数量和金额
+        def count
+          @q = Order.ransack(params[:q]).result
+          @total_count = @q.count
+          @total_sum = @q.sum(:total)
+        end
+
         def show
           authorize! :show, @order, order_token
           respond_with(@order)
@@ -108,16 +115,17 @@ module Spree
           end
         end
 
+
         # count order on param states
         # states - is an array of state
         # 参数： store_id,计算这个店铺的订单统计
         #
-        def count
-          @order_counts = {}
+        def state_statis
+          @state_statis = {}
           Order::GROUP_STATES.each{|state|
-            @order_counts[state] = Order.where( group_state: state ).count
+            @state_statis[state] = Order.where( group_state: state ).count
           }
-          @order_counts
+          @state_statis
         end
 
         def mine

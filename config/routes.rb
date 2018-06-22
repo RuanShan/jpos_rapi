@@ -90,11 +90,12 @@ scope module: 'spree' do
       get '/pos_orders/:id', to: 'pos_orders#show'
       post '/pos_orders', to: 'pos_orders#create', as: 'create_pos_orders'
       get '/pos_orders/find_by_group_number/:group_number', to: 'pos_orders#find_by_group_number'
-      get '/pos_orders/count', to: 'pos_orders#count', as: 'count_pos_orders'
+      get '/pos_orders/state_statis', to: 'pos_orders#state_statis'
       put '/pos_orders/all_step', to: 'pos_orders#all_step', as: 'all_step_pos_orders'
       put '/pos_orders/:id/one_step', to: 'pos_orders#one_step', as: 'one_step_pos_orders'
       get '/pos_orders', to: 'pos_orders#index'
       post '/pos_orders/search', to: 'pos_orders#index'
+      post '/pos_orders/count', to: 'pos_orders#count'
 
       resources :line_item_groups do
         member do

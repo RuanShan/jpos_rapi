@@ -1,3 +1,2 @@
-@order_counts.each_pair{|key,val|
-  node(key) { val }
-}
+node( :total_count ) { @total_count }
+node( :total_sum ) { @total_sum }
