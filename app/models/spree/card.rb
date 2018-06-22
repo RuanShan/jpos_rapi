@@ -78,7 +78,10 @@ module Spree
     end
 
     def deposit!( line_item )
-      self.card_transactions.create!( order: line_item.order, amount: line_item.price, amount_left: self.amount )
+      #当为position = 1， 表示为新增卡的充值记录
+      position = self.card_transactions.count + 1
+
+      self.card_transactions.create!( order: line_item.order, amount: line_item.price, amount_left: self.amount, position: position )
       self.amount += line_item.price
       self.save!
     end
