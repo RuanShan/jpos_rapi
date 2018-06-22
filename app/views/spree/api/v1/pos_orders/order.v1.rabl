@@ -21,3 +21,7 @@ end
 child customer: :customer do
   extends 'spree/api/v1/customers/show'
 end
+
+child payments: :payments do
+  attributes *payment_attributes
+end
