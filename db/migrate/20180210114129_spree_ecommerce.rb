@@ -1528,11 +1528,8 @@ class SpreeEcommerce < ActiveRecord::Migration[5.1]
       t.string "confirmation_token"
       t.datetime "confirmed_at"
       t.datetime "confirmation_sent_at"
-      t.index ["bill_address_id"], name: "index_spree_users_on_bill_address_id"
       t.index ["deleted_at"], name: "index_spree_users_on_deleted_at"
-      t.index ["ship_address_id"], name: "index_spree_users_on_ship_address_id"
-      t.index ["site_id", "email"], name: "email_idx_unique", unique: true
-      t.index ["spree_api_key"], name: "index_spree_users_on_spree_api_key"
+      t.index ["mobile"], name: "mobile_idx_unique", unique: true
     end
 
     create_table "spree_variants", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|

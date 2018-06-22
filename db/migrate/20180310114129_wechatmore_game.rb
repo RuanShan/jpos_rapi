@@ -327,7 +327,6 @@ class WechatmoreGame < ActiveRecord::Migration[5.1]
       t.string "role", default: "guest"
       t.string "username", limit: 64, default: "", null: false
       t.integer "company_id"
-      t.index ["username"], name: "index_users_on_username", unique: true
 
       #copy from spree_users
       t.string "password_salt", limit: 128
@@ -339,7 +338,7 @@ class WechatmoreGame < ActiveRecord::Migration[5.1]
       t.integer "bill_address_id"
       t.string "authentication_token"
       t.boolean :is_staff, null: false, default: false
-      t.string "mobile"
+      t.string "mobile", limit: 24, null: false
       t.datetime "birth"
       t.string "address"
       t.string "memo"
@@ -350,9 +349,8 @@ class WechatmoreGame < ActiveRecord::Migration[5.1]
 
       t.timestamps null: false
 
-      t.index ["bill_address_id"], name: "index_spree_users_on_bill_address_id"
+      t.index ["mobile"], unique: true
       t.index ["deleted_at"], name: "index_spree_users_on_deleted_at"
-      t.index ["ship_address_id"], name: "index_spree_users_on_ship_address_id"
 
     end
 

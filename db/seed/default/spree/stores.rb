@@ -3,11 +3,18 @@ unless Spree::Store.where(code: 'spree').exists?
   store = Spree::Store.new do |s|
     s.code              = 'spree'
     s.name              = '示例门店'
-    s.url               = 'example.com'
-    s.mail_from_address = 'spree@example.com'
+    s.url               = '1.example.com'
+    s.mail_from_address = '1@example.com'
   end
   store.save!
 
+  store = Spree::Store.new do |s|
+    s.code              = 'spree2'
+    s.name              = '示例门店2'
+    s.url               = '2.example.com'
+    s.mail_from_address = '2@example.com'
+  end
+  store.save!
 
   # Spree::Address.new do |s|
   #   s.firstname = 'store'
