@@ -53,9 +53,9 @@ module Spree
       after_transition to: :shipped, do: :after_ship
 
       event :cancel do
-        transition to: :canceled, from: %i(pending ready)
+        transition to: :canceled, from: (any - %i(shipped))
       end
-      after_transition to: :canceled, do: :after_cancel
+      #after_transition to: :canceled, do: :after_cancel
 
       event :resume do
         transition from: :canceled, to: :ready, if: lambda { |shipment|

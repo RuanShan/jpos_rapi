@@ -6,6 +6,7 @@ module Spree
 
         before_action :find_order, except: [:create, :mine, :current, :index, :update, :all_step, :count, :find_by_group_number]
 
+
         def create
           authorize! :create, Spree::Order
 
@@ -24,6 +25,13 @@ module Spree
           end
 
         end
+
+
+        def cancel
+          @order.canceled_by(current_api_user)
+          respond_with(@order, default_template: :show)
+        end
+
 
         def empty
           authorize! :update, @order, order_token

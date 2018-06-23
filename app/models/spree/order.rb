@@ -275,8 +275,9 @@ module Spree
     end
 
     def allow_cancel?
-      return false if !completed? || canceled?
-      shipment_state.nil? || %w{ready backorder pending}.include?(shipment_state)
+      return true
+      #return false if !completed? || canceled?
+      #shipment_state.nil? || %w{ready backorder pending}.include?(shipment_state)
     end
 
     def all_inventory_units_returned?
@@ -692,6 +693,7 @@ module Spree
       updater.update_order_type
       updater.update_sale_total
 
+
       save!
       updater.run_hooks
       #不能 touch completed_at, 删除时会导致 OrderInventory.verify 异常
@@ -735,7 +737,8 @@ module Spree
 
     # Determine if email is required (we don't want validation errors before we hit the checkout)
     def require_email
-      true unless new_record? || ['cart', 'address'].include?(state)
+      return false
+      #true unless new_record? || ['cart', 'address'].include?(state)
     end
 
     def ensure_line_items_present
@@ -754,13 +757,14 @@ module Spree
     end
 
     def after_cancel
-      shipments.each(&:cancel!)
+      #shipments.each(&:cancel!)
+      line_item_groups.each(&:cancel!)
       payments.completed.each(&:cancel!)
 
       # Free up authorized store credits
-      payments.store_credits.pending.each(&:void!)
+      #payments.store_credits.pending.each(&:void!)
 
-      send_cancel_email
+      #send_cancel_email
       update_with_updater!
     end
 

@@ -85,17 +85,19 @@ scope module: 'spree' do
       get '/orders/mine', to: 'orders#mine', as: 'my_orders'
       get '/orders/current', to: 'orders#current', as: 'current_order'
 
-      resources :orders, concerns: :order_routes
+      #resources :orders, concerns: :order_routes
 
       get '/pos_orders/:id', to: 'pos_orders#show'
-      post '/pos_orders', to: 'pos_orders#create', as: 'create_pos_orders'
-      get '/pos_orders/find_by_group_number/:group_number', to: 'pos_orders#find_by_group_number'
+      post '/pos_orders', to: 'pos_orders#create'
+      get '/pos_orders/find_by_group_number/:group_number', to: 'pos_orders#state_counts'
       get '/pos_orders/state_counts', to: 'pos_orders#state_counts'
-      put '/pos_orders/all_step', to: 'pos_orders#all_step', as: 'all_step_pos_orders'
-      put '/pos_orders/:id/one_step', to: 'pos_orders#one_step', as: 'one_step_pos_orders'
+      put '/pos_orders/all_step', to: 'pos_orders#all_step'
+      put '/pos_orders/:id/one_step', to: 'pos_orders#one_step'
       get '/pos_orders', to: 'pos_orders#index'
       post '/pos_orders/search', to: 'pos_orders#index'
       post '/pos_orders/count', to: 'pos_orders#count'
+      put '/pos_orders/:id/cancel', to: 'pos_orders#cancel'
+      delete '/pos_orders/:id', to: 'pos_orders#destroy'
 
       resources :line_item_groups do
         member do
