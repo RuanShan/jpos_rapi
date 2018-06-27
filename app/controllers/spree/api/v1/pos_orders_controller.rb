@@ -56,7 +56,7 @@ module Spree
         end
 
         def show
-          authorize! :show, @order, order_token
+          #authorize! :show, @order, order_token
           respond_with(@order)
         end
 
