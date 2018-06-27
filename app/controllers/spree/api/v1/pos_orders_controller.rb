@@ -40,7 +40,7 @@ module Spree
         end
 
         def index
-          authorize! :index, Order
+          #authorize! :index, Order
           @q = Order.ransack(params[:q]).result
           @total_count = @q.count
           # 订单列表需要显示订单 物品和活的信息
