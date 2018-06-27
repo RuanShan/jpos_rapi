@@ -27,7 +27,7 @@ module Spree
 
     attr_accessor :special_instructions
 
-
+    scope :uncanceled, ->{ where.not( state: :cancelled )}
     scope :pending, -> { with_state('pending') }
     scope :ready,   -> { with_state('ready') }
     scope :shipped, -> { with_state('shipped') }
@@ -55,7 +55,7 @@ module Spree
       event :cancel do
         transition to: :canceled, from: (any - %i(shipped))
       end
-      #after_transition to: :canceled, do: :after_cancel
+      after_transition to: :canceled, do: :after_cancel
 
       event :resume do
         transition from: :canceled, to: :ready, if: lambda { |shipment|
@@ -103,11 +103,16 @@ module Spree
           processing: :processed, processed: :ready_for_store, ready_for_store: :ready, ready: :shipped
       end
 
-      event :draw_back do
+      event :back do
         #
         transition ready_for_factory: :pending, ready_for_store: :processed,
           processed: :processing,  processing: :ready_for_factory,
           shipped: :ready, ready: :pending
+      end
+
+      #返工
+      event :rework do
+        transition to: :pending, from: any
       end
 
       event :complete do
@@ -119,14 +124,35 @@ module Spree
     self.whitelisted_ransackable_attributes = %w[ number state order_id]
 
     extend DisplayMoney
-    money_methods :cost, :discounted_cost, :final_price, :item_cost
+    money_methods :cost,  :final_price, :item_cost
     alias display_amount display_cost
 
     def make_step_and_order( forward= true )
-      forward ? next! : draw_back!
+      forward ? next! : back!
       order.updater.update_group_state
       order.save!
     end
+
+    def canceled_by(user)
+      transaction do
+        cancel!
+        update_columns(
+          canceled_by_id: user.id,
+          canceled_at: Time.current
+        )
+      end
+    end
+
+    def returned_by(user)
+      transaction do
+        rework!
+        update_columns(
+          returned_by_id: user.id,
+          returned_at: Time.current
+        )
+      end
+    end
+
 
     def finalize!
       complete!
@@ -153,10 +179,6 @@ module Spree
 
     end
 
-    def discounted_cost
-      cost + promo_total
-    end
-    alias discounted_amount discounted_cost
 
     def final_price
       cost + adjustment_total
@@ -166,27 +188,18 @@ module Spree
       item_cost + final_price
     end
 
-
     def include?(variant)
       inventory_units_for(variant).present?
     end
 
-
-
     def line_items
-
       LineItem.where( group_number: number )
-
     end
-
 
     def shipped=(value)
       return unless value == '1' && shipped_at.nil?
       self.shipped_at = Time.current
     end
-
-
-
 
     # Updates various aspects of the Shipment while bypassing any callbacks.  Note that this method takes an explicit reference to the
     # Order object.  This is necessary because the association actually has a stale (and unsaved) copy of the Order and so it will not
@@ -199,6 +212,42 @@ module Spree
         updated_at: Time.current
       )
       after_ship if new_state == 'shipped' && old_state != 'shipped'
+    end
+
+    #
+    def after_resume
+
+    end
+
+    #订单取消以后
+    def after_cancel
+      #设置line_item.quantity =0, 以便更新订单总价
+      order.line_items.each{ |item|
+        if item.group_number == self.number
+          item.update_attribute :quantity, 0
+        end
+      }
+      remainder = price
+      # 支付原路返回, 创建 -amount的支付方式
+      order.payments.each{ |payment|
+        #可能有以前取消的子订单产生的 payment
+        if remainder > 0 && payment.amount>0
+          if payment.amount > remainder
+            order.payments.create!(
+              amount: -remainder,
+              payment_method: payment.payment_method,
+              source: payment.source )
+            remainder = 0
+          else
+            order.payments.create!(
+              amount: -payment.amount,
+              payment_method: payment.payment_method,
+              source: payment.source )
+            remainder -= payment.amount
+          end
+        end
+      }
+      order.update_with_updater!
     end
 
     private

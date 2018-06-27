@@ -4,42 +4,42 @@ module Spree
       class CustomersController < UsersController
 
         def index
-          @users = Customer.accessible_by(current_ability, :read)
+          @customers = Customer.accessible_by(current_ability, :read)
 
-          @users = if params[:ids]
-                     @users.ransack(id_in: params[:ids].split(','))
+          @customers = if params[:ids]
+                     @customers.ransack(id_in: params[:ids].split(','))
                    else
-                     @users.ransack(params[:q])
+                     @customers.ransack(params[:q])
                    end
-          @q = @users.result
+          @q = @customers.result
           @total_count = @q.count
-          @users = @q.page(params[:page]).per(params[:per_page])
+          @customers = @q.page(params[:page]).per(params[:per_page])
           expires_in 15.minutes, public: true
           headers['Surrogate-Control'] = "max-age=#{15.minutes}"
-          respond_with(@users)
+          respond_with(@customers)
         end
 
         def create
 
-          @user = Customer.new(user_params) do|user|
+          @customer = Customer.new(user_params) do|user|
             user.creator = current_api_user
           end
-          if @user.save
+          if @customer.save
             if params[:order].present?
-              order_attributes = deposit_order_params( @user )
+              order_attributes = deposit_order_params( @customer )
               @order = Spree::Order.create!(order_attributes)
             end
-            respond_with(@user, status: 201, default_template: :show)
+            respond_with(@customer, status: 201, default_template: :show)
           else
-            invalid_resource!(@user)
+            invalid_resource!(@customer)
           end
         end
 
         def statis
-          @user = user
+          @customer = user
           @statis = { order_total: 0, normal_order_total: 0, card_order_total: 0 }
-          @statis[:normal_order_total] = @user.orders.type_normal.sum(:total)
-          @statis[:card_order_total] = @user.orders.type_card.sum(:total)
+          @statis[:normal_order_total] = @customer.orders.type_normal.sum(:total)
+          @statis[:card_order_total] = @customer.orders.type_card.sum(:total)
 
         end
 
@@ -63,7 +63,7 @@ module Spree
 
         private
         def user
-          @user ||= Customer.accessible_by(current_ability, :read).find(params[:id])
+          @customer ||= Customer.accessible_by(current_ability, :read).find(params[:id])
         end
 
         def user_params

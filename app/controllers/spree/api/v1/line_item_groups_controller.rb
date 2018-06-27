@@ -2,7 +2,7 @@ module Spree
   module Api
     module V1
       class LineItemGroupsController < Spree::Api::BaseController
-        before_action :fine_line_item_group, only: [:one_step, :show]
+        before_action :fine_line_item_group, only: [:one_step, :show, :cancel, :rework]
 
         def index
           authorize! :index, LineItemGroup
@@ -68,6 +68,18 @@ module Spree
             @counts[state] = @q.where( state: state ).count
           }
           @counts
+        end
+
+        #物品订单取消
+        def cancel
+          @line_item_group.canceled_by(current_api_user)
+          respond_with(@line_item_group, default_template: :show)
+        end
+
+        #物品订单返工
+        def rework
+          @line_item_group.returned_by(current_api_user)
+          respond_with(@line_item_group, default_template: :show)
         end
 
         private

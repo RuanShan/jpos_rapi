@@ -16,6 +16,7 @@ module Spree
     # associations try to save and then in turn try to call +update!+ again.)
     def update
       update_item_count
+      update_group_state
       update_totals
       if order.completed?
         update_payment_state
@@ -117,10 +118,15 @@ module Spree
 
     def update_group_state
         order.group_count = line_item_groups.count
+        uncanceled_group_states = line_item_groups.uncanceled.states
 
         group_states =  line_item_groups.states.uniq
         #only all line_item_groups has same state, then update order.group_state
-        order.group_state =  group_states.first if group_states.size == 1
+        if group_states.size == 1
+          order.group_state =  group_states.first
+        elsif uncanceled_group_states.size == 1
+          order.group_state =  uncanceled_group_states.first
+        end
     end
 
     #检查是否为 客户办卡订单，会员卡充值订单

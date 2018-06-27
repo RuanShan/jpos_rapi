@@ -263,7 +263,7 @@ Rails.logger.debug "member_card?=#{member_card?} source=#{source.inspect}"
 
     def invalidate_old_payments
       # invalid payment or store_credit payment shouldn't invalidate other payment types
-      return if has_invalid_state? || store_credit?
+      return if has_invalid_state? || store_credit? || member_card?
 
       Rails.logger.debug "=== before invalidate_old_payments"
       order.payments.with_state('checkout').where.not(id: id).each do |payment|

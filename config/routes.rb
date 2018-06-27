@@ -102,6 +102,8 @@ scope module: 'spree' do
       resources :line_item_groups do
         member do
           put :one_step
+          put :cancel #取消
+          put :rework #返工
         end
         collection do
           # search/counts, sansack has array paramter, post json is easy.

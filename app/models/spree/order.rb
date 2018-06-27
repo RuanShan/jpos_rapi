@@ -758,7 +758,7 @@ module Spree
 
     def after_cancel
       #shipments.each(&:cancel!)
-      line_item_groups.each(&:cancel!)
+      line_item_groups.uncanceled.each(&:cancel!)
       payments.completed.each(&:cancel!)
 
       # Free up authorized store credits
