@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180620115306) do
+ActiveRecord::Schema.define(version: 20180621115306) do
 
   create_table "campaign_settings", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.integer "campaign_id"
@@ -102,7 +102,7 @@ ActiveRecord::Schema.define(version: 20180620115306) do
     t.integer "bill_address_id"
     t.string "authentication_token"
     t.boolean "is_staff", default: false, null: false
-    t.string "mobile"
+    t.string "mobile", limit: 24, null: false
     t.datetime "birth"
     t.string "address"
     t.string "memo"
@@ -111,10 +111,8 @@ ActiveRecord::Schema.define(version: 20180620115306) do
     t.integer "created_by_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["bill_address_id"], name: "index_spree_users_on_bill_address_id"
     t.index ["deleted_at"], name: "index_spree_users_on_deleted_at"
-    t.index ["ship_address_id"], name: "index_spree_users_on_ship_address_id"
-    t.index ["username"], name: "index_users_on_username", unique: true
+    t.index ["mobile", "email"], name: "index_users_on_mobile", unique: true
   end
 
   create_table "delayed_jobs", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -742,6 +740,10 @@ ActiveRecord::Schema.define(version: 20180620115306) do
     t.integer "order_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "returned_by_id"
+    t.datetime "returned_at"
+    t.integer "canceled_by_id"
+    t.datetime "canceled_at"
   end
 
   create_table "spree_line_items", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -888,6 +890,7 @@ ActiveRecord::Schema.define(version: 20180620115306) do
     t.integer "group_count", default: 0, null: false
     t.string "group_state", limit: 24
     t.integer "sale_total", default: 0
+    t.text "memo"
     t.index ["approver_id"], name: "index_spree_orders_on_approver_id"
     t.index ["bill_address_id"], name: "index_spree_orders_on_bill_address_id"
     t.index ["canceler_id"], name: "index_spree_orders_on_canceler_id"

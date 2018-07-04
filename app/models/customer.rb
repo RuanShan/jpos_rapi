@@ -1,5 +1,6 @@
 class Customer <  ApplicationRecord
   acts_as_paranoid
+  after_destroy :scramble_mobile_and_password # mobile is uniqueness
 
   validates :mobile, presence: true, uniqueness: true
 
@@ -33,6 +34,14 @@ class Customer <  ApplicationRecord
     def set_login
       # for now force login to be same as email, eventually we will make this configurable, etc.
       self.username = self.mobile if (self.mobile.present? && self.username.blank? )
+    end
+
+    def scramble_mobile_and_password
+      self.mobile = SecureRandom.uuid + "@wyfpj.com"
+      self.username = self.mobile
+      self.password = SecureRandom.hex(8)
+      self.password_confirmation = self.password
+      self.save
     end
 
 end
