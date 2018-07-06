@@ -97,6 +97,7 @@ scope module: 'spree' do
       post '/pos_orders/search', to: 'pos_orders#index'
       post '/pos_orders/count', to: 'pos_orders#count'
       put '/pos_orders/:id/cancel', to: 'pos_orders#cancel'
+      post '/pos_orders/:id/add_payments', to: 'pos_orders#add_payments'
       delete '/pos_orders/:id', to: 'pos_orders#destroy'
 
       resources :line_item_groups do

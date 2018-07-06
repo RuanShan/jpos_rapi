@@ -79,6 +79,21 @@ module Spree
         ########################################################################
         # for POS
         ########################################################################
+        #后付款时，添加支付方式, 支付为数组
+        def add_payments
+          @order.validate_payments_attributes(payments_params)
+          @payments = @order.payments.build( payments_params )
+          saved = []
+          Spree::Payment.transaction do
+            saved = @payments.map( &:save)
+          end
+          saved.uniq!
+          if saved.length ==1 && saved[0] == true
+            respond_with(@payments, status: 201)
+          else
+            head :no_content
+          end
+        end
 
         def find_by_group_number
           @line_item_group = Spree::LineItemGroup.find_by!(number: params[:group_number])
@@ -174,6 +189,13 @@ module Spree
 
         def find_order(lock = false)
           @order = Spree::Order.lock(lock).find_by!(id: params[:id])
+        end
+
+        def payments_params
+          required_params = params.require(:payments)
+          required_params.map{|attrs|
+            attrs.permit(permitted_payment_attributes)
+          }
         end
 
         def find_current_order
