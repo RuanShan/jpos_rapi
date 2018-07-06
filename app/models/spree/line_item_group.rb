@@ -10,6 +10,7 @@ require 'ostruct'
 
 module Spree
   class LineItemGroup < Spree::Base
+    PAYMENT_STATES = %w(balance_due credit_owed failed paid void)
 
     with_options inverse_of: :line_item_groups do
       belongs_to :store, class_name: 'Spree::Store'
@@ -24,6 +25,7 @@ module Spree
     before_validation :set_price_zero_when_nil
 
     validates :number, uniqueness: true
+    validates :payment_state,        inclusion:    { in: PAYMENT_STATES, allow_blank: true }
 
     attr_accessor :special_instructions
 
