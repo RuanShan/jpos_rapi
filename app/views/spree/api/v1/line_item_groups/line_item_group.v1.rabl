@@ -5,3 +5,7 @@ attributes *line_item_group_attributes
 child line_items: :line_items do
   extends 'spree/api/v1/line_items/show'
 end
+
+child(order: :order) do
+  attributes *order_attributes
+end
