@@ -90,8 +90,6 @@ Rails.application.configure do
   config.active_record.dump_schema_after_migration = false
 end
 
-
-
 Paperclip.interpolates :images_host  do |attachment, style|
   "http://jpos_rapi.firecart.cn"
 end

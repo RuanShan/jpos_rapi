@@ -1,5 +1,5 @@
 object @image
-attributes :id, :position
+attributes :id, :position, :attachment_file_name
 attributes :viewable_type, :viewable_id
 Spree::GroupImage.attachment_definitions[:attachment][:styles].each do |k, _v|
   node("#{k}_url") { |i| i.attachment.url(k) }
