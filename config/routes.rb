@@ -101,6 +101,7 @@ scope module: 'spree' do
       delete '/pos_orders/:id', to: 'pos_orders#destroy'
 
       resources :line_item_groups do
+        resources :images
         member do
           put :one_step
           put :cancel #取消

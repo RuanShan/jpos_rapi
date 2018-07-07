@@ -50,6 +50,8 @@ module Spree
             Spree::Product.friendly.find(params[:product_id])
           elsif params[:variant_id]
             Spree::Variant.find(params[:variant_id])
+          elsif params[:group_id]
+            Spree::LineItemGroup.find(params[:line_item_group_id])
           end
         end
       end

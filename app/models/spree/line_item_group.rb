@@ -21,6 +21,7 @@ module Spree
       has_many :state_changes, as: :stateful
     end
 
+    has_many :images, -> { order(:position) }, as: :viewable, dependent: :destroy, class_name: 'Spree::GroupImage'
 
     before_validation :set_price_zero_when_nil
 
