@@ -9,3 +9,8 @@ end
 child order: :order do
   extends 'spree/api/v1/orders/order'
 end
+
+
+child images: :images do
+  extends 'spree/api/v1/images/show'
+end
