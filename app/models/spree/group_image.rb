@@ -7,7 +7,7 @@ module Spree
     end
 
     has_attached_file :attachment,
-                      styles: { mini: '48x48>',  product: '240x240>' },
+                      styles: { mini: '48x48>',  big: '600x600>' },
                       default_style: :product,
                       url: '/images/spree/groups/:id/:style/:basename.:extension',
                       path: ':rails_root/public/images/spree/groups/:id/:style/:basename.:extension',
