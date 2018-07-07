@@ -42,6 +42,8 @@ gem 'spree_api',   path: './spree/api'
   #gem 'classy_enum', '~> 3.4'
   # spree require 5.1.0
   gem 'paperclip', '~> 5.2.0'
+  gem 'paperclip_oss_storage',   github: 'RuanShan/paperclip_oss_storage', branch: 'master'
+
   #gem "friendly_id"
   #gem 'figaro'
 

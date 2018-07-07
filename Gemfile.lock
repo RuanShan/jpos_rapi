@@ -1,3 +1,12 @@
+GIT
+  remote: git://github.com/RuanShan/paperclip_oss_storage.git
+  revision: c2df34ed4fc242bea415c9eceaf999e46bc650da
+  branch: master
+  specs:
+    paperclip_oss_storage (0.0.4)
+      paperclip (>= 3.5.2)
+      rest-client (>= 1.6.7)
+
 PATH
   remote: spree/api
   specs:
@@ -456,6 +465,7 @@ DEPENDENCIES
   listen (~> 3.0.5)!
   mysql2 (~> 0.4.10)!
   paperclip (~> 5.2.0)!
+  paperclip_oss_storage!
   pry!
   pry-rails!
   puma (~> 3.0)!
