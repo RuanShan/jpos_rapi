@@ -34,6 +34,7 @@ class UserEntriesController < ApplicationController
     authorize! :create, UserEntry
 
     @user_entry = UserEntry.new(user_entry_params)
+    @user_entry.user = @user
     respond_to do |format|
       if @user_entry.save
         format.html { redirect_to @user_entry, notice: 'User entry was successfully created.' }
