@@ -30,8 +30,8 @@ class UserEntriesController < ApplicationController
   # POST /user_entries.json
   def create
     #判断用户使用有创建打卡的权限
-    @current_ability = Spree::Ability.new( @user )
-    authorize! :create, UserEntry
+    ability = Spree::Ability.new( @user )
+    ability.authorize! :create, UserEntry
 
     @user_entry = UserEntry.new(user_entry_params)
     @user_entry.user = @user
