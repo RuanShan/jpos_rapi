@@ -38,6 +38,7 @@ module Spree
         :taxonomy_attributes,
         :taxon_attributes,
         :user_attributes,
+        :user_entry_attributes,
         :variant_attributes,
       ]
 
@@ -162,6 +163,8 @@ module Spree
       ]
 
       @@user_attributes = [:id, :email, :created_at, :updated_at, :username, :mobile, :address, :birth, :memo, :payment_password]
+
+      @@user_entries_attributes = [:id, :created_at, :updated_at, :store_id, :user_id, ]
 
       @@property_attributes = [:id, :name, :presentation]
 

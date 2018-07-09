@@ -26,6 +26,7 @@ module Spree
       :taxon_attributes,
       :taxonomy_attributes,
       :user_attributes,
+      :user_entry_attributes,
       :variant_attributes
     ]
 
@@ -113,6 +114,7 @@ module Spree
 
     # TODO: Should probably use something like Spree.user_class.attributes
     @@user_attributes = [:email, :username, :mobile, :password, :password_confirmation, :payment_password, :payment_password_confirmation, :birth, :address, :memo]
+    @@user_entry_attributes = [:user_id, :store_id, :state]
 
     @@variant_attributes = [
       :name, :presentation, :cost_price, :discontinue_on, :lock_version,

@@ -59,7 +59,7 @@ module Spree
       def authenticate_user
         #检查用户session是否过期, jpos 每个API请求都需要检查
         if @current_api_user.blank?
-          unauthorized
+          session_expired
         end
 
       end
@@ -74,6 +74,10 @@ module Spree
 
       def load_user_roles
         @current_user_roles = @current_api_user ? @current_api_user.spree_roles.pluck(:name) : []
+      end
+
+      def session_expired
+        render 'spree/api/errors/session_expired', status: 401 and return
       end
 
       def unauthorized

@@ -49,6 +49,7 @@ module Spree
           can :manage, Customer
           can :manage, GroupImage
           can :manage, Image
+          can :manage, UserEntry
           can :read, Store
         else
           can :read, Order do |order, token|

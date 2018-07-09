@@ -1,10 +1,14 @@
 RailsStarter::Application.routes.draw do
+  resources :user_entries #用户打卡记录
 ################################################################################
 # spree api
 ################################################################################
 scope module: 'spree' do
   namespace :api, defaults: { format: 'json' } do
     namespace :v1 do
+      resources :user_entries #取得用户打卡列表
+      post '/user_entries/search', to: 'user_entries#index'
+
       resources :promotions, only: [:show]
 
       resources :payment_methods, only: [:index]
@@ -206,6 +210,7 @@ scope module: 'spree' do
           post 'total'
         end
       end
+
     end
 
     spree_path = Rails.application.routes.url_helpers.try(:spree_path, trailing_slash: true) || '/'
