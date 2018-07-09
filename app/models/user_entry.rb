@@ -11,6 +11,8 @@ class UserEntry < ApplicationRecord
   after_validation  :set_state_when_nil
   validates :day, presence: true
 
+  delegate :username, to: :user
+
   private
   def set_today_when_nil
     self.day = DateTime.current.to_date if self.day.nil?
