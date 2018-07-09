@@ -3,4 +3,4 @@ cache [I18n.locale, root_object]
 
 attributes *user_entry_attributes
 
-node(:username) { @user_entry.username }
+node(:username, &:username )
