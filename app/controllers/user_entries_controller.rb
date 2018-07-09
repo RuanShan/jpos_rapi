@@ -93,7 +93,7 @@ class UserEntriesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_entry_params
-      params.require(:user_entry).permit(:state, :user_id, :store_id)
+      params.require(:user_entry).permit(:state, :user_id, :store_id, :day)
     end
 
     def user_params

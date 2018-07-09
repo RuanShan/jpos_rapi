@@ -7,7 +7,12 @@ class UserEntry < ApplicationRecord
 
   enum state:{ checkin: 1, checkout: 0 }
 
-  #validates :store, presence: true
-  #validates :user, presence: true
+  before_validation :set_today_when_nil
+  validates :day, presence: true
+
+  private
+  def set_today_when_nil
+    self.day = DateTime.current.to_date if self.day.nil?
+  end
 
 end

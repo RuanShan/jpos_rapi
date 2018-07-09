@@ -164,7 +164,7 @@ module Spree
 
       @@user_attributes = [:id, :email, :created_at, :updated_at, :username, :mobile, :address, :birth, :memo, :payment_password]
 
-      @@user_entry_attributes = [:id, :created_at, :updated_at, :store_id, :user_id, ]
+      @@user_entry_attributes = [:id, :created_at, :updated_at, :day, :store_id, :user_id, :state]
 
       @@property_attributes = [:id, :name, :presentation]
 

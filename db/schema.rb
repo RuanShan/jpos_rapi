@@ -2013,6 +2013,7 @@ ActiveRecord::Schema.define(version: 20180708115306) do
   create_table "user_entries", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.bigint "store_id"
     t.bigint "user_id"
+    t.date "day"
     t.integer "state"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
