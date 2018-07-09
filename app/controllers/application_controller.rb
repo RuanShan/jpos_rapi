@@ -36,7 +36,7 @@ class ApplicationController < ActionController::Base
 
   def is_cors?
 Rails.logger.debug "local=#{request.local?} xhr=#{ request.xhr?} "
-    request.local?
+    request.local? || request.host=~/jpos/
   end
 
   def unauthorized
