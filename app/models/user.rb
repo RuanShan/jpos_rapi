@@ -27,14 +27,13 @@
 #  username               :string(255)      default(""), not null
 #
 
-class User < ActiveRecord::Base
+class User < ApplicationRecord
   ROLES = {'guest' => 1, 'user' => 2, 'manager' => 3, 'admin' => 4}.freeze
   extend Spree::DisplayDateTime
-
+  include Spree::RansackableAttributes
   include Spree::UserAddress
   include Spree::UserPaymentSource
   include Spree::UserMethods
-
 
 
   devise :database_authenticatable, :registerable, :recoverable, :lockable, :timeoutable,
@@ -60,7 +59,7 @@ class User < ActiveRecord::Base
   scope :admin, -> { includes(:spree_roles).where("#{roles_table_name}.name" => "admin") }
 
   self.whitelisted_ransackable_attributes = %w[id mobile username]
-  self.whitelisted_ransackable_associations = %w[spree_roles]
+  self.whitelisted_ransackable_associations = %w[spree_roles user_entries]
 
   alias_attribute :spree_api_key, :api_key
   alias_attribute :name, :username # order.user_name required
@@ -68,6 +67,10 @@ class User < ActiveRecord::Base
   date_time_methods :created_at, :updated_at
 
   validates :username, presence: true, length: { in: 5..20 }, uniqueness: true
+
+  # 为了方便处理查询结果
+  # 将按照一定条件查询到的 user_entry, 赋值给searched_entries，以便json一并处理
+  attr_accessor :searched_entries
 
   def self.admin_created?
     User.admin.count > 0

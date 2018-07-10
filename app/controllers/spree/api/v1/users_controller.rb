@@ -19,6 +19,24 @@ module Spree
           respond_with(@users)
         end
 
+        # 这个方法无法正确工作，用户会按条件查询，但是关联的user_entries会查询到所有的。
+        # 参数: eq:{ day_gteq:'2018-07-06',day_lteq:'2018-07-06'}， 必须
+        #
+        def entries
+
+          eq = params.require(:eq).to_unsafe_hash
+          uq = eq.inject({}){|h, pair| h["user_entries_#{pair[0]}"] = pair[1]; h}
+          #Rails.logger.debug " eq=#{eq.inspect}, uq=#{uq.inspect}"
+          @uq = User.ransack(uq).result( distinct: true )
+          @users =@uq.page(params[:page]).per(params[:per_page])
+
+          @eq = UserEntry.ransack(eq).result( distinct: true )
+          @user_entries =@eq
+          @users.each{|user| user.searched_entries= @user_entries.select{|entry| entry.user_id == user.id}}
+          respond_with(@users)
+        end
+
+
         def show
           respond_with(user)
         end

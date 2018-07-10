@@ -13,5 +13,5 @@ class ApplicationRecord < ActiveRecord::Base
       [ self.translate_enum_name( enum_name, enum_value), enum_value ]
     end
   end
-  
+
 end

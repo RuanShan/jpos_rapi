@@ -22,6 +22,7 @@ module Spree
     end
 
     has_many :images, -> { order(:position) }, as: :viewable, dependent: :destroy, class_name: 'Spree::GroupImage'
+    has_many :line_items, foreign_key: 'group_number', primary_key: 'number'
 
     before_validation :set_price_zero_when_nil
 
@@ -123,8 +124,8 @@ module Spree
       end
     end
 
-    self.whitelisted_ransackable_associations = %w[order]
-    self.whitelisted_ransackable_attributes = %w[ number state order_id]
+    self.whitelisted_ransackable_associations = %w[order line_items]
+    self.whitelisted_ransackable_attributes = %w[number state order_id]
 
     extend DisplayMoney
     money_methods :cost,  :final_price, :item_cost

@@ -1,4 +1,6 @@
 class UserEntry < ApplicationRecord
+  include Spree::RansackableAttributes
+
   extend BetterDateScope
   better_date_scope day: [:today, :week]
 
@@ -6,6 +8,7 @@ class UserEntry < ApplicationRecord
   belongs_to :user, class_name: 'User', required: true
 
   enum state:{ clockin: 1, clockout: 0 }
+  self.whitelisted_ransackable_attributes = %w[id user_id store_id day]
 
   before_validation :set_today_when_nil
   after_validation  :set_state_when_nil

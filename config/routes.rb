@@ -163,6 +163,10 @@ scope module: 'spree' do
         member do
           get :cards
         end
+        #搜索店员及打卡记录信息
+        collection do
+          post :entries
+        end
       end
       post '/users/search', to: 'users#index'
 

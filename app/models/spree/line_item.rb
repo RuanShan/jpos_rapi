@@ -51,8 +51,8 @@ module Spree
 
     enum state: { done: 1, pending: 0 }
 
-    self.whitelisted_ransackable_associations = ['variant']
-    self.whitelisted_ransackable_attributes = ['variant_id']
+    self.whitelisted_ransackable_associations = %w[variant]
+    self.whitelisted_ransackable_attributes = %w[variant_id price]
 
     def copy_price
       if variant

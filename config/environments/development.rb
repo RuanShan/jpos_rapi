@@ -56,3 +56,7 @@ end
 Paperclip.interpolates :images_host  do |attachment, style|
   "http://localhost:3000"
 end
+
+Ransack.configure do |c|
+  c.ignore_unknown_conditions = false
+end
