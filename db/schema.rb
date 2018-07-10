@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180708115306) do
+ActiveRecord::Schema.define(version: 20180710115306) do
 
   create_table "campaign_settings", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.integer "campaign_id"
@@ -1760,6 +1760,9 @@ ActiveRecord::Schema.define(version: 20180708115306) do
     t.string "wx_appid"
     t.string "wx_secret"
     t.string "wx_token"
+    t.string "doc_printer_name"
+    t.string "receipt_printer_name"
+    t.string "label_printer_name"
     t.index ["code"], name: "index_spree_stores_on_code"
     t.index ["default"], name: "index_spree_stores_on_default"
     t.index ["url"], name: "index_spree_stores_on_url"
