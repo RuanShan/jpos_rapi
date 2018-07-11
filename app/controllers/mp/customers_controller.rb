@@ -27,16 +27,16 @@ class Mp::CustomersController < Mp::BaseController
         wx_follower.country = user['country']
         wx_follower.subscribe_time = user['subscribe_time']
       end
-
-    end
-
-    if @wx_follower.present?
-      if @wx_follower.customer.present?
-        redirect_to :show
+      if @wx_follower.present?
+        if @wx_follower.customer.present?
+          redirect_to :show
+        end
+      else
+        redirect_to :please_subscribe
       end
-    else
-      redirect_to :please_subscribe
     end
+
+
     @customer = Customer.new
   end
 
