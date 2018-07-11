@@ -5,5 +5,6 @@ attributes *user_attributes
 
 
 child searched_entries: :searched_entries do
-  attributes *user_entry_attributes
+  extends 'spree/api/v1/user_entries/simple'
+
 end

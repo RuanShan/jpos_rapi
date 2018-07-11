@@ -28,6 +28,7 @@ module Spree
           uq = eq.inject({}){|h, pair| h["user_entries_#{pair[0]}"] = pair[1]; h}
           #Rails.logger.debug " eq=#{eq.inspect}, uq=#{uq.inspect}"
           @uq = User.ransack(uq).result( distinct: true )
+          @total_count = @uq.count
           @users =@uq.page(params[:page]).per(params[:per_page])
 
           @eq = UserEntry.ransack(eq).result( distinct: true )

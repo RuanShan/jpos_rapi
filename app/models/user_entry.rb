@@ -15,6 +15,7 @@ class UserEntry < ApplicationRecord
   validates :day, presence: true
 
   delegate :username, to: :user
+  delegate :name, to: :store, prefix: true
 
   private
   def set_today_when_nil
