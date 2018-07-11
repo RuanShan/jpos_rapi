@@ -2,6 +2,10 @@
 class ApplicationController < ActionController::Base
   include Application::CommonHelper
   rescue_from CanCan::AccessDenied, with: :unauthorized
+  rescue_from ActionController::ParameterMissing, with: :error_during_processing
+  rescue_from ActiveRecord::RecordInvalid, with: :error_during_processing
+  rescue_from ActiveRecord::RecordNotFound, with: :forbidden
+
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :reset_session # TODO: is this what I want?
@@ -39,8 +43,22 @@ Rails.logger.debug "local=#{request.local?} xhr=#{ request.xhr?} "
     request.local? || request.host=~/jpos/
   end
 
-  def unauthorized
-    render 'errors/unauthorized', status: 401 and return
+  def forbidden
+    render 'errors/forbidden', status: 403
   end
 
+  def unauthorized
+    render 'errors/unauthorized', status: 401
+  end
+
+  def error_during_processing(exception)
+    Rails.logger.error exception.message
+    Rails.logger.error exception.backtrace.join("\n")
+
+    unprocessable_entity(exception.message)
+  end
+
+  def unprocessable_entity(message)
+    render plain: { exception: message }.to_json, status: 422
+  end
 end

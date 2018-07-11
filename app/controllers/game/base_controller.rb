@@ -1,4 +1,4 @@
-class GameBaseController < ApplicationController
+class Game::BaseController < ApplicationController
   # 调用 Wechat::ControllerApi，实现多公众号方案。
   # 游戏对应的公众号
   def game_wechat

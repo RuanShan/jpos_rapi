@@ -2,8 +2,6 @@ class WxMpUser < ApplicationRecord
   include Concerns::WxMpUserPlugin
   include Concerns::WeixinApi
 
-  belongs_to :company
-  belongs_to :creator, class_name:'User'
 
   # ['pending', 0, '待激活'],   ['active', 1, '已开启'],    ['disabled', 2, '已过期，待激活'],    ['froze', -1, '已冻结']
   enum status: { pending: 0, active: 1,   disabled: 2,  froze: 4 }, _prefix: true
