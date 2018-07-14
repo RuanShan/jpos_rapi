@@ -71,7 +71,7 @@ threads 0, 16
 #
 # The default is "tcp://0.0.0.0:9292".
 #
-bind 'tcp://0.0.0.0:3001'
+#bind 'tcp://0.0.0.0:3001'
 bind 'unix:///var/www/jpos_rapi/tmp/puma.sock'
 # bind 'unix:///var/run/puma.sock?umask=0111'
 # bind 'ssl://127.0.0.1:9292?key=path_to_key&cert=path_to_cert'
@@ -79,10 +79,10 @@ bind 'unix:///var/www/jpos_rapi/tmp/puma.sock'
 # Instead of "bind 'ssl://127.0.0.1:9292?key=path_to_key&cert=path_to_cert'" you
 # can also use the "ssl_bind" option.
 #
-# ssl_bind '127.0.0.1', '9292', {
-#   key: path_to_key,
-#   cert: path_to_cert
-# }
+ssl_bind '127.0.0.1', '9292', {
+   key: '/etc/nginx/conf.d/server.key',
+   cert: '/etc/nginx/conf.d/server.crt'
+}
 # for JRuby additional keys are required:
 # keystore: path_to_keystore,
 # keystore_pass: password
