@@ -1,6 +1,6 @@
 class UnopenGameError < RuntimeError; end
 
-class GameRoundsController < Game::BaseController
+class GameRoundsController < ApplicationController
   layout :select_layout_by_game
 
   wechat_api
