@@ -1,4 +1,4 @@
-class Game::DumplingController < GameBaseController
+class Game::DumplingController < Game::BaseController
   layout 'dumpling'
 
   wechat_api
