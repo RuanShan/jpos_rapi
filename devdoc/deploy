@@ -5,3 +5,7 @@ bundle exec rake assets:precompile RAILS_ENV=production
 
 
 bundle exec puma -e production -b unix:///home/deploy/www/wechatmore/tmp/sockets/puma.socket -d
+
+SSL
+==================
+https://stackoverflow.com/questions/47979328/how-to-secure-with-ssl-https-a-nginx-front-end-and-puma-back-end-in-amazon-ec2-a

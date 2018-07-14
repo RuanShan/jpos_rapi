@@ -80,10 +80,10 @@ bind 'unix:///var/www/jpos_rapi/tmp/puma.sock'
 # Instead of "bind 'ssl://127.0.0.1:9292?key=path_to_key&cert=path_to_cert'" you
 # can also use the "ssl_bind" option.
 #
-ssl_bind '127.0.0.1', '9292', {
-   key: '/etc/nginx/conf.d/server.key',
-   cert: '/etc/nginx/conf.d/server.crt'
-}
+#ssl_bind '127.0.0.1', '9292', {
+#   key: '/etc/nginx/conf.d/server.key',
+#   cert: '/etc/nginx/conf.d/server.crt'
+#}
 # for JRuby additional keys are required:
 # keystore: path_to_keystore,
 # keystore_pass: password
