@@ -52,6 +52,7 @@ daemonize true
 #
 # stdout_redirect '/u/apps/lolcat/log/stdout', '/u/apps/lolcat/log/stderr'
 # stdout_redirect '/u/apps/lolcat/log/stdout', '/u/apps/lolcat/log/stderr', true
+stdout_redirect 'log/puma.log', 'log/puma_error.log', true
 
 # Disable request logging.
 #
