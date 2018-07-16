@@ -91,3 +91,6 @@ require 'spree/core/controller_helpers/respond_with'
 require 'spree/core/controller_helpers/search'
 require 'spree/core/controller_helpers/store'
 require 'spree/core/controller_helpers/strong_parameters'
+
+#copy form spree_auth_devise
+require 'spree/authentication_helpers'

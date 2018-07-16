@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180711115306) do
+ActiveRecord::Schema.define(version: 20180712115306) do
 
   create_table "campaign_settings", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.integer "campaign_id"
@@ -892,6 +892,8 @@ ActiveRecord::Schema.define(version: 20180711115306) do
     t.string "group_state", limit: 24
     t.integer "sale_total", default: 0
     t.text "memo"
+    t.boolean "enable_sms", default: false, null: false
+    t.boolean "enable_mp_msg", default: false, null: false
     t.index ["approver_id"], name: "index_spree_orders_on_approver_id"
     t.index ["bill_address_id"], name: "index_spree_orders_on_bill_address_id"
     t.index ["canceler_id"], name: "index_spree_orders_on_canceler_id"
@@ -999,6 +1001,7 @@ ActiveRecord::Schema.define(version: 20180711115306) do
     t.string "number"
     t.string "cvv_response_code"
     t.string "cvv_response_message"
+    t.string "cname"
     t.index ["number"], name: "index_spree_payments_on_number", unique: true
     t.index ["order_id"], name: "index_spree_payments_on_order_id"
     t.index ["payment_method_id"], name: "index_spree_payments_on_payment_method_id"

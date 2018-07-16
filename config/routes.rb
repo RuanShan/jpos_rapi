@@ -560,6 +560,7 @@ namespace :api do
     # cors, json
     # new_user_session
     get '/users/info', to: 'local_devise/registrations#show'
+
   end
 
   root to: 'visitors#index'
@@ -581,8 +582,6 @@ namespace :api do
   #  end
   #  resources :wechat_accounts
   #end
-
-
 
   ##############################################################################
   # Game Case

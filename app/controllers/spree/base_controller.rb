@@ -2,6 +2,8 @@ require 'cancan'
 require_dependency 'spree/core/controller_helpers/strong_parameters'
 
 class Spree::BaseController < ApplicationController
+  include Spree::AuthenticationHelpers
+
   include Spree::Core::ControllerHelpers::Auth
   include Spree::Core::ControllerHelpers::RespondWith
   include Spree::Core::ControllerHelpers::Common

@@ -6,11 +6,18 @@ class ApplicationController < ActionController::Base
   rescue_from ActiveRecord::RecordInvalid, with: :error_during_processing
   rescue_from ActiveRecord::RecordNotFound, with: :forbidden
 
+  # add method spree requried
+  #include Spree::Core::ControllerHelpers::Auth
+  #include Spree::Core::ControllerHelpers::Common
+  #include Spree::Core::ControllerHelpers::Order
+  #include Spree::Core::ControllerHelpers::Store
+  #helper 'spree/base'
+
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :reset_session # TODO: is this what I want?
 
-  before_action :set_store
+  before_action :set_client_store
   before_action :configure_permitted_parameters, if: :devise_controller?
 
 
@@ -33,7 +40,7 @@ class ApplicationController < ActionController::Base
     openid = ( params[:openid] || cookies.signed_or_encrypted[:we_openid]  )
   end
 
-  def set_store
+  def set_client_store
     Spree::Store.current= Spree::Store.where( id: request.headers['X-Jpos-Site-Id'] ).first
   end
 
