@@ -1,239 +1,429 @@
 RailsStarter::Application.routes.draw do
   resources :user_entries #用户打卡记录
-################################################################################
-# spree api
-################################################################################
-scope module: 'spree' do
-  namespace :api, defaults: { format: 'json' } do
-    namespace :v1 do
-      resources :user_entries #取得用户打卡列表
-      post '/user_entries/search', to: 'user_entries#index'
+  scope module: 'spree' do
+    ################################################################################
+    # spree api
+    ################################################################################
 
-      resources :promotions, only: [:show]
+    namespace :api, defaults: { format: 'json' } do
+      namespace :v1 do
+        resources :user_entries #取得用户打卡列表
+        post '/user_entries/search', to: 'user_entries#index'
 
-      resources :payment_methods, only: [:index]
+        resources :promotions, only: [:show]
 
-      resources :customer_returns, only: [:index]
-      resources :reimbursements, only: [:index]
+        resources :payment_methods, only: [:index]
 
-      concern :selling do
-        resources :images
-        resources :variants
-        resources :product_properties
+        resources :customer_returns, only: [:index]
+        resources :reimbursements, only: [:index]
 
-        get :related, on: :member
-        resources :relations do
+        concern :selling do
+          resources :images
+          resources :variants
+          resources :product_properties
+
+          get :related, on: :member
+          resources :relations do
+            collection do
+              post :update_positions
+            end
+          end
+        end
+
+        resources :products , concerns: :selling do
+        end
+
+        resources :selling_services, concerns: :selling do
+        end
+
+        resources :selling_cards, concerns: :selling do
+        end
+
+        concern :order_routes do
+          member do
+            put :approve
+            put :cancel
+            put :empty
+            put :apply_coupon_code
+          end
+
+          resources :line_items
+          resources :payments do
+            member do
+              put :authorize
+              put :capture
+              put :purchase
+              put :void
+              put :credit
+            end
+          end
+
+          resources :addresses, only: [:show, :update]
+
+          resources :return_authorizations do
+            member do
+              put :add
+              put :cancel
+              put :receive
+            end
+          end
+        end
+
+        resources :checkouts, only: [:update], concerns: :order_routes do
+          member do
+            put :next
+            put :advance
+          end
+        end
+
+        resources :variants do
+          resources :images
+        end
+
+        resources :option_types do
+          resources :option_values
+        end
+        resources :option_values
+
+        resources :option_values, only: :index
+
+        get '/orders/mine', to: 'orders#mine', as: 'my_orders'
+        get '/orders/current', to: 'orders#current', as: 'current_order'
+
+        #resources :orders, concerns: :order_routes
+
+        get '/pos_orders/:id', to: 'pos_orders#show'
+        post '/pos_orders', to: 'pos_orders#create'
+        get '/pos_orders/find_by_group_number/:group_number', to: 'pos_orders#state_counts'
+        get '/pos_orders/state_counts', to: 'pos_orders#state_counts'
+        put '/pos_orders/all_step', to: 'pos_orders#all_step'
+        put '/pos_orders/:id/one_step', to: 'pos_orders#one_step'
+        get '/pos_orders', to: 'pos_orders#index'
+        post '/pos_orders/search', to: 'pos_orders#index'
+        post '/pos_orders/count', to: 'pos_orders#count'
+        put '/pos_orders/:id/cancel', to: 'pos_orders#cancel'
+        post '/pos_orders/:id/add_payments', to: 'pos_orders#add_payments'
+        delete '/pos_orders/:id', to: 'pos_orders#destroy'
+
+        resources :line_item_groups do
+          resources :images
+          member do
+            put :one_step
+            put :cancel #取消
+            put :rework #返工
+          end
+          collection do
+            # search/counts, sansack has array paramter, post json is easy.
+            post :counts
+            put :all_step
+            put :all_complete # 交付选择的物品
+          end
+        end
+        post '/line_item_groups/search', to: 'line_item_groups#index'
+        put '/line_items/fulfill', to: 'line_items#fulfill'
+
+        resources :zones
+        resources :countries, only: [:index, :show] do
+          resources :states, only: [:index, :show]
+        end
+
+        resources :shipments, only: [:create, :update] do
+          collection do
+            post 'transfer_to_location'
+            post 'transfer_to_shipment'
+            get :mine
+          end
+
+          member do
+            put :next
+            put :ready
+            put :ship
+            put :add
+            put :remove
+          end
+        end
+        resources :states, only: [:index, :show]
+
+        resources :taxonomies do
+          member do
+            get :jstree
+          end
+          resources :taxons do
+            member do
+              get :jstree
+            end
+          end
+        end
+
+        resources :taxons, only: [:index]
+
+        resources :inventory_units, only: [:show, :update]
+
+        resources :users do
+          resources :credit_cards, only: [:index]
+          member do
+            get :cards
+          end
+          #搜索店员及打卡记录信息
+          collection do
+            post :entries
+          end
+        end
+        post '/users/search', to: 'users#index'
+
+        resources :customers do
+          member do
+            get :cards
+            get :statis
+          end
+          collection do
+            get :validate_mobile
+          end
+        end
+        post '/customers/search', to: 'customers#index'
+
+        resources :staffs do
+
+        end
+
+        resources :cards do
+          member do
+            get :transactions
+          end
+        end
+
+        resources :properties
+        resources :stock_locations do
+          resources :stock_movements
+          resources :stock_items
+        end
+
+        resources :stock_items, only: [:index, :update, :destroy]
+        resources :stores
+
+        resources :tags, only: :index
+
+        put '/classifications', to: 'classifications#update', as: :classifications
+        get '/taxons/products', to: 'taxons#products', as: :taxon_products
+
+        resources :sale_days do
+          collection do
+            get 'today'
+            post 'day'
+            get 'week'
+            post 'days'
+            post 'total'
+          end
+        end
+
+      end
+
+      spree_path = Rails.application.routes.url_helpers.try(:spree_path, trailing_slash: true) || '/'
+
+      match 'v:api/*path', to: redirect { |params, request|
+        format = ".#{params[:format]}" unless params[:format].blank?
+        query  = "?#{request.query_string}" unless request.query_string.blank?
+
+        "#{spree_path}api/v1/#{params[:path]}#{format}#{query}"
+      }, via: [:get, :post, :put, :patch, :delete]
+
+      match '*path', to: redirect { |params, request|
+        format = ".#{params[:format]}" unless params[:format].blank?
+        query  = "?#{request.query_string}" unless request.query_string.blank?
+
+        "#{spree_path}api/v1/#{params[:path]}#{format}#{query}"
+      }, via: [:get, :post, :put, :patch, :delete]
+    end
+
+    ##############################################################################
+    # spree Admin
+    ##############################################################################
+    namespace :admin, path: Spree.admin_path do
+      resources :promotions do
+        resources :promotion_rules
+        resources :promotion_actions
+        member do
+          post :clone
+        end
+      end
+
+      resources :promotion_categories, except: [:show]
+
+      resources :zones
+
+      resources :stores do
+        member do
+          post :set_default
+        end
+      end
+
+      resources :countries do
+        resources :states
+      end
+      resources :states
+      resources :tax_categories
+
+      resources :products do
+        resources :product_properties do
           collection do
             post :update_positions
           end
         end
-      end
-
-      resources :products , concerns: :selling do
-      end
-
-      resources :selling_services, concerns: :selling do
-      end
-
-      resources :selling_cards, concerns: :selling do
-      end
-
-      concern :order_routes do
-        member do
-          put :approve
-          put :cancel
-          put :empty
-          put :apply_coupon_code
-        end
-
-        resources :line_items
-        resources :payments do
-          member do
-            put :authorize
-            put :capture
-            put :purchase
-            put :void
-            put :credit
+        resources :images do
+          collection do
+            post :update_positions
           end
         end
-
-        resources :addresses, only: [:show, :update]
-
-        resources :return_authorizations do
-          member do
-            put :add
-            put :cancel
-            put :receive
+        member do
+          post :clone
+          get :stock
+        end
+        resources :variants do
+          collection do
+            post :update_positions
           end
         end
-      end
-
-      resources :checkouts, only: [:update], concerns: :order_routes do
-        member do
-          put :next
-          put :advance
-        end
-      end
-
-      resources :variants do
-        resources :images
+        resources :variants_including_master, only: [:update]
       end
 
       resources :option_types do
-        resources :option_values
-      end
-      resources :option_values
-
-      resources :option_values, only: :index
-
-      get '/orders/mine', to: 'orders#mine', as: 'my_orders'
-      get '/orders/current', to: 'orders#current', as: 'current_order'
-
-      #resources :orders, concerns: :order_routes
-
-      get '/pos_orders/:id', to: 'pos_orders#show'
-      post '/pos_orders', to: 'pos_orders#create'
-      get '/pos_orders/find_by_group_number/:group_number', to: 'pos_orders#state_counts'
-      get '/pos_orders/state_counts', to: 'pos_orders#state_counts'
-      put '/pos_orders/all_step', to: 'pos_orders#all_step'
-      put '/pos_orders/:id/one_step', to: 'pos_orders#one_step'
-      get '/pos_orders', to: 'pos_orders#index'
-      post '/pos_orders/search', to: 'pos_orders#index'
-      post '/pos_orders/count', to: 'pos_orders#count'
-      put '/pos_orders/:id/cancel', to: 'pos_orders#cancel'
-      post '/pos_orders/:id/add_payments', to: 'pos_orders#add_payments'
-      delete '/pos_orders/:id', to: 'pos_orders#destroy'
-
-      resources :line_item_groups do
-        resources :images
-        member do
-          put :one_step
-          put :cancel #取消
-          put :rework #返工
-        end
         collection do
-          # search/counts, sansack has array paramter, post json is easy.
-          post :counts
-          put :all_step
-          put :all_complete # 交付选择的物品
+          post :update_positions
+          post :update_values_positions
         end
       end
-      post '/line_item_groups/search', to: 'line_item_groups#index'
-      put '/line_items/fulfill', to: 'line_items#fulfill'
 
-      resources :zones
-      resources :countries, only: [:index, :show] do
-        resources :states, only: [:index, :show]
-      end
+      delete '/option_values/:id', to: 'option_values#destroy', as: :option_value
 
-      resources :shipments, only: [:create, :update] do
+      resources :properties do
         collection do
-          post 'transfer_to_location'
-          post 'transfer_to_shipment'
-          get :mine
-        end
-
-        member do
-          put :next
-          put :ready
-          put :ship
-          put :add
-          put :remove
+          get :filtered
         end
       end
-      resources :states, only: [:index, :show]
 
-      resources :taxonomies do
+      delete '/product_properties/:id', to: 'product_properties#destroy', as: :product_property
+
+      resources :prototypes do
         member do
-          get :jstree
+          get :select
         end
-        resources :taxons do
+
+        collection do
+          get :available
+        end
+      end
+
+      resources :orders, except: [:show] do
+        member do
+          get :cart
+          post :resend
+          get :open_adjustments
+          get :close_adjustments
+          put :approve
+          put :cancel
+          put :resume
+          get :store
+          put :set_store
+        end
+
+        resources :state_changes, only: [:index]
+
+        resource :customer, controller: 'orders/customer_details'
+        resources :customer_returns, only: [:index, :new, :edit, :create, :update] do
           member do
-            get :jstree
+            put :refund
+          end
+        end
+
+        resources :adjustments
+        resources :return_authorizations do
+          member do
+            put :fire
+          end
+        end
+        resources :payments do
+          member do
+            put :fire
+          end
+
+          resources :log_entries
+          resources :refunds, only: [:new, :create, :edit, :update]
+        end
+
+        resources :reimbursements, only: [:index, :create, :show, :edit, :update] do
+          member do
+            post :perform
           end
         end
       end
 
-      resources :taxons, only: [:index]
+      get '/return_authorizations', to: 'return_index#return_authorizations', as: :return_authorizations
+      get '/customer_returns', to: 'return_index#customer_returns', as: :customer_returns
 
-      resources :inventory_units, only: [:show, :update]
+      resource :general_settings do
+        collection do
+          post :clear_cache
+        end
+      end
+
+      resources :return_items, only: [:update]
+
+      resources :taxonomies do
+        collection do
+          post :update_positions
+        end
+        resources :taxons
+      end
+
+      resources :taxons, only: [:index, :show]
+
+      resources :reports, only: [:index] do
+        collection do
+          get :sales_total
+          post :sales_total
+        end
+      end
+
+      resources :reimbursement_types
+      resources :refund_reasons, except: :show
+      resources :return_authorization_reasons, except: :show
+
+      resources :shipping_methods
+      resources :shipping_categories
+      resources :stock_transfers, only: [:index, :show, :new, :create]
+      resources :stock_locations do
+        resources :stock_movements, except: [:edit, :update, :destroy]
+        collection do
+          post :transfer_stock
+        end
+      end
+
+      resources :stock_items, only: [:create, :update, :destroy]
+      resources :store_credit_categories
+      resources :tax_rates
+      resources :payment_methods do
+        collection do
+          post :update_positions
+        end
+      end
+      resources :roles
 
       resources :users do
-        resources :credit_cards, only: [:index]
         member do
-          get :cards
+          get :addresses
+          put :addresses
+          put :clear_api_key
+          put :generate_api_key
+          get :items
+          get :orders
         end
-        #搜索店员及打卡记录信息
-        collection do
-          post :entries
-        end
+        resources :store_credits
       end
-      post '/users/search', to: 'users#index'
-
-      resources :customers do
-        member do
-          get :cards
-          get :statis
-        end
-        collection do
-          get :validate_mobile
-        end
-      end
-      post '/customers/search', to: 'customers#index'
-
-      resources :staffs do
-
-      end
-
-      resources :cards do
-        member do
-          get :transactions
-        end
-      end
-
-      resources :properties
-      resources :stock_locations do
-        resources :stock_movements
-        resources :stock_items
-      end
-
-      resources :stock_items, only: [:index, :update, :destroy]
-      resources :stores
-
-      resources :tags, only: :index
-
-      put '/classifications', to: 'classifications#update', as: :classifications
-      get '/taxons/products', to: 'taxons#products', as: :taxon_products
-
-      resources :sale_days do
-        collection do
-          get 'today'
-          post 'day'
-          get 'week'
-          post 'days'
-          post 'total'
-        end
-      end
-
     end
 
-    spree_path = Rails.application.routes.url_helpers.try(:spree_path, trailing_slash: true) || '/'
+    get Spree.admin_path, to: redirect((Spree.admin_path + '/orders').gsub('//', '/')), as: :admin
 
-    match 'v:api/*path', to: redirect { |params, request|
-      format = ".#{params[:format]}" unless params[:format].blank?
-      query  = "?#{request.query_string}" unless request.query_string.blank?
-
-      "#{spree_path}api/v1/#{params[:path]}#{format}#{query}"
-    }, via: [:get, :post, :put, :patch, :delete]
-
-    match '*path', to: redirect { |params, request|
-      format = ".#{params[:format]}" unless params[:format].blank?
-      query  = "?#{request.query_string}" unless request.query_string.blank?
-
-      "#{spree_path}api/v1/#{params[:path]}#{format}#{query}"
-    }, via: [:get, :post, :put, :patch, :delete]
   end
-end
 
 ################################################################################
 # wechatmore game
@@ -384,13 +574,13 @@ namespace :api do
   ##############################################################################
   # Admin
   ##############################################################################
-  namespace :admin do
-    get '/' => 'home#index'
-    resources :games do
-      resources :game_rounds
-    end
-    resources :wechat_accounts
-  end
+  #namespace :admin do
+  #  get '/' => 'home#index'
+  #  resources :games do
+  #    resources :game_rounds
+  #  end
+  #  resources :wechat_accounts
+  #end
 
 
 

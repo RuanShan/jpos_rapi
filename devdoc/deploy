@@ -9,3 +9,6 @@ bundle exec puma -e production -b unix:///home/deploy/www/wechatmore/tmp/sockets
 SSL
 ==================
 https://stackoverflow.com/questions/47979328/how-to-secure-with-ssl-https-a-nginx-front-end-and-puma-back-end-in-amazon-ec2-a
+
+生成证书
+https://blog.csdn.net/witmind/article/details/78456660

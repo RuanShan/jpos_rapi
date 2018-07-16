@@ -683,6 +683,7 @@ module Spree
       # lock all adjustments (coupon promotions, etc.)
       #all_adjustments.each(&:close)
       # update payment and shipment(s) states, and save
+      payments.each(&:complete)
       updater.update_payment_state
       #shipments.each do |shipment|
       #  shipment.update!(self)
@@ -693,12 +694,14 @@ module Spree
       updater.update_order_type
       updater.update_sale_total
 
-
       save!
-      updater.run_hooks
+      #updater.run_hooks
       #不能 touch completed_at, 删除时会导致 OrderInventory.verify 异常
       #touch :completed_at
+      #根据配置，发出公众号、短信，或邮件通知
+      notify_customer
     end
+
 
     def create_line_item_groups
       #如果创建 line_item_groups时， payments 存在，说明客户已经付款，否则为未付款订单
@@ -732,7 +735,14 @@ module Spree
       groups_map.values
     end
 
+
     private
+
+    def notify_customer
+      SmsJob.perform_later(self) if enable_sms
+      MpMsgJob.perform_later(self) if enable_mp_msg
+    end
+
 
     def link_by_email
       self.email = user.email if user

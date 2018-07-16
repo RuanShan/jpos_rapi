@@ -4,6 +4,7 @@ source 'https://gems.ruby-china.org/' do
 ################################################################################
 gem 'spree_core',   path: './spree/core'
 gem 'spree_api',   path: './spree/api'
+gem 'spree_backend',   path: './spree/backend'
 
 
 ################################################################################

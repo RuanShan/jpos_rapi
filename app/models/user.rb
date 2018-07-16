@@ -83,6 +83,11 @@ class User < ApplicationRecord
   def avatar_url
     "xx"
   end
+
+  def spree_role_names
+    self.spree_roles.pluck :name
+  end
+
   protected
     def password_required?
       !persisted? || password.present? || password_confirmation.present?
