@@ -1,5 +1,5 @@
 <% content_for :page_title do %>
-  <%= link_to Spree.t(:taxonomies), spree.admin_taxonomies_url %> /
+  <%= link_to Spree.t(:taxonomies), admin_taxonomies_url %> /
   <%= Spree.t(:new_taxonomy) %>
 <% end %>
 <%= render partial: 'spree/admin/shared/error_messages', locals: { target: @taxonomy } %>

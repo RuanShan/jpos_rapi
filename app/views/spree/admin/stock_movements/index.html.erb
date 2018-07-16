@@ -1,5 +1,5 @@
 <% content_for :page_title do %>
-  <%= link_to Spree.t(:stock_locations), spree.admin_stock_locations_path %> /
+  <%= link_to Spree.t(:stock_locations), admin_stock_locations_path %> /
   <%= Spree.t(:stock_movements_for_stock_location, stock_location_name: @stock_location.name) %>
 <% end %>
 
@@ -36,7 +36,7 @@
 <% else %>
   <div class="alert alert-info no-objects-found">
     <%= Spree.t(:no_resource_found, resource: plural_resource_name(Spree::StockMovement)) %>,
-    <%= link_to Spree.t(:add_one), spree.new_admin_stock_location_stock_movement_path(@stock_location) %>!
+    <%= link_to Spree.t(:add_one), new_admin_stock_location_stock_movement_path(@stock_location) %>!
   </div>
 <% end %>
 

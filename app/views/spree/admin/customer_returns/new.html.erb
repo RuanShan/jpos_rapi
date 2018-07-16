@@ -32,7 +32,7 @@
       <div class="form-actions" data-hook="buttons">
         <%= button Spree.t(:create), 'save' %>
         <span class="or"><%= Spree.t(:or) %></span>
-        <%= button_link_to Spree.t('actions.cancel'), spree.admin_order_customer_returns_url(@order), icon: 'delete' %>
+        <%= button_link_to Spree.t('actions.cancel'), admin_order_customer_returns_url(@order), icon: 'delete' %>
       </div>
     </fieldset>
   <% end %>
@@ -41,7 +41,7 @@
 
   <div class="alert alert-info no-objects-found">
     <%= Spree.t(:all_items_have_been_returned) %>,
-    <%= link_to Spree.t(:back_to_resource_list, resource: Spree::CustomerReturn.model_name.human), spree.admin_order_customer_returns_path(@order) %>.
+    <%= link_to Spree.t(:back_to_resource_list, resource: Spree::CustomerReturn.model_name.human), admin_order_customer_returns_path(@order) %>.
   </div>
 
 <% end %>

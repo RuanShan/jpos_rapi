@@ -2,7 +2,7 @@
 <%= render partial: 'spree/admin/users/user_page_actions' %>
 
 <% content_for :page_title do %>
-  <%= link_to @user.email, spree.edit_admin_user_url(@user) %> /
+  <%= link_to @user.email, edit_admin_user_url(@user) %> /
   <%= Spree.t(:addresses) %>
 <% end %>
 
@@ -17,7 +17,7 @@
       <%= render partial: 'addresses_form', locals: { f: f } %>
 
       <div class="form-actions text-center well" data-hook="admin_user_edit_form_button">
-        <%= render partial: 'spree/admin/shared/edit_resource_links', locals: { collection_url: spree.admin_users_url } %>
+        <%= render partial: 'spree/admin/shared/edit_resource_links', locals: { collection_url: admin_users_url } %>
       </div>
     <% end %>
   </div>

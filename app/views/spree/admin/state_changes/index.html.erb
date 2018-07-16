@@ -26,7 +26,7 @@
           <td>
             <% if state_change.user %>
               <% user_login = state_change.user.try(:login) || state_change.user.try(:email) %>
-              <%= link_to user_login, spree.admin_user_path(state_change.user) %>
+              <%= link_to user_login, admin_user_path(state_change.user) %>
             <% end %>
           </td>
           <td>

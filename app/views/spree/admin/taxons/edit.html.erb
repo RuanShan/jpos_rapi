@@ -1,6 +1,6 @@
 <% content_for :page_title do %>
-  <%= link_to Spree.t(:taxonomies), spree.admin_taxonomies_url %> /
-  <%= link_to @taxonomy.name, spree.edit_admin_taxonomy_url(@taxonomy) %> /
+  <%= link_to Spree.t(:taxonomies), admin_taxonomies_url %> /
+  <%= link_to @taxonomy.name, edit_admin_taxonomy_url(@taxonomy) %> /
   <%= @taxon.name %>
 <% end %>
 

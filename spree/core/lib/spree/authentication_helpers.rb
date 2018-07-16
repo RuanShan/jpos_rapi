@@ -16,7 +16,7 @@ module Spree
     end
 
     def spree_signup_path
-    #  signup_path
+      new_user_registration_path
     end
 
     def spree_logout_path

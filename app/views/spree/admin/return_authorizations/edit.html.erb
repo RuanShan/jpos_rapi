@@ -7,7 +7,7 @@
 <%= render partial: 'spree/admin/shared/order_tabs', locals: { current: :return_authorizations } %>
 
 <% content_for :page_title do %>
-  / <%= link_to Spree.t(:return_authorizations), spree.admin_order_return_authorizations_url %>
+  / <%= link_to Spree.t(:return_authorizations), admin_order_return_authorizations_url %>
   / <%= @return_authorization.number %> (<%= Spree.t(@return_authorization.state.downcase) %>)
 <% end %>
 
@@ -20,7 +20,7 @@
     <div class="form-actions" data-hook="buttons">
       <%= button Spree.t('actions.update'), 'repeat' %>
       <span class="or"><%= Spree.t(:or) %></span>
-      <%= button_link_to Spree.t('actions.cancel'), spree.admin_order_return_authorizations_url(@order), icon: 'delete' %>
+      <%= button_link_to Spree.t('actions.cancel'), admin_order_return_authorizations_url(@order), icon: 'delete' %>
     </div>
   </fieldset>
 <% end %>

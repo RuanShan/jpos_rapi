@@ -1,7 +1,7 @@
 <%= render partial: 'spree/admin/shared/error_messages', locals: { target: @product } %>
 
 <% content_for :page_title do %>
-  <%= link_to Spree.t(:products), spree.admin_products_url %> /
+  <%= link_to Spree.t(:products), admin_products_url %> /
   <%= Spree.t(:new_product) %>
 <% end %>
 
@@ -69,7 +69,7 @@
 <script type="text/javascript">
 //<![CDATA[
   (function($){
-    var base_url = "<%= spree.admin_prototypes_url %>";
+    var base_url = "<%= admin_prototypes_url %>";
     var prototype_select = $('#product_prototype_id');
     prototype_select.change(function() {
       var id = prototype_select.val();

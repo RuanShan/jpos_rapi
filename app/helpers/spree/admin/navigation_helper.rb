@@ -24,7 +24,7 @@ module Spree
         options = options.merge(args.pop) if args.last.is_a?(Hash)
         options[:route] ||= "admin_#{args.first}"
 
-        destination_url = options[:url] || spree.send("#{options[:route]}_path")
+        destination_url = options[:url] || send("#{options[:route]}_path")
         titleized_label = Spree.t(options[:label], default: options[:label], scope: [:admin, :tab]).titleize
 
         css_classes = ['sidebar-menu-item']
@@ -38,7 +38,7 @@ module Spree
         selected = if options[:match_path].is_a? Regexp
                      request.fullpath =~ options[:match_path]
                    elsif options[:match_path]
-                     request.fullpath.starts_with?("#{spree.admin_path}#{options[:match_path]}")
+                     request.fullpath.starts_with?("#{admin_path}#{options[:match_path]}")
                    else
                      args.include?(controller.controller_name.to_sym)
                    end

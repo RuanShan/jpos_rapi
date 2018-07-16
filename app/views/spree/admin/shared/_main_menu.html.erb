@@ -30,7 +30,7 @@
 
 <% if Spree.user_class && can?(:admin, Spree.user_class) %>
   <ul class="nav nav-sidebar">
-    <%= tab *Spree::BackendConfiguration::USER_TABS, url: spree.admin_users_path, icon: 'user' %>
+    <%= tab *Spree::BackendConfiguration::USER_TABS, url: admin_users_path, icon: 'user' %>
   </ul>
 <% end %>
 
