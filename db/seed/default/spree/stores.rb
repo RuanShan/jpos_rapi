@@ -8,13 +8,7 @@ unless Spree::Store.where(code: 'spree').exists?
   end
   store.save!
 
-  store = Spree::Store.new do |s|
-    s.code              = 'spree2'
-    s.name              = '示例门店2'
-    s.url               = '2.example.com'
-    s.mail_from_address = '2@example.com'
-  end
-  store.save!
+
 
   # Spree::Address.new do |s|
   #   s.firstname = 'store'
@@ -29,5 +23,17 @@ unless Spree::Store.where(code: 'spree').exists?
   # end.save
   # create shipping_method for pos
   # create payment_method for pos
+end
+
+unless Spree::Store.where(code: 'spree2').exists?
+  (2..5).each{ |i|
+    store = Spree::Store.new do |s|
+      s.code              = "spree#{i}"
+      s.name              = "示例门店"
+      s.url               = "#{i}.example.com"
+      s.mail_from_address = "#{i}@example.com"
+    end
+    store.save!
+  }
 
 end
