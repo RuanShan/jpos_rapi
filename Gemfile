@@ -32,7 +32,7 @@ gem 'spree_backend',   path: './spree/backend'
   gem 'bootstrap-sass', '~> 3.3.7'
   gem "font-awesome-rails"
   #https://github.com/kyuubi9/rails-adminlte
-  gem 'rails-adminlte'
+  #gem 'rails-adminlte'
   #add it for window
   #gem 'bcrypt-ruby', '3.1.5', :require => 'bcrypt', platforms: [:ruby]
   gem 'devise'
