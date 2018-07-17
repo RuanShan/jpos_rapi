@@ -45,4 +45,57 @@
   $gray:                   lighten($gray-base, 33.5%) !default; // #555
   $gray-light:             lighten($gray-base, 46.7%) !default; // #777
   $gray-lighter:           lighten($gray-base, 93.5%) !default; // #eee
-  
+
+  //== Typography
+  //
+  //## Font, line-height, and color for body text, headings, and more.
+
+  $font-family-sans-serif:  "Helvetica Neue", Helvetica, Arial, sans-serif !default;
+  $font-family-serif:       Georgia, "Times New Roman", Times, serif !default;
+  //** Default monospace fonts for `<code>`, `<kbd>`, and `<pre>`.
+  $font-family-monospace:   Menlo, Monaco, Consolas, "Courier New", monospace !default;
+  $font-family-base:        $font-family-sans-serif !default;
+
+  $font-size-base:          14px !default;
+  $font-size-large:         ceil(($font-size-base * 1.25)) !default; // ~18px
+  $font-size-small:         ceil(($font-size-base * 0.85)) !default; // ~12px
+
+  $font-size-h1:            floor(($font-size-base * 2.6)) !default; // ~36px
+  $font-size-h2:            floor(($font-size-base * 2.15)) !default; // ~30px
+  $font-size-h3:            ceil(($font-size-base * 1.7)) !default; // ~24px
+  $font-size-h4:            ceil(($font-size-base * 1.25)) !default; // ~18px
+  $font-size-h5:            $font-size-base !default;
+  $font-size-h6:            ceil(($font-size-base * 0.85)) !default; // ~12px
+
+
+  //== Buttons
+  //
+  //## For each of Bootstrap's buttons, define text, background and border color.
+
+  $btn-font-weight:                normal !default;
+
+  $btn-default-color:              #333 !default;
+  $btn-default-bg:                 #fff !default;
+  $btn-default-border:             #ccc !default;
+
+  $btn-primary-color:              #fff !default;
+  $btn-primary-bg:                 $brand-primary !default;
+  $btn-primary-border:             darken($btn-primary-bg, 5%) !default;
+
+  $btn-success-color:              #fff !default;
+  $btn-success-bg:                 $brand-success !default;
+  $btn-success-border:             darken($btn-success-bg, 5%) !default;
+
+  $btn-info-color:                 #fff !default;
+  $btn-info-bg:                    $brand-info !default;
+  $btn-info-border:                darken($btn-info-bg, 5%) !default;
+
+  $btn-warning-color:              #fff !default;
+  $btn-warning-bg:                 $brand-warning !default;
+  $btn-warning-border:             darken($btn-warning-bg, 5%) !default;
+
+  $btn-danger-color:               #fff !default;
+  $btn-danger-bg:                  $brand-danger !default;
+  $btn-danger-border:              darken($btn-danger-bg, 5%) !default;
+
+  $btn-link-disabled-color:        $gray-light !default;
