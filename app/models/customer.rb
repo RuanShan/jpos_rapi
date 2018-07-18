@@ -17,7 +17,7 @@ class Customer <  ApplicationRecord
   has_many :cards, class_name: 'Spree::Card', foreign_key: 'user_id', inverse_of: :customer
   accepts_nested_attributes_for :cards
 
-  self.whitelisted_ransackable_attributes = %w[id mobile username]
+  self.whitelisted_ransackable_attributes = %w[id mobile username store_id]
   self.whitelisted_ransackable_associations = %w[cards]
 
   before_validation :set_login
