@@ -29,7 +29,7 @@ unless Spree::Store.where(code: 'spree2').exists?
   (2..5).each{ |i|
     store = Spree::Store.new do |s|
       s.code              = "spree#{i}"
-      s.name              = "示例门店"
+      s.name              = "示例门店#{i}"
       s.url               = "#{i}.example.com"
       s.mail_from_address = "#{i}@example.com"
     end

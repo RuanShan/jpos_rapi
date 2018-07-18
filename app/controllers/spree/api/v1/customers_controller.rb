@@ -11,7 +11,7 @@ module Spree
                    else
                      @customers.ransack(params[:q])
                    end
-          @q = @customers.result
+          @q = @customers.result(distinct: true)
           @total_count = @q.count
           @customers = @q.page(params[:page]).per(params[:per_page])
           expires_in 15.minutes, public: true

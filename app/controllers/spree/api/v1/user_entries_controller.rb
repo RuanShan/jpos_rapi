@@ -6,7 +6,7 @@ module Spree
 
         def index
           authorize! :read, UserEntry
-          @q = UserEntry.ransack(params[:q]).result
+          @q = UserEntry.ransack(params[:q]).result(distinct: true)
           @total_count = @q.count
 
           @user_entries = @q.includes( :user ).page(params[:page]).per(params[:per_page])

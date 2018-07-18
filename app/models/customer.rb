@@ -1,5 +1,7 @@
 class Customer <  ApplicationRecord
   acts_as_paranoid
+  include Spree::RansackableAttributes
+
   after_destroy :scramble_mobile_and_password # mobile is uniqueness
 
   validates :mobile, presence: true, uniqueness: true
@@ -14,6 +16,9 @@ class Customer <  ApplicationRecord
   has_many :orders, class_name: 'Spree::Order', foreign_key: 'user_id'
   has_many :cards, class_name: 'Spree::Card', foreign_key: 'user_id', inverse_of: :customer
   accepts_nested_attributes_for :cards
+
+  self.whitelisted_ransackable_attributes = %w[id mobile username]
+  self.whitelisted_ransackable_associations = %w[cards]
 
   before_validation :set_login
   alias_attribute :name, :username # order.user_name required

@@ -41,7 +41,7 @@ module Spree
 
         def index
           #authorize! :index, Order
-          @q = Order.ransack(params[:q]).result
+          @q = Order.ransack(params[:q]).result(distinct: true)
           @total_count = @q.count
           # 订单列表需要显示订单 物品和活的信息
           @orders = @q.includes( :creator, :payments, user: :cards, line_item_groups: :images, line_items: :variant ).page(params[:page]).per(params[:per_page])
@@ -50,7 +50,7 @@ module Spree
 
         # 基于index的查询条件，统计订单数量和金额
         def count
-          @q = Order.ransack(params[:q]).result
+          @q = Order.ransack(params[:q]).result(distinct: true)
           @total_count = @q.count
           @total_sum = @q.sum(:total)
         end

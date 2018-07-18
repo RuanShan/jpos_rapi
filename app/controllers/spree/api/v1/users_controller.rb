@@ -13,7 +13,7 @@ module Spree
                      @users.ransack(params[:q])
                    end
 
-          @users = @users.result.page(params[:page]).per(params[:per_page])
+          @users = @users.result(distinct: true).page(params[:page]).per(params[:per_page])
           expires_in 15.minutes, public: true
           headers['Surrogate-Control'] = "max-age=#{15.minutes}"
           respond_with(@users)
