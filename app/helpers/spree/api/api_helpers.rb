@@ -96,7 +96,7 @@ module Spree
         :shipment_state, :payment_state, :email, :special_instructions, :channel,
         :included_tax_total, :additional_tax_total, :display_included_tax_total,
         :display_additional_tax_total, :tax_total, :currency, :considered_risky,
-        :canceler_id, :store_id, :group_state, :sale_total, :order_type
+        :created_by_id, :canceler_id, :store_id, :group_state, :sale_total, :order_type
       ]
 
       #                                price：实收价格   sale_price：应收价格
@@ -111,7 +111,7 @@ module Spree
       @@payment_attributes = [
         :id, :source_type, :source_id, :amount, :display_amount,
         :payment_method_id, :state, :avs_response, :created_at,
-        :updated_at, :number
+        :updated_at, :number, :cname
       ]
 
       @@payment_method_attributes = [:id, :name, :description, :active, :display, :posable]

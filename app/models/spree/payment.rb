@@ -32,6 +32,7 @@ module Spree
     # update the order totals, etc.
     set_callback :save, :after, :update_order, unless: -> { capture_on_dispatch }
 
+    before_create :set_default_cname #便于前端显示，即 payment_method.name
     # invalidate previously entered payments
     after_create :invalidate_old_payments
     after_create :create_eligible_credit_event
@@ -271,6 +272,15 @@ Rails.logger.debug "member_card?=#{member_card?} source=#{source.inspect}"
       end
       Rails.logger.debug "=== after invalidate_old_payments"
 
+    end
+
+    def set_default_cname
+      if self.cname.blank?
+        self.cname = self.payment_method.name
+        if self.payment_method.member_card?
+          self.cname +="(#{self.source.code})"
+        end
+      end
     end
   end
 end
