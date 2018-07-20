@@ -188,7 +188,8 @@ module Spree
       @@store_attributes = [
         :id, :name, :url, :meta_description, :meta_keywords, :seo_title,
         :mail_from_address, :default_currency, :code, :default,
-        :doc_printer_name, :receipt_printer_name, :label_printer_name
+        :doc_printer_name, :receipt_printer_name, :label_printer_name,
+        :receipt_title, :receipt_footer
       ]
 
       @@tag_attributes = [:id, :name]

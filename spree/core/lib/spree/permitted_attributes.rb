@@ -103,7 +103,8 @@ module Spree
 
     @@store_attributes = [:name, :url, :seo_title, :meta_keywords,
                           :meta_description, :default_currency, :mail_from_address,
-                        :doc_printer_name, :receipt_printer_name, :label_printer_name]
+                        :doc_printer_name, :receipt_printer_name, :label_printer_name,
+                      :receipt_title, :receipt_footer]
 
     @@store_credit_attributes = [:amount, :category_id, :memo]
 
