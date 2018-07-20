@@ -35,6 +35,20 @@ module Spree
           respond_with(@line_items)
         end
 
+        # params
+        #  order_number - required
+        #  line_item - { memo: xxx }
+        def update_extra
+          @line_item = find_line_item
+          Rails.logger.debug " permitted_line_item_attributes=#{line_item_extra_params.inspect} "
+          if @line_item.update(line_item_extra_params)
+            @line_item.reload
+            respond_with(@line_item, default_template: :show)
+          else
+            invalid_resource!(@line_item)
+          end
+        end
+
         def new; end
 
         def create
@@ -92,6 +106,11 @@ module Spree
         def line_item_params
           params.require(:line_item).permit(:quantity, :variant_id, options: line_item_options)
         end
+
+        def line_item_extra_params
+          params.require(:line_item).permit(permitted_line_item_attributes)
+        end
+
       end
     end
   end
