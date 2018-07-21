@@ -1,4 +1,5 @@
 class Customer <  ApplicationRecord
+
   acts_as_paranoid
   include Spree::RansackableAttributes
 
@@ -20,7 +21,7 @@ class Customer <  ApplicationRecord
   self.whitelisted_ransackable_attributes = %w[id mobile username store_id]
   self.whitelisted_ransackable_associations = %w[cards]
 
-  before_validation :set_login
+  before_validation :set_defaults
   alias_attribute :name, :username # order.user_name required
 
   enum gender: { male: 1, female: 0 }
@@ -34,11 +35,14 @@ class Customer <  ApplicationRecord
     orders.where( order_type: :normal ).count
   end
 
-  private
 
-    def set_login
+
+  #private
+
+    def set_defaults
       # for now force login to be same as email, eventually we will make this configurable, etc.
       self.username = self.mobile if (self.mobile.present? && self.username.blank? )
+      self.number = generate_permalink if self.number.blank?
     end
 
     def scramble_mobile_and_password
@@ -49,4 +53,22 @@ class Customer <  ApplicationRecord
       self.save
     end
 
+    # 会员号 {2位店号}{5位随机数}
+    def generate_permalink()
+      length = 6
+
+      loop do
+        candidate = new_candidate(length)
+        return candidate unless self.class.exists?(number: candidate)
+
+        # If over half of all possible options are taken add another digit.
+        length += 1 if host.count > Rational(10**length, 2)
+      end
+    end
+
+    def new_candidate(length)
+      prefix = "M%02d" % [ store_id ]
+      characters = 10
+      prefix + SecureRandom.random_number(characters**length).to_s(characters).rjust(length, '0').upcase
+    end
 end
