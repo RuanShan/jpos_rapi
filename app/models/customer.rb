@@ -55,8 +55,7 @@ class Customer <  ApplicationRecord
 
     # 会员号 {2位店号}{5位随机数}
     def generate_permalink()
-      length = 6
-
+      length = 7
       loop do
         candidate = new_candidate(length)
         return candidate unless self.class.exists?(number: candidate)
