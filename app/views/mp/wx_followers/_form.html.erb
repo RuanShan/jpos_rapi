@@ -1,0 +1,29 @@
+<%= form_for([:mp, @wx_follower] ) do |f| %>
+
+  <div class="weui-cells weui-cells_form">
+
+    <div class="weui-cell weui-cell_vcode telephone_wrapper">
+      <div class="weui-cell__hd">
+        <label for="wx_follower_mobile" class="weui-label">手机号</label>
+      </div>
+      <div class="weui-cell__bd ">
+        <input class="weui-input" name="wx_follower[mobile]"  type="tel" placeholder="请输入手机号" required pattern="[0-9]{11}" emptyTips="请输入手机号" notMatchTips="请输入正确的手机号">
+      </div>
+      <div class="weui-cell__ft">
+        <button id="get_verify_code
+        " type="button" class="weui-vcode-btn">获取验证码</button>
+      </div>
+    </div>
+    <div class="weui-cell">
+      <div class="weui-cell__hd"><label  for="wx_follower_verify_code" class="weui-label">验证码</label></div>
+      <div class="weui-cell__bd">
+        <input class="weui-input" type="number" name="wx_follower[verify_code]" placeholder="请输入验证码" required pattern="[0-9]{4}">
+      </div>
+    </div>
+
+  </div>
+
+  <div class="form-actions weui-btn-area">
+    <%= f.button '关联会员账号', style:"width:100%", class: 'weui-btn weui-btn_primary', type: :submit %>
+  </div>
+<% end %>

@@ -26,6 +26,9 @@ class Customer <  ApplicationRecord
 
   enum gender: { male: 1, female: 0 }
 
+  # sms对象，创建用户时检查短信验证码, :verify_code, 用户输入的验证码
+  attr_accessor :sms,:verify_code
+
   #总共消费金额
   def normal_order_total
     orders.where( order_type: :normal ).sum(:total)
@@ -37,7 +40,7 @@ class Customer <  ApplicationRecord
 
 
 
-  #private
+  private
 
     def set_defaults
       # for now force login to be same as email, eventually we will make this configurable, etc.
@@ -70,4 +73,15 @@ class Customer <  ApplicationRecord
       characters = 10
       prefix + SecureRandom.random_number(characters**length).to_s(characters).rjust(length, '0').upcase
     end
+
+    def confirm_verify_code
+      #只有sms存在时才需要验证，加载seed时无需短信验证
+      if sms.present?
+        if !sms.validate_for_sign_up( self.cellphone, self.verify_code)
+          Rails.logger.debug sms.errors.inspect
+          errors.add("verify_code", sms.errors.first[1])
+        end
+      end
+    end
+
 end

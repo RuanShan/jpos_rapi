@@ -72,6 +72,8 @@ class User < ApplicationRecord
   # 将按照一定条件查询到的 user_entry, 赋值给searched_entries，以便json一并处理
   attr_accessor :searched_entries
 
+
+
   def self.admin_created?
     User.admin.count > 0
   end

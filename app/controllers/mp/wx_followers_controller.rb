@@ -1,34 +1,34 @@
 #
-# 用户通过微信公众号，注册，查看自己的订单
+# 微信用户通过微信公众号，注册，查看自己的订单
 #
 #
-class Mp::CustomersController < Mp::BaseController
+class Mp::WxFollowersController < Mp::BaseController
 
-  before_action :set_customer, only: [:show, :edit, :update, :destroy]
+  before_action :set_wx_follower, only: [:show, :edit, :update, :destroy]
 
-  # GET /customers/1
-  # GET /customers/1.json
-  def show
-
-  end
-
+  # 微信会员入口
   # 关联会员账号，或创建会员账号
-  def new
+  def entry
     wechat_oauth2 do |openid, access_info|
       #查找用户，强制关注
-      user = wechat.web_userinfo( access_info['access_token'], openid )
+      user = wechat.web_userinfo( access_info['access_token'], 'openid' )
+      if user.blank?
+        redirect_to :please_subscribe and return
+      end
+      Rails.logger.debug "entry.user=#{user.inspect}"
+      #微信用户已经关注
       @wx_follower = WxFollower.find_by(openid: openid)
 
-      if @wx_follower.present?
-        if @wx_follower.customer.present?
-          redirect_to :show
-        end
-      else
-        render :please_subscribe
+      if @wx_follower.try(:customer)
+        #如果微信用户已经关联会员账号
+        redirect_to controller: :mp_customers, action: :show
+      elsif @wx_follower.present?
+        #customer 客户信息被删除， 微信用户需要重新关联
+        @wx_follower.destroy
       end
     end
 
-    @customer = Customer.new
+    @wx_follower = WxFollower.new
   end
 
   # GET /customers/1/edit
@@ -39,14 +39,15 @@ class Mp::CustomersController < Mp::BaseController
   # POST /customers.json
   # 创建公众号 WxFollower, 创建Customer
   # 参数 短信和短信验证码
-  def create
+  #
+  def associate_customer
     wechat_oauth2 do |openid, access_info|
 
-      permitted_params = customer_params
+      permitted_params = wx_follower_params
 
       #查找用户，强制关注
       user = wechat.web_userinfo( access_info['access_token'], openid )
-      @wx_follower = WxFollower.find_or_create_by!(openid: openid) do |wx_follower|
+      @wx_follower = WxFollower.find_or_initialize_by(openid: openid) do |wx_follower|
         wx_follower.nickname = user['nickname']
         wx_follower.headimgurl = user['headimgurl']
         wx_follower.sex = user['sex']
@@ -58,13 +59,15 @@ class Mp::CustomersController < Mp::BaseController
       end
 
       @customer = Customer.find_or_initialize_by(permitted_params)
-
+      # 检查手机验证码
       verify_sms
-      unless @sms.errors.empty?
+      if @sms.errors.present?
         @sms.errors.each{|key, value|
-          @customer.errors.add(key, value)
+          @wx_follower.errors.add(key, value)
         }
       end
+      # 检查手机号码对应的客户是否存在
+
 
       respond_to do |format|
         if @customer.save
@@ -79,16 +82,12 @@ class Mp::CustomersController < Mp::BaseController
 
   end
 
-  # 如果会员账号已经存在，这时需要关联会员账号和微信账号
-  def associate_follower
-
-  end
 
   # PATCH/PUT /customers/1
   # PATCH/PUT /customers/1.json
   def update
     respond_to do |format|
-      if @customer.update(customer_params)
+      if @customer.update(wx_follower_params)
         format.html { redirect_to @customer, notice: 'Customer was successfully updated.' }
         format.json { render :show, status: :ok, location: @customer }
       else
@@ -110,7 +109,7 @@ class Mp::CustomersController < Mp::BaseController
 
   private
     # Use callbacks to share common setup or constraints between actions.
-    def set_customer
+    def set_wx_follower
       wechat_oauth2 do |openid|
         @wx_follower = WxFollower.find_by_openid( openid )
         @customer =  @wx_follower.try(:customer)
@@ -123,15 +122,15 @@ class Mp::CustomersController < Mp::BaseController
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
-    def customer_params
-      params.require(:customer).permit(:game_player_id, :openid)
+    def wx_follower_params
+      params.require(:wx_follower).permit(:mobile, :verify_code)
     end
 
     def verify_sms
-      permitted_params = customer_params
+      permitted_params = wx_follower_params
       serialized_sms = session[:sms]||{}
       # sms serialized as json in session, it is string key hash here
-      @sms = Sms.new( phone: serialized_sms['phone'], code: serialized_sms['code'], send_at: serialized_sms['send_at'])
-      @sms.verify_sign_up_sms( permitted_params['cellphone'],permitted_params['verification_code'])
+      @sms = Sms.new( mobile: serialized_sms['mobile'], verify_code: serialized_sms['verify_code'], send_at: serialized_sms['send_at'])
+      @sms.verify_sign_up_sms( permitted_params['mobile'],permitted_params['verify_code'])
     end
 end

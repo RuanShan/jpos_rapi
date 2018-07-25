@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180721115306) do
+ActiveRecord::Schema.define(version: 20180722115306) do
 
   create_table "campaign_settings", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.integer "campaign_id"
@@ -112,6 +112,7 @@ ActiveRecord::Schema.define(version: 20180721115306) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "number", limit: 64, default: "", null: false
+    t.string "verify_code", limit: 12
     t.index ["deleted_at"], name: "index_spree_users_on_deleted_at"
     t.index ["mobile", "email"], name: "index_users_on_mobile", unique: true
   end
@@ -2158,6 +2159,8 @@ ActiveRecord::Schema.define(version: 20180721115306) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "customer_id"
+    t.string "mobile", limit: 24
+    t.string "verify_code", limit: 12
   end
 
   create_table "wx_mp_users", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|

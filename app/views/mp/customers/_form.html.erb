@@ -1,15 +1,28 @@
-<%= simple_form_for(@vote) do |f| %>
-  <%= f.error_notification %>
+<%= form_for([:mp, @customer] ) do |f| %>
 
   <div class="form-inputs">
 
-    <%= f.input :game_player_id %>
-
-    <%= f.input :openid %>
+    <div class="weui-cell weui-cell_vcode telephone_wrapper">
+      <div class="weui-cell__hd">
+        <label for="customer_mobile" class="weui-label">手机号</label>
+      </div>
+      <div class="weui-cell__bd ">
+        <input class="weui-input" name="customer[mobile]"  type="tel" placeholder="请输入手机号" required pattern="[0-9]{11}" emptyTips="请输入手机号" notMatchTips="请输入正确的手机号">
+      </div>
+      <div class="weui-cell__ft">
+        <button id="get_vcode" type="button" class="weui-vcode-btn">获取验证码</button>
+      </div>
+    </div>
+    <div class="weui-cell">
+      <div class="weui-cell__hd"><label  for="customer_verify_code" class="weui-label">验证码</label></div>
+      <div class="weui-cell__bd">
+        <input class="weui-input" type="number" name="customer[verify_code]" placeholder="请输入验证码" required pattern="[0-9]{4}">
+      </div>
+    </div>
 
   </div>
 
-  <div class="form-actions">
-    <%= f.button :submit %>
+  <div class="form-actions weui-btn-area">
+    <%= f.button '关联会员账号', style:"width:100%", class: 'weui-btn weui-btn_primary', type: :submit %>
   </div>
 <% end %>

@@ -427,13 +427,13 @@ RailsStarter::Application.routes.draw do
 
   end
 
-################################################################################
-# wechatmore game
-################################################################################
+  ################################################################################
+  # wechatmore game
+  ################################################################################
 
 
-# For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
-namespace :api do
+  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+  namespace :api do
     namespace :v1 do
       ##############################################################################
       # wechat open
@@ -634,6 +634,18 @@ namespace :api do
   ##############################################################################
   namespace :mp do
     resources :customers
+    resources :wx_followers do
+      collection do
+        get :entry
+        post :associate_customer
+      end
+    end
   end
+  get '/please_subscribe', to: 'mp/wx_followers#please_subscribe', as: 'please_subscribe'
 
+  ##############################################################################
+  # 短信服务接口
+  ##############################################################################
+  post '/sms', to: 'sms#create', as: :get_sms_code
+  post '/sms/validate', to: 'sms#validate', as: :valiate_sms_code
 end

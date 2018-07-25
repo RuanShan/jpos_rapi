@@ -25,7 +25,7 @@ gem 'spree_backend',   path: './spree/backend'
   #gem 'jquery-ui-rails'
 
   gem 'turbolinks'
-  gem 'jquery-turbolinks'
+  #gem 'jquery-turbolinks'
 
   gem 'jbuilder', '~> 2.0'
 

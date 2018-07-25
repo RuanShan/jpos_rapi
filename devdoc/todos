@@ -36,3 +36,7 @@ https://github.com/oneclick/rubyinstaller/issues/324
 #障碍物
 #小车的背景
 #微信分享，接口，取消微信账号。
+
+JPOS 管理端
+========================================================
+管理端上传微信公众号图片，在 please_subscribe 页面显示
