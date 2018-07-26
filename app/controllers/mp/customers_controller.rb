@@ -79,11 +79,6 @@ class Mp::CustomersController < Mp::BaseController
 
   end
 
-  # 如果会员账号已经存在，这时需要关联会员账号和微信账号
-  def associate_follower
-
-  end
-
   # PATCH/PUT /customers/1
   # PATCH/PUT /customers/1.json
   def update

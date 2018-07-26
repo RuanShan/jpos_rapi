@@ -636,8 +636,9 @@ RailsStarter::Application.routes.draw do
     resources :customers
     resources :wx_followers do
       collection do
-        get :entry
+        get :order_entry
         post :associate_customer
+        get :validate_mobile
       end
     end
   end

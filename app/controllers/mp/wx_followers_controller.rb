@@ -8,7 +8,7 @@ class Mp::WxFollowersController < Mp::BaseController
 
   # 微信会员入口
   # 关联会员账号，或创建会员账号
-  def entry
+  def order_entry
     wechat_oauth2 do |openid, access_info|
       #查找用户，强制关注
       user = wechat.web_userinfo( access_info['access_token'], 'openid' )
@@ -21,7 +21,7 @@ class Mp::WxFollowersController < Mp::BaseController
 
       if @wx_follower.try(:customer)
         #如果微信用户已经关联会员账号
-        redirect_to controller: :mp_customers, action: :show
+        redirect_to  mp_wx_follower_path( @wx_follower )
       elsif @wx_follower.present?
         #customer 客户信息被删除， 微信用户需要重新关联
         @wx_follower.destroy
@@ -57,8 +57,7 @@ class Mp::WxFollowersController < Mp::BaseController
         wx_follower.country = user['country']
         wx_follower.subscribe_time = user['subscribe_time']
       end
-
-      @customer = Customer.find_or_initialize_by(permitted_params)
+      @wx_follower.assign_attributes( permitted_params )
       # 检查手机验证码
       verify_sms
       if @sms.errors.present?
@@ -66,16 +65,20 @@ class Mp::WxFollowersController < Mp::BaseController
           @wx_follower.errors.add(key, value)
         }
       end
+
       # 检查手机号码对应的客户是否存在
 
-
       respond_to do |format|
-        if @customer.save
-          format.html { redirect_to @customer, notice: 'Customer was successfully created.' }
-          format.json { render :show, status: :created, location: @customer }
+        if @wx_follower.save
+          format.html {
+            @orders = @wx_follower.customer.orders
+
+            redirect_to  mp_wx_follower_path( @wx_follower ), notice: 'wx_follower was successfully created.'
+          }
+          format.json { render :show, status: :created}
         else
           format.html { render :new }
-          format.json { render json: @customer.errors, status: :unprocessable_entity }
+          format.json { render json: @wx_follower.errors, status: :unprocessable_entity }
         end
       end
     end
@@ -107,6 +110,18 @@ class Mp::WxFollowersController < Mp::BaseController
     end
   end
 
+  # jquery.validator 调用，
+  # 检验会员的手机号码是否存在，只有存在的会员才能关联微信号
+  # params
+  #  mobile: 需要验证的电话号码
+  # response
+  #  json: { ret: 'success'|'failure'   }
+  def validate_mobile
+    mobile = params[:mobile]
+    exists = Customer.exists?( mobile: mobile )
+    render json: ( exists ? 'true' : 'false' )
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_wx_follower
@@ -131,6 +146,6 @@ class Mp::WxFollowersController < Mp::BaseController
       serialized_sms = session[:sms]||{}
       # sms serialized as json in session, it is string key hash here
       @sms = Sms.new( mobile: serialized_sms['mobile'], verify_code: serialized_sms['verify_code'], send_at: serialized_sms['send_at'])
-      @sms.verify_sign_up_sms( permitted_params['mobile'],permitted_params['verify_code'])
+      @sms.validate_for_sign_up( permitted_params['mobile'],permitted_params['verify_code'])
     end
 end
