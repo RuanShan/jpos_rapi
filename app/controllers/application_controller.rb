@@ -45,11 +45,6 @@ class ApplicationController < ActionController::Base
   end
 
 
-  def is_cors?
-Rails.logger.debug "request.host=#{request.host} local=#{request.local?} xhr=#{ request.xhr?} "
-    request.local? || request.host=~/jpos|localhost/
-  end
-
   def forbidden
     render 'errors/forbidden', status: 403
   end
