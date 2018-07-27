@@ -1,6 +1,6 @@
 <div id="sec-index" class="recent-orders">
   <div class="vip-head">
-      <a href="javascript:">
+      <a href="<%= mp_wx_follower_path(@customer.wx_follower)%>">
         <img src="/assets/mobile/wcard/icon-right.png" alt="">
       </a>
       <h1>最近订单</h1>
@@ -21,9 +21,15 @@
                 </div>
             </div>
             <div class="weui-tab__panel">
-              <div class="weui-tab__content">Page 1</div>
-              <div class="weui-tab__content" style="display:none">Page 2</div>
-              <div class="weui-tab__content" style="display:none">Page 3</div>
+              <div class="weui-tab__content">
+                  <%= render partial: 'mp/orders/incomplete_order', collection: @incomplete_orders, as: 'order' %>
+              </div>
+              <div class="weui-tab__content" style="display:none">
+                  <%= render partial: 'mp/orders/incomplete_order', collection: @working_orders, as: 'order' %>
+              </div>
+              <div class="weui-tab__content" style="display:none">
+                <%= render partial: 'mp/orders/incomplete_order', collection: @ready_orders, as: 'order' %>
+              </div>
             </div>
         </div>
     </div>

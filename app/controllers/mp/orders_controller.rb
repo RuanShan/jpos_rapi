@@ -8,9 +8,15 @@ class Mp::OrdersController < Mp::BaseController
 
   #最新订单
   def recent
-    @customer = Customer.find 2
-    
+    @customer = Customer.find 8
 
+    incomplete = @customer.orders.incomplete
+    #新订单
+    @pending_orders = incomplete.select{|o| o.group_state.blank? }
+    #工作中
+    @working_orders = incomplete.select{|o| o.group_state.present? && o.group_state!='ready' }
+    #待领取
+    @ready_orders = incomplete.select{|o|  o.group_state =='ready' }
   end
 
   # GET /orders/1
