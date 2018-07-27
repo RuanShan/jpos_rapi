@@ -18,7 +18,8 @@ module Application::DeviseSetup
   end
 
   def after_sign_in_path_for(resource_or_scope)
-    stored_location_for(resource_or_scope) || case_root_path(resource_or_scope)
+    #登录之后重定向到管理首页
+    stored_location_for(resource_or_scope) || Spree.admin_path
   end
 end
 # rubocop:enable all
