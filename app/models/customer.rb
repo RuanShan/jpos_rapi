@@ -38,7 +38,10 @@ class Customer <  ApplicationRecord
     orders.where( order_type: :normal ).count
   end
 
-
+  # 客户当前使用的充值卡
+  def prepaid_card
+    self.cards.status_enabled.style_prepaid.first
+  end
 
   private
 

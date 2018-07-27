@@ -588,46 +588,46 @@ RailsStarter::Application.routes.draw do
   ##############################################################################
   # Game Case
   ##############################################################################
-  namespace :case do
-    root to: "game_rounds#index"
-
-    resources :campaigns do
-      resources :game_rounds do
-        collection do
-          get :by_code
-        end
-      end
-
-      member do
-        get :live_screen
-        get :live_phone
-      end
-    end
-
-    #edit, delete, show
-    resources :game_rounds do
-      member do
-        get :players
-        get :player_results
-      end
-    end
-    resources :game_players
-    resources :game_settings
-    resources :stores
-
-    resources :wechat_opens, only: [:index] do
-
-    end
-
-    get 'wechat_bind', to: 'wechat_opens#bind'
-    get 'wechat_auth', to: 'wechat_opens#auth'
-
-
-    resources :wx_mp_users, except: [:edit, :show, :destroy] do
-      post :auth, :enable, :disable, :open_oauth, :close_oauth, on: :member
-      get :qrcode, :oauth, on: :collection
-    end
-  end
+  # namespace :case do
+  #   root to: "game_rounds#index"
+  #
+  #   resources :campaigns do
+  #     resources :game_rounds do
+  #       collection do
+  #         get :by_code
+  #       end
+  #     end
+  #
+  #     member do
+  #       get :live_screen
+  #       get :live_phone
+  #     end
+  #   end
+  #
+  #   #edit, delete, show
+  #   resources :game_rounds do
+  #     member do
+  #       get :players
+  #       get :player_results
+  #     end
+  #   end
+  #   resources :game_players
+  #   resources :game_settings
+  #   resources :stores
+  #
+  #   resources :wechat_opens, only: [:index] do
+  #
+  #   end
+  #
+  #   get 'wechat_bind', to: 'wechat_opens#bind'
+  #   get 'wechat_auth', to: 'wechat_opens#auth'
+  #
+  #
+  #   resources :wx_mp_users, except: [:edit, :show, :destroy] do
+  #     post :auth, :enable, :disable, :open_oauth, :close_oauth, on: :member
+  #     get :qrcode, :oauth, on: :collection
+  #   end
+  # end
 
   ##############################################################################
   # 微信公众账号用户
@@ -639,6 +639,11 @@ RailsStarter::Application.routes.draw do
         get :order_entry
         post :associate_customer
         get :validate_mobile
+      end
+    end
+    resources :orders do
+      collection do
+        get :recent
       end
     end
   end

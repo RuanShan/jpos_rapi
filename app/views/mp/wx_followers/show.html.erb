@@ -1,22 +1,95 @@
-<div class="clear-block">
-  <div class="left">
-    <%= @wx_follower.nickname %>
-    <%= image_tag @wx_follower.headimgurl %>
-  </div>
-   永峰皮具头部
-  <div class="right"> 关闭 </div>
-</div>
+<div class="stage" id="stage">
+  <div> 永峰皮具头部 </div>
+  <!-- 会员卡首页 start -->
+  <section class="index" id="sec-index">
+    <div class="card-img"> <!-- no-card 没有领卡显示领卡按钮 -->
+      <div class="img-bg">
+        <%=image_tag 'mp/vcard.jpg' %>
+        <div class="card-logo">
+          <%= image_tag @wx_follower.headimgurl %>
+        </div>
+        <div class="card-vip" ><%= @wx_follower.nickname %></div>
+        <div class="card-name" >
+          <p>会员卡等级</p>
+          <p>会员卡号</p>
+        </div>
+      </div>
+      <div class="card-btn">
 
-<div>
-  基本信息统计
-  消费多少单， 会员卡余额，
-</div>
+      </div>
+    </div>
+    <!-- tab box start -->
+    <div class="item-box">
+      <div class="item">
+        <a href="#">
+          <b>0</b>
+          <span>当前金额</span>
+        </a>
+      </div>
+      <% if false %>
+        <div class="item cur">
+          <a href="#">
+            <b><i class="img img-1"></i></b>
+            <span>会员卡充值</span>
+          </a>
+        </div>
+      <% end %>
+      <div class="item">
+        <a href="#">
+          <b>0</b>
+          <span>可用积分</span>
+        </a>
+      </div>
+    </div>
+    <!-- tab box end -->
+    <!-- list box start -->
+    <div class="main">
+      <div class="list-box recent-order-states">
+        最近订单
+        <div class="item-box">
+          <div class="item">
+            <a href="#" class="recent-order-state order-state-new">
+            <div class="img-wrap" style="width: 3.5em; display: block; margin: 5px auto 0;position:relative;">
+            <%=image_tag 'mp/pic_160.png' %>
+            <div class="weui-badge" style="position: absolute;top: -.4em;right: -.4em;">8</div>
+            </div>
+            新订单
+            </a>
+          </div>
+          <div class="item">
+            工作中
+          </div>
+          <div class="item">
+            待领取
+          </div>
+        </div>
+      </div>
 
-<p id="notice"><%= notice %></p>
+      <div class="list-box">
+        <dl>
+          <dt class="border">
+            <a class="icon-right" href="">
+              <i class="icon icon-2"></i>
+              <span>我的订单</span>
+              <div class="num">xx</div>
+            </a>
+          </dt>
+        </dl>
+        <dl>
+          <dt class="border">
+            <a class="icon-right" href="">
+              <i class="icon icon-3"></i>
+              <span>我的充值</span>
+              <div class="num">xx</div>
+            </a>
+          </dt>
+        </dl>
+      </div>
 
-<div>
-  <table>
-    
-  </table>
-  订单列表 15
+    </div>
+    <!-- list box end -->
+  </section>
+  <!-- 会员卡首页 end -->
+
+
 </div>

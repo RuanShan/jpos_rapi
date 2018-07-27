@@ -46,6 +46,9 @@ $(document).on("click", "#b_get_verify_code", function(event) {
 //  }
 //});
 
+
+
+
 $(document).on("ready page:load", function() {
   console.log('document.ready page:load')
   var wx_follower_validator = $(".new_wx_follower").validate({
@@ -92,4 +95,6 @@ $(document).on("ready page:load", function() {
     }
   })
   Jpos.wx_follower_validator = wx_follower_validator;
+
+
 });

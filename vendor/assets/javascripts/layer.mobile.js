@@ -4,11 +4,11 @@
  @Author：贤心
  @Site：http://layer.layui.com/mobie/
  @License：LGPL
-    
+
  */
 
 ;!function(win){
-  
+
 "use strict";
 
 var doc = document, query = 'querySelectorAll', claname = 'getElementsByClassName', S = function(s){
@@ -31,7 +31,7 @@ var ready = {
       newobj[i] = obj[i];
     }
     return newobj;
-  }, 
+  },
   timer: {}, end: {}
 };
 
@@ -54,7 +54,7 @@ Layer.prototype.view = function(){
   that.id = layerbox.id = classs[0] + index;
   layerbox.setAttribute('class', classs[0] + ' ' + classs[0]+(config.type || 0));
   layerbox.setAttribute('index', index);
-  
+
   //标题区域
   var title = (function(){
     var titype = typeof config.title === 'object';
@@ -62,7 +62,7 @@ Layer.prototype.view = function(){
     ? '<h3 style="'+ (titype ? config.title[1] : '') +'">'+ (titype ? config.title[0] : config.title)  +'</h3>'
     : '';
   }());
-  
+
   //按钮区域
   var button = (function(){
     typeof config.btn === 'string' && (config.btn = [config.btn]);
@@ -76,20 +76,20 @@ Layer.prototype.view = function(){
     }
     return '<div class="layui-m-layerbtn">'+ btndom + '</div>';
   }());
-  
+
   if(!config.fixed){
     config.top = config.hasOwnProperty('top') ?  config.top : 100;
     config.style = config.style || '';
     config.style += ' top:'+ ( doc.body.scrollTop + config.top) + 'px';
   }
-  
+
   if(config.type === 2){
     config.content = '<i></i><i class="layui-m-layerload"></i><i></i><p>'+ (config.content||'') +'</p>';
   }
-  
+
   if(config.skin) config.anim = 'up';
   if(config.skin === 'msg') config.shade = false;
-  
+
   layerbox.innerHTML = (config.shade ? '<div '+ (typeof config.shade === 'string' ? 'style="'+ config.shade +'"' : '') +' class="layui-m-layershade"></div>' : '')
   +'<div class="layui-m-layermain" '+ (!config.fixed ? 'style="position:static;"' : '') +'>'
     +'<div class="layui-m-layersection">'
@@ -100,32 +100,32 @@ Layer.prototype.view = function(){
       +'</div>'
     +'</div>'
   +'</div>';
-  
+
   if(!config.type || config.type === 2){
     var dialogs = doc[claname](classs[0] + config.type), dialen = dialogs.length;
     if(dialen >= 1){
       layer.close(dialogs[0].getAttribute('index'))
     }
   }
-  
+
   document.body.appendChild(layerbox);
   var elem = that.elem = S('#'+that.id)[0];
   config.success && config.success(elem);
-  
+
   that.index = index++;
   that.action(config, elem);
 };
 
 Layer.prototype.action = function(config, elem){
   var that = this;
-  
+
   //自动关闭
   if(config.time){
     ready.timer[that.index] = setTimeout(function(){
       layer.close(that.index);
     }, config.time*1000);
   }
-  
+
   //确认取消
   var btn = function(){
     var type = this.getAttribute('type');
@@ -142,7 +142,7 @@ Layer.prototype.action = function(config, elem){
       ready.touch(btns[ii], btn);
     }
   }
-  
+
   //点遮罩关闭
   if(config.shade && config.shadeClose){
     var shade = elem[claname]('layui-m-layershade')[0];
@@ -157,13 +157,13 @@ Layer.prototype.action = function(config, elem){
 win.layer = {
   v: '2.0',
   index: index,
-  
+
   //核心方法
   open: function(options){
     var o = new Layer(options || {});
     return o.index;
   },
-  
+
   close: function(index){
     var ibox = S('#'+classs[0]+index)[0];
     if(!ibox) return;
@@ -174,7 +174,7 @@ win.layer = {
     typeof ready.end[index] === 'function' && ready.end[index]();
     delete ready.end[index];
   },
-  
+
   //关闭所有layer层
   closeAll: function(){
     var boxs = doc[claname](classs[0]);
@@ -187,22 +187,14 @@ win.layer = {
 'function' == typeof define ? define(function() {
   return layer;
 }) : function(){
-  
+
   var js = document.scripts, script = js[js.length - 1], jsPath = script.src;
   var path = jsPath.substring(0, jsPath.lastIndexOf("/") + 1);
-  
+
   //如果合并方式，则需要单独引入layer.css
-  if(script.getAttribute('merge')) return; 
-  
-  document.head.appendChild(function(){
-    var link = doc.createElement('link');
-    link.href = path + 'need/layer.css?2.0';
-    link.type = 'text/css';
-    link.rel = 'styleSheet'
-    link.id = 'layermcss';
-    return link;
-  }());
-  
+  if(script.getAttribute('merge')) return;
+
+
 }();
 
 }(window);

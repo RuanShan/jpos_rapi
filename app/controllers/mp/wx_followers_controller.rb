@@ -71,8 +71,9 @@ class Mp::WxFollowersController < Mp::BaseController
       respond_to do |format|
         if @wx_follower.save
           format.html {
-            @orders = @wx_follower.customer.orders
-
+            #@orders = @wx_follower.customer.orders
+            @customer = @wx_follower.customer
+            @prepaid_card = @wx_follower.customer.prepaid_card
             redirect_to  mp_wx_follower_path( @wx_follower ), notice: 'wx_follower was successfully created.'
           }
           format.json { render :show, status: :created}

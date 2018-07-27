@@ -13,7 +13,6 @@
 // July 14, 2016: Temporarily remove turbolinks until can figure out conflict with bootstrap nav bar.
 //
 //= require jquery3
-//= require jquery.turbolinks
 //= require jquery_ujs
 //= require tether.min
 //= require bootstrap

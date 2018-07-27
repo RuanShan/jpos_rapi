@@ -2,8 +2,9 @@
 //= require jquery_ujs
 //= require cable.js
 //= require jquery.validate.min.js
-//= require jquery.layermodel
 //= require weui.js
+//= require layer.mobile.js
 //= require mp/util.js
-//= require mp/app.js
+//= require mp/followers.js
+//= require mp/orders.js
 //= require turbolinks

@@ -49,10 +49,17 @@ module Spree
     attr_accessor :target_shipment
     attr_accessor :code #会员卡号，老客购买新卡子订单，需要提供卡号
 
-    enum state: { done: 1, pending: 0 }
+    #enum state: { done: 1, pending: 0 }
 
     self.whitelisted_ransackable_associations = %w[variant]
     self.whitelisted_ransackable_attributes = %w[variant_id price]
+
+    #初始化为待处理， 当确认工作量后 转为 done
+    state_machine initial: :pending, use_transactions: false do
+      event :fulfill do
+        transition from: :pending, to: :done
+      end
+    end
 
     def copy_price
       if variant

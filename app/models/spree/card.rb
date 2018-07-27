@@ -12,8 +12,9 @@ module Spree
     belongs_to :creator, class_name: 'User', foreign_key: 'created_by_id', optional: true
     belongs_to :sale_day, ->{ today }, class_name: 'SaleDay', counter_cache: "new_cards_count",
     primary_key: 'user_id', foreign_key: 'created_by_id'
-
+    # 会员卡的可用和禁用状态
     enum  status:{ enabled: 1, disabled: 0 }, _prefix: true
+    # 次卡 和 充值卡
     enum  style:{ counts: 1, prepaid: 0 }, _prefix: true
 
     validates :amount_used, :name, :amount, :code, :customer,  presence: true
