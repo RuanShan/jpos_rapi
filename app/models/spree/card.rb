@@ -1,6 +1,7 @@
 module Spree
   class Card < ActiveRecord::Base
     #include CalculatedAdjustments
+    acts_as_paranoid
 
     UNACTIVATABLE_ORDER_STATES = ["complete", "awaiting_return", "returned"]
 
@@ -73,22 +74,57 @@ module Spree
       ['checkout', 'pending'].include?(payment.state)
     end
 
+    #支付
     def capture!( payment )
+      self.order_id = payment.order_id
       self.amount_used += payment.amount
       self.save!
     end
 
+    #充值
     def deposit!( line_item )
       #当为position = 1， 表示为新增卡的充值记录
-      position = self.card_transactions.count + 1
+      card_transaction = self.card_transactions.create!( order: line_item.order, amount: line_item.price, amount_left: self.amount, reason: 'deposit')
+      card_transaction.deposit
+    end
 
-      self.card_transactions.create!( order: line_item.order, amount: line_item.price, amount_left: self.amount, position: position )
-      self.amount += line_item.price
-      self.save!
+    #结账支付前授权
+    def authorize(amount, order_currency, options = {})
+      authorization_code = generate_authorization_code
+      if validate_authorization(amount, order_currency)
+        order = Spree::Order.find_by_number options[:order_number]
+        self.card_transactions.create!( order:order,  amount: amount, amount_left: self.amount, reason: 'consume', auth_code: authorization_code  )
+        authorization_code
+      else
+        errors.add(:base, Spree.t('store_credit_payment_method.insufficient_authorized_amount'))
+        false
+      end
+    end
+
+    #支付
+    def capture( amount, auth_code, gateway_options )
+      card_transaction = self.card_transactions.find_by( auth_code: auth_code)
+
+      card_transaction.capture
+
+      auth_code
+    end
+
+    def cancel( auth_code )
+      card_transaction = self.card_transactions.find_by( auth_code: auth_code)
+
+      new_card_transaction = self.card_transactions.create!( order: card_transaction.order,  amount: card_transaction.amount, amount_left: self.amount, reason: 'canceled', auth_code: generate_authorization_code  )
+
+      new_card_transaction.capture
     end
 
     private
-
+    def validate_authorization(amount, order_currency)
+      if amount_remaining.to_d < amount.to_d
+        errors.add(:base, Spree.t('store_credit_payment_method.insufficient_funds'))
+      end
+      errors.blank?
+    end
 
     def generate_code
       until self.code.present? && self.class.where(code: self.code).count == 0

@@ -35,6 +35,13 @@ class Mp::WxFollowersController < Mp::BaseController
   def edit
   end
 
+  def show
+    @customer = @wx_follower.customer
+    @order_count = @customer.orders.order_type_normal.count
+
+    @card_total = @customer.orders.order_type_card.sum(:total)
+  end
+
   # POST /customers
   # POST /customers.json
   # 创建公众号 WxFollower, 创建Customer

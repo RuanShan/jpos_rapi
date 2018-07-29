@@ -1,22 +1,23 @@
 <div class="stage" id="stage">
-  <div> 永峰皮具头部 </div>
+  <div>
+    永峰皮具头部
+  </div>
   <!-- 会员卡首页 start -->
   <section class="index" id="sec-index">
-    <div class="card-img"> <!-- no-card 没有领卡显示领卡按钮 -->
+    <div class="card-img">
+      <!-- no-card 没有领卡显示领卡按钮 -->
       <div class="img-bg">
         <%=image_tag 'mp/vcard.jpg' %>
         <div class="card-logo">
           <%= image_tag @wx_follower.headimgurl %>
         </div>
-        <div class="card-vip" ><%= @wx_follower.nickname %></div>
-        <div class="card-name" >
+        <div class="card-vip"><%= @wx_follower.nickname %></div>
+        <div class="card-name">
           <p>会员卡等级</p>
           <p>会员卡号</p>
         </div>
       </div>
-      <div class="card-btn">
-
-      </div>
+      <div class="card-btn"></div>
     </div>
     <!-- tab box start -->
     <div class="item-box">
@@ -29,7 +30,9 @@
       <% if false %>
         <div class="item cur">
           <a href="#">
-            <b><i class="img img-1"></i></b>
+            <b>
+              <i class="img img-1"></i>
+            </b>
             <span>会员卡充值</span>
           </a>
         </div>
@@ -48,19 +51,31 @@
         最近订单
         <div class="item-box">
           <div class="item">
-            <a href="#" class="recent-order-state order-state-new">
-            <div class="img-wrap" style="width: 3.5em; display: block; margin: 5px auto 0;position:relative;">
-            <%=image_tag 'mp/pic_160.png' %>
-            <div class="weui-badge" style="position: absolute;top: -.4em;right: -.4em;">8</div>
-            </div>
-            新订单
+            <a href="<%= recent_mp_orders_path(group_state: :pending)%>" class="recent-order-state order-state-new">
+              <div class="img-wrap" style="width: 2.5em; display: block; margin: 5px auto 0;position:relative;">
+                <%=image_tag 'mp/pic_160.png' %>
+                <div class="weui-badge" style="position: absolute;top: -.4em;right: -.4em;">8</div>
+              </div>
+              新订单
             </a>
           </div>
           <div class="item">
-            工作中
+            <a href="<%= recent_mp_orders_path(group_state: :working)%>" class="recent-order-state order-state-new">
+              <div class="img-wrap" style="width: 2.5em; display: block; margin: 5px auto 0;position:relative;">
+                <%=image_tag 'mp/pic_160.png' %>
+                <div class="weui-badge" style="position: absolute;top: -.4em;right: -.4em;">8</div>
+              </div>
+              工作中
+            </a>
           </div>
           <div class="item">
-            待领取
+            <a href="<%= recent_mp_orders_path(group_state: :ready)%>" class="recent-order-state order-state-new">
+              <div class="img-wrap" style="width: 2.5em; display: block; margin: 5px auto 0;position:relative;">
+                <%=image_tag 'mp/pic_160.png' %>
+                <div class="weui-badge" style="position: absolute;top: -.4em;right: -.4em;">8</div>
+              </div>
+              待领取
+            </a>
           </div>
         </div>
       </div>
@@ -68,19 +83,19 @@
       <div class="list-box">
         <dl>
           <dt class="border">
-            <a class="icon-right" href="">
+            <a class="icon-right" href="<%= normal_mp_orders_path%>">
               <i class="icon icon-2"></i>
               <span>我的订单</span>
-              <div class="num">xx</div>
+              <div class="num"><%= @order_count %></div>
             </a>
           </dt>
         </dl>
         <dl>
           <dt class="border">
-            <a class="icon-right" href="">
+            <a class="icon-right" href="<%= card_mp_orders_path%>">
               <i class="icon icon-3"></i>
               <span>我的充值</span>
-              <div class="num">xx</div>
+              <div class="num">￥<%= @card_total.to_i %></div>
             </a>
           </dt>
         </dl>
@@ -90,6 +105,5 @@
     <!-- list box end -->
   </section>
   <!-- 会员卡首页 end -->
-
 
 </div>

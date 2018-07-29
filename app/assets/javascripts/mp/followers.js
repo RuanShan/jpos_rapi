@@ -49,8 +49,8 @@ $(document).on("click", "#b_get_verify_code", function(event) {
 
 
 
-$(document).on("ready page:load", function() {
-  console.log('document.ready page:load')
+$(document).on("ready turbolinks:load", function() {
+  console.log('document.ready turbolinks:load')
   var wx_follower_validator = $(".new_wx_follower").validate({
     onkeyup:false,
     rules: {

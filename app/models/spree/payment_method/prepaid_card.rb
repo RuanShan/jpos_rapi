@@ -17,21 +17,11 @@ module Spree
     end
 
     def authorize(amount_in_cents, prepaid_card, gateway_options = {})
-      if prepaid_card.nil?
-        ActiveMerchant::Billing::Response.new(false, Spree.t('prepaid_card_payment_method.unable_to_find'), {}, {})
-      else
-        action = -> (prepaid_card) do
-          prepaid_card.authorize(amount_in_cents / 100.0.to_d, order_number: get_order_number(gateway_options))
-        end
-        handle_action_call(prepaid_card, action, :authorize)
-      end
+      simulated_successful_billing_response
     end
 
     def capture(amount_in_cents, auth_code, gateway_options = {})
-      action = -> (prepaid_card) do
-        prepaid_card.capture(amount_in_cents / 100.0.to_d, auth_code, order_number: get_order_number(gateway_options))
-      end
-      handle_action(action, :capture, auth_code)
+      simulated_successful_billing_response
     end
 
     def void(auth_code, gateway_options = {})
@@ -53,12 +43,17 @@ module Spree
       end
     end
 
-    def credit(amount_in_cents, auth_code, gateway_options = {})
-      action = -> (prepaid_card) do
-        prepaid_card.credit(amount_in_cents / 100.0.to_d, auth_code, order_number: get_order_number(gateway_options))
-      end
+    def credit(*)
+      simulated_successful_billing_response
+    end
 
-      handle_action(action, :credit, auth_code)
+    #整个订单被取消时，每个支付方式被设置为 void
+    def cancel(auth_code)
+      Rails.logger.debug "prepaid_card cancel #{auth_code}"
+      action = lambda do |prepaid_card|
+        prepaid_card.cancel(auth_code)
+      end
+      handle_action(action, :cancel, auth_code)
     end
 
     def source_required?
@@ -83,7 +78,7 @@ module Spree
     end
 
     def handle_action(action, action_name, auth_code)
-      prepaid_card = CardTransaction.find_by(authorization_code: auth_code).try(:prepaid_card)
+      prepaid_card = CardTransaction.find_by(auth_code: auth_code).try(:card)
 
       if prepaid_card.nil?
         ActiveMerchant::Billing::Response.new(
@@ -99,6 +94,10 @@ module Spree
 
     def get_order_number(gateway_options)
       gateway_options[:order_id].split('-').first if gateway_options[:order_id]
+    end
+
+    def simulated_successful_billing_response
+      ActiveMerchant::Billing::Response.new(true, '', {}, {})
     end
   end
 end

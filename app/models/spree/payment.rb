@@ -36,7 +36,7 @@ module Spree
     # invalidate previously entered payments
     after_create :invalidate_old_payments
     after_create :create_eligible_credit_event
-    after_create :create_eligible_card_event
+    
 
     attr_accessor :source_attributes, :request_env, :capture_on_dispatch
 
@@ -255,12 +255,12 @@ module Spree
                                 action_authorization_code: response_code)
     end
 
-    #支付方式为会员卡时，调整会员卡余额
-    def create_eligible_card_event
-Rails.logger.debug "member_card?=#{member_card?} source=#{source.inspect}"
-      return unless member_card? && source.is_a?(Spree::Card)
-      source.capture!(self)
-    end
+    #支付方式为会员卡时，调整会员卡余额,  payment.purchase 方法中创建 card_transaction
+    #def create_eligible_card_event
+    #  Rails.logger.debug "member_card?=#{member_card?} source=#{source.inspect}"
+    #  return unless member_card? && source.is_a?(Spree::Card)
+    #  source.capture!(self)
+    #end
 
     def invalidate_old_payments
       # invalid payment or store_credit payment shouldn't invalidate other payment types

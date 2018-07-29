@@ -33,8 +33,8 @@ module Spree
 
     before_destroy :destroy_inventory_units
 
-    #客户端传过来的会员卡ID
-    before_create :associate_with_card, if: -> { card_id > 0 || code.present? }
+    # 在订单创建成功，并支付成功后，创建 会员卡ID
+    #before_create :associate_with_card, if: -> { card_id > 0 || code.present? }
 
     after_save :update_inventory
     after_save :update_adjustments
@@ -132,13 +132,12 @@ module Spree
       sale_unit_price * quantity * discount_percent / 100
     end
 
-    private
     def associate_with_card
       #客户没有卡，创建新卡
       if self.code.present?
         card = create_card!( variant: variant, customer: self.user) do |new_card|
           new_card.code = self.code
-          new_card.amount = self.price
+          new_card.amount = 0
           new_card.name = variant.name #产品名字
           new_card.creator = order.creator
           new_card.style = variant.product.card_style #卡的种类
@@ -151,13 +150,24 @@ module Spree
         end
         self.card_id = card.id
       end
-      #如果产品是一张充值卡
+      #如果是充值订单
       if self.card_id > 0
         # 充值
         #self.card.transactions.create!( order: order, amount: self.price)
         Spree::Card.find(card_id).deposit!( self )
       end
     end
+
+    def cancel_associated_card
+      if self.code.present?
+        #删除创建的会员卡
+        Spree::Card.find_by( code: self.code).destroy()
+        
+      end
+    end
+
+    private
+
 
     def ensure_valid_quantity
       self.quantity = 0 if quantity.nil? || quantity < 0

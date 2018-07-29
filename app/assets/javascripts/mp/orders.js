@@ -13,10 +13,16 @@ $(document).on('click', '.recent-order-states .recent-order-state', function () 
   //});
 });
 
-$(document).on("ready page:load", function() {
-
+$(document).on("ready turbolinks:load", function() {
+  var states = ['pending', 'working', 'ready'];
+  var initial = 0;
+  for(var i = 0; i< states.length; i++ ){
+    if( states[i] == Jpos.select_group_state){
+      initial = i; break;
+    }
+  }
   weui.tab('#recent-orders-tab',{
-      defaultIndex: 0,
+      defaultIndex: initial,
       onChange: function(index){
           console.log(index);
      }

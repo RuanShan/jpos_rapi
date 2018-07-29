@@ -683,7 +683,7 @@ module Spree
       # lock all adjustments (coupon promotions, etc.)
       #all_adjustments.each(&:close)
       # update payment and shipment(s) states, and save
-      payments.each(&:complete)
+      payments.each(&:purchase!)
       updater.update_payment_state
       #shipments.each do |shipment|
       #  shipment.update!(self)
@@ -698,6 +698,8 @@ module Spree
       #updater.run_hooks
       #不能 touch completed_at, 删除时会导致 OrderInventory.verify 异常
       #touch :completed_at
+      #如果是会员卡订单， 购买，充值等
+      associate_card_if_needed if self.order_type_card?
       #根据配置，发出公众号、短信，或邮件通知
       notify_customer
     end
@@ -743,6 +745,11 @@ module Spree
       MpMsgJob.perform_later(self) if enable_mp_msg
     end
 
+    def associate_card_if_needed
+      if self.order_type_card?
+        self.line_items.each{ |item| item.associate_with_card  }
+      end
+    end
 
     def link_by_email
       self.email = user.email if user
@@ -770,12 +777,14 @@ module Spree
     end
 
     def after_cancel
-      #shipments.each(&:cancel!)
-      line_item_groups.uncanceled.each(&:cancel!)
+      # shipments.each(&:cancel!)
+      # 订单取消，不需要每个物品再分别取消
+      # line_item_groups.uncanceled.each(&:cancel!)
       payments.completed.each(&:cancel!)
 
       # Free up authorized store credits
       #payments.store_credits.pending.each(&:void!)
+      #associate_card_if_needed if self.order_type_card?
 
       #send_cancel_email
       update_with_updater!

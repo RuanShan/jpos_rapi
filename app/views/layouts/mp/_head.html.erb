@@ -1,9 +1,15 @@
 <script>
 Jpos = {
+	select_group_state: 'pending',
 	routes: {}
 }
 Jpos.routes.get_sms_code_url = <%== get_sms_code_url.to_json %>
 Jpos.routes.validate_wx_follower_mobile_url = <%== validate_mobile_mp_wx_followers_url.to_json %>
 Jpos.routes.associate_wx_follower_to_customer_url = <%== associate_customer_mp_wx_followers_url.to_json %>
 Jpos.routes.wx_followers_url = <%== mp_wx_followers_url.to_json %>
+
+
+<% if @group_state %>
+Jpos.select_group_state = <%== @group_state.to_json %>
+<% end %>
 </script>

@@ -3,12 +3,13 @@
 #
 #
 class Mp::OrdersController < Mp::BaseController
-
+  before_action :set_wx_follower
   before_action :set_order, only: [:show, :edit, :update, :destroy]
 
   #最新订单
   def recent
-    @customer = Customer.find 8
+    @group_state = params[:group_state] || 'pending'
+
 
     incomplete = @customer.orders.incomplete
     #新订单
@@ -17,6 +18,17 @@ class Mp::OrdersController < Mp::BaseController
     @working_orders = incomplete.select{|o| o.group_state.present? && o.group_state!='ready' }
     #待领取
     @ready_orders = incomplete.select{|o|  o.group_state =='ready' }
+  end
+
+  # 物品维修订单
+  def normal
+    @orders = @customer.orders.order_type_normal
+  end
+
+  # 充值卡订单
+  def card
+    @orders = @customer.orders.order_type_card
+
   end
 
   # GET /orders/1
@@ -117,16 +129,20 @@ class Mp::OrdersController < Mp::BaseController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_order
+    def set_wx_follower
       wechat_oauth2 do |openid|
         @wx_follower = WxFollower.find_by_openid( openid )
-        @order =  @wx_follower.try(:order)
         #微信用户没有关联会员账号
-        if @order.blank?
-          redirect_to action: :new
+        if @wx_follower.blank?
+          redirect_to follower_order_entry_path
         end
+        @customer = @wx_follower.customer
       end
+    end
+
+    # Use callbacks to share common setup or constraints between actions.
+    def set_order
+
 
     end
 

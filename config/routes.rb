@@ -644,10 +644,13 @@ RailsStarter::Application.routes.draw do
     resources :orders do
       collection do
         get :recent
+        get :normal
+        get :card
       end
     end
   end
   get '/please_subscribe', to: 'mp/wx_followers#please_subscribe', as: 'please_subscribe'
+  get '/follower_order_entry', to: 'mp/wx_followers#order_entry', as: 'follower_order_entry'
 
   ##############################################################################
   # 短信服务接口
