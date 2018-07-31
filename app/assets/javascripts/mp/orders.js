@@ -13,7 +13,7 @@ $(document).on('click', '.recent-order-states .recent-order-state', function () 
   //});
 });
 
-$(document).on("ready turbolinks:load", function() {
+$(document).on(" turbolinks:load", function() {
   var states = ['pending', 'working', 'ready'];
   var initial = 0;
   for(var i = 0; i< states.length; i++ ){
