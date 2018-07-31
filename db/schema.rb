@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180729115309) do
+ActiveRecord::Schema.define(version: 20180731115309) do
 
   create_table "campaign_settings", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.integer "campaign_id"
@@ -543,6 +543,7 @@ ActiveRecord::Schema.define(version: 20180729115309) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "deleted_at"
+    t.integer "store_id"
     t.index ["user_id"], name: "index_spree_cards_on_user_id"
   end
 

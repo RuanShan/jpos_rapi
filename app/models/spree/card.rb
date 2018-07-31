@@ -5,12 +5,15 @@ module Spree
 
     UNACTIVATABLE_ORDER_STATES = ["complete", "awaiting_return", "returned"]
 
+    belongs_to :store
     belongs_to :variant
     belongs_to :customer, class_name: 'Customer', foreign_key: 'user_id'
 
     has_many :line_items, class_name: 'Spree::LineItem'
     has_many :card_transactions, class_name: 'Spree::CardTransaction'
+    #会员卡创建人员是必须的，以便查找 卡所属 店铺ID
     belongs_to :creator, class_name: 'User', foreign_key: 'created_by_id', optional: true
+
     belongs_to :sale_day, ->{ today }, class_name: 'SaleDay', counter_cache: "new_cards_count",
     primary_key: 'user_id', foreign_key: 'created_by_id'
     # 会员卡的可用和禁用状态

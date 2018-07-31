@@ -1,3 +1,2 @@
 object false
-node(:error) { 'session expired' }
-node(:ret) { 'expired' }
+node(:error) { 'session_expired' }

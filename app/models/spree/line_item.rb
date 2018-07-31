@@ -139,6 +139,7 @@ module Spree
           new_card.code = self.code
           new_card.amount = 0
           new_card.name = variant.name #产品名字
+          new_card.store = order.store
           new_card.creator = order.creator
           new_card.style = variant.product.card_style #卡的种类
           if variant.card_expire_in > 0
@@ -162,7 +163,7 @@ module Spree
       if self.code.present?
         #删除创建的会员卡
         Spree::Card.find_by( code: self.code).destroy()
-        
+
       end
     end
 
