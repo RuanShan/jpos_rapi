@@ -28,6 +28,7 @@ module Spree
             if params[:order].present?
               order_attributes = deposit_order_params( @customer )
               @order = Spree::Order.create!(order_attributes)
+              @order.complete_via_pos
             end
             respond_with(@customer, status: 201, default_template: :show)
           else

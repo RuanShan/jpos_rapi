@@ -74,7 +74,7 @@ class Customer <  ApplicationRecord
     end
 
     def new_candidate(length)
-      prefix = "M%02d" % [ store_id ]
+      prefix = "M%02d" % [ self.store_id ]
       characters = 10
       prefix + SecureRandom.random_number(characters**length).to_s(characters).rjust(length, '0').upcase
     end
