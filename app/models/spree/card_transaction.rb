@@ -32,7 +32,8 @@ class Spree::CardTransaction < ActiveRecord::Base
   def adjust_card_amount_used
     Rails.logger.debug "adjust_card_amount. state=#{state} "
     Rails.logger.debug "original card amount_used #{card.amount_used}"
-    self.card.amount_used += self.amount
+    # 会员卡支付时self.amount 为负数，便于统计余额。所以这里需要 减
+    self.card.amount_used -= self.amount
     self.card.save!
   end
 
