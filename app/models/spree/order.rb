@@ -683,7 +683,8 @@ module Spree
       # lock all adjustments (coupon promotions, etc.)
       #all_adjustments.each(&:close)
       # update payment and shipment(s) states, and save
-      payments.each(&:purchase!)
+      #保证会员卡，现金等支付为完成状态。
+      payments.each(&:capture!)
       updater.update_payment_state
       #shipments.each do |shipment|
       #  shipment.update!(self)

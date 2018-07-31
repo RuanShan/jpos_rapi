@@ -20,8 +20,16 @@ module Spree
       simulated_successful_billing_response
     end
 
-    def capture(amount_in_cents, auth_code, gateway_options = {})
-      simulated_successful_billing_response
+    def capture(amount_in_cents, authorize_code, gateway_options = {})
+      order_number = get_order_number(gateway_options)
+      order = Spree::Order.find_by_number( order_number )
+      prepaid_card = order.payments.where(payment_method: self).first.source
+
+      action = -> (prepaid_card) do
+        purchase_amount = amount_in_cents / 100.0.to_d
+        prepaid_card.capture(purchase_amount, authorize_code, order_number: order_number)
+      end
+      handle_action_call(prepaid_card, action, :capture)
     end
 
     def void(auth_code, gateway_options = {})
@@ -31,16 +39,8 @@ module Spree
       handle_action(action, :void, auth_code)
     end
 
-    def purchase(amount_in_cents, prepaid_card, gateway_options = {})
-      if prepaid_card.nil?
-        ActiveMerchant::Billing::Response.new(false, Spree.t('prepaid_card_payment_method.unable_to_find'), {}, {})
-      else
-        action = -> (prepaid_card) do
-          purchase_amount = amount_in_cents / 100.0.to_d
-          (authorize_code = prepaid_card.authorize(purchase_amount, order_number: get_order_number(gateway_options))) && prepaid_card.capture(purchase_amount, authorize_code, order_number: get_order_number(gateway_options))
-        end
-        handle_action_call(prepaid_card, action, :authorize)
-      end
+    def purchase(*)
+      simulated_successful_billing_response
     end
 
     def credit(*)

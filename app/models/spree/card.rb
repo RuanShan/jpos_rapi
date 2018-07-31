@@ -74,12 +74,12 @@ module Spree
       ['checkout', 'pending'].include?(payment.state)
     end
 
-    #支付
-    def capture!( payment )
-      self.order_id = payment.order_id
-      self.amount_used += payment.amount
-      self.save!
-    end
+    # #支付
+    # def capture!( payment )
+    #   self.order_id = payment.order_id
+    #   self.amount_used += payment.amount
+    #   self.save!
+    # end
 
     #充值
     def deposit!( line_item )
@@ -88,26 +88,13 @@ module Spree
       card_transaction.deposit
     end
 
-    #结账支付前授权
-    def authorize(amount, order_currency, options = {})
-      authorization_code = generate_authorization_code
-      if validate_authorization(amount, order_currency)
-        order = Spree::Order.find_by_number options[:order_number]
-        self.card_transactions.create!( order:order,  amount: amount, amount_left: self.amount, reason: 'consume', auth_code: authorization_code  )
-        authorization_code
-      else
-        errors.add(:base, Spree.t('store_credit_payment_method.insufficient_authorized_amount'))
-        false
-      end
-    end
-
     #支付
     def capture( amount, auth_code, gateway_options )
-      card_transaction = self.card_transactions.find_by( auth_code: auth_code)
 
+      order = Spree::Order.find_by_number gateway_options[:order_number]
+      card_transaction = self.card_transactions.create!( order:order,  amount: amount, amount_left: self.amount, reason: 'consume'  )
       card_transaction.capture
-
-      auth_code
+      true
     end
 
     def cancel( auth_code )
