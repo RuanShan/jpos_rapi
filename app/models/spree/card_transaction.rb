@@ -11,9 +11,10 @@ class Spree::CardTransaction < ActiveRecord::Base
 
 
   state_machine initial: :pending do
-    after_transition :pending => :completed, :do => :adjust_card_amount
+    after_transition :on=> :capture, :do => :adjust_card_amount_used
+    after_transition :on=> :deposit, :do => :adjust_card_amount
 
-    after_transition :completed => :canceled, :do => :adjust_card_amount
+    after_transition :completed => :canceled, :do => :adjust_card_amount_used
 
     #付款
     event :capture do
@@ -27,6 +28,13 @@ class Spree::CardTransaction < ActiveRecord::Base
   end
 
 
+
+  def adjust_card_amount_used
+    Rails.logger.debug "adjust_card_amount. state=#{state} "
+    Rails.logger.debug "original card amount_used #{card.amount_used}"
+    self.card.amount_used += self.amount
+    self.card.save!
+  end
 
   def adjust_card_amount
     Rails.logger.debug "adjust_card_amount. state=#{state} "

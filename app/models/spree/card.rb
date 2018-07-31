@@ -95,7 +95,7 @@ module Spree
     def capture( amount, auth_code, gateway_options )
 
       order = Spree::Order.find_by_number gateway_options[:order_number]
-      card_transaction = self.card_transactions.create!( order:order,  amount: amount, amount_left: self.amount, reason: 'consume'  )
+      card_transaction = self.card_transactions.create!( order:order,  amount: -amount, amount_left: self.amount, reason: 'consume'  )
       card_transaction.capture
       true
     end

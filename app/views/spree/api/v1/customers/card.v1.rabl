@@ -4,3 +4,5 @@ attributes *card_attributes
 node(:product_id) do |c|
   c.variant.product_id
 end
+
+node(:amount_remaining, &:amount_remaining)
