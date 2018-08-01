@@ -1526,6 +1526,7 @@ class SpreeEcommerce < ActiveRecord::Migration[5.1]
       t.string "spree_api_key", limit: 48
       t.datetime "deleted_at"
       t.string "confirmation_token"
+      t.string "mobile", limit: 24
       t.datetime "confirmed_at"
       t.datetime "confirmation_sent_at"
       t.index ["deleted_at"], name: "index_spree_users_on_deleted_at"

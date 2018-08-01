@@ -1,19 +1,11 @@
 unless Spree::PaymentMethod::PrepaidCard.all.exists?
   Spree::PaymentMethod::PrepaidCard.create(
-    name: "PrepaidCard",
-    description: "Pay by PrepaidCard",
-    active: false,
+    name: "会员卡",
+    description: "会员卡支付",
+    active: true,
     display_on: :both
   )
 end
-
-Spree::PaymentMethod::PointOfSale.where(
-  name: "POS",
-  description: "PointOfSale",
-  active: true,
-  auto_capture: true
-).first_or_create!
-
 
 Spree::PaymentMethod::Cash.where(
   name: "现金",

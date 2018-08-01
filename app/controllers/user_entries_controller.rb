@@ -102,4 +102,7 @@ class UserEntriesController < ApplicationController
       params.require(:user).permit(:username, :password)
     end
 
+    def is_cors?
+      request.local? || request.host=~/jpos|localhost/
+    end
 end
