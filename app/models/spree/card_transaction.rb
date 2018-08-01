@@ -4,6 +4,7 @@ class Spree::CardTransaction < ActiveRecord::Base
   belongs_to :order
 
   scope :reverse_chronological, -> { order(Arel.sql('spree_card_transactions.completed_at IS NULL'), completed_at: :desc, created_at: :desc) }
+  scope :deposit, ->{ where reason: :deposit }
 
   validates :amount, :card, presence: true
   #        充值       消费       取消回退
@@ -40,6 +41,8 @@ class Spree::CardTransaction < ActiveRecord::Base
   def adjust_card_amount
     Rails.logger.debug "adjust_card_amount. state=#{state} "
     Rails.logger.debug "original card amount #{card.amount}"
+    #设置充值顺序，以便知道这是第几次充值
+    self.position = self.card.card_transactions.deposit.maximum(:position).to_i + 1
     self.card.amount += self.amount
     self.card.save!
   end
