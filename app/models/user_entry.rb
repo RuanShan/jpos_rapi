@@ -36,6 +36,6 @@ class UserEntry < ApplicationRecord
   end
 
   def touch_user
-    user.touch!
+    user.touch
   end
 end

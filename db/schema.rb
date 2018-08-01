@@ -107,6 +107,7 @@ ActiveRecord::Schema.define(version: 20180801115309) do
     t.string "address"
     t.string "memo"
     t.integer "store_id"
+    t.integer "gender", default: 0, null: false
     t.datetime "deleted_at"
     t.integer "created_by_id"
     t.datetime "created_at", null: false
@@ -114,7 +115,7 @@ ActiveRecord::Schema.define(version: 20180801115309) do
     t.string "number", limit: 64, default: "", null: false
     t.string "verify_code", limit: 12
     t.index ["deleted_at"], name: "index_spree_users_on_deleted_at"
-    t.index ["mobile", "email"], name: "index_users_on_mobile", unique: true
+    t.index ["mobile"], name: "index_customers_on_mobile", unique: true
   end
 
   create_table "delayed_jobs", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -526,6 +527,7 @@ ActiveRecord::Schema.define(version: 20180801115309) do
 
   create_table "spree_cards", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.bigint "user_id"
+    t.integer "store_id"
     t.integer "created_by_id"
     t.string "code", null: false
     t.integer "style", default: 0, null: false
@@ -534,6 +536,7 @@ ActiveRecord::Schema.define(version: 20180801115309) do
     t.string "name"
     t.text "memo"
     t.datetime "sent_at"
+    t.integer "expire_in", default: 0
     t.datetime "expire_at"
     t.integer "discount_percent"
     t.integer "discount_amount"
@@ -543,7 +546,6 @@ ActiveRecord::Schema.define(version: 20180801115309) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "deleted_at"
-    t.integer "store_id"
     t.index ["user_id"], name: "index_spree_cards_on_user_id"
   end
 
@@ -646,13 +648,11 @@ ActiveRecord::Schema.define(version: 20180801115309) do
     t.string "spree_api_key", limit: 48
     t.datetime "deleted_at"
     t.string "confirmation_token"
+    t.string "mobile", limit: 24
     t.datetime "confirmed_at"
     t.datetime "confirmation_sent_at"
-    t.index ["bill_address_id"], name: "index_spree_users_on_bill_address_id"
     t.index ["deleted_at"], name: "index_spree_users_on_deleted_at"
-    t.index ["ship_address_id"], name: "index_spree_users_on_ship_address_id"
-    t.index ["site_id", "email"], name: "email_idx_unique", unique: true
-    t.index ["spree_api_key"], name: "index_spree_users_on_spree_api_key"
+    t.index ["mobile"], name: "mobile_idx_unique", unique: true
   end
 
   create_table "spree_customizable_product_options", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
