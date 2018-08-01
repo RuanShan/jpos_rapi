@@ -14,6 +14,8 @@ class UserEntry < ApplicationRecord
   after_validation  :set_state_when_nil
   validates :day, presence: true
 
+  after_save :touch_user
+
   delegate :username, to: :user
   delegate :name, to: :store, prefix: true
 
@@ -33,4 +35,7 @@ class UserEntry < ApplicationRecord
     entry.try(:state) == 'clockin' ? 'clockout'  : 'clockin'
   end
 
+  def touch_user
+    user.touch!
+  end
 end
