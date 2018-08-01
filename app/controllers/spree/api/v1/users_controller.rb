@@ -33,6 +33,7 @@ module Spree
 
           @eq = UserEntry.ransack(eq).result( distinct: true )
           @user_entries =@eq
+          Rails.logger.debug "@user_entries=#{@user_entries.inspect} "
           @users.each{|user| user.searched_entries= @user_entries.select{|entry| entry.user_id == user.id}}
           respond_with(@users)
         end
