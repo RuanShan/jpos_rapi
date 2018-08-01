@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180801115309) do
+ActiveRecord::Schema.define(version: 20180731115309) do
 
   create_table "campaign_settings", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.integer "campaign_id"
@@ -781,7 +781,6 @@ ActiveRecord::Schema.define(version: 20180801115309) do
     t.string "memo", limit: 128
     t.integer "sale_unit_price", default: 0
     t.integer "discount_percent", default: 0
-    t.string "code", limit: 16
     t.index ["order_id"], name: "index_spree_line_items_on_order_id"
     t.index ["tax_category_id"], name: "index_spree_line_items_on_tax_category_id"
     t.index ["variant_id"], name: "index_spree_line_items_on_variant_id"

@@ -29,14 +29,13 @@ module Spree
     #validates_with Stock::AvailabilityValidator
     validate :ensure_proper_currency, if: -> { order.present? }
 
-    validate :ensure_card_code_unique, if: -> { code.present? }
+    # 在订单创建成功，并支付成功后，创建 会员卡ID
+    validate :ensure_card_code_unique, if: -> { card_code.present? }
 
     before_destroy :verify_order_inventory_before_destroy, if: -> { order.has_checkout_step?('delivery') }
 
     before_destroy :destroy_inventory_units
 
-    # 在订单创建成功，并支付成功后，创建 会员卡ID
-    #before_create :associate_with_card, if: -> { card_id > 0 || code.present? }
 
     after_save :update_inventory
     after_save :update_adjustments
@@ -136,9 +135,9 @@ module Spree
 
     def associate_with_card
       #客户没有卡，创建新卡
-      if self.code.present?
+      if self.card_code.present?
         card = create_card!( variant: variant, customer: self.user) do |new_card|
-          new_card.code = self.code
+          new_card.code = self.card_code
           new_card.amount = 0
           new_card.name = variant.name #产品名字
           new_card.store = order.store
@@ -241,8 +240,8 @@ module Spree
     end
 
     def ensure_card_code_unique
-      if Spree::Card.exists?( code: code )
-        errors.add(:code, :code_existed)
+      if Spree::Card.exists?( code: card_code )
+        errors.add(:card_code, :existed)
       end
     end
 
