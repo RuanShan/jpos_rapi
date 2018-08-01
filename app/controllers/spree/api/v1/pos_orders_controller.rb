@@ -16,7 +16,7 @@ module Spree
           order_attributes[:store] = current_store
           order_attributes[:channel] = 'pos'
           @order = Spree::Order.create!(order_attributes)
-
+Rails.logger.debug( "order_params=#{order_params.inspect}" )
           if @order.contents.update_cart(order_params)
             @order.complete_via_pos
             respond_with(@order, default_template: :show, status: 201)
