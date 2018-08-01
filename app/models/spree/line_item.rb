@@ -29,6 +29,8 @@ module Spree
     #validates_with Stock::AvailabilityValidator
     validate :ensure_proper_currency, if: -> { order.present? }
 
+    validate :ensure_card_code_unique, if: -> { code.present? }
+
     before_destroy :verify_order_inventory_before_destroy, if: -> { order.has_checkout_step?('delivery') }
 
     before_destroy :destroy_inventory_units
@@ -47,7 +49,7 @@ module Spree
     delegate :is_card?, to: :product
 
     attr_accessor :target_shipment
-    attr_accessor :code #会员卡号，老客购买新卡子订单，需要提供卡号
+    # code 会员卡号，老客购买新卡子订单，需要提供卡号
 
     #enum state: { done: 1, pending: 0 }
 
@@ -235,6 +237,12 @@ module Spree
     def ensure_proper_currency
       unless currency == order.currency
         errors.add(:currency, :must_match_order_currency)
+      end
+    end
+
+    def ensure_card_code_unique
+      if Spree::Card.exists?( code: code )
+        errors.add(:code, :code_existed)
       end
     end
 
