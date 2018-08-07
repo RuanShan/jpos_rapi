@@ -243,6 +243,12 @@ textarea.input{resize:none;}
 .select{height:40px;padding:0 5px;line-height:40px;border:1px solid #ccc;-webkit-box-shadow:none;box-shadow:none;position:relative;cursor:pointer;background:#fff;}
 .select .img{position:absolute;right:3px;bottom:3px;}
 .selected .img-3{background-position:-80px 0;}
+
+.stage .title{display:table;width:100%;height:45px;line-height:44px;border-bottom:1px solid #039994;}
+.stage .title a{display:table-cell;width:25%;padding:0 10px;vertical-align:middle;}
+.stage .title a img{width:8px;height:15px;display:block;}
+.stage .title h1{display:table-cell;width:50%;color:#039994;font-size:15px;font-weight:normal;text-align:center;}
+
 /*card-img*/
 .card-img{padding:5px 7px;position:relative;}
 .img-bg{width:100%;position:relative;color:#fff;font-size:12px;}
@@ -265,10 +271,10 @@ textarea.input{resize:none;}
 .img-bg-active .state{position:absolute;font-size:10px;padding:3px 5px;color:#fff;border-radius:5px;background-color:rgba(0,0,0,.2);top:7px;margin-left:5px;}
 
 /*item-box*/
-.item-box{width:100%;height:56px;display:table;table-layout:fixed;}
+.item-box{width:100%;display:table;table-layout:fixed;}
 .item{display:table-cell;text-align:center;vertical-align:top;word-break:break-all;}
 .item:last-child{border-right-width:0;}
-.item a{display:block;height:56px;padding-top:5px;}
+.item a{display:block;padding-top:5px;}
 .item b{display:block;height:25px;line-height:25px;font-size:15px;overflow:hidden;}
 .item span{display:block;height:20px;font-size:12px;line-height:20px;overflow:hidden;}
 /*list-box*/

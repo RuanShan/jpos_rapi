@@ -70,6 +70,7 @@ p{ margin: 0;}
 .fr{ float:right;}
 .fw{ width: 100%;}
 .fa{ font-style:normal;}
+.hide{ display:none;}
 .mt20,
 .btn.mt20{margin-top: 20px;}
 .mt10,
@@ -517,14 +518,3 @@ textarea.input{min-height:100px; padding:10px; height: auto;}
 .logo{ display:block; height:20px !important; margin:0px !important; padding:0px !important}
 .logos{width:55px; height:50px; margin:0px auto 0px auto;}
 .logos p{ margin:-15px 0px 0px 0px; padding:0px; height:20px;}
-
-
-
-
-
-
-
-
-
-
-
