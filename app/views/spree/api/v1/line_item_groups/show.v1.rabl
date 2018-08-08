@@ -14,4 +14,4 @@ child images: :images do
   extends 'spree/api/v1/images/show'
 end
 
-node(:missing_image_path) { |group| image_path(group.missing_image_path) }
+node(:missing_image_url) { |group| image_url(group.missing_image_path) }

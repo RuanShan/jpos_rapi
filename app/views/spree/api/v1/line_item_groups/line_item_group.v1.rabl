@@ -10,4 +10,4 @@ child(order: :order) do
   attributes *order_attributes
 end
 
-node(:missing_image_url) { |group| image_path(group.missing_image_path) }
+node(:missing_image_url) { |group| image_url(group.missing_image_path) }
