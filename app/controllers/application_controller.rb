@@ -53,6 +53,10 @@ class ApplicationController < ActionController::Base
     render 'errors/unauthorized', status: 401
   end
 
+  def no_entry_today
+    render 'errors/no_entry_today', status: 401    
+  end
+
   def error_during_processing(exception)
     Rails.logger.error exception.message
     Rails.logger.error exception.backtrace.join("\n")

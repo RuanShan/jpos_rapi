@@ -37,9 +37,22 @@ class Mp::WxFollowersController < Mp::BaseController
 
   def show
     @customer = @wx_follower.customer
+    @prepaid_card = @customer.prepaid_card
+    #我的订单数量
     @order_count = @customer.orders.order_type_normal.count
-
+    #我的充值金额
     @card_total = @customer.orders.order_type_card.sum(:total)
+    #最近订单及物品
+    @incomplete_orders  = @customer.orders.incomplete.includes(:payments, :line_item_groups)
+    #最近订单物品
+    @line_item_groups = @incomplete_orders.map(&:line_item_groups).flatten
+    #新订单数量
+    @pending_line_item_group_count = @line_item_groups.select{|group| group.pending? }.count
+    #待领取数量
+    @ready_line_item_group_count = @line_item_groups.select{|group| group.ready? }.count
+    #工作中
+    @processing_line_item_group_count = @line_item_groups.length - @pending_line_item_group_count  - @ready_line_item_group_count
+
   end
 
   # POST /customers

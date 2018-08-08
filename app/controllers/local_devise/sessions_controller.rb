@@ -1,31 +1,110 @@
-class LocalDevise::SessionsController < Devise::SessionsController
+# frozen_string_literal: true
+
+class LocalDevise::SessionsController < DeviseController
   respond_to :html, :json
   skip_before_action :verify_authenticity_token, if: :is_cors?
 
+  prepend_before_action :require_no_authentication, only: [:new, :create, :create_by_entry]
+  prepend_before_action :allow_params_authentication!, only: [:create, :create_by_entry]
+  prepend_before_action :verify_signed_out_user, only: :destroy
+  prepend_before_action(only: [:create, :destroy, :create_by_entry]) { request.env["devise.skip_timeout"] = true }
+
+  # GET /resource/sign_in
+  def new
+    self.resource = resource_class.new(sign_in_params)
+    clean_up_passwords(resource)
+    yield resource if block_given?
+    respond_with(resource, serialize_options(resource))
+  end
+
+  #检查用户是否有签到记录， 如果有签到记录，则登录，否则不允许登录，IPAD使用
+  def create_by_entry
+    Rails.logger.debug( "create_by_entry - auth_options=#{auth_options.inspect}")
+    self.resource = warden.authenticate!(auth_options)
+
+    unless self.resource.user_entries.today.any?
+      no_entry_today and return
+    end
+
+    set_flash_message!(:notice, :signed_in)
+    sign_in(resource_name, resource)
+    yield resource if block_given?
+
+    #取得今日签到信息
+    resource.today_entries = resource.user_entries.today
+    Rails.logger.debug "resource=#{resource.object_id} resource.today_entries =#{resource.today_entries.inspect} #{after_sign_in_path_for(resource)}"
+    respond_to do |format|
+      format.json 
+    end
+  end
+
   # POST /resource/sign_in
-  # def create
-  #
-  #   self.resource = warden.authenticate!(auth_options)
-  #   set_flash_message!(:notice, :signed_in)
-  #   bypass_sign_in( resource )
-  #   yield resource if block_given?
-  #   #Rails.logger.debug "session=#{request.env['rack.session']} #{request.env['rack.session'].to_hash}"
-  #   # 登录之后，创建这个用户在当前商店的sale_day
-  #   #if resource.sale_today.blank?
-  #   #   resource.create_sale_today( store_id: Spree::Store.current.id )
-  #   #end
-  #
-  #   respond_with resource, location: after_sign_in_path_for(resource)
-  # end
+  def create
+    self.resource = warden.authenticate!(auth_options)
+    set_flash_message!(:notice, :signed_in)
+    sign_in(resource_name, resource)
+    yield resource if block_given?
+    respond_with resource, location: after_sign_in_path_for(resource)
+  end
+
+  # DELETE /resource/sign_out
+  def destroy
+    signed_out = (Devise.sign_out_all_scopes ? sign_out : sign_out(resource_name))
+    set_flash_message! :notice, :signed_out if signed_out
+    yield if block_given?
+    respond_to_on_destroy
+  end
+
+  protected
+
+  def sign_in_params
+    devise_parameter_sanitizer.sanitize(:sign_in)
+  end
+
+  def serialize_options(resource)
+    methods = resource_class.authentication_keys.dup
+    methods = methods.keys if methods.is_a?(Hash)
+    methods << :password if resource.respond_to?(:password)
+    { methods: methods, only: [:password] }
+  end
+
+  def auth_options
+    { scope: resource_name, recall: "#{controller_path}#new" }
+  end
+
+  def translation_scope
+    'devise.sessions'
+  end
 
   private
+
+  # Check if there is no signed in user before doing the sign out.
+  #
+  # If there is no signed in user, it will set the flash message and redirect
+  # to the after_sign_out path.
+  def verify_signed_out_user
+    if all_signed_out?
+      set_flash_message! :notice, :already_signed_out
+
+      respond_to_on_destroy
+    end
+  end
+
+  def all_signed_out?
+    users = Devise.mappings.keys.map { |s| warden.user(scope: s, run_callbacks: false) }
+
+    users.all?(&:blank?)
+  end
+
   def respond_to_on_destroy
     # We actually need to hardcode this as Rails default responder doesn't
     # support returning empty response on GET request
     respond_to do |format|
-
+      #format.all { head :no_content }
+      #format.any(*navigational_formats) { redirect_to after_sign_out_path_for(resource_name) }
       format.html { redirect_to after_sign_out_path_for(resource_name) }
       format.json
+
     end
   end
 

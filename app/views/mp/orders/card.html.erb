@@ -7,6 +7,7 @@
       <a href="javascript:;"></a>
   </div>
   <div class="page">
+    <% if @orders.present? %>
     <div class="weui-form-preview">
                 <div class="weui-form-preview__hd">
                     <div class="weui-form-preview__item">
@@ -29,7 +30,6 @@
                     </div>
                 </div>
     </div>
-
     <div class="weui-form-preview">
                 <div class="weui-form-preview__hd">
                     <div class="weui-form-preview__item">
@@ -52,6 +52,10 @@
                     </div>
                 </div>
     </div>
-
+    <% else %>
+      <div class="weui-form-preview tcenter">
+        <p> 暂无数据</p>
+      </div>
+    <% end %>
   </div>
 </div>

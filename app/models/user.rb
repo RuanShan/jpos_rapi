@@ -71,7 +71,8 @@ class User < ApplicationRecord
   # 为了方便处理查询结果
   # 将按照一定条件查询到的 user_entry, 赋值给searched_entries，以便json一并处理
   attr_accessor :searched_entries
-
+  #获取用户信息时，缺省设置 today_entries, 即当前用户的打卡信息
+  attr_accessor :today_entries
 
 
   def self.admin_created?
@@ -88,6 +89,11 @@ class User < ApplicationRecord
 
   def spree_role_names
     self.spree_roles.pluck :name
+  end
+
+  def make_entry!( store )
+    last_user_entry = user_entries.today.last
+    user_entries.create!( store: store, day: DateTime.current, state:(last_user_entry.try(:state) == 'clockin' ? 'clockout'  : 'clockin') )
   end
 
   protected

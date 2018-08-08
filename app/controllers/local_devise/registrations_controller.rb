@@ -3,9 +3,10 @@ class LocalDevise::RegistrationsController < Devise::RegistrationsController
   def show
 #Rails.logger.debug " current_user1=#{current_user.inspect}"
     send(:"authenticate_#{resource_name}!")
-Rails.logger.debug " current_user2=#{current_user.inspect}"
 Rails.logger.debug "session=#{request.env['rack.session']} #{request.env['rack.session'].to_hash}"
     self.resource = send(:"current_#{resource_name}")
+    resource.today_entries = resource.user_entries.today
+
   end
 
   private

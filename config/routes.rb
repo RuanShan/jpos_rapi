@@ -562,7 +562,7 @@ RailsStarter::Application.routes.draw do
     # cors, json
     # new_user_session
     get '/users/info', to: 'local_devise/registrations#show'
-
+    post '/users/sign_in_by_entry', to: 'local_devise/sessions#create_by_entry'
   end
 
   root to: 'visitors#index'
