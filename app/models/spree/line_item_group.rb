@@ -254,6 +254,11 @@ module Spree
       order.update_with_updater!
     end
 
+
+    def missing_image_path
+      "mobile/groups/missing.jpg"
+    end
+
     private
 
     def set_price_zero_when_nil
