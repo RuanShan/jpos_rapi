@@ -13,8 +13,12 @@
         </div>
         <div class="card-vip"><%= @wx_follower.nickname %></div>
         <div class="card-name">
-          <p>会员卡等级</p>
-          <p>会员卡号</p>
+          <% if @prepaid_card.persisted? %>
+          <p><%= @prepaid_card.name %></p>
+          <p>会员卡号:<%= @prepaid_card.code %></p>
+          <% else %>
+          <p> 暂无会员卡 </p>
+          <% end %>
         </div>
       </div>
       <div class="card-btn"></div>
@@ -23,8 +27,8 @@
     <div class="item-box">
       <div class="item">
         <a href="#">
-          <b>0</b>
-          <span>当前余额</span>
+          <b><%=@prepaid_card.amount_remaining %></b>
+          <span>会员卡余额</span>
         </a>
       </div>
       <% if false %>
@@ -39,7 +43,7 @@
       <% end %>
       <div class="item">
         <a href="#">
-          <b>0</b>
+          <b><%= @order_total %></b>
           <span>消费金额</span>
         </a>
       </div>
@@ -54,7 +58,7 @@
             <a href="<%= recent_mp_orders_path(group_state: :pending)%>" class="recent-order-state order-state-new">
               <div class="img-wrap" style="width: 2.5em; display: block; margin: 5px auto 0;position:relative;">
                 <%=image_tag 'mp/pic_160.png' %>
-                <div class="weui-badge" style="position: absolute;top: -.4em;right: -.4em;">8</div>
+                <div class="weui-badge" style="position: absolute;top: -.4em;right: -.4em;"><%=@pending_line_item_group_count %></div>
               </div>
               新订单
             </a>
@@ -63,7 +67,7 @@
             <a href="<%= recent_mp_orders_path(group_state: :working)%>" class="recent-order-state order-state-new">
               <div class="img-wrap" style="width: 2.5em; display: block; margin: 5px auto 0;position:relative;">
                 <%=image_tag 'mp/pic_160.png' %>
-                <div class="weui-badge" style="position: absolute;top: -.4em;right: -.4em;">8</div>
+                <div class="weui-badge" style="position: absolute;top: -.4em;right: -.4em;"><%=@processing_line_item_group_count %></div>
               </div>
               工作中
             </a>
@@ -72,7 +76,7 @@
             <a href="<%= recent_mp_orders_path(group_state: :ready)%>" class="recent-order-state order-state-new">
               <div class="img-wrap" style="width: 2.5em; display: block; margin: 5px auto 0;position:relative;">
                 <%=image_tag 'mp/pic_160.png' %>
-                <div class="weui-badge" style="position: absolute;top: -.4em;right: -.4em;">8</div>
+                <div class="weui-badge" style="position: absolute;top: -.4em;right: -.4em;"><%=@ready_line_item_group_count %></div>
               </div>
               待领取
             </a>

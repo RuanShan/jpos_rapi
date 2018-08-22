@@ -41,6 +41,10 @@ module Spree
       validation.fetch(:numericality)[:less_than_or_equal_to] = 0
     end.freeze
 
+
+    extend Spree::DisplayDateTime
+    date_time_methods :created_at
+
     checkout_flow do
       go_to_state :address
       go_to_state :delivery
@@ -719,7 +723,7 @@ module Spree
         line_item_group = groups_map[line_item.group_position]
         if line_item_group.blank?
           group_number = generate_group_number
-          line_item.update_attributes group_number: group_number
+          line_item.update_attributes { group_number: group_number, label_icon_name: line_item.product.label_icon_name }
           groups_map[line_item.group_position] = Spree::LineItemGroup.create(
             store_id: self.store_id,
             order: self,

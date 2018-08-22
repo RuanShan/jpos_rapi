@@ -259,6 +259,10 @@ module Spree
       "mobile/groups/missing.jpg"
     end
 
+    def first_image
+      images.first
+    end
+
     private
 
     def set_price_zero_when_nil

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180801115309) do
+ActiveRecord::Schema.define(version: 20180809115309) do
 
   create_table "campaign_settings", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.integer "campaign_id"
@@ -540,12 +540,14 @@ ActiveRecord::Schema.define(version: 20180801115309) do
     t.datetime "expire_at"
     t.integer "discount_percent"
     t.integer "discount_amount"
-    t.decimal "amount_used", precision: 8, scale: 2, null: false
-    t.decimal "amount", precision: 8, scale: 2, null: false
+    t.decimal "amount_used", precision: 8, scale: 2, default: "0.0", null: false
+    t.decimal "amount", precision: 8, scale: 2, default: "0.0", null: false
     t.integer "status", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "deleted_at"
+    t.string "card_code", limit: 16
+    t.date "card_expire_at"
     t.index ["user_id"], name: "index_spree_cards_on_user_id"
   end
 

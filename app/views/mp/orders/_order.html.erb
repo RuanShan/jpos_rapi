@@ -1,0 +1,49 @@
+<%  # locals: { order }
+%>
+
+<div class="order item-box">
+  <div class="weui-form-preview__bd">
+    <div class="weui-form-preview__item">
+      <div class="weui-form-preview__label"> <%= order.store.name %> </div>
+      <div class="weui-form-preview__value">
+        <%=I18n.t  order.group_state, scope: "activerecord.attributes.spree/line_item_group.states" %>
+      </div>
+    </div>
+    <div class="weui-form-preview__item">
+      <div class="weui-form-preview__label"> 订单编号 <%= order.number %> </div>  <div class="weui-form-preview__value"> 订单日期 <%= order.display_created_at %></div>
+    </div>
+    <div class="weui-form-preview__item">
+      <div class="weui-form-preview__label"> 订单金额 <%= order.total %></div>
+        <div class="weui-form-preview__value">
+          <% if order.payments.present? %>
+            <% order.payments.each { |payment|  %>
+              <p> <%= payment.cname %> <%= payment.amount %> </p>
+            <% }%>
+          <% else %>
+            未付
+          <% end %>
+        </div>
+    </div>
+  </div>
+  <% order.line_item_groups.each { |group|  %>
+
+  <div   class="weui-media-box weui-media-box_appmsg">
+      <div class="weui-media-box__hd">
+          <%=image_tag group_first_image_url(group), size: "50" %>
+      </div>
+      <div class="weui-media-box__bd">
+          <h4 class="weui-media-box__title"></h4>
+          <div class="weui-media-box__desc">
+            <% group.line_items.each_with_index.each { |item, i|  %>
+              <div> <%= i+1 %> <%= item.cname %></div>
+            <% } %>
+          </div>
+          <ul class="weui-media-box__info">
+              <li class="weui-media-box__info__meta">物品编号：<%= group.number %></li>
+              <li class="weui-media-box__info__meta">状态：<%= group.state %></li>
+          </ul>
+      </div>
+  </div>
+  <% } %>
+
+</div>

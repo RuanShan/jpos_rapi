@@ -16,8 +16,8 @@ class CreateSpreeCards < ActiveRecord::Migration[5.1]
       t.datetime :expire_at #卡的到期时间
       t.integer  :discount_percent # percent
       t.integer  :discount_amount # percent
-      t.decimal :amount_used, :precision => 8, :scale => 2, :null => false
-      t.decimal :amount, :precision => 8, :scale => 2, :null => false
+      t.decimal :amount_used, :precision => 8, :scale => 2, :null => false, :default=>0
+      t.decimal :amount, :precision => 8, :scale => 2, :null => false, :default=>0
       t.integer :status, :default => 0, :null => false #卡的状态，是否可用, 1:可用， 0：不可用
       t.timestamps
     end

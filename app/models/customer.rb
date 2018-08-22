@@ -16,6 +16,9 @@ class Customer <  ApplicationRecord
   # 包括客户 消费订单 和 购买会员卡，会员卡充值订单
   has_many :orders, class_name: 'Spree::Order', foreign_key: 'user_id'
   has_many :cards, class_name: 'Spree::Card', foreign_key: 'user_id', inverse_of: :customer
+  #用户当前可用充值卡
+  has_one  :prepaid_card, ->{ status_enabled.style_prepaid }, class_name: 'Spree::Card', foreign_key: 'user_id'
+
   accepts_nested_attributes_for :cards
 
   has_one :wx_follower, inverse_of: :customer
@@ -41,9 +44,9 @@ class Customer <  ApplicationRecord
   end
 
   # 客户当前使用的充值卡
-  def prepaid_card
-    self.cards.status_enabled.style_prepaid.first
-  end
+  #def prepaid_card
+  #  self.cards.status_enabled.style_prepaid.first
+  #end
 
   private
 

@@ -8,100 +8,11 @@
   </div>
   <div class="page">
     <div class="orders">
-      <div class="order item-box">
-        <div class="weui-form-preview__bd">
-          <div class="weui-form-preview__item">
-            <div class="weui-form-preview__label"> 新开路店 </div>  <div class="weui-form-preview__value"> 订单状态</div>
-          </div>
-          <div class="weui-form-preview__item">
-            <div class="weui-form-preview__label"> 订单编号 R00010101001 </div>  <div class="weui-form-preview__value"> 订单日期 2018-08-01 12:00</div>
-          </div>
-          <div class="weui-form-preview__item">
-            <div class="weui-form-preview__label"> 订单金额 50元</div>  <div class="weui-form-preview__value"> 会员卡(#38383)支付 50元</div>
-          </div>
-        </div>
-        <div   class="weui-media-box weui-media-box_appmsg">
-            <div class="weui-media-box__hd">
-                <%=image_tag 'mp/pic_160.png', size: "50" %>
-            </div>
-            <div class="weui-media-box__bd">
-                <h4 class="weui-media-box__title"></h4>
-                <div class="weui-media-box__desc">
-                  <div> 1 保养鞋低规	 </div>
-                  <div> 2 保养鞋低规	 </div>
-                </div>
-                <ul class="weui-media-box__info">
-                    <li class="weui-media-box__info__meta">物品编号：072701008153</li>
-                    <li class="weui-media-box__info__meta">状态：新订单</li>
-                </ul>
-            </div>
-        </div>
-        <div   class="weui-media-box weui-media-box_appmsg">
-            <div class="weui-media-box__hd">
-                <%=image_tag 'mp/pic_160.png', size: "50" %>
-            </div>
-            <div class="weui-media-box__bd">
-                <h4 class="weui-media-box__title"></h4>
-                <div class="weui-media-box__desc">
-                  <div> 1 保养鞋低规	 </div>
-                  <div> 2 保养鞋低规	 </div>
-                </div>
-                <ul class="weui-media-box__info">
-                    <li class="weui-media-box__info__meta">物品编号：072701008153</li>
-                    <li class="weui-media-box__info__meta">状态：新订单</li>
-                </ul>
-            </div>
-        </div>
-
-      </div>
-
-      <div class="order item-box">
-        <div class="weui-form-preview__bd">
-          <div class="weui-form-preview__item">
-            <div class="weui-form-preview__label"> 新开路店 </div>  <div class="weui-form-preview__value"> 订单状态</div>
-          </div>
-          <div class="weui-form-preview__item">
-            <div class="weui-form-preview__label"> 订单编号 R00010101001 </div>  <div class="weui-form-preview__value"> 订单日期 2018-08-01 12:00</div>
-          </div>
-          <div class="weui-form-preview__item">
-            <div class="weui-form-preview__label"> 订单金额 50元</div>  <div class="weui-form-preview__value"> 会员卡(#38383)支付 50元</div>
-          </div>
-        </div>
-        <div   class="weui-media-box weui-media-box_appmsg">
-            <div class="weui-media-box__hd">
-                <%=image_tag 'mp/pic_160.png', size: "50" %>
-            </div>
-            <div class="weui-media-box__bd">
-                <h4 class="weui-media-box__title"></h4>
-                <div class="weui-media-box__desc">
-                  <div> 1 保养鞋低规	 </div>
-                  <div> 2 保养鞋低规	 </div>
-                </div>
-                <ul class="weui-media-box__info">
-                    <li class="weui-media-box__info__meta">物品编号：072701008153</li>
-                    <li class="weui-media-box__info__meta">状态：新订单</li>
-                </ul>
-            </div>
-        </div>
-        <div   class="weui-media-box weui-media-box_appmsg">
-            <div class="weui-media-box__hd">
-                <%=image_tag 'mp/pic_160.png', size: "50" %>
-            </div>
-            <div class="weui-media-box__bd">
-                <h4 class="weui-media-box__title"></h4>
-                <div class="weui-media-box__desc">
-                  <div> 1 保养鞋低规	 </div>
-                  <div> 2 保养鞋低规	 </div>
-                </div>
-                <ul class="weui-media-box__info">
-                    <li class="weui-media-box__info__meta">物品编号：072701008153</li>
-                    <li class="weui-media-box__info__meta">状态：新订单</li>
-                </ul>
-            </div>
-        </div>
-
-      </div>
-
+      <% if @orders.present? %>
+        <%= render partial: 'order', collection: @orders %>
+      <% else %>
+        <p class="mod-null"> 暂无数据</p>
+      <% end %>
     </div>
   </div>
 </div>
