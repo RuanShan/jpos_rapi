@@ -723,7 +723,7 @@ module Spree
         line_item_group = groups_map[line_item.group_position]
         if line_item_group.blank?
           group_number = generate_group_number
-          line_item.update_attributes { group_number: group_number, label_icon_name: line_item.product.label_icon_name }
+          line_item.update_attributes( group_number: group_number, label_icon_name: line_item.product.label_icon_name )
           groups_map[line_item.group_position] = Spree::LineItemGroup.create(
             store_id: self.store_id,
             order: self,
@@ -825,11 +825,11 @@ module Spree
     end
 
     def generate_group_number
-      count = store.line_item_groups.count
-      #date.to_formatted_s(:number)        # => "20071110"
-      date = created_at.to_date
-      # 8byte(date)-3byte(store_id)-4byte(count)-2bytes(随机码)-1byte(校验码)
-      "%s%03d%04d%02d" % [date.to_formatted_s(:number)[2,6], store_id, count, rand(100)]
+      # "0823010001" 取后四位
+      max = (store.line_item_groups.today.maximum(:number)||'')[-4,4].to_i
+      #date.to_s(:number)        # => "20071110"
+      # 4byte(date)-2byte(store_id)-4byte(count)
+      "%s%02d%04d" % [created_at.to_s(:number)[4,4], store_id, max+1]
     end
   end
 end

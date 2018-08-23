@@ -131,6 +131,10 @@ module Spree
     money_methods :cost,  :final_price, :item_cost
     alias display_amount display_cost
 
+    extend BetterDateScope
+    better_date_time_scope( created_at: :today)
+
+
     def make_step_and_order( forward= true )
       forward ? next! : back!
       order.updater.update_group_state

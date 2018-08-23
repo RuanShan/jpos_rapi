@@ -99,10 +99,10 @@ module Spree
         :created_by_id, :canceler_id, :store_id, :group_state, :sale_total, :order_type
       ]
 
-      #                                price：实收价格   sale_price：应收价格
+      #   price：实收价格   sale_price：应收价格, label_icon_name: 标签图标
       @@line_item_attributes = [:id, :quantity, :price, :variant_id, :group_number,
         :group_position, :worker_id, :cname, :memo, :sale_unit_price, :state,
-        :discount_percent, :card_id, :order_id]
+        :discount_percent, :card_id, :order_id, :label_icon_name]
 
       @@line_item_group_attributes = [:id, :order_id, :number, :price, :state, :name, :payment_state, :created_at, :updated_at]
 

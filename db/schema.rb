@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180809115309) do
+ActiveRecord::Schema.define(version: 20180822115309) do
 
   create_table "campaign_settings", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.integer "campaign_id"
@@ -785,6 +785,7 @@ ActiveRecord::Schema.define(version: 20180809115309) do
     t.integer "discount_percent", default: 0
     t.string "card_code", limit: 16
     t.date "card_expire_at"
+    t.string "label_icon_name", limit: 16
     t.index ["order_id"], name: "index_spree_line_items_on_order_id"
     t.index ["tax_category_id"], name: "index_spree_line_items_on_tax_category_id"
     t.index ["variant_id"], name: "index_spree_line_items_on_variant_id"
@@ -1141,6 +1142,7 @@ ActiveRecord::Schema.define(version: 20180809115309) do
     t.datetime "discontinue_on"
     t.integer "card_style", default: 0, null: false
     t.string "type", limit: 24
+    t.string "label_icon_name", limit: 16
     t.index ["available_on"], name: "index_spree_products_on_available_on"
     t.index ["deleted_at"], name: "index_spree_products_on_deleted_at"
     t.index ["discontinue_on"], name: "index_spree_products_on_discontinue_on"

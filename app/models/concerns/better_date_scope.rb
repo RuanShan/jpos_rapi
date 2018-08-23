@@ -1,7 +1,7 @@
 module BetterDateScope
 
   # sample
-  # add_better_date_scopes( created_at: :today)
+  # better_date_time_scope( created_at: :today)
   def better_date_time_scope( args = {})
       args.each_pair do |field_name, timespans|
         timespans = [timespans] unless timespans.is_a? Array
