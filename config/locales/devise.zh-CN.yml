@@ -29,6 +29,8 @@ zh-CN:
       x_timeout: "登录超时，请重新登录."
       unauthenticated: "继续操作前请确保您已登录."
       unconfirmed: "继续操作前请先确认您的帐号."
+      user:
+        timeout: "session_expired"
     mailer:
       confirmation_instructions:
         action: "确认我的帐户"
