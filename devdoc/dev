@@ -10,3 +10,8 @@ rails spree_sample:load
 Web print
 ################################################################################
 https://stackoverflow.com/questions/16894683/how-to-print-html-content-on-click-of-a-button-but-not-the-page
+
+
+关于session过期
+================================================================================
+devise 控制session 过期(timeout) 返回错误 session_expired

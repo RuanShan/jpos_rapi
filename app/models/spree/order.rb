@@ -724,7 +724,7 @@ module Spree
         if line_item_group.blank?
           group_number = generate_group_number
           line_item.update_attributes( group_number: group_number, label_icon_name: line_item.product.label_icon_name )
-          groups_map[line_item.group_position] = Spree::LineItemGroup.create(
+          groups_map[line_item.group_position] = Spree::LineItemGroup.create!(
             store_id: self.store_id,
             order: self,
             number: line_item.group_number,
