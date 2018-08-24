@@ -7,6 +7,10 @@ RailsStarter::Application.routes.draw do
 
     namespace :api, defaults: { format: 'json' } do
       namespace :v1 do
+        resources :expense_items
+        post '/expense_items/search', to: 'expense_items#index'
+        get '/expenses', to: 'expenses#index'
+
         resources :user_entries #取得用户打卡列表
         post '/user_entries/search', to: 'user_entries#index'
 

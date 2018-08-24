@@ -723,15 +723,16 @@ module Spree
         line_item_group = groups_map[line_item.group_position]
         if line_item_group.blank?
           group_number = generate_group_number
-          line_item.update_attributes( group_number: group_number, label_icon_name: line_item.product.label_icon_name )
           groups_map[line_item.group_position] = Spree::LineItemGroup.create!(
             store_id: self.store_id,
             order: self,
-            number: line_item.group_number,
+            number: group_number,
             price: line_item.price,
             payment_state: group_payment_state,
             name: "#{line_item.name}(#{line_item.options_text})"
           )
+          line_item.update_attributes( group_number: group_number, label_icon_name: line_item.product.label_icon_name )
+
         else
           line_item.update_attributes group_number: line_item_group.number
           line_item_group.price += line_item.price
@@ -827,6 +828,7 @@ module Spree
     def generate_group_number
       # "0823010001" 取后四位
       max = (store.line_item_groups.today.maximum(:number)||'')[-4,4].to_i
+      #Rails.logger.debug(" max number = #{store.line_item_groups.today.maximum(:number)} max=#{max}")
       #date.to_s(:number)        # => "20071110"
       # 4byte(date)-2byte(store_id)-4byte(count)
       "%s%02d%04d" % [created_at.to_s(:number)[4,4], store_id, max+1]

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180822115309) do
+ActiveRecord::Schema.define(version: 20180823115306) do
 
   create_table "campaign_settings", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.integer "campaign_id"
@@ -691,6 +691,23 @@ ActiveRecord::Schema.define(version: 20180822115309) do
   create_table "spree_excluded_ad_hoc_option_values", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer "ad_hoc_variant_exclusion_id"
     t.integer "ad_hoc_option_value_id"
+  end
+
+  create_table "spree_expense_items", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
+    t.bigint "store_id"
+    t.bigint "user_id"
+    t.bigint "variant_id"
+    t.date "day"
+    t.date "entry_day"
+    t.string "cname"
+    t.decimal "price", precision: 10, scale: 2, null: false
+    t.string "memo"
+    t.integer "state"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["store_id"], name: "index_spree_expense_items_on_store_id"
+    t.index ["user_id"], name: "index_spree_expense_items_on_user_id"
+    t.index ["variant_id"], name: "index_spree_expense_items_on_variant_id"
   end
 
   create_table "spree_gateways", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -2029,6 +2046,49 @@ ActiveRecord::Schema.define(version: 20180822115309) do
     t.string "name"
     t.integer "taggings_count", default: 0
     t.index ["name"], name: "index_tags_on_name", unique: true
+  end
+
+  create_table "think_applicant", id: :integer, force: :cascade, options: "ENGINE=MyISAM DEFAULT CHARSET=utf8" do |t|
+    t.string "fullname", limit: 45
+    t.string "position", limit: 45, comment: "职位"
+    t.string "id_num", limit: 45
+    t.string "id_address", limit: 128
+    t.integer "gender", limit: 1, default: 0, null: false
+    t.string "address", limit: 45
+    t.integer "married", limit: 1, default: 0, null: false
+    t.string "mobile", limit: 45
+    t.string "major", limit: 45
+    t.string "degree", limit: 45
+    t.string "graduated_from"
+    t.datetime "graduated_at"
+    t.text "qualification"
+    t.text "self_evaluation"
+    t.datetime "exp1_start_at"
+    t.datetime "exp1_end_at"
+    t.string "exp1_company"
+    t.string "exp1_position", limit: 45
+    t.text "exp1_responsibility"
+    t.datetime "exp2_start_at"
+    t.datetime "exp2_end_at"
+    t.string "exp2_company"
+    t.string "exp2_position", limit: 45
+    t.text "exp2_responsibility"
+    t.datetime "exp3_start_at"
+    t.datetime "exp3_end_at"
+    t.string "exp3_company"
+    t.string "exp3_position", limit: 45
+    t.text "exp3_responsibility"
+    t.datetime "exp4_start_at"
+    t.datetime "exp4_end_at"
+    t.string "exp4_company"
+    t.string "exp4_position", limit: 45
+    t.text "exp4_responsibility"
+    t.datetime "exp5_start_at"
+    t.datetime "exp5_end_at"
+    t.string "exp5_company"
+    t.string "exp5_position", limit: 45
+    t.text "exp5_responsibility"
+    t.string "number", limit: 45
   end
 
   create_table "user_entries", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|

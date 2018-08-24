@@ -50,6 +50,7 @@ module Spree
           can :manage, GroupImage
           can :manage, Image
           can :manage, UserEntry
+          can :manage, ExpenseItem
           can :manage, Store
           can :read, Store
         else
