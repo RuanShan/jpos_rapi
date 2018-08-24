@@ -2,6 +2,7 @@ module Spree
   class ExpenseItem < Spree::Base
 
     belongs_to :variant, class_name: 'Spree::Variant'
+    belongs_to :user, class_name: 'User'
 
     has_one :product, through: :variant
     # 一张卡可能多次充值，所以一张卡可能有多个line_item
