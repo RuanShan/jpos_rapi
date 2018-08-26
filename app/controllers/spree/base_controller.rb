@@ -12,6 +12,11 @@ class Spree::BaseController < ApplicationController
   include Spree::Core::ControllerHelpers::StrongParameters
 
   respond_to :html
+
+
+  def forbidden
+    render 'spree/shared/forbidden', layout: Spree::Config[:layout], status: 403
+  end
 end
 
 require 'spree/i18n/initializer'

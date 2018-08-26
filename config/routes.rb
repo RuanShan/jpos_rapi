@@ -429,6 +429,7 @@ RailsStarter::Application.routes.draw do
 
     get Spree.admin_path, to: redirect((Spree.admin_path + '/orders').gsub('//', '/')), as: :admin
 
+    get '/forbidden', to: "base#forbidden", as: :forbidden
   end
 
   ################################################################################
@@ -567,6 +568,9 @@ RailsStarter::Application.routes.draw do
     # new_user_session
     get '/users/info', to: 'local_devise/registrations#show'
     post '/users/sign_in_by_entry', to: 'local_devise/sessions#create_by_entry'
+    get 'sign_in', to: 'devise/sessions#new'
+    get 'sign_out', to: 'devise/sessions#destroy'
+
   end
 
   root to: 'visitors#index'
