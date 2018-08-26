@@ -1438,7 +1438,7 @@ zh-CN:
     return_number: Return Number
     return_quantity: "退货数量"
     returned: "已退回"
-    returns:
+    returns: "退货"
     review: Review
     risk: Risk
     risk_analysis: Risk Analysis
