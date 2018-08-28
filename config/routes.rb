@@ -1,5 +1,6 @@
 RailsStarter::Application.routes.draw do
-  resources :user_entries #用户打卡记录
+  mount Spree::Core::Engine => "/"
+  #resources :user_entries #用户打卡记录
   scope module: 'spree' do
     ################################################################################
     # spree api
