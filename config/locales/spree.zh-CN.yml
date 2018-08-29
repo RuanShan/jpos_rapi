@@ -90,6 +90,7 @@ zh-CN:
         cost_price: 成本
         description: 描述
         master_price: 默认价格
+        master_card_discount_percent: 'master_card_discount_percent'
         name: 名称
         on_hand: 库存
         shipping_category: 配送分类
@@ -412,6 +413,9 @@ zh-CN:
         properties: "产品属性"
         prototypes: "产品原型"
         reports: "报告"
+        selling_services: "Service"
+        selling_prepaid_cards: "PrepaidCards"
+        selling_products: "Products"
         taxonomies: "分类树"
         taxons: "产品与分类"
         users: "用户"

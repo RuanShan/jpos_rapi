@@ -245,7 +245,7 @@ RailsStarter::Application.routes.draw do
     ##############################################################################
     # spree Admin
     ##############################################################################
-    namespace :admin, path: Spree.admin_path do
+    namespace :admin  do
       resources :promotions do
         resources :promotion_rules
         resources :promotion_actions
@@ -569,8 +569,8 @@ RailsStarter::Application.routes.draw do
     # new_user_session
     get '/users/info', to: 'local_devise/registrations#show'
     post '/users/sign_in_by_entry', to: 'local_devise/sessions#create_by_entry'
-    get 'sign_in', to: 'devise/sessions#new'
-    get 'sign_out', to: 'devise/sessions#destroy'
+    get 'sign_in', to: 'local_devise/sessions#new'
+    get 'sign_out', to: 'local_devise/sessions#destroy'
 
   end
 

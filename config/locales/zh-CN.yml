@@ -117,6 +117,11 @@ zh-CN:
         email: 电子邮箱
         password: 密码
         password_confirmation: 密码确认
+      selling/prepaid_card:
+        card_expire_ins:
+           year: year
+           month: month
+           week: week
     models:
       campaign:
         one: 活动

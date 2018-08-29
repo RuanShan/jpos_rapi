@@ -6,6 +6,8 @@ module Spree
       before_action :redirect_on_empty_option_values, only: [:new]
       before_action :load_data, only: [:new, :create, :edit, :update]
 
+      helper_method :get_belongs_to_name
+
       # override the destroy method to set deleted_at value
       # instead of actually deleting the product.
       def destroy
@@ -35,7 +37,7 @@ module Spree
       end
 
       def parent
-        @product = Product.with_deleted.friendly.find(params[:product_id])
+        @product = Product.with_deleted.friendly.find(get_belongs_to_id)
       end
 
       def collection
@@ -57,7 +59,15 @@ module Spree
       end
 
       def redirect_on_empty_option_values
-        redirect_to admin_product_variants_url(params[:product_id]) if @product.empty_option_values?
+        redirect_to admin_product_variants_url(get_belongs_to_id) if @product.empty_option_values?
+      end
+
+      def get_belongs_to_name
+        parent.class.name.underscore.sub('/','_')
+      end
+
+      def get_belongs_to_id
+        params[:product_id] || params[:selling_service_id] || params[:selling_product_id]
       end
     end
   end

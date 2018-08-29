@@ -49,4 +49,7 @@ var set_taxon_select = function(selector){
 
 $(document).ready(function () {
   set_taxon_select('#product_taxon_ids')
+  set_taxon_select('#selling_service_taxon_ids')
+  set_taxon_select('#selling_prepaid_card_taxon_ids')
+  set_taxon_select('#selling_product_taxon_ids')
 });

@@ -1,4 +1,4 @@
-<%= render partial: 'spree/admin/shared/product_tabs', locals: {current: :variants} %>
+<%= render partial: "spree/admin/shared/#{get_belongs_to_name}_tabs", locals: { current: :variants } %>
 
 <%# Place for new variant form %>
 <div id="new_variant" data-hook></div>

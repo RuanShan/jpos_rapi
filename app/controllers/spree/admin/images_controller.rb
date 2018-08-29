@@ -1,6 +1,8 @@
 module Spree
   module Admin
     class ImagesController < ResourceController
+      helper_method :get_belongs_to_name
+
       before_action :load_edit_data, except: :index
       before_action :load_index_data, only: :index
 
@@ -9,20 +11,12 @@ module Spree
 
       private
 
-      def location_after_destroy
-        admin_product_images_url(@product)
-      end
-
-      def location_after_save
-        admin_product_images_url(@product)
-      end
-
       def load_index_data
-        @product = Product.friendly.includes(*variant_index_includes).find(params[:product_id])
+        @product = Product.friendly.includes(*variant_index_includes).find(get_belongs_to_id)
       end
 
       def load_edit_data
-        @product = Product.friendly.includes(*variant_edit_includes).find(params[:product_id])
+        @product = Product.friendly.includes(*variant_edit_includes).find(get_belongs_to_id)
         @variants = @product.variants.map do |variant|
           [variant.sku_and_options_text, variant.id]
         end
@@ -45,6 +39,23 @@ module Spree
           variants_including_master: { option_values: :option_type, images: :viewable }
         ]
       end
+
+      def new_object_url( options={} )
+        spree.new_polymorphic_url([:admin, @product, model_class], options)
+      end
+
+      def collection_url(options = {})
+        spree.polymorphic_url([:admin, @product, model_class], options)
+      end
+
+      def get_belongs_to_id
+        params[:product_id] || params[:selling_service_id] || params[:selling_prepaid_card_id] || params[:selling_product_id]
+      end
+
+      def get_belongs_to_name
+        @product.class.name.underscore.sub('/','_')
+      end
+
     end
   end
 end

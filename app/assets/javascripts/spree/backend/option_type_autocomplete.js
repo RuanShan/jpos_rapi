@@ -1,12 +1,11 @@
-$(document).ready(function () {
-  'use strict';
-
+'use strict';
+var set_option_type_select = function(selector){
   function formatOptionType(option_type) {
     return Select2.util.escapeMarkup(option_type.presentation + ' (' + option_type.name + ')');
   }
 
-  if ($('#product_option_type_ids').length > 0) {
-    $('#product_option_type_ids').select2({
+  if ($(selector).length > 0) {
+    $(selector).select2({
       placeholder: Spree.translations.option_type_placeholder,
       multiple: true,
       initSelection: function (element, callback) {
@@ -40,4 +39,11 @@ $(document).ready(function () {
       formatSelection: formatOptionType
     });
   }
+
+}
+
+$(document).ready(function () {
+  set_option_type_select( '#product_option_type_ids' )
+  set_option_type_select( '#selling_service_option_type_ids' )
+  set_option_type_select( '#selling_product_option_type_ids' )
 });

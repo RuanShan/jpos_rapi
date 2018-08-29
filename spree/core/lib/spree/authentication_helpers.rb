@@ -12,15 +12,17 @@ module Spree
     end
 
     def spree_login_path
-      new_user_session_path
+      Rails.logger.debug "local new_user_session_path =#{new_user_session_path}"
+      '/sign_in'
     end
 
     def spree_signup_path
-      new_user_registration_path
+      #new_user_registration_path
+      '/local_devise/registrations/new'
     end
 
     def spree_logout_path
-      destroy_user_session_path
+      '/sign_out'
     end
   end
 end

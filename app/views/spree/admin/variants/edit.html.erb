@@ -1,4 +1,4 @@
-<%= render partial: 'spree/admin/shared/product_tabs', locals: { current: :variants } %>
+<%= render partial: "spree/admin/shared/#{get_belongs_to_name}_tabs", locals: { current: :variants } %>
 
 <%= render partial: 'spree/admin/shared/error_messages', locals: { target: @variant } %>
 

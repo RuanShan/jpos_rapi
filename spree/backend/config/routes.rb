@@ -1,5 +1,32 @@
 Spree::Core::Engine.add_routes do
   namespace :admin, path: Spree.admin_path do
+    concern :saleable do
+      resources :product_properties do
+        collection do
+          post :update_positions
+        end
+      end
+      resources :images do
+        collection do
+          post :update_positions
+        end
+      end
+      member do
+        post :clone
+        get :stock
+      end
+      resources :variants do
+        collection do
+          post :update_positions
+        end
+      end
+      resources :variants_including_master, only: [:update]
+    end
+
+    resources :selling_services, concerns: [:saleable]
+    resources :selling_prepaid_cards, concerns: [:saleable]
+    resources :selling_products, concerns: [:saleable]
+
     resources :promotions do
       resources :promotion_rules
       resources :promotion_actions
