@@ -12,7 +12,7 @@ module Spree
 
 
     self.whitelisted_ransackable_associations = %w[variant]
-    self.whitelisted_ransackable_attributes = %w[store_id user_id variant_id price]
+    self.whitelisted_ransackable_attributes = %w[store_id user_id variant_id price entry_day]
 
     before_create :set_defaut_day
     #初始化为待处理， 当确认工作量后 转为 done
