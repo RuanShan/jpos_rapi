@@ -1,12 +1,13 @@
 <% if can? :admin, Spree::Order %>
   <ul class="nav nav-sidebar">
-    <%= tab *Spree::BackendConfiguration::ORDER_TABS, icon: 'shopping-cart' %>
+    <%= main_menu_tree Spree.t(:orders), icon: "shopping-cart", sub_menu: "order", url: "#sidebar-order" %>
+
   </ul>
 <% end %>
 
-<% if can?(:admin, Spree::ReturnAuthorization) || can?(:admin, Spree::CustomerReturn) %>
+<% if can?(:admin, Customer) %>
   <ul class="nav nav-sidebar">
-    <%= main_menu_tree Spree.t(:returns), icon: "transfer", sub_menu: "returns", url: "#sidebar-returns" %>
+    <%= tab Spree.t(:customers), url: admin_customers_path, icon: 'user' %>
   </ul>
 <% end %>
 

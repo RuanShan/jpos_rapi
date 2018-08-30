@@ -126,6 +126,9 @@ zh-CN:
       campaign:
         one: 活动
         other: 活动
+      customer:
+        one: 顾客
+        other: 顾客        
       game_instrument:
         one: 游戏工具
         other: 游戏工具
@@ -162,6 +165,7 @@ zh-CN:
     save_changes: "Save changes"
     send_email: "Send Email"
     add_new_user: "Add New User"
+  customer_without_name: 'nobody'
   label:
     username: 用户名
     user: "User"

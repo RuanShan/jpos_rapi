@@ -205,7 +205,7 @@ zh-CN:
     am: 上午
     formats:
       default: "%Y年%b%d日 %A %H:%M:%S %Z"
-      long: "%Y年%m%d日 %H:%M"
+      long: "%Y-%m-%d %H:%M"
       short: "%b%d日 %H:%M"
       better: "%Y-%m-%d %H:%M:%S"
       search_time: "%Y-%m-%d %H:%M"

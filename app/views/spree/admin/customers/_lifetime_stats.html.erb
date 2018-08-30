@@ -1,0 +1,26 @@
+<div data-hook="admin_customer_lifetime_stats" class="panel panel-default">
+  <div class="panel-heading">
+    <h1 class="panel-title">
+      <%= Spree.t(:lifetime_stats) %>
+    </h1>
+  </div>
+
+  <table class="table" id="customer-lifetime-stats" data-hook>
+    <tr>
+      <td width="30%"><%= Spree.t(:total_sales) %>:</td>
+      <td><%= @customer.display_lifetime_value.to_html %></td>
+    </tr>
+    <tr>
+      <td><%= Spree.t(:num_orders) %>:</td>
+      <td><%= @customer.order_count %></td>
+    </tr>
+    <tr>
+      <td><%= Spree.t(:average_order_value) %>:</td>
+      <td><%= @customer.display_average_order_value.to_html %></td>
+    </tr>
+    <tr>
+      <td><%= Spree.t(:member_since) %>:</td>
+      <td><%= pretty_time(@customer.created_at) %></td>
+    </tr>
+  </table>
+</div>

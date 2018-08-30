@@ -23,9 +23,65 @@ Spree::Core::Engine.add_routes do
       resources :variants_including_master, only: [:update]
     end
 
+    concern :orderable  do
+      member do
+        get :cart
+        post :resend
+        get :open_adjustments
+        get :close_adjustments
+        put :approve
+        put :cancel
+        put :resume
+        get :store
+        put :set_store
+      end
+
+      resources :state_changes, only: [:index]
+
+      resource :customer, controller: 'orders/customer_details'
+      resources :customer_returns, only: [:index, :new, :edit, :create, :update] do
+        member do
+          put :refund
+        end
+      end
+
+      resources :adjustments
+      resources :return_authorizations do
+        member do
+          put :fire
+        end
+      end
+      resources :payments do
+        member do
+          put :fire
+        end
+
+        resources :log_entries
+        resources :refunds, only: [:new, :create, :edit, :update]
+      end
+
+      resources :reimbursements, only: [:index, :create, :show, :edit, :update] do
+        member do
+          post :perform
+        end
+      end
+    end
+
     resources :selling_services, concerns: [:saleable]
     resources :selling_prepaid_cards, concerns: [:saleable]
     resources :selling_products, concerns: [:saleable]
+
+
+    resources :customers do
+      member do
+        get :addresses
+        get :items
+        get :orders
+        get :cards
+      end
+      resources :store_credits
+    end
+    resources :order_cards, concerns: [:saleable]
 
     resources :promotions do
       resources :promotion_rules

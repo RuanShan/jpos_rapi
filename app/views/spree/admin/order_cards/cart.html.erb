@@ -10,6 +10,8 @@
   <%= render 'spree/admin/orders/risk_analysis', latest_payment: @order.payments.order("created_at DESC").first %>
 <% end %>
 
+<%= render 'add_line_item' if can?(:update, @order) %>
+
 <% if @order.line_items.empty? %>
   <div class="alert alert-warning">
     <%= Spree.t(:your_order_is_empty_add_product)%>

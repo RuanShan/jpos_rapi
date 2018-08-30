@@ -2,6 +2,9 @@ class Customer <  ApplicationRecord
 
   acts_as_paranoid
   include Spree::RansackableAttributes
+  extend Spree::DisplayDateTime
+  include Spree::CustomerReporting
+
 
   after_destroy :scramble_mobile_and_password # mobile is uniqueness
 
@@ -29,7 +32,11 @@ class Customer <  ApplicationRecord
   before_validation :set_defaults
   alias_attribute :name, :username # order.user_name required
 
+  date_time_methods :created_at, :updated_at
+
   enum gender: { male: 1, female: 0 }
+
+  delegate :name, to: :store, prefix: true
 
   # sms对象，创建用户时检查短信验证码, :verify_code, 用户输入的验证码
   attr_accessor :sms,:verify_code
@@ -47,6 +54,10 @@ class Customer <  ApplicationRecord
   #def prepaid_card
   #  self.cards.status_enabled.style_prepaid.first
   #end
+
+  def display_name
+    name.present? ? name : I18n.t( 'customer_without_name')
+  end
 
   private
 

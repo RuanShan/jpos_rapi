@@ -1,0 +1,32 @@
+<%= render partial: 'spree/admin/customers/sidebar', locals: { current: :account } %>
+<%= render partial: 'spree/admin/customers/user_page_actions' %>
+
+<% content_for :page_title do %>
+  <%= @customer.mobile %>
+<% end %>
+
+<div data-hook="admin_customer_edit_general_settings" class="panel panel-default">
+  <div class="panel-heading">
+    <h1 class="panel-title">
+      <%= Spree.t(:general_settings) %>
+    </h1>
+  </div>
+
+  <div class="panel-body">
+    <div data-hook="admin_customer_edit_form_header">
+      <%= render partial: 'spree/admin/shared/error_messages', locals: { target: @customer } %>
+    </div>
+
+    <div data-hook="admin_customer_edit_form">
+      <%= form_for [:admin, @customer], as: :customer, url: admin_customer_url(@customer), method: :put do |f| %>
+        <%= render partial: 'form', locals: { f: f } %>
+
+        <div data-hook="admin_customer_edit_form_button">
+          <%= render partial: 'spree/admin/shared/edit_resource_links', locals: { collection_url: admin_customers_url } %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<%= render 'spree/admin/customers/lifetime_stats' %>

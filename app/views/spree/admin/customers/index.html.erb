@@ -1,0 +1,73 @@
+<% content_for :page_title do %>
+  <%= Spree.t(:customers) %>
+<% end %>
+
+<% content_for :page_actions do %>
+  <%= button_link_to Spree.t(:new_customer), new_admin_customer_url, class: "btn-success", icon: 'add', id: 'admin_new_customer_link' %>
+<% end if can? :create, Customer %>
+
+<% content_for :table_filter_title do %>
+  <%= Spree.t(:search) %>
+<% end %>
+
+<% content_for :table_filter do %>
+  <div data-hook="admin_customers_index_search">
+    <%= search_form_for [:admin, @search], url: admin_customers_url do |f| %>
+      <div class="form-group">
+        <%= f.label Spree.t(:mobile) %>
+        <%= f.text_field :mobile_cont, class: "form-control js-quick-search-target" %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label Spree.t(:username) %>
+        <%= f.text_field :username_cont, class: 'form-control' %>
+      </div>
+      <div data-hook="admin_customers_index_search_buttons" class="form-actions">
+        <%= button Spree.t(:search), 'search' %>
+      </div>
+    <% end %>
+  </div>
+<% end %>
+
+<% if @customers.any? %>
+  <table class="table" id="listing_customers" data-hook>
+    <thead>
+      <tr data-hook="admin_customers_index_headers">
+        <th>
+          <%= sort_link @search,:store_id, Spree.t(:store), {}, {title: 'customers_store_id_title'} %>
+        </th>
+        <th>
+          <%= sort_link @search,:mobile, Spree.t(:mobile), {}, {title: 'customers_mobile_title'} %>
+        </th>
+        <th>
+          <%= sort_link @search,:username, Spree.t(:username), {}, {title: 'customers_username_title'} %>
+        </th>
+        <th>
+          <%= sort_link @search,:created_at, Spree.t(:created_at), {}, {title: 'customers_created_at_title'} %>
+        </th>
+        <th data-hook="admin_customers_index_header_actions" class="actions"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @customers.each do |customer|%>
+        <tr id="<%= spree_dom_id customer %>" data-hook="admin_customers_index_rows">
+          <td class='customer_store'><%= customer.store_name %></td>
+          <td class='customer_mobile'><%=link_to customer.mobile, edit_admin_customer_url(customer) %></td>
+          <td class='customer_username'><%= customer.username %></td>
+          <td class='customer_created_at'><%= customer.display_created_at %></td>
+          <td data-hook="admin_customers_index_row_actions" class="actions actions-2 text-right">
+            <%= link_to_edit customer, no_text: true if can?(:edit, customer) %>
+            <%= link_to_delete customer, no_text: true if can?(:delete, customer) %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <div class="alert alert-info no-objects-found">
+    <%= Spree.t(:no_resource_found, resource: plural_resource_name(Spree.customer_class)) %>,
+    <%= link_to Spree.t(:add_one), new_object_url %>!
+  </div>
+<% end %>
+
+<%= paginate @customers %>

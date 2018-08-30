@@ -1,0 +1,63 @@
+<%= render partial: 'spree/admin/customers/sidebar', locals: { current: :cards } %>
+<%= render partial: 'spree/admin/customers/user_page_actions' %>
+
+<% content_for :page_title do %>
+  <%= link_to @customer.email, edit_admin_customer_url(@customer) %> /
+  <%= Spree.t(:"admin.customer.cards") %>
+<% end %>
+
+<fieldset data-hook="admin_customer_items_purchased">
+  <%= paginate @cards %>
+
+  <% if @cards.any? %>
+    <%# TODO add search interface %>
+    <table class="table table-condensed table-bordered stock-contents" id="listing_items" data-hook="stock-contents">
+      <thead>
+        <th><%= sort_link @search, :created_at, I18n.t(:created_at, scope: 'activerecord.attributes.spree/order'), {}, {title: 'cards_created_at_title'} %></th>
+        <th colspan=2><%= Spree.t(:description) %></th>
+        <th><%= I18n.t(:price, scope: 'activerecord.attributes.spree/line_item') %></th>
+        <th><%= I18n.t(:quantity, scope: 'activerecord.attributes.spree/line_item') %></th>
+        <th><%= Spree.t(:total) %></th>
+        <th><%= sort_link @search, :state, I18n.t(:state, scope: 'activerecord.attributes.spree/order'), {}, {title: 'cards_state_title'} %></th>
+        <th><%= sort_link @search, :number, Spree.t(:order_num, scope: 'admin.customer'), {}, {title: 'cards_number_title'} %></th>
+      </thead>
+      <tbody>
+        <% @cards.each do |card| %>
+          <% card.line_items.each do |item| %>
+            <tr class="stock-item" data-item-quantity="<%= item.quantity %>">
+              <td class="card-completed-at"><%= card_time(card.created_at) if card.created_at %></td>
+              <td class="item-image">
+                <%= mini_image(item.variant) %>
+              </td>
+              <td class="item-name">
+                <%= item.name %><br><%= "(" + variant_options(item.variant) + ")" unless item.variant.option_values.empty? %>
+                <% if item.sku.present? %>
+                  <strong><%= Spree.t(:sku) %>:</strong> <%= item.variant.sku %>
+                <% end %>
+              </td>
+              <td class="item-price"><%= item.single_money.to_html %></td>
+              <td class="item-quantity"><%= item.quantity %></td>
+              <td class="item-total"><%= item.money.to_html %></td>
+              <td class="card-state">
+                <div class="state <%= card.state.downcase %>"><%= Spree.t("card_state.#{card.state.downcase}") %></div>
+                <% if card.payment_state %>
+                  <div class="state <%= card.payment_state %>"><%= link_to Spree.t("payment_states.#{card.payment_state}"), admin_card_payments_path(card) %></div>
+                <% end %>
+                <% if Spree::Order.checkout_step_names.include?(:delivery) && card.shipment_state %>
+                  <div class="state <%= card.shipment_state %>"><%= Spree.t("shipment_states.#{card.shipment_state}") %></div>
+                <% end %>
+              </td>
+              <td class="card-number"><%= link_to card.number, edit_admin_card_url(card) %></td>
+            </tr>
+          <% end %>
+        <% end %>
+    </table>
+  <% else %>
+    <div class="alert alert-info no-objects-found">
+      <%= Spree.t(:no_resource_found, resource: plural_resource_name(Spree::Card)) %>
+    </div>
+  <% end %>
+  <%= paginate @cards %>
+</fieldset>
+
+<%= render 'spree/admin/customers/lifetime_stats' %>
