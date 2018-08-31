@@ -77,11 +77,11 @@ Spree::Core::Engine.add_routes do
         get :addresses
         get :items
         get :orders
-        get :cards
+        get :order_cards
       end
       resources :store_credits
     end
-    resources :order_cards, concerns: [:saleable]
+    resources :card_transactions 
 
     resources :promotions do
       resources :promotion_rules

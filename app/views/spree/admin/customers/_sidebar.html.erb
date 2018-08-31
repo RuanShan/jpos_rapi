@@ -14,8 +14,8 @@
     <li<%== ' class="active"' if current == :items %>>
       <%= link_to_with_icon 'edit', Spree.t(:"admin.customer.items"), items_admin_customer_path(@customer) %>
     </li>
-    <li<%== ' class="active"' if current == :store_credits %>>
-      <%= link_to_with_icon 'money', Spree.t(:"admin.customer.cards"), cards_admin_customer_path(@customer) %>
+    <li<%== ' class="active"' if current == :order_cards %>>
+      <%= link_to_with_icon 'money', Spree.t(:"admin.customer.order_cards"), order_cards_admin_customer_path(@customer) %>
     </li>
   </ul>
 <% end %>

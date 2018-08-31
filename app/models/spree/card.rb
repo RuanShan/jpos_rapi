@@ -34,6 +34,7 @@ module Spree
     before_validation :set_values, on: :create
 
     delegate :product, to: :variant
+    delegate :name, to: :store, prefix: true
 
     def amount_remaining
       amount - amount_used

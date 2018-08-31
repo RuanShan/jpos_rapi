@@ -1,0 +1,52 @@
+<%= render partial: 'spree/admin/customers/sidebar', locals: { current: :order_cards } %>
+<%= render partial: 'spree/admin/customers/user_page_actions' %>
+
+<% content_for :page_title do %>
+  <%= link_to @customer.email, edit_admin_customer_url(@customer) %> /
+  <%= Spree.t(:"admin.customer.cards") %>
+<% end %>
+
+<fieldset data-hook="admin_customer_items_purchased">
+  <%= paginate @orders %>
+
+  <% if @orders.any? %>
+    <%# TODO add search interface %>
+    <table class="table table-condensed table-bordered stock-contents" id="listing_items" data-hook="stock-contents">
+      <thead>
+        <th><%= sort_link @search, :completed_at, I18n.t(:completed_at, scope: 'activerecord.attributes.spree/order'), {}, {title: 'cards_completed_at_title'} %></th>
+        <th > code</th>
+        <th > card type</th>
+        <th> money</th>
+        <th> amount_remaining</th>
+        <th> order state </th>
+        <th>order number </th>
+      </thead>
+      <tbody>
+        <% @orders.each do |order| card_transaction = order.card_transactions.first %>
+          <% order.line_items.each do |item| card = item.card;  %>
+            <tr class="stock-item" data-item-quantity="<%= item.quantity %>">
+              <td class="order-completed-at"><%= order_time(order.completed_at) if order.completed_at %></td>
+              <td class="item-code"><%= card.code %></td>
+
+              <td class="item-name">
+                <%= item.name %>
+              </td>
+              <td class="item-total"><%= item.money.to_html %></td>
+              <td class="item-total"><%= card_transaction.amount_remaining %></td>
+              <td class="order-state">
+                <div class="state <%= order.state.downcase %>"><%= Spree.t("order_state.#{order.state.downcase}") %></div>
+              </td>
+              <td class="order-number"> <%= order.number %></td>
+            </tr>
+          <% end %>
+        <% end %>
+    </table>
+  <% else %>
+    <div class="alert alert-info no-objects-found">
+      <%= Spree.t(:no_resource_found, resource: plural_resource_name(Spree::Card)) %>
+    </div>
+  <% end %>
+  <%= paginate @orders %>
+</fieldset>
+
+<%= render 'spree/admin/customers/lifetime_stats' %>

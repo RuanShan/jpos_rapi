@@ -1,0 +1,124 @@
+<% content_for :page_title do %>
+  会员卡充值
+<% end %>
+
+<% content_for :page_actions do %>
+
+<% end if can? :create, Spree::Order %>
+
+<% content_for :table_filter do %>
+  <div data-hook="admin_orders_index_search">
+
+    <%= search_form_for [:admin, @search]  do |f| %>
+      <div class="row">
+        <div class="date-range-filter col-xs-12 col-md-8">
+          <div class="form-group">
+            <%= label_tag :q_created_at_gt, Spree.t(:date_range) %>
+            <div class="row no-padding-bottom">
+              <div class="col-xs-12 col-md-6">
+                <div class="input-group">
+                  <%= f.text_field :created_at_gt, class: 'datepicker datepicker-from form-control', value: params[:q][:created_at_gt], placeholder: Spree.t(:start) %>
+                  <span class="input-group-addon">
+                    <i class="icon icon-calendar"></i>
+                  </span>
+                </div>
+
+              </div>
+              <div class="col-xs-12 col-md-6">
+                <div class="input-group">
+                  <%= f.text_field :created_at_lt, class: 'datepicker datepicker-to form-control', value: params[:q][:created_at_lt], placeholder: Spree.t(:stop) %>
+                  <span class="input-group-addon">
+                    <i class="icon icon-calendar"></i>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-xs-12 col-md-4">
+          <div class="form-group">
+            <%= label_tag :q_card_code_cont, Spree.t(:card_code, code: '') %>
+            <%= f.text_field :card_code_cont, class: 'form-control js-quick-search-target' %>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="row">
+
+        <div class="col-xs-12 col-md-4">
+          <div class="form-group">
+            <%= label_tag :q_state_eq, Spree.t(:status) %>
+            <%= f.select :state_eq, Spree::Order.state_machines[:state].states.map {|s| [Spree.t("order_state.#{s.name}"), s.value]}, { include_blank: true }, class: 'select2 js-filterable' %>
+          </div>
+        </div>
+
+
+      </div>
+
+      <div data-hook="admin_orders_index_search_buttons" class="form-actions">
+        <%= button Spree.t(:filter_results), 'search' %>
+      </div>
+
+    <% end %>
+
+  </div>
+
+<% end %>
+
+<%= render 'spree/admin/shared/index_table_options', collection: @orders %>
+
+<% if @orders.any? %>
+  <table class="table" id="listing_orders" data-hook>
+    <thead>
+      <tr data-hook="admin_orders_index_headers">
+
+        <th><%= sort_link @search, :created_at,     I18n.t(:created_at, scope: 'activerecord.attributes.spree/order') %></th>
+        <th><%= sort_link @search, :store_name,     "store name" %></th>
+        <th><%= sort_link @search, :code,           "code" %></th>
+        <th><%= sort_link @search, :card_name,       "card name" %></th>
+        <th><%= sort_link @search, :total,            I18n.t(:total, scope: 'activerecord.attributes.spree/order') %></th>
+        <th><%= sort_link @search, :state,            I18n.t(:state, scope: 'activerecord.attributes.spree/order') %></th>
+
+        <th><%= sort_link @search, :customer,           "customer" %></th>
+        <th data-hook="admin_orders_index_header_actions" class="actions"></th>
+      </tr>
+    </thead>
+    <tbody>
+    <% @orders.each do |card_transaction| card = card_transaction.card;  order = card_transaction.order; %>
+      <tr data-hook="admin_orders_index_rows" class="state-<%= order.state.downcase %> <%= cycle('odd', 'even') %>">
+        <td>
+          <%= order_time( card_transaction.created_at) %>
+        </td>
+        <td><%= order.store_name %></td>
+        <td><%= card.code %></td>
+        <td><%= card.name %></td>
+        <td><%= card_transaction.amount %></td>
+
+        <td>
+          <span class="label label-<%= order.state.downcase %>"><%= Spree.t("order_state.#{order.state.downcase}") %></span>
+          <span class="icon icon-filter filterable js-add-filter" data-ransack-field="q_state_eq" data-ransack-value="<%= order.state %>"></span>
+        </td>
+
+        <td>
+          <% if card.customer %>
+            <%= link_to card.customer.display_name, edit_admin_customer_path(card.customer) %>
+          <% end %>
+          <% if card.customer  %>
+            <span class="icon icon-filter filterable js-add-filter" data-ransack-field="q_card_user_id_eq" data-ransack-value="<%= card.user_id %>"></span>
+          <% end %>
+        </td>
+
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <div class="alert alert-info no-objects-found">
+    <%= Spree.t(:no_resource_found, resource: plural_resource_name(Spree::Order)) %>,
+    <%= link_to(Spree.t(:add_one), new_admin_order_url) if can? :create, Spree::Order %>!
+  </div>
+<% end %>
+
+<%= render 'spree/admin/shared/index_table_options', collection: @orders, simple: true %>

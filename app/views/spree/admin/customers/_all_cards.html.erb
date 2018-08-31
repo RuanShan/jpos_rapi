@@ -1,0 +1,54 @@
+<% if @customer.cards.any? %>
+
+  <div data-hook="admin_customer_cards" class="panel panel-default">
+    <div class="panel-heading">
+      <h1 class="panel-title">
+        <%= Spree.t(:cards) %>
+      </h1>
+    </div>
+    <%# TODO add search interface %>
+    <table class="table table-condensed table-bordered stock-contents" id="listing_items" data-hook="stock-contents">
+      <thead>
+        <th><%= Spree.t(:code) %></th>
+        <th>store </th>
+        <th>card_type</th>
+        <th colspan="2">card_description</th>
+        <th>state</th>
+        <th>created_at</th>
+        <th>expires_at </th>
+        <th> remaining_amount </th>
+      </thead>
+      <tbody>
+        <% @customer.cards.each do |card| %>
+            <tr>
+              <td class="card-code">
+                <%= card.code %>
+              </td>
+              <td class="card-store-name">
+                <%= card.store_name %>
+              </td>
+              <td class="card-product-name">
+                <%= card.product.class.model_name.human %>
+              </td>
+              <td class="card-image">
+                <%= mini_image(card.variant) %>
+              </td>
+              <td class="card-name">
+                <%= card.name %>
+              </td>
+              <td class="card-state">
+                <div class="state <%= card.status %>"><%= Spree.t("card_status.#{card.status}") %></div>
+              </td>
+              <td class="card-created-at"><%= order_time(card.created_at)  %></td>
+              <td class="card-expire-at"><%= order_time(card.expire_at) if card.expire_at  %></td>
+              <td class="card-amount-remaining"><%= card.amount_remaining %></td>
+
+            </tr>
+        <% end %>
+    </table>
+  </div>
+<% else %>
+  <div class="alert alert-info no-objects-found">
+    <%= Spree.t(:no_resource_found, resource: plural_resource_name(Spree::Card)) %>
+  </div>
+<% end %>

@@ -128,13 +128,16 @@ zh-CN:
         other: 活动
       customer:
         one: 顾客
-        other: 顾客        
+        other: 顾客
       game_instrument:
         one: 游戏工具
         other: 游戏工具
       game_round:
         one: 应用
         other: 应用
+      selling/prepaid_card:
+        one: "充值卡"
+        other: "充值卡"
   menu:
     login: "登陆"
     logout: "退出"

@@ -41,6 +41,7 @@ module Spree
           params[:q][:completed_at_gt] = params[:q].delete(:created_at_gt)
           params[:q][:completed_at_lt] = params[:q].delete(:created_at_lt)
         end
+        params[:q][:order_type_eq] = Spree::Order.order_types['normal']
 
         @search = Spree::Order.preload(:user).accessible_by(current_ability, :index).ransack(params[:q])
 

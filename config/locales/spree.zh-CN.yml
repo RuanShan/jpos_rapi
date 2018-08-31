@@ -1061,6 +1061,7 @@ zh-CN:
     order_details: "订单详情"
     order_email_resent: "重新发出了订单邮件"
     order_group_state:
+      none: ""
       pending: "pending"
       ready_for_factory: "ready_for_factory"
       processing: "processing"
@@ -1100,7 +1101,7 @@ zh-CN:
       address: "地址"
       awaiting_return: "等待退货"
       canceled: "取消"
-      cart: "购物车"
+      cart: "正常"
       complete: "完成"
       confirm: "确认"
       considered_risky: considered risky

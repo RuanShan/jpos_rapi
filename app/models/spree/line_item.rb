@@ -150,7 +150,7 @@ module Spree
           new_card.discount_amount = variant.card_discount_amount
           new_card.status = :enabled
         end
-        self.card_id = card.id
+        self.update_attribute :card_id, card.id
       end
       #如果是充值订单
       if self.card_id > 0

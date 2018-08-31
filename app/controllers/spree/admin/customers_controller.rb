@@ -45,7 +45,7 @@ module Spree
 
       def orders
         params[:q] ||= {}
-        @search = Spree::Order.reverse_chronological.ransack(params[:q].merge(user_id_eq: @customer.id))
+        @search = Spree::Order.reverse_chronological.ransack(params[:q].merge(user_id_eq: @customer.id, order_type_eq: Spree::Order.order_types['normal']))
         @orders = @search.result.page(params[:page])
       end
 
@@ -58,10 +58,10 @@ module Spree
         @orders = @search.result.page(params[:page])
       end
 
-      def cards
+      def order_cards
         params[:q] ||= {}
-        @search = Spree::Card.ransack(params[:q].merge(user_id_eq: @customer.id))
-        @cards = @search.result.page(params[:page])
+        @search = Spree::Order.ransack(params[:q].merge(user_id_eq: @customer.id, order_type_eq: Spree::Order.order_types['card']))
+        @orders = @search.result.page(params[:page])
       end
 
       def generate_api_key
@@ -108,9 +108,7 @@ module Spree
       end
 
       def sign_in_if_change_own_password
-        if try_spree_current_customer == @customer && @customer.password.present?
-          sign_in(@customer, event: :authentication, bypass: true)
-        end
+
       end
     end
   end

@@ -34,7 +34,19 @@
     <thead>
       <tr data-hook="admin_users_index_headers">
         <th>
+          <%= sort_link @search,:username, 'username', {}, {title: 'users_username_title'} %>
+        </th>
+        <th>
+          roles
+        </th>
+        <th>
+          <%= sort_link @search,:mobile, 'mobile', {}, {title: 'users_mobile_title'} %>
+        </th>
+        <th>
           <%= sort_link @search,:email, Spree.t(:user), {}, {title: 'users_email_title'} %>
+        </th>
+        <th>
+          <%= sort_link @search,:created_at, Spree.t(:created_at), {}, {title: 'users_created_at_title'} %>
         </th>
         <th data-hook="admin_users_index_header_actions" class="actions"></th>
       </tr>
@@ -42,7 +54,11 @@
     <tbody>
       <% @users.each do |user|%>
         <tr id="<%= spree_dom_id user %>" data-hook="admin_users_index_rows">
-          <td class='user_email'><%=link_to user.email, edit_admin_user_url(user) %></td>
+          <td class='user_username'><%=link_to user.username, edit_admin_user_url(user) %></td>
+          <td class='user_roles'> <% user.spree_roles.each{|role| %><span><%=role.name %> </span> <%}%></td>
+          <td class='user_mobile'><%= user.mobile %></td>
+          <td class='user_email'><%= user.email %></td>
+          <td class='user_created_at'><%= order_time user.created_at %></td>
           <td data-hook="admin_users_index_row_actions" class="actions actions-2 text-right">
             <%= link_to_edit user, no_text: true if can?(:edit, user) %>
             <%= link_to_delete user, no_text: true if can?(:delete, user) %>

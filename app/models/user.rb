@@ -49,6 +49,7 @@ class User < ApplicationRecord
   has_one :sale_today, ->{ today.where( store: Spree::Store.current ) }, class_name: 'SaleDay', foreign_key: 'user_id'
   has_many :sale_days, class_name: 'SaleDay'
   has_many :user_entries, class_name: 'UserEntry'
+  has_many :orders, foreign_key: :created_by_id, class_name: 'Spree::Order'
 
   after_initialize :create_sale_today_for_waiter, :if => :persisted?
   before_validation :set_login

@@ -28,7 +28,9 @@ class Spree::CardTransaction < ActiveRecord::Base
 
   end
 
-
+  def amount_remaining
+    amount + amount_left
+  end
 
   def adjust_card_amount_used
     Rails.logger.debug "adjust_card_amount. state=#{state} "

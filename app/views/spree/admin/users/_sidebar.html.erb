@@ -7,17 +7,5 @@
     <li<%== ' class="active"' if current == :account %>>
       <%= link_to_with_icon 'user', Spree.t(:"admin.user.account"), edit_admin_user_path(@user) %>
     </li>
-    <li<%== ' class="active"' if current == :address %>>
-      <%= link_to_with_icon 'user', Spree.t(:"admin.user.addresses"), addresses_admin_user_path(@user) %>
-    </li>
-    <li<%== ' class="active"' if current == :orders %>>
-      <%= link_to_with_icon 'shopping-cart', Spree.t(:"admin.user.orders"), orders_admin_user_path(@user) %>
-    </li>
-    <li<%== ' class="active"' if current == :items %>>
-      <%= link_to_with_icon 'edit', Spree.t(:"admin.user.items"), items_admin_user_path(@user) %>
-    </li>
-    <li<%== ' class="active"' if current == :store_credits %>>
-      <%= link_to_with_icon 'money', Spree.t(:"admin.user.store_credits"), admin_user_store_credits_path(@user) %>
-    </li>
   </ul>
 <% end %>
