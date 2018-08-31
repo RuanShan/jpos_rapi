@@ -1,4 +1,4 @@
-source 'https://gems.ruby-china.org/' do
+source 'https://gems.ruby-china.com/' do
 ################################################################################
 # spree
 ################################################################################
@@ -66,7 +66,7 @@ gem 'spree_backend',   path: './spree/backend'
   #验证码
   #gem 'rucaptcha'
   #https://github.com/nesquena/rabl/wiki/Rabl-In-Production
-  gem 'aliyun-sms' 
+  gem 'aliyun-sms'
 
   group :doc do
     # bundle exec rake doc:rails generates the API under doc/api.
