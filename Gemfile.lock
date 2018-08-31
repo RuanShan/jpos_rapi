@@ -54,7 +54,7 @@ PATH
       twitter_cldr (~> 4.3)
 
 GEM
-  remote: https://gems.ruby-china.org/
+  remote: https://gems.ruby-china.com/
   specs:
     aasm (4.12.3)
       concurrent-ruby (~> 1.0)
