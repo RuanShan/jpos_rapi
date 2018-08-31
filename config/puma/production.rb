@@ -74,7 +74,7 @@ threads 0, 16
 #
 # bind 'tcp://0.0.0.0:3001'
 # bind 'unix:///var/www/jpos_rapi/tmp/puma.sock'
-bind 'unix:///var/run/jpos_rapi_puma.sock?umask=0111'
+bind 'unix:///tmp/jpos_rapi_puma.sock?umask=0111'
 # bind 'ssl://127.0.0.1:9292?key=path_to_key&cert=path_to_cert'
 
 # Instead of "bind 'ssl://127.0.0.1:9292?key=path_to_key&cert=path_to_cert'" you
