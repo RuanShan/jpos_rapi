@@ -65,7 +65,7 @@ module Spree
     scope :store_credits, -> { where(source_type: Spree::StoreCredit.to_s) }
     scope :not_store_credits, -> { where(arel_table[:source_type].not_eq(Spree::StoreCredit.to_s).or(arel_table[:source_type].eq(nil))) }
 
-    self.whitelisted_ransackable_attributes = %w[source_id payment_method_id]
+    self.whitelisted_ransackable_attributes = %w[source_id payment_method_id state]
     # transaction_id is much easier to understand
     def transaction_id
       response_code
