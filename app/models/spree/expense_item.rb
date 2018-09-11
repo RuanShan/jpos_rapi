@@ -6,7 +6,7 @@ module Spree
     belongs_to :expense_category, class_name: 'Spree::ExpenseCategory'
 
 
-    validates :expense_category,  presence: true
+    #validates :expense_category,  presence: true
     validates :price, numericality: true
 
 
