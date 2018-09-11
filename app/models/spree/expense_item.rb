@@ -21,7 +21,7 @@ module Spree
 
     delegate :name, to: :store, prefix: true
     delegate :name, to: :user, prefix: true
-    delegate :name, to: :expense_category, prefix: true
+    delegate :name, to: :expense_category, prefix: true, allow_nil: true
 
     # Remove expense_category default_scope `deleted_at: nil`
     def expense_category

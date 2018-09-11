@@ -966,6 +966,7 @@ zh-CN:
     metadata: 元数据
     minimal_amount: "少量"
     missing_required_information: 缺少必须的信息
+    mobile: Mobile
     month: "月"
     more: "更多"
     move_stock_between_locations:
