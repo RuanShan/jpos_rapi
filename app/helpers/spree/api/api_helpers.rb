@@ -71,7 +71,7 @@ module Spree
         :id, :name, :description
       ]
       @@expense_item_attributes = [
-        :id, :store_id, :user_id, :variant_id, :cname, :memo, :price, :day, :entry_day, :created_at
+        :id, :store_id, :user_id, :expense_category_id, :variant_id, :cname, :memo, :price, :day, :entry_day, :created_at
       ]
       @@expense_attributes = [
         :id, :name
