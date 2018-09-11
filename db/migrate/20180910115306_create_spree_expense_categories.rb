@@ -11,6 +11,9 @@ class CreateSpreeExpenseCategories < ActiveRecord::Migration[5.1]
       t.index ["is_default"], name: "index_spree_tax_categories_on_is_default"
     end
 
+    change_table "spree_expense_items" do |t|
+      t.references 'expense_category'
+    end
 
   end
 end

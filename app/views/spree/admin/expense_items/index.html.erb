@@ -9,15 +9,23 @@
 <% if @expense_items.any? %>
   <table class="table">
     <thead>
-      <th><%= Spree::ExpenseItem.human_attribute_name :name %></th>
-      <th><%= Spree::ExpenseItem.human_attribute_name :description %></th>
+      <th><%= Spree::ExpenseItem.human_attribute_name :store_id %></th>
+      <th><%= Spree::ExpenseItem.human_attribute_name :day %></th>
+      <th><%= Spree::ExpenseItem.human_attribute_name :expense_category %></th>
+      <th><%= Spree::ExpenseItem.human_attribute_name :cname %></th>
+      <th><%= Spree::ExpenseItem.human_attribute_name :price %></th>
+      <th><%= Spree::ExpenseItem.human_attribute_name :user_id %></th>
       <th></th>
     </thead>
     <tbody>
       <% @expense_items.each do |expense_item| %>
         <tr>
-          <td><%= expense_item.name %></td>
-          <td><%= expense_item.description %></td>
+          <td><%= expense_item.store_name %></td>
+          <td><%= expense_item.day %></td>
+          <td><%= expense_item.expense_category_name %></td>
+          <td><%= expense_item.cname %></td>
+          <td><%= expense_item.price %></td>
+          <td><%= expense_item.user_name %></td>
           <td class="actions actions-2 text-right">
             <%= link_to_edit expense_item, no_text: true if can?(:edit, expense_item) %>
             <%= link_to_delete expense_item, no_text: true if can?(:delete, expense_item) %>

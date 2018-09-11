@@ -714,6 +714,8 @@ ActiveRecord::Schema.define(version: 20180910115306) do
     t.integer "state"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "expense_category_id"
+    t.index ["expense_category_id"], name: "index_spree_expense_items_on_expense_category_id"
     t.index ["store_id"], name: "index_spree_expense_items_on_store_id"
     t.index ["user_id"], name: "index_spree_expense_items_on_user_id"
     t.index ["variant_id"], name: "index_spree_expense_items_on_variant_id"
