@@ -10,6 +10,7 @@ module Spree
         :creditcard_attributes,
         :customer_attributes,
         :customer_return_attributes,
+        :expense_category_attributes,
         :expense_item_attributes,
         :expense_attributes,
         :image_attributes,
@@ -65,6 +66,9 @@ module Spree
       ]
       @@card_transaction_attributes = [
         :id, :card_id, :order_id, :amount,  :amount_left,:position,  :created_at
+      ]
+      @@expense_category_attributes = [
+        :id, :name, :description
       ]
       @@expense_item_attributes = [
         :id, :store_id, :user_id, :variant_id, :cname, :memo, :price, :day, :entry_day, :created_at

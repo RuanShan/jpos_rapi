@@ -6,6 +6,7 @@ module Spree
       :checkout_attributes,
       :customer_return_attributes,
       :customer_attributes,
+      :expense_category_attributes,
       :expense_item_attributes,
       :image_attributes,
       :inventory_unit_attributes,
@@ -53,6 +54,8 @@ module Spree
     @@customer_attributes = [:store_id, :email, :username, :mobile, :payment_password,
 
       :payment_password_confirmation, :birth, :address, :memo, :gender]
+
+    @@expense_category_attributes = [:name, :description]
 
     @@expense_item_attributes = [:id, :store_id, :user_id, :variant_id, :day, :entry_day, :quantity, :price,  :memo, :cname ]
 

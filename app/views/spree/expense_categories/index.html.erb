@@ -1,0 +1,31 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Spree Expense Categories</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+      <th>Deleted at</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @spree_expense_categories.each do |spree_expense_category| %>
+      <tr>
+        <td><%= spree_expense_category.name %></td>
+        <td><%= spree_expense_category.description %></td>
+        <td><%= spree_expense_category.deleted_at %></td>
+        <td><%= link_to 'Show', spree_expense_category %></td>
+        <td><%= link_to 'Edit', edit_spree_expense_category_path(spree_expense_category) %></td>
+        <td><%= link_to 'Destroy', spree_expense_category, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Spree Expense Category', new_spree_expense_category_path %>

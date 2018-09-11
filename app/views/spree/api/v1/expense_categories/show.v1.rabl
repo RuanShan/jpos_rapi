@@ -1,0 +1,2 @@
+object @expense_category
+attributes *expense_category_attributes

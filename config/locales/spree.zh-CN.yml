@@ -32,6 +32,9 @@ zh-CN:
         number: "卡号"
         verification_value: "验证码"
         year: "年份"
+      spree/expense_category:
+        name: "Name"
+        description: "description"
       spree/inventory_unit:
         state: "状态"
       spree/line_item:
@@ -233,6 +236,12 @@ zh-CN:
       spree/customer_return:
         one: 客户退货
         other: 客户退货
+      spree/expense_category:
+        one: 费用分类
+        other: 费用分类
+      spree/expense_item:
+        one: 费用
+        other: 费用
       spree/inventory_unit:
         one: "库存单位"
         other: "库存单位"
@@ -779,6 +788,8 @@ zh-CN:
     excl: excl.
     existing_shipments: Existing shipments
     expedited_exchanges_warning: "Any specified exchanges will ship to the customer immediately upon saving. The customer will be charged the full amount of the item if they do not return the original item within %{days_window} days."
+    expense_categories: 费用分类
+    expense_items: 费用
     expiration: "过期"
     expiration_month: 过期月份
     expiration_year: 过期年份

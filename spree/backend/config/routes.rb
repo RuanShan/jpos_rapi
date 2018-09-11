@@ -67,6 +67,9 @@ Spree::Core::Engine.add_routes do
       end
     end
 
+    resources :expense_categories
+    resources :expense_items
+
     resources :selling_services, concerns: [:saleable]
     resources :selling_prepaid_cards, concerns: [:saleable]
     resources :selling_products, concerns: [:saleable]
@@ -81,7 +84,7 @@ Spree::Core::Engine.add_routes do
       end
       resources :store_credits
     end
-    resources :card_transactions 
+    resources :card_transactions
 
     resources :promotions do
       resources :promotion_rules

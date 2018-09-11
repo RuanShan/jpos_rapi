@@ -5,6 +5,12 @@
   </ul>
 <% end %>
 
+<% if can? :admin, Spree::ExpenseItem %>
+  <ul class="nav nav-sidebar">
+    <%= main_menu_tree Spree.t(:expense_items), icon: "gift", sub_menu: "expense_item", url: "#sidebar-expense-item" %>
+  </ul>
+<% end %>
+
 <% if can?(:admin, Customer) %>
   <ul class="nav nav-sidebar">
     <%= tab Spree.t(:customers), url: admin_customers_path, icon: 'magnet' %>
@@ -23,11 +29,7 @@
   </ul>
 <% end %>
 
-<% if can? :admin, Spree::Promotion %>
-  <ul class="nav nav-sidebar">
-    <%= main_menu_tree Spree.t(:promotions), icon: "gift", sub_menu: "promotion", url: "#sidebar-promotions" %>
-  </ul>
-<% end %>
+
 
 <% if Spree.user_class && can?(:admin, Spree.user_class) %>
   <ul class="nav nav-sidebar">

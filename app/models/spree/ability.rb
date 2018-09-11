@@ -42,6 +42,7 @@ module Spree
         can :display, Country
         can :display, OptionType
         can :display, OptionValue
+        can :display, ExpenseCategory
         can :create, Order
         if user.has_spree_role?('waiter')
           can :manage, Order

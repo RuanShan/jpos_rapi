@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180823115306) do
+ActiveRecord::Schema.define(version: 20180910115306) do
 
   create_table "campaign_settings", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.integer "campaign_id"
@@ -689,6 +689,17 @@ ActiveRecord::Schema.define(version: 20180823115306) do
   create_table "spree_excluded_ad_hoc_option_values", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer "ad_hoc_variant_exclusion_id"
     t.integer "ad_hoc_option_value_id"
+  end
+
+  create_table "spree_expense_categories", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
+    t.string "name"
+    t.string "description"
+    t.boolean "is_default", default: false
+    t.datetime "deleted_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["deleted_at"], name: "index_spree_tax_categories_on_deleted_at"
+    t.index ["is_default"], name: "index_spree_tax_categories_on_is_default"
   end
 
   create_table "spree_expense_items", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|

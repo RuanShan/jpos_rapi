@@ -34,7 +34,7 @@ class LocalDevise::SessionsController < DeviseController
     resource.today_entries = resource.user_entries.today
     Rails.logger.debug "resource=#{resource.object_id} resource.today_entries =#{resource.today_entries.inspect} #{after_sign_in_path_for(resource)}"
     respond_to do |format|
-      format.json 
+      format.json
     end
   end
 
@@ -44,7 +44,14 @@ class LocalDevise::SessionsController < DeviseController
     set_flash_message!(:notice, :signed_in)
     sign_in(resource_name, resource)
     yield resource if block_given?
-    respond_with resource, location: after_sign_in_path_for(resource)
+    respond_to do |format|
+      #only for admin
+      format.html {
+        redirect_to admin_path
+      }
+      format.json
+    end
+    #respond_with resource, location: after_sign_in_path_for(resource)
   end
 
   # DELETE /resource/sign_out

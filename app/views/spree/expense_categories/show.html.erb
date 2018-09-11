@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @spree_expense_category.name %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @spree_expense_category.description %>
+</p>
+
+<p>
+  <strong>Deleted at:</strong>
+  <%= @spree_expense_category.deleted_at %>
+</p>
+
+<%= link_to 'Edit', edit_spree_expense_category_path(@spree_expense_category) %> |
+<%= link_to 'Back', spree_expense_categories_path %>
