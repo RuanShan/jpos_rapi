@@ -3,7 +3,6 @@ RailsStarter::Application.routes.draw do
     resources :expense_categories
   end
   mount Spree::Core::Engine => "/"
-  #resources :user_entries #用户打卡记录
   scope module: 'spree' do
     ################################################################################
     # spree api
@@ -496,6 +495,7 @@ RailsStarter::Application.routes.draw do
     end
   end
 
+  resources :user_entries #用户打卡记录
 
   resources :game_round_assets
   resources :game_results
