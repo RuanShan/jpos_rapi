@@ -118,6 +118,7 @@ Rails.logger.debug( "order_params=#{order_params.inspect}" )
 
           respond_with(@orders)
         end
+
         #订单的下一步流程
         def one_step
           find_order(true)
@@ -151,22 +152,12 @@ Rails.logger.debug( "order_params=#{order_params.inspect}" )
           @state_counts
         end
 
-        def mine
-          if current_api_user.persisted?
-            @orders = current_api_user.orders.reverse_chronological.ransack(params[:q]).result.page(params[:page]).per(params[:per_page])
-          else
-            render 'spree/api/errors/unauthorized', status: :unauthorized
-          end
+        def destroy
+          authorize! :destroy, @order
+          @order.destroy
+          respond_with(@order, status: 204)
         end
 
-        def apply_coupon_code
-          find_order
-          authorize! :update, @order, order_token
-          @order.coupon_code = params[:coupon_code]
-          @handler = PromotionHandler::Coupon.new(@order).apply
-          status = @handler.successful? ? 200 : 422
-          render 'spree/api/v1/promotions/handler', status: status
-        end
 
         private
 

@@ -1,7 +1,5 @@
 cache [I18n.locale, root_object]
 attributes *order_attributes
-node(:display_item_total) { |o| o.display_item_total.to_s }
-node(:display_total) { |o| o.display_total.to_s }
 node(:user_name, &:user_name)
 node(:creator_name, &:creator_name)
 node(:store_name, &:store_name)

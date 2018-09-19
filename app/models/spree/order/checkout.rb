@@ -4,7 +4,7 @@ module Spree
       def self.included(klass)
 
         klass.class_eval do
-          state_machine :state, initial: :cart, use_transactions: false, action: :save_state do
+          state_machine :state, initial: :cart, use_transactions: false  do
 
             # Persist the state on the order
             after_transition do |order, transition|
