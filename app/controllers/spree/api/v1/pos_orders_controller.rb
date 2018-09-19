@@ -11,13 +11,13 @@ module Spree
           authorize! :create, Spree::Order
 
           # enable group_state
-          order_attributes = params.require(:order).permit(permitted_checkout_attributes)
+          order_attributes = params.require(:order).permit(permitted_order_attributes)
           order_attributes[:creator] = current_api_user
           order_attributes[:store] = current_store
           order_attributes[:channel] = 'pos'
-          @order = Spree::Order.create!(order_attributes)
+          @order = Spree::Order.new(order_attributes)
 Rails.logger.debug( "order_params=#{order_params.inspect}" )
-          if @order.contents.update_cart(order_params)
+          if @order.save
             @order.complete_via_pos
             respond_with(@order, default_template: :show, status: 201)
           else

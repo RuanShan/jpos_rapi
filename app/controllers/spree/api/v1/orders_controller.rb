@@ -6,13 +6,6 @@ module Spree
 
         before_action :find_order, except: [:create, :mine, :current, :index, :update]
 
-        # Dynamically defines our stores checkout steps to ensure we check authorization on each step.
-        Order.checkout_steps.keys.each do |step|
-          define_method step do
-            find_order
-            authorize! :update, @order, params[:token]
-          end
-        end
 
         def cancel
           authorize! :update, @order, params[:token]

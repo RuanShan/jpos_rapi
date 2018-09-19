@@ -59,14 +59,8 @@ module Spree
           :customer,
           :customer_id,
           :ip,
-          :order_id,
-          :shipping,
-          :tax,
-          :subtotal,
-          :discount,
-          :currency,
-          :billing_address,
-          :shipping_address
+          :order_id
+
         ]
       end
 

@@ -429,6 +429,7 @@ class SpreeEcommerce < ActiveRecord::Migration[5.1]
       t.string "state"
       t.decimal "adjustment_total", precision: 10, scale: 2, default: "0.0", null: false
       t.integer "user_id"
+      t.integer "customer_id"
       t.datetime "completed_at"
       t.integer "bill_address_id"
       t.integer "ship_address_id"
@@ -436,13 +437,14 @@ class SpreeEcommerce < ActiveRecord::Migration[5.1]
       t.string "shipment_state"
       t.string "payment_state"
       t.string "email"
+      t.string "mobile", limit: 18
       t.text "special_instructions"
+      t.integer "created_by_id"
       t.datetime "created_at"
       t.datetime "updated_at"
       t.integer "site_id"
       t.string "currency"
       t.string "last_ip_address"
-      t.integer "created_by_id"
       t.string "channel", default: "spree"
       t.decimal "shipment_total", precision: 10, scale: 2, default: "0.0", null: false
       t.decimal "additional_tax_total", precision: 10, scale: 2, default: "0.0"
@@ -473,7 +475,7 @@ class SpreeEcommerce < ActiveRecord::Migration[5.1]
       t.index ["number"], name: "index_spree_orders_on_number"
       t.index ["ship_address_id"], name: "index_spree_orders_on_ship_address_id"
       t.index ["store_id"], name: "index_spree_orders_on_store_id"
-      t.index ["user_id", "created_by_id"], name: "index_spree_orders_on_user_id_and_created_by_id"
+      t.index ["customer_id", "created_by_id"], name: "index_spree_orders_on_user_id_and_created_by_id"
     end
 
     create_table "spree_page_layouts", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
