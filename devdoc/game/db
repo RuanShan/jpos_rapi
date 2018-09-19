@@ -1,0 +1,9 @@
+game (has_many)-> game_round
+
+                  game_round (belongs_to) -> user
+                                             user ->belongs_to ->company
+
+                                                                 company(has_one) wechat_account
+
+company has_many users
+        has_many wechat_account
