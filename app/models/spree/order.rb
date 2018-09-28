@@ -12,7 +12,7 @@ module Spree
 
     include NumberAsParam
     extend Spree::DisplayMoney
-    money_methods :total, :item_total
+    money_methods :outstanding_balance, :total, :item_total
 
     MONEY_THRESHOLD  = 100_000_000
     MONEY_VALIDATION = {

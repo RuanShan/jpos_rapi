@@ -11,7 +11,7 @@ module Spree
           authorize! :create, Spree::Order
 
           # enable group_state
-          order_attributes = params.require(:order).permit(permitted_order_attributes)
+          order_attributes = order_params
           order_attributes[:creator] = current_api_user
           order_attributes[:store] = current_store
           order_attributes[:channel] = 'pos'
