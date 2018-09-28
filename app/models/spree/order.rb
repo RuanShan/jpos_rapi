@@ -407,19 +407,18 @@ module Spree
       # lock all adjustments (coupon promotions, etc.)
       #all_adjustments.each(&:close)
       # update payment and shipment(s) states, and save
-      #保证会员卡，现金等支付为完成状态。
-      payments.each(&:capture!)
-      updater.update_payment_state
       #shipments.each do |shipment|
       #  shipment.update!(self)
       #  shipment.finalize!
       #end
       #updater.update_shipment_state
-      updater.update_group_state
-      updater.update_order_type
-      updater.update_sale_total
+      #保证会员卡，现金等支付为完成状态。
+      payments.each(&:capture!)
+      updater.update_payment_state
 
-      save!
+      updater.update
+
+
       #updater.run_hooks
       #不能 touch completed_at, 删除时会导致 OrderInventory.verify 异常
       touch :completed_at

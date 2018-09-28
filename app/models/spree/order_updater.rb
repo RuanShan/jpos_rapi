@@ -21,7 +21,10 @@ module Spree
       if order.completed?
         update_payment_state
       end
-      run_hooks
+      update_order_type
+      update_sale_total
+
+      #run_hooks
       persist_totals
     end
 
@@ -40,6 +43,7 @@ module Spree
     def update_totals
       update_payment_total
       update_item_total
+    #  Rails.logger.debug "======update_totals=#{  order.total}========"
     end
 
 
