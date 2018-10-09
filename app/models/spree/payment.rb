@@ -261,6 +261,8 @@ module Spree
     #end
 
     def invalidate_old_payments
+      #允许同时使用多种支付方式，所以屏蔽这个方法
+      return
       # invalid payment or store_credit payment shouldn't invalidate other payment types
       return if has_invalid_state? || store_credit? || member_card?
 
