@@ -117,6 +117,6 @@ class LocalDevise::SessionsController < DeviseController
 
   def is_cors?
 Rails.logger.debug "request.host=#{request.host} local=#{request.local?} xhr=#{ request.xhr?} "
-    request.local? || request.host=~/api|localhost/
+    request.local? || request.host=~/api|ruanshan|getstore|wyfpj|localhost/
   end
 end
