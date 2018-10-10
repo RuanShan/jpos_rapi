@@ -91,5 +91,5 @@ Rails.application.configure do
 end
 
 Paperclip.interpolates :images_host  do |attachment, style|
-  "https://jpos_api.firecart.cn"
+  "http://api.wyfpj.com"
 end
