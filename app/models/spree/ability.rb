@@ -44,7 +44,7 @@ module Spree
         can :display, OptionValue
         can :display, ExpenseCategory
         can :create, Order
-        if user.has_spree_role?('waiter')
+        if user.has_spree_role?('waiter') ||  user.has_spree_role?('worker')
           can :manage, Order
           can :manage, LineItemGroup
           can :manage, Customer
