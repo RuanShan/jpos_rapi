@@ -69,6 +69,7 @@ module Spree
 
     def persist_totals
       order.update_columns(
+        group_state: order.group_state,
         payment_state: order.payment_state,
         item_total: order.item_total,
         item_count: order.item_count,
