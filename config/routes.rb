@@ -102,7 +102,7 @@ RailsStarter::Application.routes.draw do
 
         get '/pos_orders/:id', to: 'pos_orders#show'
         post '/pos_orders', to: 'pos_orders#create'
-        get '/pos_orders/find_by_group_number/:group_number', to: 'pos_orders#state_counts'
+        get '/pos_orders/find_by_group_number/:group_number', to: 'pos_orders#find_by_group_number'
         get '/pos_orders/state_counts', to: 'pos_orders#state_counts'
         put '/pos_orders/all_step', to: 'pos_orders#all_step'
         put '/pos_orders/:id/one_step', to: 'pos_orders#one_step'
