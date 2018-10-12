@@ -7,7 +7,7 @@ child line_items: :line_items do
 end
 
 child order: :order do
-  extends 'spree/api/v1/orders/order'
+  attributes *order_attributes
 end
 
 child images: :images do
