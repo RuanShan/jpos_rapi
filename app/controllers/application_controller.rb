@@ -19,7 +19,7 @@ class ApplicationController < ActionController::Base
 
   before_action :set_client_store
   before_action :configure_permitted_parameters, if: :devise_controller?
-
+  before_action :set_cache_header
 
   add_flash_types :error, :success # available flash types: notice, alert, error, success
 
@@ -54,7 +54,7 @@ class ApplicationController < ActionController::Base
   end
 
   def no_entry_today
-    render 'errors/no_entry_today', status: 401    
+    render 'errors/no_entry_today', status: 401
   end
 
   def error_during_processing(exception)
@@ -66,5 +66,16 @@ class ApplicationController < ActionController::Base
 
   def unprocessable_entity(message)
     render plain: { exception: message }.to_json, status: 422
+  end
+
+  def set_cache_header
+    #https://stackoverflow.com/questions/711418/how-to-prevent-browser-page-caching-in-rails
+    #https://www.jianshu.com/p/e59d16a9ab7e
+    #禁止浏览器使用缓存
+    if devise_controller? || request.fullpath=~/\/api/
+      headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+      headers['Pragma'] = 'no-cache'
+      headers['Expires'] = '0'
+    end
   end
 end

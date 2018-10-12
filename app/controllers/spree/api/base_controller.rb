@@ -46,11 +46,6 @@ module Spree
 
       def set_content_type
         headers['Content-Type'] = content_type
-        #https://www.jianshu.com/p/e59d16a9ab7e
-        #禁止浏览器使用缓存
-        headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
-        headers['Pragma'] = 'no-cache'
-        headers['Expires'] = '0'
       end
 
       def load_user
