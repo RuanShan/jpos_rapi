@@ -19,7 +19,6 @@ class ApplicationController < ActionController::Base
 
   before_action :set_client_store
   before_action :configure_permitted_parameters, if: :devise_controller?
-  before_action :set_cache_header
 
   add_flash_types :error, :success # available flash types: notice, alert, error, success
 
@@ -72,10 +71,10 @@ class ApplicationController < ActionController::Base
     #https://stackoverflow.com/questions/711418/how-to-prevent-browser-page-caching-in-rails
     #https://www.jianshu.com/p/e59d16a9ab7e
     #禁止浏览器使用缓存
-    #if devise_controller? || request.fullpath=~/\/(api|user)/
+    if request.fullpath=~/\/(api|user)/
       headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
       headers['Pragma'] = 'no-cache'
       headers['Expires'] = '0'
-    #end
+    end
   end
 end

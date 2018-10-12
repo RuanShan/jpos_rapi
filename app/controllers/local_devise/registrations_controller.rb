@@ -1,4 +1,5 @@
 class LocalDevise::RegistrationsController < Devise::RegistrationsController
+  before_action :set_cache_header
 
   def show
     #Rails.logger.debug " current_user1=#{current_user.inspect}"

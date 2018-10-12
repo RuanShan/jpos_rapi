@@ -46,6 +46,10 @@ module Spree
 
       def set_content_type
         headers['Content-Type'] = content_type
+        # 由于继承关系 BaseController < ActionController::Base，需要单独设置
+        headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+        headers['Pragma'] = 'no-cache'
+        headers['Expires'] = '0'
       end
 
       def load_user
