@@ -24,7 +24,7 @@
       <div class="card-btn"></div>
     </div>
     <!-- tab box start -->
-    <div class="item-box">
+    <div class="item-box totals">
       <div class="item">
         <a href="#">
           <b><%=@prepaid_card.amount_remaining %></b>
@@ -52,7 +52,7 @@
     <!-- list box start -->
     <div class="main">
       <div class="list-box recent-order-states">
-        最近订单
+        <div class="list-box-title"> <i class="icon icon-9"></i> 最近订单 </div>
         <div class="item-box">
           <div class="item">
             <a href="<%= recent_mp_orders_path(group_state: :pending)%>" class="recent-order-state order-state-new">
@@ -84,7 +84,7 @@
         </div>
       </div>
 
-      <div class="list-box">
+      <div class="list-box my">
         <dl>
           <dt class="border">
             <a class="icon-right" href="<%= normal_mp_orders_path%>">

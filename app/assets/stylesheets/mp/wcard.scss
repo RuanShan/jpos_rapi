@@ -10,7 +10,7 @@
 .theme-1 .member{background-color: #e4ebfd}
 .theme-1{color:#999;}
 .theme-1 a{color:#666;}
-.theme-1 *{border:0 solid  #ccc;}
+.theme-1 *{border:0 solid  transparent;}
 .theme-1 .btn{background:#556fb5;}
 .theme-1 .btn[disabled]{background:#7b93d6;}
 .theme-1 .btn-code{background:#7b93d6;}
@@ -35,6 +35,19 @@
 .theme-1 .sign-top{background:#556fb5;}
 .theme-1 .sign-btn div{background:#556fb5;}
 .theme-1 .used-main .selected .fa{color:#556fb5;}
+.theme-1 .my{     background: #f8fafe; }
+.theme-1 .my dl{  background: #fff; margin-bottom: 12px;}
+.theme-1 .item-box .item:first-child{ border-right: 1px solid #f8fafe;}
+.theme-1 .item-box .item:last-child{ border-left: 1px solid #f8fafe;}
+.theme-1 .index{
+  padding: 0 10px;
+}
+.theme-1 .list-box-title { padding-left: 34px; position: relative; }
+.theme-1 .list-box-title .icon { left: 8px; top: 0;}
+.theme-1 .weui-badge { background-color: #f4b22c; }
+.theme-1 .totals .item a{ padding: 5px 0; }
+.theme-1 .vip-head { background-color:#f4b22c; border-bottom: 1px solid #f4b22c;}
+.theme-1 .vip-head h1{ color: #434343;  }
 /*theme-2*/
 
 .theme-2{color:#666;padding-bottom:90px;}
@@ -244,17 +257,19 @@ textarea.input{resize:none;}
 .select .img{position:absolute;right:3px;bottom:3px;}
 .selected .img-3{background-position:-80px 0;}
 
-.stage .title{display:table;width:100%;height:45px;line-height:44px;border-bottom:1px solid #039994;}
+.stage .title{display:table;width:100%;height:45px;line-height:44px;
+  background-color: #f4b22c;
+  border-bottom:1px solid #f4b22c;}
 .stage .title a{display:table-cell;width:25%;padding:0 10px;vertical-align:middle;}
 .stage .title a img{width:8px;height:15px;display:block;}
-.stage .title h1{display:table-cell;width:50%;color:#039994;font-size:15px;font-weight:normal;text-align:center;}
+.stage .title h1{display:table-cell;width:50%;color:#434343;font-size:15px;font-weight:normal;text-align:center;}
 
 /*card-img*/
-.card-img{padding:5px 7px;position:relative;}
+.card-img{padding:10px 0;position:relative;}
 .img-bg{width:100%;position:relative;color:#fff;font-size:12px;}
 .img-bg img{width:100%;}
-.card-logo{position:absolute;width:30%;max-height:40px;left:10px;top:10px;}
-.card-logo img{width:auto;max-width:100%;max-height:100%;}
+.card-logo{position:absolute;width:14%;max-height:40px;left:10px;top:10px;}
+.card-logo img{width:auto;max-width:100%;max-height:100%; border-radius: 100%;}
 .card-vip{font-family:STSong;position:absolute;right:10px;top:10px;}
 .card-name{position:absolute;right:10px;bottom:10px;text-align:right;}
 .card-btn{display:none;position:absolute;width:100%;height:65px;left:0;bottom:0;}
@@ -275,7 +290,7 @@ textarea.input{resize:none;}
 .item{display:table-cell;text-align:center;vertical-align:top;word-break:break-all;}
 .item:last-child{border-right-width:0;}
 .item a{display:block;padding-top:5px;}
-.item b{display:block;height:25px;line-height:25px;font-size:15px;overflow:hidden;}
+.item b{display:block;height:25px;line-height:25px;font-size:15px;overflow:hidden; color:#f4b22c;}
 .item span{display:block;height:20px;font-size:12px;line-height:20px;overflow:hidden;}
 /*list-box*/
 .list-box-t{padding:10px;color:#666;border-bottom-width:1px;}
@@ -619,3 +634,8 @@ transform-origin: left top; height: 0px;}
   .sex{ padding-left: 13px; border:1px solid #ccc; border-radius:3px; width:100%; height: 40px; line-height: 40px; display: block;}
   .choose_radio li,.choose_checkbox li{ float: left; margin:7px 6% 0 0;}
   .textarea{ padding:12px; width:100%; height:88px; border:1px solid #ccc; border-radius: 3px; font-size:14px;}
+
+.order{
+  background-color: #fff;
+  margin-bottom: 10px;
+}

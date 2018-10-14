@@ -546,6 +546,8 @@ ActiveRecord::Schema.define(version: 20180910115306) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "deleted_at"
+    t.string "card_code", limit: 16
+    t.date "card_expire_at"
     t.index ["user_id"], name: "index_spree_cards_on_user_id"
   end
 
@@ -691,9 +693,9 @@ ActiveRecord::Schema.define(version: 20180910115306) do
     t.integer "ad_hoc_option_value_id"
   end
 
-  create_table "spree_expense_categories", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
-    t.string "name"
-    t.string "description"
+  create_table "spree_expense_categories", force: :cascade, options: "ENGINE=MyISAM DEFAULT CHARSET=utf8mb4" do |t|
+    t.string "name", limit: 128
+    t.string "description", limit: 1024
     t.boolean "is_default", default: false
     t.datetime "deleted_at"
     t.datetime "created_at", null: false
@@ -2057,6 +2059,49 @@ ActiveRecord::Schema.define(version: 20180910115306) do
     t.string "name"
     t.integer "taggings_count", default: 0
     t.index ["name"], name: "index_tags_on_name", unique: true
+  end
+
+  create_table "think_applicant", id: :integer, force: :cascade, options: "ENGINE=MyISAM DEFAULT CHARSET=utf8" do |t|
+    t.string "fullname", limit: 45
+    t.string "position", limit: 45, comment: "职位"
+    t.string "id_num", limit: 45
+    t.string "id_address", limit: 128
+    t.integer "gender", limit: 1, default: 0, null: false
+    t.string "address", limit: 45
+    t.integer "married", limit: 1, default: 0, null: false
+    t.string "mobile", limit: 45
+    t.string "major", limit: 45
+    t.string "degree", limit: 45
+    t.string "graduated_from"
+    t.datetime "graduated_at"
+    t.text "qualification"
+    t.text "self_evaluation"
+    t.datetime "exp1_start_at"
+    t.datetime "exp1_end_at"
+    t.string "exp1_company"
+    t.string "exp1_position", limit: 45
+    t.text "exp1_responsibility"
+    t.datetime "exp2_start_at"
+    t.datetime "exp2_end_at"
+    t.string "exp2_company"
+    t.string "exp2_position", limit: 45
+    t.text "exp2_responsibility"
+    t.datetime "exp3_start_at"
+    t.datetime "exp3_end_at"
+    t.string "exp3_company"
+    t.string "exp3_position", limit: 45
+    t.text "exp3_responsibility"
+    t.datetime "exp4_start_at"
+    t.datetime "exp4_end_at"
+    t.string "exp4_company"
+    t.string "exp4_position", limit: 45
+    t.text "exp4_responsibility"
+    t.datetime "exp5_start_at"
+    t.datetime "exp5_end_at"
+    t.string "exp5_company"
+    t.string "exp5_position", limit: 45
+    t.text "exp5_responsibility"
+    t.string "number", limit: 45
   end
 
   create_table "user_entries", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
