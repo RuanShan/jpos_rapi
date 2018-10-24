@@ -1,6 +1,6 @@
 # Template file for application.yml
 devise_secret_key: 'somethingsecure' # 'rake secret' to generate a token
-url_host: "example.test"
+host: "example.test"
 devise_mailer_sender: "devise@example.com"
 mailer_address: "smtpout.secureserver.net" # for example, this is godaddy.com
 mailer_port: 80
@@ -15,6 +15,9 @@ legal_disclaimer_link: "http://ourdisclaimer.com/?i=YOUR-SITE-HERE"
 
 production:
 #  <<: *defaults
-  url_host: "www.example.com"
+  host: "www.example.com"
   ga_tracker: "UA-xxxxxxxx-X"
   ga_tracker_domain: "example.com"
+  wx_url: 'https://api.wyfpj.com'
+development:
+  wx_url: 'http://testwx.getstore.cn'

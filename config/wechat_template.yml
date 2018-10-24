@@ -1,20 +1,20 @@
-template:
-  template_id: "o64KQ62_xxxxxxxxxxxxxxx-Qz-MlNcRKteq8"
+new_order_created:
+  template_id: "Tbs485ygKHXrfuR_-8v416YmZjz1jrN4uY9NuZY4xRM"
   url: "http://weixin.qq.com/download"
   topcolor: "#FF0000"
   data:
     first:
-      value: "您好，您已报名成功"
+      value: "订单生成通知"
       color: "#0A0A0A"
-    keynote1:
-      value: "XX活动"
+    keyword1:
+      value: "2014年7月21日 18:36"
       color: "#CCCCCC"
-    keynote2:
-      value: "2014年9月16日"
+    keyword2:
+      value: "苹果"
       color: "#CCCCCC"
-    keynote3:
-      value: "上海徐家汇xxx城"
+    keyword3:
+      value: "007"
       color: "#CCCCCC"
     remark:
-      value: "欢迎再次使用。"
+      value: "订单成功"
       color: "#173177"

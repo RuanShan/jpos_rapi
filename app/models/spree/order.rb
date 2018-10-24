@@ -485,7 +485,7 @@ module Spree
 
     def notify_customer
       SmsJob.perform_later(self) if enable_sms
-      MpMsgJob.perform_later(self) if enable_mp_msg
+      MpMsgJob.perform_later(self,  MpMsgJob::TemplateTypeEnum.new_order_created ) if enable_mp_msg
     end
 
     def associate_card_if_needed

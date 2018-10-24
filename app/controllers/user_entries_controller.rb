@@ -104,6 +104,6 @@ class UserEntriesController < ApplicationController
 
     def is_cors?
       Rails.logger.debug "request.host=#{request.host} local=#{request.local?} "
-      request.local? || request.host=~/jpos|localhost/
+      request.local? || request.host=~/api|getstore|wyfpj|localhost/
     end
 end
