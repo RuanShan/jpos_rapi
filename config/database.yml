@@ -16,7 +16,7 @@ development:
   database: jpos_rapi_dev
   pool: 5
   username: root
-  password:
+  password: root
   socket: /var/lib/mysql/mysql.sock
 
 # Warning: The database defined as "test" will be erased and
