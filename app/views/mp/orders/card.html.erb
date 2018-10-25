@@ -1,11 +1,12 @@
-<div id="sec-index" class="orders">
-  <div class="vip-head">
-      <a href="<%= mp_wx_follower_path(@customer.wx_follower)%>">
-        <img src="/assets/mobile/wcard/icon-right.png" alt="">
-      </a>
-      <h1>我的充值</h1>
-      <a href="javascript:;"></a>
-  </div>
+<div class="vip-head">
+    <a href="<%= mp_wx_follower_path(@customer.wx_follower)%>">
+      <img src="/assets/mobile/wcard/icon-right.png" alt="">
+    </a>
+    <h1>我的充值</h1>
+    <a href="javascript:;"></a>
+</div>
+<div id="sec-index" class="index orders">
+
   <div class="page">
     <% if @orders.present? %>
     <div class="weui-form-preview">

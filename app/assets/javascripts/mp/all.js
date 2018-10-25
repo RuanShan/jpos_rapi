@@ -3,7 +3,8 @@
 //= require cable.js
 //= require jquery.validate.min.js
 //= require weui.js
-//= require layer.mobile.js
+//= require mp/orders.js
+//= require infinite-scroll.pkgd.min
 //= require mp/util.js
 //= require mp/followers.js
 //= require mp/orders.js

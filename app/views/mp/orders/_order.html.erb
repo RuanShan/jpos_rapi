@@ -10,14 +10,14 @@
       </div>
     </div>
     <div class="weui-form-preview__item">
-      <div class="weui-form-preview__label"> 订单编号 <%= order.number %> </div>  <div class="weui-form-preview__value"> 订单日期 <%= order.display_created_at %></div>
+      <div class="weui-form-preview__label"> 订单编号 <%= order.number %> </div>  <div class="weui-form-preview__value"> 订单日期 <%= order.created_at.to_date %></div>
     </div>
     <div class="weui-form-preview__item">
-      <div class="weui-form-preview__label"> 订单金额 <%= order.total %></div>
+      <div class="weui-form-preview__label"> 订单金额 <%= order.total.to_i %></div>
         <div class="weui-form-preview__value">
           <% if order.payments.present? %>
             <% order.payments.each { |payment|  %>
-              <p> <%= payment.cname %> <%= payment.amount %> </p>
+              <p> <%= payment.cname %> <%= payment.amount.to_i %> </p>
             <% }%>
           <% else %>
             未付
@@ -40,7 +40,7 @@
           </div>
           <ul class="weui-media-box__info">
               <li class="weui-media-box__info__meta">物品编号：<%= group.number %></li>
-              <li class="weui-media-box__info__meta">状态：<%= group.state %></li>
+              <li class="weui-media-box__info__meta">状态：<%=  group.display_state %></li>
           </ul>
       </div>
   </div>

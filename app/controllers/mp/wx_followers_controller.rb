@@ -4,29 +4,29 @@
 #
 class Mp::WxFollowersController < Mp::BaseController
 
-  before_action :set_wx_follower, only: [:edit, :update, :destroy]
+  before_action :set_wx_follower, only: [:show, :edit, :update, :destroy]
 
   # 微信会员入口
   # 关联会员账号，或创建会员账号
   def order_entry
-    # wechat_oauth2 do |openid, access_info|
-    #   #查找用户，强制关注
-    #   user = wechat.web_userinfo( access_info['access_token'], 'openid' )
-    #   if user.blank?
-    #     redirect_to :please_subscribe and return
-    #   end
-    #   Rails.logger.debug "entry.user=#{user.inspect}"
-    #   #微信用户已经关注
-    #   @wx_follower = WxFollower.find_by(openid: openid)
-    #
-    #   if @wx_follower.try(:customer)
-    #     #如果微信用户已经关联会员账号
-    #     redirect_to  mp_wx_follower_path( @wx_follower )
-    #   elsif @wx_follower.present?
-    #     #customer 客户信息被删除， 微信用户需要重新关联
-    #     @wx_follower.destroy
-    #   end
-    # end
+    wechat_oauth2 do |openid, access_info|
+      #查找用户，强制关注
+      user = wechat.web_userinfo( access_info['access_token'], 'openid' )
+      if user.blank?
+        redirect_to :please_subscribe and return
+      end
+      Rails.logger.debug "entry.user=#{user.inspect}"
+      #微信用户已经关注
+      @wx_follower = WxFollower.find_by(openid: openid)
+
+      if @wx_follower.try(:customer)
+        #如果微信用户已经关联会员账号
+        redirect_to  mp_wx_follower_path( @wx_follower )
+      elsif @wx_follower.present?
+        #customer 客户信息被删除， 微信用户需要重新关联
+        @wx_follower.destroy
+      end
+    end
 
     @wx_follower = WxFollower.new
   end
@@ -36,7 +36,6 @@ class Mp::WxFollowersController < Mp::BaseController
   end
 
   def show
-    @wx_follower = WxFollower.find(1)
     @customer = @wx_follower.customer
     @prepaid_card = @customer.prepaid_card || Spree::Card.style_prepaid.new
     #我的订单数量

@@ -134,6 +134,8 @@ module Spree
     extend BetterDateScope
     better_date_time_scope( created_at: :today)
 
+    extend DisplayEnum
+    display_enum_methods :state
 
     def make_step_and_order( forward= true )
       forward ? next! : back!

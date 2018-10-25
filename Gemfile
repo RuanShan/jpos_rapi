@@ -96,6 +96,8 @@ gem 'spree_backend',   path: './spree/backend'
   gem 'rest-client'
   gem 'tzinfo-data', platforms: [:mingw, :mswin , :x64_mingw]
 
+  gem 'kaminari'
+
 end
 
 #source 'https://rails-assets.org' do
