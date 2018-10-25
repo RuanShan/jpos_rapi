@@ -4,7 +4,7 @@
 #
 class Mp::WxFollowersController < Mp::BaseController
 
-  before_action :set_wx_follower, only: [:show, :edit, :update, :destroy]
+  before_action :set_wx_follower, only: [:edit, :update, :destroy]
 
   # 微信会员入口
   # 关联会员账号，或创建会员账号
@@ -36,6 +36,7 @@ class Mp::WxFollowersController < Mp::BaseController
   end
 
   def show
+    @wx_follower = WxFollower.find(1)
     @customer = @wx_follower.customer
     @prepaid_card = @customer.prepaid_card || Spree::Card.style_prepaid.new
     #我的订单数量

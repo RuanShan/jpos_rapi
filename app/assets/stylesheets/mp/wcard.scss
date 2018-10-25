@@ -20,7 +20,7 @@
 .theme-1 .icon-right:after{background-image:asset-url("mobile/wcard/icon-v1.png");}
 .theme-1 .item{border-right-width:1px;}
 .theme-1 .tab-item:last-child{border-right-width:0;}
-.theme-1 .num{color:#556fb5;border-color:#556fb5;}
+.theme-1 .num{color:#111;border-color:#111;}
 .theme-1 .card-btn{background:#f8fafe;}
 .theme-1 .tab-box a{border-color:#404257;background:#eee;}
 .theme-1 .tab-box .cur{color:#fff;background:#404257;}
@@ -141,16 +141,21 @@ textarea.input{resize:none;}
   border-bottom:1px solid #f4b22c;}
 .stage .title a{display:table-cell;width:25%;padding:0 10px;vertical-align:middle;}
 .stage .title a img{width:8px;height:15px;display:block;}
-.stage .title h1{display:table-cell;width:50%;color:#434343;font-size:15px;font-weight:normal;text-align:center;}
+.stage .title h1{display:table-cell;width:50%;color:#3f210f;font-size:15px;font-weight:normal;text-align:center;}
 
 /*card-img*/
 .card-img{padding:10px 0;position:relative;}
 .img-bg{width:100%;position:relative;color:#fff;font-size:12px;}
 .img-bg img{width:100%;}
-.card-logo{position:absolute;width:14%;max-height:40px;left:10px;top:10px;}
+.card-logo{position:absolute;width:40px;max-height:40px;left:20px;top:20px;box-shadow:0px 0px 5px #F2F2F2; border-radius: 100%;}
 .card-logo img{width:auto;max-width:100%;max-height:100%; border-radius: 100%;}
-.card-vip{font-family:STSong;position:absolute;right:10px;top:10px;}
-.card-name{position:absolute;right:10px;bottom:10px;text-align:right;}
+.card-vip{font-family:STSong;position:absolute;right:20px;top:20px;text-align: right;}
+.card-vip .clogo{ width: 20%;}
+.card-number{position:absolute;right:20px;bottom:10px;text-align:right;color:#b69850; font-size: 14px; font-weight: bold;}
+.card-name{position:absolute;left:20px;bottom:15px; color: #3f210f;}
+.card-name span{    font-size: 20px; color:#b69850;}
+.card-name b{ background-color:#b69850; border-radius: 100%;     width: 20px; height: 20px; line-height: 20px; text-align: center; display: inline-block;}
+
 .card-btn{display:none;position:absolute;width:100%;height:65px;left:0;bottom:0;}
 .btn-code{height:32px;line-height:32px;}
 .no-card .card-btn{display:block;}
