@@ -39,5 +39,5 @@ production:
   database: jpos_rapi_prod
   pool: 5
   username: root
-  password:
+  password: root
   socket: /tmp/mysql.sock
