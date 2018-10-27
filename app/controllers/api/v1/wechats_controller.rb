@@ -5,7 +5,7 @@ module Api
       wechat_responder
 
       on :text do |request, content|
-          request.reply.text "echo: #{content}" # Just echo
+          request.reply.text "#{content}" # Just echo for connection
       end
 
       # When receive 'help', will trigger this responder
