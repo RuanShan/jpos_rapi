@@ -4,7 +4,7 @@ module Api
       before_action :debug_echo
 
       def debug_echo
-        Rails.logger.debug "debug_echo#{ ENV['JPOS_WECHAT_APPID'] }"
+        Rails.logger.info "debug_echo#{ ENV['JPOS_WECHAT_APPID'] }"
       end
       # For details on the DSL available within this file, see https://github.com/Eric-Guo/wechat#rails-responder-controller-dsl
       wechat_responder
