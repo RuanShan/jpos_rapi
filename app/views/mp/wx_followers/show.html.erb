@@ -1,21 +1,24 @@
 <div class="stage" id="stage">
   <div class="title">
-    <h1> 永峰皮具头部</h1>
+    <h1> 会员专享</h1>
   </div>
   <!-- 会员卡首页 start -->
   <section class="index" id="sec-index">
     <div class="card-img">
       <!-- no-card 没有领卡显示领卡按钮 -->
       <div class="img-bg">
-        <%=image_tag 'mp/vcard.jpg' %>
+        <%=image_tag 'mobile/wcard/card.png' %>
         <div class="card-logo">
           <%= image_tag @wx_follower.headimgurl %>
         </div>
-        <div class="card-vip"><%= @wx_follower.nickname %></div>
+        <div class="card-vip">  <%= image_tag 'mobile/wcard/logo.png', class: 'clogo' %></div>
         <div class="card-name">
+          <p >   <b>会</b> <b>员</b> <b>卡</b> </p>
+        </div>
+        <div class="card-number">
           <% if @prepaid_card.persisted? %>
-          <p><%= @prepaid_card.name %></p>
-          <p>会员卡号:<%= @prepaid_card.code %></p>
+          <p><% @prepaid_card.name %></p>
+          <p> NO. <%= @prepaid_card.code %></p>
           <% else %>
           <p> 暂无会员卡 </p>
           <% end %>
@@ -27,7 +30,7 @@
     <div class="item-box totals">
       <div class="item">
         <a href="#">
-          <b><%=@prepaid_card.amount_remaining %></b>
+          <b><%=@prepaid_card.amount_remaining.to_i %></b>
           <span>会员卡余额</span>
         </a>
       </div>
@@ -43,7 +46,7 @@
       <% end %>
       <div class="item">
         <a href="#">
-          <b><%= @order_total %></b>
+          <b><%= @order_total.to_i %></b>
           <span>消费金额</span>
         </a>
       </div>
@@ -52,7 +55,7 @@
     <!-- list box start -->
     <div class="main">
       <div class="list-box recent-order-states">
-        <div class="list-box-title"> <i class="icon icon-9"></i> 最近订单 </div>
+        <div class="list-box-title"> <i class="icon icon-9"></i> <span style="color:#666;">最近订单 </span></div>
         <div class="item-box">
           <div class="item">
             <a href="<%= recent_mp_orders_path(group_state: :pending)%>" class="recent-order-state order-state-new">

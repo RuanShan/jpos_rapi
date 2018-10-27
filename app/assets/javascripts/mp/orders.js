@@ -27,4 +27,12 @@ $(document).on(" turbolinks:load", function() {
           console.log(index);
      }
   });
+  // init Infinite Scroll
+  $('.my-orders .orders').infiniteScroll({
+    path: '.pagination__next',
+    append: '.order',
+    status: '.scroller-status',
+    hideNav: '.pagination',
+  });
+
 })

@@ -478,6 +478,7 @@ DEPENDENCIES
   httparty!
   jbuilder (~> 2.0)!
   jquery-rails!
+  kaminari!
   listen (~> 3.0.5)!
   mysql2 (~> 0.4.10)!
   paperclip (~> 5.2.0)!
