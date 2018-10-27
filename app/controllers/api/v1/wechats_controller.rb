@@ -5,8 +5,7 @@ module Api
       wechat_responder
 
       on :text do |request, content|
-        Rails.logger.debug "wx content=#{content}"
-          request.reply.text "#{content}" # Just echo for connection
+          request.reply.text "echo: #{content}" # Just echo
       end
 
       # When receive 'help', will trigger this responder
