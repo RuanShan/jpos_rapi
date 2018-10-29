@@ -13,7 +13,7 @@ class Mp::WxFollowersController < Mp::BaseController
     wechat_oauth2 do |openid, access_info|
       Rails.logger.debug "order_entry:openid=#{openid}"
       #查找用户，强制关注
-      user = wechat.web_userinfo( access_info['access_token'], 'openid' )
+      user = wechat.user( openid )
       if user.blank?
         redirect_to :please_subscribe and return
       end
@@ -70,7 +70,7 @@ class Mp::WxFollowersController < Mp::BaseController
       permitted_params = wx_follower_params
 
       #查找用户，强制关注
-      user = wechat.web_userinfo( access_info['access_token'], openid )
+      user = wechat.user( openid )
       @wx_follower = WxFollower.find_or_initialize_by(openid: openid) do |wx_follower|
         wx_follower.nickname = user['nickname']
         wx_follower.headimgurl = user['headimgurl']
