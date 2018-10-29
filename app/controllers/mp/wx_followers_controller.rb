@@ -20,6 +20,7 @@ class Mp::WxFollowersController < Mp::BaseController
 
       if @wx_follower.try(:customer)
         #如果微信用户已经关联会员账号
+        Rails.logger.debug "found customer, redirect #{ mp_wx_follower_path( @wx_follower ) }"
         redirect_to  mp_wx_follower_path( @wx_follower )
       elsif @wx_follower.present?
         #customer 客户信息被删除， 微信用户需要重新关联

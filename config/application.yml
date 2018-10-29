@@ -18,6 +18,6 @@ production:
   host: "www.example.com"
   ga_tracker: "UA-xxxxxxxx-X"
   ga_tracker_domain: "example.com"
-  wx_url: 'https://api.wyfpj.com'
+  wx_url: 'http://wx.wyfpj.com'
 development:
   wx_url: 'http://testwx.getstore.cn'
