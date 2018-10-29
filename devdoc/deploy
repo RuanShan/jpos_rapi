@@ -12,3 +12,13 @@ https://stackoverflow.com/questions/47979328/how-to-secure-with-ssl-https-a-ngin
 
 生成证书
 https://blog.csdn.net/witmind/article/details/78456660
+
+
+
+CORS
+=====================
+application.rb
+路径包括：
+/users/info
+/sms/
+/user_entries/
