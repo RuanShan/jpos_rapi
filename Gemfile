@@ -48,7 +48,7 @@ gem 'spree_backend',   path: './spree/backend'
   #gem "friendly_id"
   #gem 'figaro'
 
-  gem 'wechat', '~> 0.8.7' #, :github => "Eric-Guo/wechat", :branch => "master"
+  gem 'wechat', '~> 0.10.3' #, :github => "Eric-Guo/wechat", :branch => "master"
   gem 'wx_pay'
 
   gem 'simple_form'

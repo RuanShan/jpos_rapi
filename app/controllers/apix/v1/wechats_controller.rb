@@ -1,8 +1,8 @@
 module Api
   module V1
-    class WechatsController < ActionController::Base
+    class WechatsController < BaseController
 
-      Rails.logger.info "debug_echo#{ ENV['JPOS_WECHAT_APPID'] }"
+      #Rails.logger.info "debug_echo#{ ENV['JPOS_WECHAT_APPID'] }"
 
       # For details on the DSL available within this file, see https://github.com/Eric-Guo/wechat#rails-responder-controller-dsl
       wechat_responder

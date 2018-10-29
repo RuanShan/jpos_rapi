@@ -28,15 +28,6 @@ class Api::V1::BaseController < ApplicationController
   respond_to :json
   attr_accessor :current_api_user
 
-
-
-  # disable the CSRF token
-  protect_from_forgery with: :null_session
-
-  # disable cookies (no set-cookies header in response)
-  #before_action :destroy_session
-  #before_action :authenticate_with_api_key
-
   # disable the CSRF token
   skip_before_action :verify_authenticity_token
 
@@ -44,9 +35,6 @@ class Api::V1::BaseController < ApplicationController
     api_error(status: 400, errors: 'Invalid parameters')
   end
 
-  def destroy_session
-    request.session_options[:skip] = true
-  end
 
   def api_error(status: 500, errors: [])
     if errors.blank?

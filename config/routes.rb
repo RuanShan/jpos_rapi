@@ -10,6 +10,8 @@ RailsStarter::Application.routes.draw do
 
     namespace :api, defaults: { format: 'json' } do
       namespace :v1 do
+        resource :wechat, only: [:show, :create]
+
         resources :expense_categories
         resources :expense_items
         post '/expense_items/search', to: 'expense_items#index'
@@ -442,58 +444,57 @@ RailsStarter::Application.routes.draw do
 
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
-  namespace :api do
-    namespace :v1 do
-      ##############################################################################
-      # wechat open
-      ##############################################################################
-      post  'wechat_opens/notify', to: 'wechat_opens#notify'
-      get 'wechat_opens/auth', to: 'wechat_opens#auth'
-
-      resource :sessions, only: [:create]
-      resource :wechat, only: [:show, :create]
-
-      resources :campaigns
-      resources :game_awards, only: [:create, :show, :update, :destroy] do
-        resources :players, only:[:index ], controller: :game_award_players  do
-        end
-      end
-
-      resources :game_rounds do
-        member do
-          post :reset
-          post :start
-          post :restart_award
-        end
-        resources :awards, only:[:index ], controller: :game_awards
-
-        resources :players, only:[:index ], controller: :game_players  do
-          collection do
-            get :next_by_position
-            get :noaward
-            get :awarded
-          end
-        end
-      end
-
-      resources :game_players, only: [:create, :show, :update, :destroy] do
-      end
-
-      resources :game_award_players, only: [:create, :show, :update, :destroy] do
-
-      end
-
-      #scope path: '/game_round/:game_round_id' do
-      #  resources :game_awards, only:[:index ]
-      #  resources :game_players, only:[:index ]  do
-      #    collection do
-      #      get :next_by_position
-      #      get :noaward
-      #    end
-      #  end
-      #end
-    end
-  end
+  # namespace :api do
+  #   namespace :v1 do
+  #     ##############################################################################
+  #     # wechat open
+  #     ##############################################################################
+  #     post  'wechat_opens/notify', to: 'wechat_opens#notify'
+  #     get 'wechat_opens/auth', to: 'wechat_opens#auth'
+  #
+  #     resource :sessions, only: [:create]
+  #
+  #     resources :campaigns
+  #     resources :game_awards, only: [:create, :show, :update, :destroy] do
+  #       resources :players, only:[:index ], controller: :game_award_players  do
+  #       end
+  #     end
+  #
+  #     resources :game_rounds do
+  #       member do
+  #         post :reset
+  #         post :start
+  #         post :restart_award
+  #       end
+  #       resources :awards, only:[:index ], controller: :game_awards
+  #
+  #       resources :players, only:[:index ], controller: :game_players  do
+  #         collection do
+  #           get :next_by_position
+  #           get :noaward
+  #           get :awarded
+  #         end
+  #       end
+  #     end
+  #
+  #     resources :game_players, only: [:create, :show, :update, :destroy] do
+  #     end
+  #
+  #     resources :game_award_players, only: [:create, :show, :update, :destroy] do
+  #
+  #     end
+  #
+  #     #scope path: '/game_round/:game_round_id' do
+  #     #  resources :game_awards, only:[:index ]
+  #     #  resources :game_players, only:[:index ]  do
+  #     #    collection do
+  #     #      get :next_by_position
+  #     #      get :noaward
+  #     #    end
+  #     #  end
+  #     #end
+  #   end
+  # end
 
   resources :user_entries #用户打卡记录
 
