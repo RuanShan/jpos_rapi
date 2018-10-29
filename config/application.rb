@@ -45,7 +45,8 @@ module RailsStarter
 
     config.middleware.insert_before 0, Rack::Cors do
       allow do
-        origins  /127.0.0.1(:\d+)/, /192.168./, /wyfpj/
+        #localhost is required for electron
+        origins  /localhost(:\d+)/, /127.0.0.1(:\d+)/, /192.168./, /wyfpj/
         resource '*', :headers => :any, :methods => [:get, :post, :delete, :put, :patch, :options, :head], :credentials => true
         #resource '/api/v1/*', :headers => :any, :methods => [:get, :post, :delete, :put, :patch, :options, :head], :credentials => true
         #resource '/users/*', :headers => :any, :methods => [:get, :post, :delete, :options], :credentials => true
