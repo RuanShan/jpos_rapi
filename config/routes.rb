@@ -443,59 +443,6 @@ RailsStarter::Application.routes.draw do
   ################################################################################
 
 
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
-  # namespace :api do
-  #   namespace :v1 do
-  #     ##############################################################################
-  #     # wechat open
-  #     ##############################################################################
-  #     post  'wechat_opens/notify', to: 'wechat_opens#notify'
-  #     get 'wechat_opens/auth', to: 'wechat_opens#auth'
-  #
-  #     resource :sessions, only: [:create]
-  #
-  #     resources :campaigns
-  #     resources :game_awards, only: [:create, :show, :update, :destroy] do
-  #       resources :players, only:[:index ], controller: :game_award_players  do
-  #       end
-  #     end
-  #
-  #     resources :game_rounds do
-  #       member do
-  #         post :reset
-  #         post :start
-  #         post :restart_award
-  #       end
-  #       resources :awards, only:[:index ], controller: :game_awards
-  #
-  #       resources :players, only:[:index ], controller: :game_players  do
-  #         collection do
-  #           get :next_by_position
-  #           get :noaward
-  #           get :awarded
-  #         end
-  #       end
-  #     end
-  #
-  #     resources :game_players, only: [:create, :show, :update, :destroy] do
-  #     end
-  #
-  #     resources :game_award_players, only: [:create, :show, :update, :destroy] do
-  #
-  #     end
-  #
-  #     #scope path: '/game_round/:game_round_id' do
-  #     #  resources :game_awards, only:[:index ]
-  #     #  resources :game_players, only:[:index ]  do
-  #     #    collection do
-  #     #      get :next_by_position
-  #     #      get :noaward
-  #     #    end
-  #     #  end
-  #     #end
-  #   end
-  # end
-
   resources :user_entries #用户打卡记录
 
   resources :game_round_assets
@@ -550,7 +497,6 @@ RailsStarter::Application.routes.draw do
     end
   end
 
-  resource :wechat, only: [:show, :create]
 
    #resources :users
   resources :profiles, only: [:edit, :update, :destroy, :create]
@@ -587,61 +533,6 @@ RailsStarter::Application.routes.draw do
   # API 说明文档
   get '/docs/index', to: 'docs#index'
 
-
-  ##############################################################################
-  # Admin
-  ##############################################################################
-  #namespace :admin do
-  #  get '/' => 'home#index'
-  #  resources :games do
-  #    resources :game_rounds
-  #  end
-  #  resources :wechat_accounts
-  #end
-
-  ##############################################################################
-  # Game Case
-  ##############################################################################
-  # namespace :case do
-  #   root to: "game_rounds#index"
-  #
-  #   resources :campaigns do
-  #     resources :game_rounds do
-  #       collection do
-  #         get :by_code
-  #       end
-  #     end
-  #
-  #     member do
-  #       get :live_screen
-  #       get :live_phone
-  #     end
-  #   end
-  #
-  #   #edit, delete, show
-  #   resources :game_rounds do
-  #     member do
-  #       get :players
-  #       get :player_results
-  #     end
-  #   end
-  #   resources :game_players
-  #   resources :game_settings
-  #   resources :stores
-  #
-  #   resources :wechat_opens, only: [:index] do
-  #
-  #   end
-  #
-  #   get 'wechat_bind', to: 'wechat_opens#bind'
-  #   get 'wechat_auth', to: 'wechat_opens#auth'
-  #
-  #
-  #   resources :wx_mp_users, except: [:edit, :show, :destroy] do
-  #     post :auth, :enable, :disable, :open_oauth, :close_oauth, on: :member
-  #     get :qrcode, :oauth, on: :collection
-  #   end
-  # end
 
   ##############################################################################
   # 微信公众账号用户
