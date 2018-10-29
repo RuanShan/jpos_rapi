@@ -9,6 +9,7 @@ class Mp::WxFollowersController < Mp::BaseController
   # 微信会员入口
   # 关联会员账号，或创建会员账号
   def order_entry
+    Rails.logger.debug "order_entry:#{DateTime.current.to_i},#{ENV['JPOS_WECHAT_APPID']} "
     wechat_oauth2 do |openid, access_info|
       #查找用户，强制关注
       user = wechat.web_userinfo( access_info['access_token'], 'openid' )
