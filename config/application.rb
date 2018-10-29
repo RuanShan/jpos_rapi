@@ -49,7 +49,7 @@ module RailsStarter
         resource '/api/v1/*', :headers => :any, :methods => [:get, :post, :delete, :put, :patch, :options, :head], :credentials => true
         resource '/users/*', :headers => :any, :methods => [:get, :post, :delete, :options], :credentials => true
         resource '/user_entries/*', :headers => :any, :methods => [:get, :post, :delete, :options], :credentials => true
-        resource '/sms/*', :headers => :any, :methods => [:get, :post, :delete, :options], :credentials => true
+        resource '/sms*', :headers => :any, :methods => [:get, :post, :delete, :options], :credentials => true
       end
     end
 
