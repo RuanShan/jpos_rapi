@@ -11,6 +11,7 @@ class Mp::WxFollowersController < Mp::BaseController
   def order_entry
     Rails.logger.debug "order_entry:#{DateTime.current.to_i},#{ENV['JPOS_WECHAT_APPID']} "
     wechat_oauth2 do |openid, access_info|
+      Rails.logger.debug "order_entry:openid=#{openid}"
       #查找用户，强制关注
       user = wechat.web_userinfo( access_info['access_token'], 'openid' )
       if user.blank?
