@@ -21,6 +21,7 @@ class Customer <  ApplicationRecord
   has_many :cards, class_name: 'Spree::Card', foreign_key: 'user_id', inverse_of: :customer
   #用户当前可用充值卡
   has_one  :prepaid_card, ->{ status_enabled.style_prepaid }, class_name: 'Spree::Card', foreign_key: 'user_id'
+  has_one  :wx_follower
 
   accepts_nested_attributes_for :cards
 
@@ -37,6 +38,7 @@ class Customer <  ApplicationRecord
   enum gender: { male: 1, female: 0 }
 
   delegate :name, to: :store, prefix: true
+  delegate :nickname, :headimgurl, to: :wx_follower, prefix: true, allow_nil: true
 
   # sms对象，创建用户时检查短信验证码, :verify_code, 用户输入的验证码
   attr_accessor :sms,:verify_code

@@ -1,8 +1,6 @@
 class WxFollower < ApplicationRecord
 
   belongs_to :customer,  required: false
-
-
   validates :mobile, mobile: true , if: :mobile_validatable
   validate :customer_mobile_required, if: :mobile_validatable, on: :create
   before_create :associate_customer

@@ -3,10 +3,13 @@ object @customer
 
 attributes *customer_attributes
 
-
 child(cards: :cards) do
   extends 'spree/api/v1/customers/card'
 end
+
+
+node(:wx_follower_nickname) { |user| user.wx_follower_nickname }
+node(:wx_follower_headimgurl) { |user| user.wx_follower_headimgurl }
 
 node(:normal_order_total) { |user| user.normal_order_total }
 node(:normal_order_count) { |user| user.normal_order_count }
