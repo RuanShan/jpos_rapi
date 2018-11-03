@@ -562,7 +562,7 @@ module Spree
 
     def generate_group_number
       # "0823010001" 取后四位
-      max = (store.line_item_groups.today.maximum(:number)||'')[-4,4].to_i
+      max = (self.store.line_item_groups.today.maximum(:number)||'')[-4,4].to_i
       #Rails.logger.debug(" max number = #{store.line_item_groups.today.maximum(:number)} max=#{max}")
       #date.to_s(:number)        # => "20071110"
       # 4byte(date)-2byte(store_id)-4byte(count)

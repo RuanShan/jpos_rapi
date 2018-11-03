@@ -13,10 +13,10 @@ module Spree
           # enable group_state
           order_attributes = order_params
           order_attributes[:creator] = current_api_user
-          order_attributes[:store] = current_store
+          # get store_id from client
+          # order_attributes[:store] = current_store
           order_attributes[:channel] = 'pos'
           @order = Spree::Order.new(order_attributes)
-Rails.logger.debug( "order_params=#{order_params.inspect}" )
           if @order.save
             @order.complete_via_pos
             respond_with(@order, default_template: :show, status: 201)

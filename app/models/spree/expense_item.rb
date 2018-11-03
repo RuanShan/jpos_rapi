@@ -5,6 +5,7 @@ module Spree
     belongs_to :user, class_name: 'User'
     belongs_to :expense_category, class_name: 'Spree::ExpenseCategory'
 
+    has_many :images, -> { order(:position) }, as: :viewable, dependent: :destroy, class_name: 'Spree::ExpenseImage'
 
     #validates :expense_category,  presence: true
     validates :price, numericality: true

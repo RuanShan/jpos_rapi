@@ -1,5 +1,3 @@
-require 'redis'
-
-$redis = Redis.new()
-
-$redis.select(1)
+#require 'redis'
+#$redis = Redis.new()
+#$redis.select(1)

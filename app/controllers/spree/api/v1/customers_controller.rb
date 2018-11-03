@@ -83,7 +83,8 @@ module Spree
           permitted_params = params.require(:order).permit(permitted_order_attributes)
 
           permitted_params[:channel] = 'pos'
-          permitted_params[:store] = current_store
+          #get store from client
+          #permitted_params[:store] = current_store
           permitted_params[:user] = user
           permitted_params[:creator] = current_api_user
           permitted_params[:order_type] = :card

@@ -45,7 +45,7 @@ module Spree
     @@card_attributes = [ :store_id, :code, :variant_id, :amount, :status, :discount_percent, :memo, :expire_at]
 
     @@checkout_attributes = [
-      :coupon_code, :email, :shipping_method_id, :special_instructions, :use_billing, :user_id,
+      :coupon_code, :email, :shipping_method_id, :special_instructions, :use_billing, :user_id, :store_id,
       :order_type, :created_by_id, :enable_sms, :enable_mp_msg, :memo
     ]
 
