@@ -18,6 +18,21 @@ new_order_created:
     remark:
       value: "订单成功"
       color: "#173177"
+
+# 尊敬的用户您好！您的订单已经提交成功！
+# 会员名：XX先生/小姐
+# 订单号：20160825163959-637
+# 支付金额：20元
+# 支付时间：2016年8月25日
+# 支付类型：微信支付
+# 感谢您的使用，如有疑问，可联系我们的客服人员。
+# {{first.DATA}}
+# 会员名：{{keyword1.DATA}}
+# 订单号：{{keyword2.DATA}}
+# 支付金额：{{keyword3.DATA}}
+# 支付时间：{{keyword4.DATA}}
+# 支付类型：{{keyword5.DATA}}
+# {{remark.DATA}}
 production_new_order_created:
   template_id: "2nH8gSZz8lAa4K84SFHZ73fo6RfXiNLFUkpBMrlNZFQ"
   url: "http://weixin.qq.com/download"
@@ -44,6 +59,17 @@ production_new_order_created:
     remark:
       value: "感谢您的使用，如有疑问，可联系我们的客服人员。"
       color: "#173177"
+
+# 杨小姐，充值成功。
+# 本次充值金额：1500
+# 充值后余额：1850
+# 充值门店：武林广场店
+# 武林广场店(0512-88888888)感谢您的一贯支持。
+# {{first.DATA}}
+# 本次充值：{{keyword1.DATA}}
+# 充值后余额：{{keyword2.DATA}}
+# 充值门店：{{keyword3.DATA}}
+# {{remark.DATA}}
 production_deposit_success:
   template_id: "gpUXAH5S_ORUXbScXCucGjQFpvU8A-iru4-yL5Q311Y"
   url: "http://weixin.qq.com/download"
