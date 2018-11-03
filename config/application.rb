@@ -13,7 +13,7 @@ module RailsStarter
     # -- all .rb files in that directory are automatically loaded.
     #https://www.phusionpassenger.com/library/config/standalone/action_cable_integration/
     # Serve websocket cable requests in-process
-    config.payment = config_for(:application)
+    config.application = config_for(:application)
 
     config.generators do |generator|
       generator.test_framework :rspec,
