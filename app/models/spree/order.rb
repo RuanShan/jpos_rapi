@@ -113,6 +113,7 @@ module Spree
 
     scope :type_normal, -> { where( order_type: :normal ) }
     scope :type_card, -> { where.not( order_type: :normal ) }
+    # 0： 服务订单， 1：买卡订单， 2：充值订单
     enum order_type: { normal: 0,  card: 1,  deposit: 2 }, _prefix: true
 
     alias_attribute :customer_id, :user_id
@@ -371,8 +372,6 @@ module Spree
       super
     end
 
-
-
     def quantity
       line_items.sum(:quantity)
     end
@@ -480,6 +479,15 @@ module Spree
       outstanding_balance != 0
     end
 
+    #显示支付状态
+    def display_payment_method_names
+      if payments.present?
+        payments.pluck(:cname).join(',')
+      else
+        "未付款"
+      end
+    end
+    #
 
     private
 

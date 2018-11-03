@@ -101,6 +101,7 @@ module Spree
       true
     end
 
+    #取消订单，取消相应的支付
     def cancel( auth_code )
       card_transaction = self.card_transactions.find_by( auth_code: auth_code)
 

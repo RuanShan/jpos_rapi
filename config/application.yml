@@ -14,10 +14,6 @@ twitter_consumer_secret: xxxx
 legal_disclaimer_link: "http://ourdisclaimer.com/?i=YOUR-SITE-HERE"
 
 production:
-#  <<: *defaults
-  host: "www.example.com"
-  ga_tracker: "UA-xxxxxxxx-X"
-  ga_tracker_domain: "example.com"
   wx_url: 'http://wx.wyfpj.com'
 development:
   wx_url: 'http://testwx.getstore.cn'

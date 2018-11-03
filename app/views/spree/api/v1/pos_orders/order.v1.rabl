@@ -11,7 +11,7 @@ end
 child line_item_groups: :line_item_groups do
   extends 'spree/api/v1/line_item_groups/simple'
 end
-
+# 充值订单，或会员卡支付，对应的 card_transaction
 child card_transactions: :card_transactions do
   extends 'spree/api/v1/card_transactions/simple'
 end
