@@ -10,7 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180910115306) do
+ActiveRecord::Schema.define(version: 20181107115306) do
+
+  create_table "auditor_general_logs", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
+    t.string "model_type"
+    t.integer "model_id"
+    t.string "action"
+    t.text "alterations"
+    t.text "message"
+    t.integer "origin_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["model_type", "model_id"], name: "index_auditor_general_logs_on_model_type_and_model_id"
+    t.index ["origin_id"], name: "index_auditor_general_logs_on_origin_id"
+  end
 
   create_table "campaign_settings", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.integer "campaign_id"
@@ -354,6 +367,9 @@ ActiveRecord::Schema.define(version: 20180910115306) do
     t.integer "processed_line_items_count", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "service_order_count", default: 0, null: false
+    t.integer "service_total", default: 0, null: false
+    t.integer "deposit_total", default: 0, null: false
     t.index ["seller_type", "user_id", "day"], name: "index_sale_days_on_seller_type_and_user_id_and_day"
     t.index ["store_id"], name: "index_sale_days_on_store_id"
   end
@@ -368,6 +384,9 @@ ActiveRecord::Schema.define(version: 20180910115306) do
     t.integer "processed_line_items_count", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "service_order_count", default: 0, null: false
+    t.integer "service_total", default: 0, null: false
+    t.integer "deposit_total", default: 0, null: false
     t.index ["seller_type", "user_id", "day"], name: "index_sale_months_on_seller_type_and_user_id_and_day"
   end
 

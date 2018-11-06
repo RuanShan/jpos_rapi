@@ -22,6 +22,8 @@ module Spree
       rescue_from CanCan::AccessDenied, with: :unauthorized
       rescue_from Spree::Core::GatewayError, with: :gateway_error
 
+      include Application::AuditorGeneral #add before_action
+
       helper Spree::Api::ApiHelpers
 
       # users should be able to set price when importing orders via api

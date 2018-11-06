@@ -422,6 +422,8 @@ module Spree
       #updater.run_hooks
       #不能 touch completed_at, 删除时会导致 OrderInventory.verify 异常
       touch :completed_at
+
+      update_sale_day_fields
       #如果是会员卡订单， 购买，充值等
       associate_card_if_needed if self.order_type_card?
       #根据配置，发出公众号、短信，或邮件通知
@@ -532,6 +534,19 @@ module Spree
 
       #send_cancel_email
       update_with_updater!
+    end
+
+    def update_sale_day_fields
+      # => service_total,  deposit_total
+      if self.sale_today
+        if order_type_normal?
+          self.sale_today.service_order_count+=1
+          self.sale_today.service_total+= self.total
+        else
+          self.sale_today.deposit_total+= self.total
+        end
+        self.sale_today.save!
+      end
     end
 
     def send_cancel_email
