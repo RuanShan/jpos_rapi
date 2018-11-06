@@ -1,5 +1,5 @@
 class AuditorGeneralLog < ActiveRecord::Base
-  serialize :alterations
+  serialize :alterations, JSON
 
   scope :filter_model, -> (model) { where(:model_type => model.split(",")) }
   scope :filter_action, -> (action) { where(:action => action.split(",")) }

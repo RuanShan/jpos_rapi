@@ -27,7 +27,7 @@ module AuditorGeneralModel
     end
 
     def log_update
-      log_action("update") if should_log?(self.changes.keys)
+      log_action("update") if should_log?(self.saved_changes.keys)
     end
 
     def log_destroy
@@ -39,13 +39,13 @@ module AuditorGeneralModel
         model_type: self.model_name.human,
         model_id: self.id,
         action: type,
-        alterations: self.destroyed? ? self.attributes : relevant_changes(self.changes),
+        alterations: self.destroyed? ? self.attributes : relevant_changes(self.saved_changes),
       )
     end
 
-    def relevant_changes(changes)
-      changes.delete("updated_at")
-      changes
+    def relevant_changes(raw_changes)
+      raw_changes.delete("updated_at")
+      raw_changes
     end
 
     def should_log?(attributes)
