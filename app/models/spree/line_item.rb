@@ -40,7 +40,7 @@ module Spree
 
     #enum state: { done: 1, pending: 0 }
 
-    self.whitelisted_ransackable_associations = %w[variant]
+    self.whitelisted_ransackable_associations = %w[variant, line_item_group]
     self.whitelisted_ransackable_attributes = %w[store_id variant_id price]
 
     #初始化为待处理， 当确认工作量后 转为 done
