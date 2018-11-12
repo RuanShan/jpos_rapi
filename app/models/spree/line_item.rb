@@ -152,8 +152,8 @@ module Spree
     def ensure_valid_group_number
       #如果为空，使用产品名称
       self.cname = self.name if self.cname.blank?
-      self.store_id = self.order.store_id
-      self.product_type = product.type
+      self.store_id = self.order.store_id if self.store_id.blank?
+      self.product_type = product.type if self.product_type.blank?
     end
 
 
