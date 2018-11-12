@@ -9,7 +9,7 @@ module Spree
         def day
           @sale_day = SaleDay.new()
           sale_days = get_selected_sale_days
-          [:new_orders_count,:new_customers_count,:new_cards_count].each{|key|
+          get_stat_cols.each{|key|
             val = sale_days.sum(&key)
             @sale_day.send( "#{key}=", val )
           }
@@ -22,7 +22,7 @@ module Spree
           else
             sale_days = SaleDay.today
           end
-          [:new_orders_count,:new_customers_count,:new_cards_count].each{|key|
+          get_stat_cols.each{|key|
             val = sale_days.sum(&key)
             @sale_day.send( "#{key}=", val )
           }
@@ -40,7 +40,7 @@ module Spree
 
             selected_sale_days = sale_days.select{|sale| sale.day == day}
 
-            [:new_orders_count,:new_customers_count,:new_cards_count].each{|key|
+            get_stat_cols.each{|key|
               sale_day.send( "#{key}=", selected_sale_days.sum(&key) )
             }
             @sale_days << sale_day
@@ -68,6 +68,8 @@ module Spree
             end
             sale_day_sum =  day_sale_days_map[day]
 
+            sale_day_sum.service_total += sale_day.service_total
+            sale_day_sum.deposit_total += sale_day.deposit_total
             sale_day_sum.new_orders_count += sale_day.new_orders_count
             sale_day_sum.new_customers_count += sale_day.new_customers_count
             sale_day_sum.new_cards_count += sale_day.new_cards_count
@@ -91,7 +93,7 @@ module Spree
           else
             sale_days = SaleDay.all
           end
-          [:new_orders_count,:new_customers_count,:new_cards_count].each{|key|
+          get_stat_cols.each{|key|
             @sale_day.send( "#{key}=", sale_days.sum(&key) )
           }
         end
@@ -122,6 +124,10 @@ module Spree
           # end
           sale_days = SaleDay.ransack( params[:q] ).result
 
+        end
+
+        def get_stat_cols
+          return  [:service_total, :deposit_total, :service_order_count, :new_orders_count,:new_customers_count,:new_cards_count]
         end
 
       end
