@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181107115306) do
+ActiveRecord::Schema.define(version: 20181112115309) do
 
   create_table "auditor_general_logs", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.string "model_type"
@@ -1828,6 +1828,7 @@ ActiveRecord::Schema.define(version: 20181107115306) do
     t.string "label_printer_name"
     t.string "receipt_title", limit: 64, default: "", null: false
     t.string "receipt_footer", limit: 64, default: "", null: false
+    t.string "type", limit: 32
     t.index ["code"], name: "index_spree_stores_on_code"
     t.index ["default"], name: "index_spree_stores_on_default"
     t.index ["url"], name: "index_spree_stores_on_url"
