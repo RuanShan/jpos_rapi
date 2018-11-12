@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181112115309) do
+ActiveRecord::Schema.define(version: 20181112115319) do
 
   create_table "auditor_general_logs", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.string "model_type"
@@ -833,7 +833,10 @@ ActiveRecord::Schema.define(version: 20181112115309) do
     t.string "card_code", limit: 16
     t.date "card_expire_at"
     t.string "label_icon_name", limit: 16
+    t.bigint "store_id"
+    t.string "product_type", limit: 32
     t.index ["order_id"], name: "index_spree_line_items_on_order_id"
+    t.index ["store_id"], name: "index_spree_line_items_on_store_id"
     t.index ["tax_category_id"], name: "index_spree_line_items_on_tax_category_id"
     t.index ["variant_id"], name: "index_spree_line_items_on_variant_id"
   end

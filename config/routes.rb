@@ -133,6 +133,7 @@ RailsStarter::Application.routes.draw do
         put '/line_items/fulfill', to: 'line_items#fulfill'
         #修改除了影响价格之外的信息，目前只有memo
         put '/line_items/:id/update_extra', to: 'line_items#update_extra'
+        post '/line_items/search', to: 'line_items#index'
 
         resources :zones
         resources :countries, only: [:index, :show] do

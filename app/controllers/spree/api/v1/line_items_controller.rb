@@ -6,6 +6,15 @@ module Spree
 
         self.line_item_options = []
 
+        # search line_items
+        def index
+          authorize! :index, LineItem
+          @q = LineItem.ransack(params[:q]).result(distinct: true)
+          @total_count = @q.count
+          @line_items = @q.includes(:order, :store, :worker).page(params[:page]).per(params[:per_page])
+          respond_with(@line_items)
+        end
+
         # 确认工作量，associate worker with line_items
         def fulfill
           worker_id = params[:worker_id]

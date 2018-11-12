@@ -47,13 +47,13 @@ module Spree
         if user.has_spree_role?('waiter') ||  user.has_spree_role?('worker')
           can :manage, Order
           can :manage, LineItemGroup
+          can :manage, LineItem
           can :manage, Customer
           can :manage, GroupImage
           can :manage, Image
           can :manage, UserEntry
           can :manage, ExpenseItem
           can :manage, Store
-          can :read, Store
         else
           can :read, Order do |order, token|
             order.user == user || order.guest_token && token == order.guest_token

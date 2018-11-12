@@ -9,6 +9,7 @@ module Spree
     end
 
     has_one :product, through: :variant
+    belongs_to :store, class_name: 'Spree::Store'
     # 一张卡可能多次充值，所以一张卡可能有多个line_item
     belongs_to :card, dependent: :destroy, required: false
     belongs_to :worker, class_name: 'User', dependent: :destroy, required: false
@@ -33,13 +34,14 @@ module Spree
 
     delegate :is_card?, to: :product
     delegate :user, to: :order
-
+    delegate :name, to: :worker, prefix: true, allow_nil: true
+    delegate :name, to: :store, prefix: true, allow_nil: true
     # code 会员卡号，老客购买新卡子订单，需要提供卡号
 
     #enum state: { done: 1, pending: 0 }
 
     self.whitelisted_ransackable_associations = %w[variant]
-    self.whitelisted_ransackable_attributes = %w[variant_id price]
+    self.whitelisted_ransackable_attributes = %w[store_id variant_id price]
 
     #初始化为待处理， 当确认工作量后 转为 done
     state_machine initial: :pending, use_transactions: false do
@@ -150,13 +152,11 @@ module Spree
     def ensure_valid_group_number
       #如果为空，使用产品名称
       self.cname = self.name if self.cname.blank?
-      #self.group_number ||= generate_group_number
+      self.store_id = self.order.store_id
+      self.product_type = product.type
     end
 
-    def generate_group_number
-      #"2018-04-14T15:39:30+08:00" =>"20180414154023"
-      DateTime.current.to_s(:number) + ("%04d" % order.store_id)
-    end
+
 
     def update_price_from_modifier(currency, opts)
       if currency
