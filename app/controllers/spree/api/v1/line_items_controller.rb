@@ -24,7 +24,7 @@ module Spree
           # update_column skip callback, or cause error:
           # NoMethodError: undefined method `set_up_inventory' for nil:NilClass
           # from /var/www/apps/jpos_rapi/app/models/spree/order_inventory.rb:80:in `add_to_shipment'
-          Spree::LineItem.where( id: ids ).update_all( worker_id: worker_id, work_at: DateTime.current, state: 1 )
+          Spree::LineItem.where( id: ids ).update_all( worker_id: worker_id, work_at: DateTime.current, state: :done )
 
           #重新统计工人每天工作量
           worker_times.each{ |worker_time_pair|
