@@ -444,7 +444,7 @@ module Spree
         line_item_group = groups_map[line_item.group_position]
         if line_item_group.blank?
           group_number = generate_group_number
-          groups_map[line_item.group_position] = Spree::LineItemGroup.create!(
+          group = Spree::LineItemGroup.create!(
             store_id: self.store_id,
             order: self,
             number: group_number,
@@ -452,10 +452,10 @@ module Spree
             payment_state: group_payment_state,
             name: "#{line_item.name}(#{line_item.options_text})"
           )
-          line_item.update_attributes( group_number: group_number, label_icon_name: line_item.product.label_icon_name )
-
+          line_item.update_attributes( group_id: group.id, group_number: group_number, label_icon_name: line_item.product.label_icon_name )
+          groups_map[line_item.group_position] = group
         else
-          line_item.update_attributes group_number: line_item_group.number
+          line_item.update_attributes( group_id: group.id, group_number: line_item_group.number )
           line_item_group.price += line_item.price
           line_item_group.name += " / #{line_item.name}(#{line_item.options_text})"
           line_item_group.save
