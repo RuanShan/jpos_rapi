@@ -86,7 +86,7 @@ module Spree
     end
 
     self.whitelisted_ransackable_associations = %w[option_values product prices default_price]
-    self.whitelisted_ransackable_attributes = %w[weight sku]
+    self.whitelisted_ransackable_attributes = %w[weight sku track_inventory]
 
     def available?
       !discontinued? && product.available?

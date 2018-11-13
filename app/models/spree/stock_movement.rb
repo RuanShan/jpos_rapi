@@ -7,6 +7,7 @@ module Spree
 
     belongs_to :stock_item, class_name: 'Spree::StockItem', inverse_of: :stock_movements
     belongs_to :originator, polymorphic: true
+    belongs_to :created_by, class_name: 'User'
 
     after_create :update_stock_item_quantity
 
@@ -21,7 +22,10 @@ module Spree
 
     scope :recent, -> { order(created_at: :desc) }
 
-    self.whitelisted_ransackable_attributes = ['quantity']
+    self.whitelisted_ransackable_attributes = ['quantity', 'day', 'stock_item_id']
+    #self.whitelisted_ransackable_associations = ['stock_item']
+
+    delegate :name, to: :created_by, prefix: true, allow_nil: true
 
     def readonly?
       persisted?

@@ -185,7 +185,7 @@ module Spree
         :country_id, :zipcode, :phone, :active
       ]
 
-      @@stock_movement_attributes = [:id, :quantity, :stock_item_id]
+      @@stock_movement_attributes = [:id, :day, :memo, :created_by_id, :quantity, :stock_item_id]
 
       @@stock_item_attributes = [
         :id, :count_on_hand, :backorderable, :lock_version, :stock_location_id,
@@ -201,7 +201,7 @@ module Spree
         :id, :name, :url, :meta_description, :meta_keywords, :seo_title,
         :mail_from_address, :default_currency, :code, :default,
         :doc_printer_name, :receipt_printer_name, :label_printer_name,
-        :receipt_title, :receipt_footer, :type
+        :receipt_title, :receipt_footer, :type, :stock_location_id
       ]
 
       @@tag_attributes = [:id, :name]

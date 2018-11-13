@@ -210,8 +210,13 @@ RailsStarter::Application.routes.draw do
           resources :stock_movements
           resources :stock_items
         end
+        # shortcut for /stock_locations/:stock_location_id/stock_movements
+        resources :stock_movements
+        post '/stock_movements/search', to: 'stock_movements#index'
 
         resources :stock_items, only: [:index, :update, :destroy]
+        post '/stock_items/search', to: 'stock_items#index'
+
         resources :stores
 
         resources :tags, only: :index

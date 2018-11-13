@@ -6,7 +6,7 @@ class UserEntry < ApplicationRecord
 
   belongs_to :store, class_name: 'Spree::Store', foreign_key: :store_id, required: true
   belongs_to :user, class_name: 'User', required: true
-
+  
   enum state:{ clockin: 1, clockout: 0 }
   self.whitelisted_ransackable_attributes = %w[id user_id store_id day]
 
@@ -35,7 +35,8 @@ class UserEntry < ApplicationRecord
     entry.try(:state) == 'clockin' ? 'clockout'  : 'clockin'
   end
 
+  # touch user to update cache
   def touch_user
-    user.touch
+    self.user.touch
   end
 end

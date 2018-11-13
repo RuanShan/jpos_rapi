@@ -44,6 +44,8 @@ module Spree
         can :display, OptionValue
         can :display, ExpenseCategory
         can :create, Order
+        can :display, StockLocation
+        can :display, StockItem
         if user.has_spree_role?('waiter') ||  user.has_spree_role?('worker')
           can :manage, Order
           can :manage, LineItemGroup
@@ -54,6 +56,7 @@ module Spree
           can :manage, UserEntry
           can :manage, ExpenseItem
           can :manage, Store
+          can :manage, StockMovement
         else
           can :read, Order do |order, token|
             order.user == user || order.guest_token && token == order.guest_token

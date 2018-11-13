@@ -46,12 +46,11 @@ class User < ApplicationRecord
   belongs_to :store, class_name: 'Spree::Store'
 
   #服务员今天的统计信息
-  has_one :sale_today, ->{ today.where( store: Spree::Store.current ) }, class_name: 'SaleDay', foreign_key: 'user_id'
   has_many :sale_days, class_name: 'SaleDay'
   has_many :user_entries, class_name: 'UserEntry'
   has_many :orders, foreign_key: :created_by_id, class_name: 'Spree::Order'
 
-  after_initialize :create_sale_today_for_waiter, :if => :persisted?
+  #after_initialize :create_sale_today_for_waiter, :if => :persisted?
   before_validation :set_login
 
   users_table_name = User.table_name
@@ -97,6 +96,15 @@ class User < ApplicationRecord
     user_entries.create!( store: store, day: DateTime.current, state:(last_user_entry.try(:state) == 'clockin' ? 'clockout'  : 'clockin') )
   end
 
+  # work has no store_id,  seller has store_id
+  # ensure user has a sale_today
+  def sale_today
+    #self.create_sale_today if sale_day.blank?
+    #has_one :sale_day, ->(entry){ where( store_id: entry.store_id, day: entry.day  ) }, class_name: 'SaleDay', primary_key:'user_id', foreign_key: 'user_id'
+    store_id = self.user_entries.today.last.try(:store_id)
+    SaleDay.find_or_create_by( user_id: id, store_id: store_id.to_i, day: DateTime.current.to_date)
+  end
+
   protected
     def password_required?
       !persisted? || password.present? || password_confirmation.present?
@@ -129,9 +137,10 @@ class User < ApplicationRecord
       self.save
     end
 
-    def create_sale_today_for_waiter
-        self.create_sale_today( store_id: store_id ) if self.sale_today.blank?
-    end
+    # should not create sale day on initialize, we donot know store_id now, create sale_today on entry
+    #def create_sale_today_for_waiter
+    #    self.create_sale_today( store_id: store_id ) if self.sale_today.blank?
+    #end
 
     def recompute_processed_line_items_count( date )
       sale_day = sale_days.on_date( date ).first
@@ -180,7 +189,6 @@ class User < ApplicationRecord
   # def log_devise_action(new_action)
   #   DeviseUsageLog.create!(user_id: id, role: role, user_ip: current_sign_in_ip, username: username, action: new_action)
   # end
-  #
   #
 
   def email_required?

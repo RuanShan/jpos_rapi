@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181112115329) do
+ActiveRecord::Schema.define(version: 20181113115329) do
 
   create_table "auditor_general_logs", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.string "model_type"
@@ -1710,6 +1710,10 @@ ActiveRecord::Schema.define(version: 20181112115329) do
     t.datetime "updated_at"
     t.integer "originator_id"
     t.string "originator_type"
+    t.date "day"
+    t.string "memo"
+    t.bigint "created_by_id"
+    t.index ["created_by_id"], name: "index_spree_stock_movements_on_created_by_id"
     t.index ["originator_id", "originator_type"], name: "index_stock_movements_on_originator_id_and_originator_type"
     t.index ["stock_item_id"], name: "index_spree_stock_movements_on_stock_item_id"
   end
@@ -1834,8 +1838,10 @@ ActiveRecord::Schema.define(version: 20181112115329) do
     t.string "receipt_title", limit: 64, default: "", null: false
     t.string "receipt_footer", limit: 64, default: "", null: false
     t.string "type", limit: 32
+    t.bigint "stock_location_id"
     t.index ["code"], name: "index_spree_stores_on_code"
     t.index ["default"], name: "index_spree_stores_on_default"
+    t.index ["stock_location_id"], name: "index_spree_stores_on_stock_location_id"
     t.index ["url"], name: "index_spree_stores_on_url"
   end
 

@@ -105,7 +105,7 @@ module Spree
       :propagate_all_variants]
 
     @@stock_movement_attributes = [
-      :quantity, :stock_item, :stock_item_id, :originator, :action]
+      :quantity, :stock_item, :stock_item_id, :originator, :action, :memo, :day, :created_by_id]
 
     @@store_attributes = [:name, :url, :seo_title, :meta_keywords,
                           :meta_description, :default_currency, :mail_from_address,
