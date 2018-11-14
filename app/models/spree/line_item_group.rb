@@ -54,7 +54,6 @@ module Spree
       event :ship do
         transition from: %i(ready canceled), to: :shipped
       end
-      after_transition to: :shipped, do: :after_ship
 
       event :cancel do
         transition to: :canceled, from: (any - %i(shipped))
@@ -123,6 +122,11 @@ module Spree
       event :complete do
         transition all => :shipped
       end
+
+      after_transition any => [:processing, :processed] do |line_item_group, transition|
+        line_item_group.update_column( "#{transition.to}_at", DateTime.current)
+      end
+
     end
 
     self.whitelisted_ransackable_associations = %w[order line_items]
@@ -274,6 +278,10 @@ module Spree
 
     def set_price_zero_when_nil
       self.price = 0 unless price
+    end
+
+    def touch_state_at
+      send( "#{self.state}_at", DateTime.current)
     end
 
     def after_ship

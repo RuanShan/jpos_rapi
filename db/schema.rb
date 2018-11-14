@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181113115509) do
+ActiveRecord::Schema.define(version: 20181114115319) do
 
   create_table "auditor_general_logs", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.string "model_type"
@@ -801,6 +801,9 @@ ActiveRecord::Schema.define(version: 20181113115509) do
     t.integer "canceled_by_id"
     t.datetime "canceled_at"
     t.string "payment_state"
+    t.datetime "processing_at"
+    t.datetime "processed_at"
+    t.datetime "state_at"
   end
 
   create_table "spree_line_items", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
