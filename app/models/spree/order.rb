@@ -113,7 +113,7 @@ module Spree
 
     scope :type_normal, -> { where( order_type: :normal ) }
     scope :type_card, -> { where.not( order_type: :normal ) }
-    # 0： 服务订单， 1：买卡订单， 2：充值订单
+    # 0： 服务订单， 1：买卡订单， 2：二次充值订单
     enum order_type: { normal: 0,  card: 1,  deposit: 2 }, _prefix: true
 
     alias_attribute :customer_id, :user_id
@@ -425,7 +425,7 @@ module Spree
 
       update_sale_day_fields
       #如果是会员卡订单， 购买，充值等
-      associate_card_if_needed if self.order_type_card?
+      associate_card_if_needed if self.order_type_card_or_deposit?
       #根据配置，发出公众号、短信，或邮件通知
       notify_customer
     end
@@ -490,6 +490,9 @@ module Spree
       end
     end
     #
+    def order_type_card_or_deposit?
+      order_type_card? || order_type_deposit?
+    end
 
     private
 
@@ -499,9 +502,7 @@ module Spree
     end
 
     def associate_card_if_needed
-      if self.order_type_card?
         self.line_items.each{ |item| item.associate_with_card  }
-      end
     end
 
     def link_by_email
