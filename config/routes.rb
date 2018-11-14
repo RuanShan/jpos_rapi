@@ -13,7 +13,9 @@ RailsStarter::Application.routes.draw do
         resource :wechat, only: [:show, :create]
 
         resources :expense_categories
-        resources :expense_items
+        resources :expense_items do
+          resources :images
+        end
         post '/expense_items/search', to: 'expense_items#index'
         get '/expenses', to: 'expenses#index'
 

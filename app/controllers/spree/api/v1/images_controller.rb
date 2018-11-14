@@ -52,6 +52,8 @@ module Spree
             Spree::Variant.find(params[:variant_id])
           elsif params[:line_item_group_id]
             Spree::LineItemGroup.find(params[:line_item_group_id])
+          elsif params[:expense_item_id]
+            Spree::ExpenseItem.find(params[:expense_item_id])
           end
         end
       end
