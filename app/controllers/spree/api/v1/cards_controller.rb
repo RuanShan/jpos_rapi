@@ -41,7 +41,7 @@ module Spree
           if target_card.blank?
             target_card = Spree::Card.create( card.attributes.merge({ code: target_code}))
           end
-          @card.replaced_with( target_card )
+          @card.replace_with( target_card )
           @cards = [@card, target_card]
           respond_with @cards
         end
