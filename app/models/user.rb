@@ -28,6 +28,9 @@
 #
 
 class User < ApplicationRecord
+  #取得当前用户，以便更新 spree_state_changes
+  thread_mattr_accessor :current
+
   ROLES = {'guest' => 1, 'user' => 2, 'manager' => 3, 'admin' => 4}.freeze
   extend Spree::DisplayDateTime
   include Spree::RansackableAttributes

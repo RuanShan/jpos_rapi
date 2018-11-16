@@ -39,6 +39,19 @@ module Spree
     delegate :product, to: :variant
     delegate :name, to: :store, prefix: true
 
+    state_machine initial: :enabled, use_transactions: false do
+      event :disable do
+        transition from: :enabled, to: :disabled
+      end
+      event :enable do
+        transition from: :disabled, to: :enabled
+      end
+      event :replace do
+        transition from: any, to: :replaced
+      end
+
+    end
+
     def amount_remaining
       amount - amount_used
     end
@@ -111,6 +124,23 @@ module Spree
       new_card_transaction = self.card_transactions.create!( order: card_transaction.order,  amount: card_transaction.amount, amount_left: self.amount, reason: 'canceled', auth_code: generate_authorization_code  )
 
       new_card_transaction.capture
+    end
+
+    #替换会员卡
+    def replace_with( new_card )
+      self.transfer_to( new_card )
+      self.replaced_with_id = new_card.id
+      self.replaced_at = DateTime.current
+      self.replace!
+    end
+    #将卡内余额转至新卡
+    def transfer_to( new_card )
+      new_card_transaction = new_card.card_transactions.create!(   amount: self.amount_remaining, amount_left: new_card.amount_remaining, reason: 'transfer'  )
+      new_card_transaction.deposit
+      card_transaction = self.card_transactions.create!(   amount: -self.amount_remaining, amount_left: 0, reason: 'transfer'  )
+      card_transaction.capture
+
+      new_card.reload
     end
 
     private

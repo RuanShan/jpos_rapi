@@ -7,8 +7,8 @@ class Spree::CardTransaction < ActiveRecord::Base
   scope :deposit, ->{ where reason: :deposit }
 
   validates :amount, :card, presence: true
-  #        充值       消费       取消回退
-  #reason :deposit,  consume,   canceled
+  #        充值       消费       取消回退   转移(其它卡转过来)
+  #reason :deposit,  consume,   canceled, transfer
 
 
   state_machine initial: :pending do
@@ -29,7 +29,7 @@ class Spree::CardTransaction < ActiveRecord::Base
   end
 
   def amount_remaining
-    amount + amount_left
+    amount + amount_left  #充值数量+充值前剩余数量
   end
 
   def adjust_card_amount_used

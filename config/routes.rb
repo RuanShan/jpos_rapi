@@ -204,6 +204,7 @@ RailsStarter::Application.routes.draw do
         resources :cards do
           member do
             get :transactions
+            put :replace #用户换卡
           end
         end
 
