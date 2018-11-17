@@ -60,6 +60,13 @@ module Spree
           #postman 测试需要
           @current_api_user = Spree.user_class.find_by(spree_api_key: api_key.to_s)
         end
+        #设置当前user,store 以便审计信息使用
+        if @current_api_user
+          User.current = @current_api_user
+          store_id = request.headers['X-Jpos-Site-Id']
+          Spree::Store.current = Spree::Store.where( id: store_id).first
+        end
+
       end
 
       def authenticate_user

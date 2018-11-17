@@ -1,5 +1,6 @@
 module Spree
   class Store < Spree::Base
+    thread_mattr_accessor :current
 
     has_many :orders, class_name: 'Spree::Order'
     has_many :line_item_groups, class_name: 'Spree::LineItemGroup'
@@ -17,22 +18,8 @@ module Spree
     scope :by_url, ->(url) { where('url like ?', "%#{url}%") }
 
     after_commit :clear_cache
-    class << self
-      def current(domain = nil)
-        #Store.default is for test only
-        ::Thread.current[:store] || Store.default
-      end
 
-      def current=(store)
-        ::Thread.current[:store] = store
-      end
 
-      def default
-        Rails.cache.fetch('default_store') do
-          where(default: true).first_or_initialize
-        end
-      end
-    end
     private
 
     def ensure_default_exists_and_is_unique
