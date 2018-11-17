@@ -18,8 +18,11 @@ module Spree
     belongs_to :creator, class_name: 'User', foreign_key: 'created_by_id', optional: true
 
     belongs_to :sale_day, ->{ today }, class_name: 'SaleDay', counter_cache: "new_cards_count",
-    primary_key: 'user_id', foreign_key: 'created_by_id'
-    # 会员卡的可用和禁用状态
+      primary_key: 'user_id', foreign_key: 'created_by_id'
+
+    has_many :state_changes, as: :stateful
+
+    # 会员卡的可用和禁用状态, 使用state代替
     enum  status:{ enabled: 1, disabled: 0 }, _prefix: true
     # 次卡 和 充值卡
     enum  style:{ counts: 1, prepaid: 0 }, _prefix: true
@@ -50,6 +53,13 @@ module Spree
         transition from: any, to: :replaced
       end
 
+      after_transition do |card, transition|
+        card.state_changes.create!(
+          previous_state: transition.from,
+          next_state:     transition.to,
+          name:           'card'
+        )
+      end
     end
 
     def amount_remaining

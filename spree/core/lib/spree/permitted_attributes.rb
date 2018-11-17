@@ -42,7 +42,7 @@ module Spree
       state: [:name, :abbr]
     ]
     # 状态，折扣，备注，过期时间
-    @@card_attributes = [ :store_id, :code, :variant_id, :amount, :status, :discount_percent, :memo, :expire_at]
+    @@card_attributes = [ :store_id, :code, :variant_id, :amount, :status, :discount_percent, :memo, :expire_at, :state]
 
     @@checkout_attributes = [
       :coupon_code, :email, :shipping_method_id, :special_instructions, :use_billing, :user_id, :store_id,

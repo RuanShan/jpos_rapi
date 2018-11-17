@@ -15,7 +15,16 @@ module Spree
 
         def update
           if @card
-            #authorize! :update, @card
+            authorize! :update, @card
+            permitted_card_params = card_params
+            state = permitted_card_params.delete :state
+            # 单独调用，以便更新后生成state_changes
+            if state == 'enabled'
+              @card.enable
+            elsif state == 'disabled'
+              @card.disable
+            end
+
             @card.update_attributes(card_params)
             respond_with(@card, status: 200, default_template: :show)
           else
