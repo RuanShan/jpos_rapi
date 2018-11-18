@@ -4,7 +4,7 @@ module Spree
     acts_as_paranoid
 
     include AuditorGeneralModel
-    auditable attributes: [:status], create: false, destroy: false
+    auditable attributes: [:password, :variant_id], create: false, destroy: false
 
     UNACTIVATABLE_ORDER_STATES = ["complete", "awaiting_return", "returned"]
 

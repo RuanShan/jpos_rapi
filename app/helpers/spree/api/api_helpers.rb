@@ -62,7 +62,7 @@ module Spree
       @@card_attributes = [
         :id, :store_id, :user_id, :code, :style, :amount, :amount_used,
         :name, :discount_percent, :discount_amount, :status, :memo, :created_at,
-        :expire_at, :variant_id, :state
+        :expire_at, :variant_id, :state, :payment_password
       ]
       @@card_transaction_attributes = [
         :id, :card_id, :order_id, :amount,  :amount_left,:position,  :created_at
