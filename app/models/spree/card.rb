@@ -22,6 +22,8 @@ module Spree
 
     has_many :state_changes, as: :stateful
 
+    scope :with_state, ->(s) { where(state: s.to_s) }
+
     # 会员卡的可用和禁用状态, 使用state代替
     enum  status:{ enabled: 1, disabled: 0 }, _prefix: true
     # 次卡 和 充值卡
