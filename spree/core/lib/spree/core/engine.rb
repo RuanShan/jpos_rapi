@@ -39,17 +39,17 @@ module Spree
 
       initializer 'spree.register.payment_methods', after: 'acts_as_list.insert_into_active_record' do |app|
         app.config.spree.payment_methods = [
-          Spree::Gateway::Bogus,
-          Spree::Gateway::BogusSimple,
-          Spree::PaymentMethod::Check,
-          Spree::PaymentMethod::StoreCredit
+          #Spree::Gateway::Bogus,
+          #Spree::Gateway::BogusSimple,
+          #Spree::PaymentMethod::Check,
+          #Spree::PaymentMethod::StoreCredit
         ]
       end
 
       initializer 'spree.register.adjustable_adjusters' do |app|
         app.config.spree.adjusters = [
-          Spree::Adjustable::Adjuster::Promotion,
-          Spree::Adjustable::Adjuster::Tax
+          #Spree::Adjustable::Adjuster::Promotion,
+          #Spree::Adjustable::Adjuster::Tax
         ]
       end
 

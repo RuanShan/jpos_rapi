@@ -5,7 +5,7 @@ module Spree
 
         def index
           @customers = Customer.accessible_by(current_ability, :read)
-
+          @customers = @customers.includes(:cards)
           @customers = if params[:ids]
                      @customers.ransack(id_in: params[:ids].split(','))
                    else

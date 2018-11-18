@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181115115319) do
+ActiveRecord::Schema.define(version: 20181118115319) do
 
   create_table "auditor_general_logs", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.string "model_type"
@@ -570,6 +570,7 @@ ActiveRecord::Schema.define(version: 20181115115319) do
     t.bigint "replaced_with_id"
     t.datetime "replaced_at"
     t.string "state", limit: 24
+    t.string "payment_password", limit: 24
     t.index ["replaced_with_id"], name: "index_spree_cards_on_replaced_with_id"
     t.index ["user_id"], name: "index_spree_cards_on_user_id"
   end
