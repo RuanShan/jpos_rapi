@@ -99,7 +99,7 @@ class User < ApplicationRecord
     user_entries.create!( store: store, day: DateTime.current, state:(last_user_entry.try(:state) == 'clockin' ? 'clockout'  : 'clockin') )
   end
 
-  # work has no store_id,  seller has store_id
+  # 工人work has no store_id,  店员seller has store_id
   # ensure user has a sale_today
   def sale_today
     #self.create_sale_today if sale_day.blank?
@@ -139,11 +139,6 @@ class User < ApplicationRecord
       self.password_confirmation = self.password
       self.save
     end
-
-    # should not create sale day on initialize, we donot know store_id now, create sale_today on entry
-    #def create_sale_today_for_waiter
-    #    self.create_sale_today( store_id: store_id ) if self.sale_today.blank?
-    #end
 
     def recompute_processed_line_items_count( date )
       sale_day = sale_days.on_date( date ).first

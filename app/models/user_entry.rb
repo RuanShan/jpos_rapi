@@ -5,8 +5,8 @@ class UserEntry < ApplicationRecord
   better_date_scope day: [:today, :week]
 
   belongs_to :store, class_name: 'Spree::Store', foreign_key: :store_id, required: true
-  belongs_to :user, class_name: 'User', required: true
-  
+  belongs_to :user, class_name: 'User', required: true, touch: true
+
   enum state:{ clockin: 1, clockout: 0 }
   self.whitelisted_ransackable_attributes = %w[id user_id store_id day]
 
@@ -14,7 +14,7 @@ class UserEntry < ApplicationRecord
   after_validation  :set_state_when_nil
   validates :day, presence: true
 
-  after_save :touch_user
+  after_save :touch_user_sale_today
 
   delegate :username, to: :user
   delegate :name, to: :store, prefix: true
@@ -35,8 +35,8 @@ class UserEntry < ApplicationRecord
     entry.try(:state) == 'clockin' ? 'clockout'  : 'clockin'
   end
 
-  # touch user to update cache
-  def touch_user
-    self.user.touch
+  def touch_user_sale_today
+    #如果 sale_today不存在，需要创建，
+    self.user.sale_today
   end
 end
