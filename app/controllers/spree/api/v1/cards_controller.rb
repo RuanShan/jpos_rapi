@@ -61,15 +61,15 @@ module Spree
           code = params[:code]
         end
 
-        # 检查checkout_password是否可用
+        # 检查payment_password是否可用
         # 参数
         #  id
-        #  checkout_password
+        #  payment_password
         def validate_password
-          checkout_password = params[:checkout_password]
+          payment_password = params[:payment_password]
           id = params[:id]
 
-          valid  = Spree::Card.where(id: id).exists?( checkout_password: checkout_password )
+          valid  = Spree::Card.where(id: id).exists?( payment_password: payment_password )
 
           json = { result: valid }
           render json: json
