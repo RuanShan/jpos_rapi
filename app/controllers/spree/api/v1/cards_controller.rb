@@ -2,7 +2,7 @@ module Spree
   module Api
     module V1
       class CardsController < Spree::Api::BaseController
-        before_action :find_card, only: [:replace, :update, :transactions]
+        before_action :find_card, only: [ :replace, :update, :transactions]
 
         def index
           @credit_cards = user.
@@ -59,6 +59,20 @@ module Spree
         #   code-检验code是否可用，没有使用过
         def is_code_available
           code = params[:code]
+        end
+
+        # 检查checkout_password是否可用
+        # 参数
+        #  id
+        #  checkout_password
+        def validate_password
+          checkout_password = params[:checkout_password]
+          id = params[:id]
+
+          valid  = Spree::Card.where(id: id).exists?( checkout_password: checkout_password )
+
+          json = { result: valid }
+          render json: json
         end
 
         private

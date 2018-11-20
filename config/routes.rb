@@ -202,6 +202,9 @@ RailsStarter::Application.routes.draw do
         end
 
         resources :cards do
+          collection do
+            get :validate_password
+          end
           member do
             get :transactions
             put :replace #用户换卡
