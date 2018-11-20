@@ -71,6 +71,7 @@ module Spree
             sale_day_sum.service_total += sale_day.service_total
             sale_day_sum.deposit_total += sale_day.deposit_total
             sale_day_sum.new_orders_count += sale_day.new_orders_count
+            sale_day_sum.service_order_count += sale_day.service_order_count
             sale_day_sum.new_customers_count += sale_day.new_customers_count
             sale_day_sum.new_cards_count += sale_day.new_cards_count
 
