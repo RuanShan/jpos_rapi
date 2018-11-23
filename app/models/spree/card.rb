@@ -17,9 +17,6 @@ module Spree
     #会员卡创建人员是必须的，以便查找 卡所属 店铺ID
     belongs_to :creator, class_name: 'User', foreign_key: 'created_by_id', optional: true
 
-    belongs_to :sale_day, ->{ today }, class_name: 'SaleDay', counter_cache: "new_cards_count",
-      primary_key: 'user_id', foreign_key: 'created_by_id'
-
     has_many :state_changes, as: :stateful
 
     scope :with_state, ->(s) { where(state: s.to_s) }

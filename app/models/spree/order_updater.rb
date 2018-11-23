@@ -43,7 +43,7 @@ module Spree
     def update_totals
       update_payment_total
       update_item_total
-    #  Rails.logger.debug "======update_totals=#{  order.total}========"
+      update_order_total
     end
 
 

@@ -543,6 +543,9 @@ module Spree
         if order_type_normal?
           self.sale_today.service_order_count+=1
           self.sale_today.service_total+= self.total
+        elsif order_type_card?
+          self.sale_today.new_cards_count+=1
+          self.sale_today.deposit_total+= self.total
         else
           self.sale_today.deposit_total+= self.total
         end

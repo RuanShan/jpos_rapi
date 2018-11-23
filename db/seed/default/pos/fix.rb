@@ -18,3 +18,13 @@ Spree::Store.all.each{| store |
     store.save
   end
 }
+
+
+
+#fix track_inventory, set true for selling:
+Selling::Service.all.each{|product|
+  product.variants.each{|variant|
+    variant.track_inventory = false
+    variant.save
+  }
+}

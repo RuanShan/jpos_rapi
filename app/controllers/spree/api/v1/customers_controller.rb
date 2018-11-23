@@ -77,7 +77,7 @@ module Spree
           params[:order][:payments_attributes] = params[:order].delete(:payments) if params[:order][:payments]
 
           amount = params[:order][:payments_attributes].inject(0){ |sum,payment| sum + payment[:amount].to_i  }
-          params[:order][:line_items_attributes] = [{variant_id: card.variant_id, price: amount}]
+          params[:order][:line_items_attributes] = [{variant_id: card.variant_id, price: amount, quantity: 1}]
           params[:order][:line_items_attributes][0][:card_id] = card.id
 
           permitted_params = params.require(:order).permit(permitted_order_attributes)
