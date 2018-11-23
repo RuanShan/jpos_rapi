@@ -6,7 +6,7 @@ module Spree
 
         def index
           @expense_items = Spree::ExpenseItem.accessible_by(current_ability, :read)
-
+          @expense_items = @expense_items.includes([:store, :user, :images])
           @expense_items = if params[:ids]
                           @expense_items.where(id: params[:ids].split(',').flatten)
                         else

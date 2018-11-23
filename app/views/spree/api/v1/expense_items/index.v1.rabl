@@ -1,8 +1,6 @@
 object false
 child(@expense_items => :expense_items) do
-  attributes *expense_item_attributes
-  node(:user_name) { |o| o.user.username }
-
+  extends 'spree/api/v1/expense_items/show'
 end
 node(:count) { @expense_items.count }
 node(:current_page) { params[:page].try(:to_i) || 1 }
