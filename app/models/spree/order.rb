@@ -50,7 +50,7 @@ module Spree
     belongs_to :creator, class_name: "User", foreign_key: "created_by_id", optional: true
     belongs_to :approver, class_name: "User", optional: true
     belongs_to :canceler, class_name: "User", optional: true
-    belongs_to :store, class_name: 'Spree::Store'
+    belongs_to :store, class_name: 'Spree::Store', required: true
     belongs_to :sale_today, ->{ today }, class_name: 'SaleDay', counter_cache: 'new_orders_count',
       primary_key: 'user_id', foreign_key: 'created_by_id', inverse_of: 'new_orders'
 
