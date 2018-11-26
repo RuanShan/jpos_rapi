@@ -206,6 +206,7 @@ RailsStarter::Application.routes.draw do
             get :validate_password
           end
           member do
+            get :send_password_sms
             get :transactions
             put :replace #用户换卡
           end

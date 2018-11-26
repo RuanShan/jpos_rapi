@@ -2,15 +2,14 @@ module Spree
   module Api
     module V1
       class CardsController < Spree::Api::BaseController
-        before_action :find_card, only: [ :replace, :update, :transactions]
+        before_action :find_card, only: [ :replace, :update, :transactions, :send_password_sms]
 
         def index
-          @credit_cards = user.
-                          credit_cards.
+          @cards = user.
+                          cards.
                           accessible_by(current_ability, :read).
-                          with_payment_profile.
                           ransack(params[:q]).result.page(params[:page]).per(params[:per_page])
-          respond_with(@credit_cards)
+          respond_with(@cards)
         end
 
         def update
@@ -74,6 +73,13 @@ module Spree
           json = { result: valid }
           render json: json
         end
+
+        # 发送会员卡密码到会员手机
+        # 参数
+        #    id
+        def send_password_sms
+        end
+
 
         private
 
