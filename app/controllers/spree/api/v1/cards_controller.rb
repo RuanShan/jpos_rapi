@@ -70,7 +70,7 @@ module Spree
 
           valid  = Spree::Card.where(id: id).exists?( payment_password: payment_password )
 
-          json = { result: valid }
+          json = { ret: valid }
           render json: json
         end
 
@@ -78,6 +78,12 @@ module Spree
         # 参数
         #    id
         def send_password_sms
+          @customer = @card.customer
+
+          success = SmsService.send_password( @customer.mobile, @card.payment_password )
+          json = { ret: success }
+          render json: json
+
         end
 
 

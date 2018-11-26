@@ -23,10 +23,13 @@ module Spree
     def capture(amount_in_cents, authorize_code, gateway_options = {})
       order_number = get_order_number(gateway_options)
       order = Spree::Order.find_by_number( order_number )
-      prepaid_card = order.payments.where(payment_method: self).first.source
+      payment = order.payments.where(payment_method: self).first
+      prepaid_card = payment.source
+      authorize_code = payment.number
 
       action = -> (prepaid_card) do
         purchase_amount = amount_in_cents / 100.0.to_d
+        # authorize_code is required for cancel order
         prepaid_card.capture(purchase_amount, authorize_code, order_number: order_number)
       end
       handle_action_call(prepaid_card, action, :capture)
@@ -78,7 +81,7 @@ module Spree
     end
 
     def handle_action(action, action_name, auth_code)
-      prepaid_card = CardTransaction.find_by(auth_code: auth_code).try(:card)
+      prepaid_card = CardTransaction.find_by( id: auth_code).try(:card)
 
       if prepaid_card.nil?
         ActiveMerchant::Billing::Response.new(

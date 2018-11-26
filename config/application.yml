@@ -1,19 +1,17 @@
-# Template file for application.yml
-devise_secret_key: 'somethingsecure' # 'rake secret' to generate a token
-host: "example.test"
-devise_mailer_sender: "devise@example.com"
-mailer_address: "smtpout.secureserver.net" # for example, this is godaddy.com
-mailer_port: 80
-mailer_domain: "example.com"
-mailer_user_name: "myinfo@example.com"
-mailer_password: "123123"
-ga_tracker: "UA-xxxxxxxx-X"
-ga_tracker_domain: "example.test"
-twitter_consumer_key: xxxxx # register your application at dev.twitter.co,
-twitter_consumer_secret: xxxx
-legal_disclaimer_link: "http://ourdisclaimer.com/?i=YOUR-SITE-HERE"
 
-production:
-  wx_url: 'http://wx.wyfpj.com'
 development:
+  icc_app_code: <%= ENV['JPOS_ICC_APP_CODE'] %>
+  aliyun_sms_access_key_secret: <%= ENV['JPOS_SMS_ACCESS_KEY_SECRET'] %>
+  aliyun_sms_access_key_id: <%= ENV['JPOS_SMS_ACCESS_KEY_ID'] %>
+  aliyun_sms_sign_name: <%= ENV['JPOS_SMS_SIGN_NAME'] %>
+  aliyun_sms_template_code_verification: SMS_144151564
+  aliyun_sms_template_send_password: SMS_151772113
   wx_url: 'http://testwx.getstore.cn'
+production:
+  icc_app_code: <%= ENV['JPOS_ICC_APP_CODE'] %>
+  aliyun_sms_access_key_secret: <%= ENV['JPOS_SMS_ACCESS_KEY_SECRET'] %>
+  aliyun_sms_access_key_id: <%= ENV['JPOS_SMS_ACCESS_KEY_ID'] %>
+  aliyun_sms_sign_name: <%= ENV['JPOS_SMS_SIGN_NAME'] %>
+  aliyun_sms_template_code_verification: SMS_146804242
+  aliyun_sms_template_send_password: SMS_151772113
+  wx_url: 'http://wx.wyfpj.com'

@@ -92,7 +92,7 @@ module Spree
     end
 
     def generate_authorization_code
-      "#{id}-GC-#{Time.now.utc.strftime('%Y%m%d%H%M%S%6N')}"
+      "A#{Time.now.utc.strftime('%Y%m%d%H%M%S%6N')}"
     end
 
     def can_void?(payment)
@@ -123,16 +123,15 @@ module Spree
       order = Spree::Order.find_by_number gateway_options[:order_number]
       card_transaction = self.card_transactions.create!( order:order,  amount: -amount, amount_left: self.amount, reason: 'consume'  )
       card_transaction.capture
-      true
+      card_transaction.id
     end
 
     #取消订单，取消相应的支付
     def cancel( auth_code )
-      card_transaction = self.card_transactions.find_by( auth_code: auth_code)
-
-      new_card_transaction = self.card_transactions.create!( order: card_transaction.order,  amount: card_transaction.amount, amount_left: self.amount, reason: 'canceled', auth_code: generate_authorization_code  )
-
+      card_transaction = self.card_transactions.find_by( id: auth_code)
+      new_card_transaction = self.card_transactions.create!( order: card_transaction.order,  amount: -card_transaction.amount, amount_left: self.amount, reason: 'canceled', auth_code: id.to_s   )
       new_card_transaction.capture
+      new_card_transaction.id
     end
 
     #替换会员卡

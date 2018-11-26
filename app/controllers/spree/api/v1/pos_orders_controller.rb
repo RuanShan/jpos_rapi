@@ -19,6 +19,12 @@ module Spree
           @order = Spree::Order.new(order_attributes)
           if @order.save
             @order.complete_via_pos
+            # update card other attributes
+            if @order.order_type_card_or_deposit? && params[:card].present?
+              permitted_card_params = card_params
+              code = permitted_card_params.delete :code
+              card = Spree::Card.find_by( code: code ).update_attributes( permitted_card_params )
+            end
             respond_with(@order, default_template: :show, status: 201)
           else
             invalid_resource!(@order)
@@ -187,6 +193,10 @@ module Spree
           required_params.map{|attrs|
             attrs.permit(permitted_payment_attributes)
           }
+        end
+
+        def card_params
+          params.require(:card).permit(permitted_card_attributes)
         end
 
         def find_current_order
