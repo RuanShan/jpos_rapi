@@ -1,6 +1,6 @@
 object @image
 attributes *image_attributes
 attributes :viewable_type, :viewable_id
-@image.class.attachment_definitions[:attachment][:styles].each do |k, _v|
+Sparee::Image.attachment_definitions[:attachment][:styles].each do |k, _v|
   node("#{k}_url") { |i| i.attachment.url(k) }
 end
