@@ -6,7 +6,7 @@ module Spree
 
         def index
           authorize! :index, LineItemGroup
-          @q = LineItemGroup.reverse_chronological.ransack(params[:q]).result(distinct: true)
+          @q = line_item_group_scope.ransack(params[:q]).result(distinct: true)
           #Rails.logger.debug "@q=#{LineItemGroup.reverse_chronological.ransack(params[:q]).inspect}"
           @total_count = @q.count
           @line_item_groups = @q.includes(:order).page(params[:page]).per(params[:per_page])
@@ -87,6 +87,14 @@ module Spree
 
         def fine_line_item_group
           @line_item_group = Spree::LineItemGroup.accessible_by(current_ability, :update).readonly(false).find_by!(number: params[:id])
+        end
+
+        def line_item_group_scope
+
+            scope = Spree::LineItemGroup.accessible_by(current_ability, :read).includes(:order)
+            scope = scope.where( {spree_orders:{state: :cart}} )
+            scope = scope.reverse_chronological
+
         end
 
       end

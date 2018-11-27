@@ -532,17 +532,20 @@ module Spree
 
 
     def after_cancel
+      Rails.logger.debug "after_cancel1... "
       # shipments.each(&:cancel!)
       # 订单取消，不需要每个物品再分别取消
       # line_item_groups.uncanceled.each(&:cancel!)
       payments.completed.each(&:cancel!)
 
+      Rails.logger.debug "after_cancel2... "
       # Free up authorized store credits
       #payments.store_credits.pending.each(&:void!)
       #associate_card_if_needed if self.order_type_card?
 
       #send_cancel_email
       update_with_updater!
+      Rails.logger.debug "after_cancel3... "
     end
 
     def update_sale_day_fields
