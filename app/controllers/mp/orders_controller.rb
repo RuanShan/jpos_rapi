@@ -142,8 +142,7 @@ class Mp::OrdersController < Mp::BaseController
 
     # Use callbacks to share common setup or constraints between actions.
     def set_order
-
-
+      @order = Spree::Order.find( params[:id] )
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
