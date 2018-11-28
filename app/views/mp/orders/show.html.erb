@@ -1,0 +1,7 @@
+<% if @order.order_type_normal? %>
+  <%= render partial: "order", locals:{ order: @order } %>
+
+<% else %>
+  <%= render partial: "deposit", locals:{ deposit: @order } %>
+
+<% end %>

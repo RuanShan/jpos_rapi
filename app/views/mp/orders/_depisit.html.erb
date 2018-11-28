@@ -1,0 +1,27 @@
+<% #locals: { deposit }
+  line_item = deposit.line_items.first
+  card_transaction = line_item.card_transaction
+%>
+
+<div class="weui-form-preview">
+            <div class="weui-form-preview__hd">
+                <div class="weui-form-preview__item">
+                    <label class="weui-form-preview__label">充值金额</label>
+                    <em class="weui-form-preview__value">¥<%= card_transaction.amount.to_i %></em>
+                </div>
+            </div>
+            <div class="weui-form-preview__bd">
+                <div class="weui-form-preview__item">
+                    <label class="weui-form-preview__label"><%= line_item.cname %></label>
+                    <span class="weui-form-preview__value">卡号<%= card_transaction.card.code %></span>
+                </div>
+                <div class="weui-form-preview__item">
+                    <label class="weui-form-preview__label">充值后金额</label>
+                    <span class="weui-form-preview__value"><%= card_transaction.amount_remaining %></span>
+                </div>
+                <div class="weui-form-preview__item">
+                    <label class="weui-form-preview__label">充值日期</label>
+                    <span class="weui-form-preview__value"><%= line_item.created_at.to_date %></span>
+                </div>
+            </div>
+</div>
