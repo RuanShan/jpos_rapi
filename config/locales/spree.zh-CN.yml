@@ -43,10 +43,11 @@ zh-CN:
       spree/line_item_group:
         states:
           pending: "新订单"
-          ready_for_factory: 准备发货到工厂
-          processing: 工厂处理
-          ready_for_store: 准备发货到店里
-          ready: 可以交给客户了
+          ready_for_factory: 准备发送到工厂
+          processing: 工厂处理中
+          processed: 工厂处理完毕
+          ready_for_store: 准备发送到店里
+          ready: 待交付客户
           shipped: 已交付客户
       spree/option_type:
         name: "名称"

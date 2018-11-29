@@ -58,7 +58,7 @@ module Spree
               valid_mobile = !Customer.exists?( mobile: mobile )
             end
           end
-          json = { result: valid_mobile }
+          json = { ret: valid_mobile }
           render json: json
         end
 

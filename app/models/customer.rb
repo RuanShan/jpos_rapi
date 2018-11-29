@@ -18,7 +18,7 @@ class Customer <  ApplicationRecord
 
   # 包括客户 消费订单 和 购买会员卡，会员卡充值订单
   has_many :orders, class_name: 'Spree::Order', foreign_key: 'user_id'
-  has_many :cards, class_name: 'Spree::Card', foreign_key: 'user_id', inverse_of: :customer
+  has_many :cards, class_name: 'Spree::Card', foreign_key: 'user_id', inverse_of: :customer, dependent: :destroy
   #用户当前可用充值卡
   has_one  :prepaid_card, ->{ with_state(:enabled).style_prepaid }, class_name: 'Spree::Card', foreign_key: 'user_id'
   has_one  :wx_follower
@@ -70,10 +70,9 @@ class Customer <  ApplicationRecord
     end
 
     def scramble_mobile_and_password
-      self.mobile = SecureRandom.uuid + "@wyfpj.com"
-      self.username = self.mobile
-      self.password = SecureRandom.hex(8)
-      self.password_confirmation = self.password
+      uid = SecureRandom.hex(4) #"2b052e7f"
+      self.mobile = uid + self.mobile
+      self.username = uid + self.username
       self.save
     end
 

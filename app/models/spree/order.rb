@@ -455,7 +455,7 @@ module Spree
           line_item.update_attributes( group_id: group.id, group_number: group_number, label_icon_name: line_item.product.label_icon_name )
           groups_map[line_item.group_position] = group
         else
-          line_item.update_attributes( group_id: group.id, group_number: line_item_group.number )
+          line_item.update_attributes( group_id: line_item_group.id, group_number: line_item_group.number )
           line_item_group.price += line_item.price
           line_item_group.name += " / #{line_item.name}(#{line_item.options_text})"
           line_item_group.save

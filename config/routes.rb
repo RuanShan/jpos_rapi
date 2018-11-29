@@ -204,6 +204,7 @@ RailsStarter::Application.routes.draw do
         resources :cards do
           collection do
             get :validate_password
+            get :code_available
           end
           member do
             get :send_password_sms

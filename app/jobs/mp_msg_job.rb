@@ -36,7 +36,7 @@ class MpMsgJob < ApplicationJob
   def send_new_order_created_message( order, template )
     wx_follower = order.customer.wx_follower
     if wx_follower
-      template['url'] = "#{Rails.configuration.application['wx_url']}/mp/order/#{order.id}"
+      template['url'] = "#{Rails.configuration.application['wx_url']}/mp/orders/#{order.id}"
       template['data']['keyword1']['value'] = order.customer.username
       template['data']['keyword2']['value'] = order.number
       template['data']['keyword3']['value'] = order.total

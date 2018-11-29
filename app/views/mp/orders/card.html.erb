@@ -9,50 +9,7 @@
 
   <div class="page">
     <% if @orders.present? %>
-    <div class="weui-form-preview">
-                <div class="weui-form-preview__hd">
-                    <div class="weui-form-preview__item">
-                        <label class="weui-form-preview__label">充值金额</label>
-                        <em class="weui-form-preview__value">¥5000.00</em>
-                    </div>
-                </div>
-                <div class="weui-form-preview__bd">
-                    <div class="weui-form-preview__item">
-                        <label class="weui-form-preview__label">5000打7折卡</label>
-                        <span class="weui-form-preview__value">卡号7900</span>
-                    </div>
-                    <div class="weui-form-preview__item">
-                        <label class="weui-form-preview__label">充值后金额</label>
-                        <span class="weui-form-preview__value">5500</span>
-                    </div>
-                    <div class="weui-form-preview__item">
-                        <label class="weui-form-preview__label">充值日期</label>
-                        <span class="weui-form-preview__value">2118-05-06 12:25:23</span>
-                    </div>
-                </div>
-    </div>
-    <div class="weui-form-preview">
-                <div class="weui-form-preview__hd">
-                    <div class="weui-form-preview__item">
-                        <label class="weui-form-preview__label">充值金额</label>
-                        <em class="weui-form-preview__value">¥5000.00</em>
-                    </div>
-                </div>
-                <div class="weui-form-preview__bd">
-                    <div class="weui-form-preview__item">
-                        <label class="weui-form-preview__label">5000打7折卡</label>
-                        <span class="weui-form-preview__value">卡号7900</span>
-                    </div>
-                    <div class="weui-form-preview__item">
-                        <label class="weui-form-preview__label">充值后金额</label>
-                        <span class="weui-form-preview__value">5500</span>
-                    </div>
-                    <div class="weui-form-preview__item">
-                        <label class="weui-form-preview__label">充值日期</label>
-                        <span class="weui-form-preview__value">2118-05-06 12:25:23</span>
-                    </div>
-                </div>
-    </div>
+    <%= render partial: 'deposit', collection: @orders %>
     <% else %>
       <div class="weui-form-preview tcenter">
         <p> 暂无数据</p>

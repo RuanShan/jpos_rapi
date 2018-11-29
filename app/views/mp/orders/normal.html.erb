@@ -10,18 +10,14 @@
     <div class="orders">
       <% if @orders.present? %>
         <%= render partial: 'order', collection: @orders %>
-
         <!-- status elements -->
         <div class="scroller-status">
-          <div class="infinite-scroll-request loader-ellips">
-            ...
-          </div>
-          <p class="infinite-scroll-last">End of content</p>
-          <p class="infinite-scroll-error">No more pages to load</p>
+          <div class="infinite-scroll-request loader-ellips"> ... </div>
+          <p class="infinite-scroll-last"></p>
+          <p class="infinite-scroll-error"></p>
         </div>
         <div class="pagination">
           <%= link_to_next_page @orders, 'Load more', class: 'pagination__next' %>
-
         </div>
 
       <% else %>
