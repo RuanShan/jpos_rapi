@@ -70,10 +70,8 @@ class Customer <  ApplicationRecord
     end
 
     def scramble_mobile_and_password
-      self.mobile = SecureRandom.uuid + "@wyfpj.com"
-      self.username = self.mobile
-      self.password = SecureRandom.hex(8)
-      self.password_confirmation = self.password
+      self.mobile = SecureRandom.uuid + self.mobile
+      self.username = SecureRandom.uuid + self.username    
       self.save
     end
 
