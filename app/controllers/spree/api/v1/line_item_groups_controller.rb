@@ -9,7 +9,7 @@ module Spree
           @q = line_item_group_scope.ransack(params[:q]).result(distinct: true)
           #Rails.logger.debug "@q=#{LineItemGroup.reverse_chronological.ransack(params[:q]).inspect}"
           @total_count = @q.count
-          @line_item_groups = @q.includes(:order).page(params[:page]).per(params[:per_page])
+          @line_item_groups = @q.includes(:order, :line_items, :images ).page(params[:page]).per(params[:per_page])
           respond_with(@line_item_groups)
         end
 

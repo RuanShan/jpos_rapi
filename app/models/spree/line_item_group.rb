@@ -22,7 +22,7 @@ module Spree
     end
 
     has_many :images, -> { order(:position) }, as: :viewable, dependent: :destroy, class_name: 'Spree::GroupImage'
-    has_many :line_items, foreign_key: 'group_number', primary_key: 'number'
+    has_many :line_items, foreign_key: 'group_id'
 
     before_validation :set_price_zero_when_nil
 
@@ -207,9 +207,9 @@ module Spree
       inventory_units_for(variant).present?
     end
 
-    def line_items
-      LineItem.where( group_number: number )
-    end
+    #def line_items
+    #  LineItem.where( group_number: number )
+    #end
 
     def shipped=(value)
       return unless value == '1' && shipped_at.nil?
