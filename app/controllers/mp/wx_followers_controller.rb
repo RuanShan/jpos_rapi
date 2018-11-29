@@ -39,11 +39,11 @@ class Mp::WxFollowersController < Mp::BaseController
     @customer = @wx_follower.customer
     @prepaid_card = @customer.prepaid_card || Spree::Card.style_prepaid.new
     #我的订单数量
-    @order_count = @customer.orders.order_type_normal.count
+    @order_count = @customer.orders.type_normal.count
     #我的订单金额
-    @order_total = @customer.orders.order_type_normal.sum(:total)
+    @order_total = @customer.orders.type_normal.sum(:total)
     #我的充值金额
-    @card_total = @customer.orders.order_type_card.sum(:total)
+    @card_total = @customer.orders.type_card.sum(:total)
     #最近订单及物品
     @incomplete_orders  = @customer.orders.incomplete.includes(:payments, :line_item_groups)
     #最近订单物品

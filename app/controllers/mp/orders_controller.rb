@@ -22,12 +22,12 @@ class Mp::OrdersController < Mp::BaseController
 
   # 物品维修订单
   def normal
-    @orders = @customer.orders.order_type_normal.reverse_chronological.page params[:page]
+    @orders = @customer.orders.type_normal.reverse_chronological.page params[:page]
   end
 
   # 充值卡订单
   def card
-    @orders = @customer.orders.order_type_card.reverse_chronological.page params[:page]
+    @orders = @customer.orders.type_card.reverse_chronological.page params[:page]
 
   end
 
