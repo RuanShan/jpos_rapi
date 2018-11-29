@@ -56,8 +56,11 @@ module Spree
 
         # 参数
         #   code-检验code是否可用，没有使用过
-        def is_code_available
+        def available_code
           code = params[:code]
+          exist = Spree::Card.exists( code: code )
+          json = { ret: !exist }
+          render json: json
         end
 
         # 检查payment_password是否可用
