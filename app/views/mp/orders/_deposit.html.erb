@@ -1,6 +1,6 @@
 <% #locals: { deposit }
   line_item = deposit.line_items.first
-  card_transaction = line_item.card_transaction
+  card_transaction = deposit.card_transactions.first
 %>
 
 <div class="weui-form-preview">
