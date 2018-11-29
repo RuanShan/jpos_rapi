@@ -62,6 +62,18 @@ module Spree
           render json: json
         end
 
+        def discard_wxfollower
+          ret = false
+          @customer = user
+          if @customer.wx_follower.present?
+            @wx_follower = @customer.wx_follower
+            @wx_follower.customer_id= nil
+            ret = @wx_follower.save
+          end
+          json = { ret: ret }
+          render json: json
+        end
+
         private
         def user
           @customer ||= Customer.accessible_by(current_ability, :read).find(params[:id])

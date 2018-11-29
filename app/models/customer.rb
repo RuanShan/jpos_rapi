@@ -21,11 +21,10 @@ class Customer <  ApplicationRecord
   has_many :cards, class_name: 'Spree::Card', foreign_key: 'user_id', inverse_of: :customer, dependent: :destroy
   #用户当前可用充值卡
   has_one  :prepaid_card, ->{ with_state(:enabled).style_prepaid }, class_name: 'Spree::Card', foreign_key: 'user_id'
-  has_one  :wx_follower
+  has_one :wx_follower, inverse_of: :customer
 
   accepts_nested_attributes_for :cards
 
-  has_one :wx_follower, inverse_of: :customer
 
   self.whitelisted_ransackable_attributes = %w[id mobile username store_id]
   self.whitelisted_ransackable_associations = %w[cards]

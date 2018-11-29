@@ -190,6 +190,7 @@ RailsStarter::Application.routes.draw do
           member do
             get :cards
             get :statis
+            put :discard_wxfollower
           end
           collection do
             get :validate_mobile
