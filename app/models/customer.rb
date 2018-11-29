@@ -18,7 +18,7 @@ class Customer <  ApplicationRecord
 
   # 包括客户 消费订单 和 购买会员卡，会员卡充值订单
   has_many :orders, class_name: 'Spree::Order', foreign_key: 'user_id'
-  has_many :cards, class_name: 'Spree::Card', foreign_key: 'user_id', inverse_of: :customer
+  has_many :cards, class_name: 'Spree::Card', foreign_key: 'user_id', inverse_of: :customer, dependent: :destroy
   #用户当前可用充值卡
   has_one  :prepaid_card, ->{ with_state(:enabled).style_prepaid }, class_name: 'Spree::Card', foreign_key: 'user_id'
   has_one  :wx_follower
