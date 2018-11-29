@@ -56,7 +56,7 @@ module Spree
 
         # 参数
         #   code-检验code是否可用，没有使用过
-        def available_code
+        def code_available
           code = params[:code]
           exist = Spree::Card.exists( code: code )
           json = { ret: !exist }
