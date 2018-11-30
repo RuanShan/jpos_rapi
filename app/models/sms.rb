@@ -15,7 +15,7 @@ class Sms
   def send_for_sign_up
     self.verify_code = rand(999999)
     self.send_at = DateTime.current
-    errors.empty? ? true : false
+    SmsService.send_verify_code( mobile, verify_code)
   end
 
   def validate_for_sign_up( some_phone, some_verify_code )
