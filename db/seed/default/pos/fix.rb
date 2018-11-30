@@ -28,3 +28,9 @@ Selling::Service.all.each{|product|
     variant.save
   }
 }
+Selling::PrepaidCard.all.each{|product|
+  product.variants_including_master.each{|variant|
+    variant.track_inventory = false
+    variant.save
+  }
+}
