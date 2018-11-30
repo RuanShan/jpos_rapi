@@ -39,7 +39,7 @@ class MpMsgJob < ApplicationJob
       template['url'] = "#{Rails.configuration.application['wx_url']}/mp/orders/#{order.id}"
       template['data']['keyword1']['value'] = order.customer.username
       template['data']['keyword2']['value'] = order.number
-      template['data']['keyword3']['value'] = order.total
+      template['data']['keyword3']['value'] = "#{order.total.to_i}元"
       template['data']['keyword4']['value'] = order.display_created_at
       template['data']['keyword5']['value'] = order.display_payment_method_names
       Wechat.api.template_message_send Wechat::Message.to(wx_follower.openid).template( template )
