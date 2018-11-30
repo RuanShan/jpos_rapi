@@ -15,7 +15,7 @@ class SmsService
       response = Aliyun::Sms.send(phone_numbers, template_code, template_param.to_json)
       response_body= JSON.parse( response.response_body )
       #ApiHistory.create( name: "send_sms_verification", url: "dysmsapi.aliyuncs.com", params: template_param, result: response_body)
-      #Rails.logger.debug "res= #{response_body}"
+      Rails.logger.debug "res= #{response_body}"
       #{"Message"=>"模板变量缺少对应参数值", "RequestId"=>"D55E55C0-C6FA-4A1D-8B06-75E70FABD5CC", "Code"=>"isv.TEMPLATE_MISSING_PARAMETERS"}
 
       response_body.try('[]', 'Code') == 'OK'
