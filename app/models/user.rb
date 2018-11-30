@@ -133,10 +133,10 @@ class User < ApplicationRecord
     end
 
     def scramble_email_and_password
-      self.email = SecureRandom.uuid + "@example.net"
-      self.username = self.mobile
-      self.password = SecureRandom.hex(8)
-      self.password_confirmation = self.password
+      uid = SecureRandom.hex(4)
+      self.email = "#{uid}+#{self.email}"
+      self.username = "#{uid}+#{self.username}"
+      self.mobile = "#{uid}+#{self.mobile}"
       self.save
     end
 
