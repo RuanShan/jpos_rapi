@@ -46,7 +46,7 @@ module Spree
 
     @@checkout_attributes = [
       :coupon_code, :email, :shipping_method_id, :special_instructions, :use_billing, :user_id, :store_id,
-      :order_type, :created_by_id, :enable_sms, :enable_mp_msg, :memo
+      :order_type, :created_by_id, :enable_sms, :enable_mp_msg, :memo, :odd_card_paid
     ]
 
     @@customer_return_attributes = [:stock_location_id, return_items_attributes: [:id, :inventory_unit_id, :return_authorization_id, :returned, :pre_tax_amount, :acceptance_status, :exchange_variant_id, :resellable]]

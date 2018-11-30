@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181118115319) do
+ActiveRecord::Schema.define(version: 20181130115319) do
 
   create_table "auditor_general_logs", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.string "model_type"
@@ -966,6 +966,7 @@ ActiveRecord::Schema.define(version: 20181118115319) do
     t.text "memo"
     t.boolean "enable_sms", default: false, null: false
     t.boolean "enable_mp_msg", default: false, null: false
+    t.boolean "odd_card_paid", default: false, null: false
     t.index ["approver_id"], name: "index_spree_orders_on_approver_id"
     t.index ["bill_address_id"], name: "index_spree_orders_on_bill_address_id"
     t.index ["canceler_id"], name: "index_spree_orders_on_canceler_id"

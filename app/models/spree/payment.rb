@@ -277,7 +277,7 @@ module Spree
     def set_default_cname
       if self.cname.blank?
         self.cname = self.payment_method.name
-        if self.payment_method.member_card?
+        if self.source.is_a? Spree::Card
           self.cname +="(#{self.source.code})"
         end
       end
