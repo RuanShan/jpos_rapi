@@ -70,7 +70,7 @@ $(document).on("turbolinks:load", function() {
       },
       'wx_follower[verify_code]': {
         required: true,
-        rangelength:[4,4]
+        rangelength:[6,6]
       },
 
     },
@@ -82,7 +82,7 @@ $(document).on("turbolinks:load", function() {
       },
       'wx_follower[verify_code]': {
         required: "请输入短信验证码",
-        rangelength: "请输入4位短信验证码"
+        rangelength: "请输入6位短信验证码"
       },
     },
     showErrors:function(errorMap,errorList) {
