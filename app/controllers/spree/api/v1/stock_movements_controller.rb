@@ -25,6 +25,13 @@ module Spree
           end
         end
 
+        # 基于index的查询条件，统计订单数量和金额
+        def count
+          @q = scope.ransack(params[:q]).result(distinct: true)
+          @total_count = @q.count
+          @total_quantity = @q.sum(:quantity)
+        end
+
         private
 
         def stock_location
