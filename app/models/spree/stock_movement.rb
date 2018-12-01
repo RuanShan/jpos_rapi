@@ -23,7 +23,7 @@ module Spree
     scope :recent, -> { order(created_at: :desc) }
 
     self.whitelisted_ransackable_attributes = ['quantity', 'day', 'stock_item_id']
-    #self.whitelisted_ransackable_associations = ['stock_item']
+    self.whitelisted_ransackable_associations = ['stock_item']
 
     delegate :name, to: :created_by, prefix: true, allow_nil: true
 

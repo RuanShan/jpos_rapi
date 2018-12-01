@@ -1,7 +1,7 @@
 class UserEntriesController < ApplicationController
   respond_to :html, :json
   skip_before_action :verify_authenticity_token, if: :is_cors?
-  before_action :set_user, only: [:create]
+  before_action :get_user, only: [:create]
   before_action :set_user_entry, only: [:show, :edit, :update, :destroy]
 
   # GET /user_entries
@@ -35,7 +35,8 @@ class UserEntriesController < ApplicationController
     #ability.authorize! :create, UserEntry
 
     @user_entry = UserEntry.new(user_entry_params)
-    @user_entry.user = @user
+    @user_entry.user = get_user
+    Rails.logger.debug "@user_entry.user =#{@user_entry.user.inspect}"
     respond_to do |format|
       if @user_entry.save
         format.html { redirect_to @user_entry, notice: 'User entry was successfully created.' }
@@ -79,18 +80,19 @@ class UserEntriesController < ApplicationController
     end
 
     #根据用户名和密码，设置打卡用户
-    def set_user
-      @user = User.new
+    def get_user
+      user = nil
       #使用当前登录用户
       if params[:is_current]
-        @user = current_user
+        user = current_user
       else
         permitted_user_params = user_params
-        user = User.find_by_username( permitted_user_params[:username] )
-        if user.valid_password?( permitted_user_params[:password] )
-          @user = user
+        userbyname = User.find_by_username( permitted_user_params[:username] )
+        if userbyname && userbyname.valid_password?( permitted_user_params[:password] )
+          user = userbyname
         end
       end
+      user
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

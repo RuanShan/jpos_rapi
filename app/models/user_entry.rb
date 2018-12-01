@@ -10,9 +10,10 @@ class UserEntry < ApplicationRecord
   enum state:{ clockin: 1, clockout: 0 }
   self.whitelisted_ransackable_attributes = %w[id user_id store_id day]
 
+  validates :day, presence: true
+
   before_validation :set_today_when_nil
   after_validation  :set_state_when_nil
-  validates :day, presence: true
 
   after_save :touch_user_sale_today
 
@@ -30,9 +31,10 @@ class UserEntry < ApplicationRecord
 
   # 根据用户今天的登录记录，得出下一个记录的状态
   def compute_next_state
-    entry = self.user.user_entries.today.last
-
-    entry.try(:state) == 'clockin' ? 'clockout'  : 'clockin'
+    if errors.empty?
+      entry = self.user.user_entries.today.last
+      entry.try(:state) == 'clockin' ? 'clockout'  : 'clockin'
+    end
   end
 
   def touch_user_sale_today
