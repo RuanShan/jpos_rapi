@@ -46,7 +46,7 @@ module Spree
         can :create, Order
         can :display, StockLocation
         can :display, StockItem
-        if user.has_spree_role?('waiter') ||  user.has_spree_role?('worker')
+        if user.has_spree_role?('waiter') || user.has_spree_role?('qa')
           can :manage, Card
           can :manage, Order
           can :manage, LineItemGroup
@@ -71,8 +71,8 @@ module Spree
         can :display, ProductProperty
         can :display, Property
 
-        # waiter could create/read/update/destroy customer
-        if user.has_spree_role?('waiter')
+        # qa could create/read/update/destroy customer
+        if user.has_spree_role?('qa')
           can :manage, Spree.user_class
         else
           can :create, Spree.user_class

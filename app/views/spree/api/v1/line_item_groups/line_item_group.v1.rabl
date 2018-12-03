@@ -15,3 +15,4 @@ child images: :images do
 end
 
 node(:missing_image_url) { |group| image_url(group.missing_image_path) }
+node(:store_name) { |group| group.store_name }

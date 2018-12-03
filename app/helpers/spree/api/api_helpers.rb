@@ -115,7 +115,7 @@ module Spree
         :group_position, :worker_id, :work_at, :cname, :memo, :sale_unit_price, :state,
         :discount_percent, :card_id, :order_id, :label_icon_name, :group_id]
 
-      @@line_item_group_attributes = [:id, :order_id, :number, :price, :state, :name, :payment_state, :created_at, :updated_at]
+      @@line_item_group_attributes = [:id, :store_id, :order_id, :number, :price, :state, :name, :payment_state, :created_at, :updated_at]
 
       @@option_type_attributes = [:id, :name, :presentation, :position]
 
