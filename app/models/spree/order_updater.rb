@@ -143,6 +143,7 @@ module Spree
         order.payment_state = 'balance_due' if order.outstanding_balance > 0
         order.payment_state = 'credit_owed' if order.outstanding_balance < 0
         order.payment_state = 'paid' unless order.outstanding_balance?
+        order.payment_state = 'unpaid' if order.payments.blank?
       end
       order.state_changed('payment') if last_state != order.payment_state
       order.payment_state
