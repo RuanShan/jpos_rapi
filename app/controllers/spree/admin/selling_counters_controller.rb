@@ -1,6 +1,6 @@
 module Spree
   module Admin
-    class SellingProductsController < ProductsController
+    class SellingCountersController < ProductsController
       helper 'spree/products'
 
       before_action :load_data, :alias_load_data, except: :index
@@ -19,11 +19,11 @@ module Spree
       end
 
       def update
-        if params[:selling_product][:taxon_ids].present?
-          params[:selling_product][:taxon_ids] = params[:selling_product][:taxon_ids].split(',')
+        if params[:selling_counter][:taxon_ids].present?
+          params[:selling_counter][:taxon_ids] = params[:selling_counter][:taxon_ids].split(',')
         end
-        if params[:selling_product][:option_type_ids].present?
-          params[:selling_product][:option_type_ids] = params[:selling_product][:option_type_ids].split(',')
+        if params[:selling_counter][:option_type_ids].present?
+          params[:selling_counter][:option_type_ids] = params[:selling_counter][:option_type_ids].split(',')
         end
         invoke_callbacks(:update, :before)
         if @object.update_attributes(permitted_resource_params)
@@ -67,7 +67,7 @@ module Spree
 
         if @new.persisted?
           flash[:success] = Spree.t('notice_messages.product_cloned')
-          redirect_to edit_admin_selling_product_url(@new)
+          redirect_to edit_admin_selling_counter_url(@new)
         else
           flash[:error] = Spree.t('notice_messages.product_not_cloned', error: @new.errors.full_messages.to_sentence)
           redirect_to admin_products_url
@@ -95,7 +95,7 @@ module Spree
       end
 
       def location_after_save
-        spree.edit_admin_selling_product_url(@product)
+        spree.edit_admin_selling_counter_url(@product)
       end
 
       def load_data
@@ -131,15 +131,15 @@ module Spree
       end
 
       def create_before
-        return if params[:selling_product][:prototype_id].blank?
-        @prototype = Spree::Prototype.find(params[:selling_product][:prototype_id])
+        return if params[:selling_counter][:prototype_id].blank?
+        @prototype = Spree::Prototype.find(params[:selling_counter][:prototype_id])
       end
 
       def update_before
         # note: we only reset the product properties if we're receiving a post
         #       from the form on that tab
         return unless params[:clear_product_properties]
-        params[:selling_product] ||= {}
+        params[:selling_counter] ||= {}
       end
 
       def product_includes
@@ -147,7 +147,7 @@ module Spree
       end
 
       def clone_object_url(resource)
-        clone_admin_selling_product_url resource
+        clone_admin_selling_counter_url resource
       end
 
       private
@@ -157,7 +157,7 @@ module Spree
       end
 
       def model_class
-        Selling::Product
+        Selling::Counter
       end
       # view required  @product, for shared/selling_service_tab
       def alias_load_data

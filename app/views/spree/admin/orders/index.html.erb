@@ -82,14 +82,6 @@
 
         <div class="col-xs-12 col-md-4">
           <div class="form-group">
-            <%= label_tag :q_line_items_variant_sku_eq, Spree.t(:sku) %>
-            <%= f.text_field :line_items_variant_sku_eq, class: 'form-control' %>
-          </div>
-        </div>
-
-
-        <div class="col-xs-12 col-md-4">
-          <div class="form-group">
             <%= label_tag :q_store_id_in, Spree.t(:store) %>
             <%= f.select :store_id_in, Spree::Store.order(:name).pluck(:name, :id), { include_blank: true }, class: 'select2' %>
           </div>

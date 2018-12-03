@@ -49,7 +49,7 @@ module Spree
       end
 
       def get_belongs_to_id
-        params[:product_id] || params[:selling_service_id] || params[:selling_prepaid_card_id] || params[:selling_product_id]
+        params[:product_id] || params[:selling_service_id] || params[:selling_prepaid_card_id] || params[:selling_counter_id]
       end
 
       def get_belongs_to_name

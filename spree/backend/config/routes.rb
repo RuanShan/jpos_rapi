@@ -72,7 +72,7 @@ Spree::Core::Engine.add_routes do
 
     resources :selling_services, concerns: [:saleable]
     resources :selling_prepaid_cards, concerns: [:saleable]
-    resources :selling_products, concerns: [:saleable]
+    resources :selling_counters, concerns: [:saleable]
 
 
     resources :customers do

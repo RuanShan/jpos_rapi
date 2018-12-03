@@ -45,5 +45,5 @@ var set_option_type_select = function(selector){
 $(document).ready(function () {
   set_option_type_select( '#product_option_type_ids' )
   set_option_type_select( '#selling_service_option_type_ids' )
-  set_option_type_select( '#selling_product_option_type_ids' )
+  set_option_type_select( '#selling_counter_option_type_ids' )
 });
