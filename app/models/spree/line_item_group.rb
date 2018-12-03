@@ -142,6 +142,8 @@ module Spree
     extend DisplayEnum
     display_enum_methods :state
 
+    delegate :name, to: :store, prefix: true, allow_nil: true
+
     def make_step_and_order( forward= true )
       forward ? next! : back!
       order.updater.update_group_state
