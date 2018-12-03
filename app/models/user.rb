@@ -69,7 +69,9 @@ class User < ApplicationRecord
 
   date_time_methods :created_at, :updated_at
 
-  validates :username, presence: true, length: { in: 5..20 }, uniqueness: true
+  #中文用户名可能为两个字符 utf8
+  validates :username, presence: true, length: { in: 2..20 }, uniqueness: true
+
 
   # 为了方便处理查询结果
   # 将按照一定条件查询到的 user_entry, 赋值给searched_entries，以便json一并处理
