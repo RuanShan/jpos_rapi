@@ -2,7 +2,7 @@ store= Spree::Store.first
 
 admin =User.where(username: 'admin').first_or_create(store: store, username: 'admin', email: 'admin@example.com', role: 'admin',
                      password: '123123', password_confirmation: '123123', confirmed_at: Time.zone.now, is_staff: true)
-User.where(username: 'manager')
+manager = User.where(username: 'manager')
     .first_or_create(store: store, username: 'manager', email: 'manager@example.com', role: 'manager', api_key: 'xxx',
                      password: '123123', password_confirmation: '123123', confirmed_at: Time.zone.now, is_staff: true)
 User.where(username: 'guest')
@@ -34,6 +34,14 @@ worker2= User.where(username: 'worker2')
 
 role = Spree::Role.find_or_create_by(name: 'worker')
 [worker1, worker2 ].each{|w|
+  w.generate_spree_api_key!
+  w.spree_roles << role
+  w.save
+}
+
+
+role = Spree::Role.find_or_create_by(name: 'qa')
+[manager ].each{|w|
   w.generate_spree_api_key!
   w.spree_roles << role
   w.save
