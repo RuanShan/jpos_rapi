@@ -412,10 +412,11 @@ module Spree
       #updater.update_shipment_state
       #保证会员卡，现金等支付为完成状态。
       payments.each(&:capture!)
-      updater.update_payment_state
 
       updater.update
 
+      #update payment_state after total, payment_total updated
+      update_column( :payment_state, updater.update_payment_state )
 
       #updater.run_hooks
       #不能 touch completed_at, 删除时会导致 OrderInventory.verify 异常
