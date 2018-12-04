@@ -96,12 +96,12 @@ module Spree
         private
         def product_scope
           if @current_user_roles.include?('admin')
-            scope = Selling::PrepaidCard.with_deleted.accessible_by(current_ability, :read).includes(*product_includes)
+            scope = Spree::Product.where(type: ['Selling::PrepaidCard', 'Selling::TimesCard']).with_deleted.accessible_by(current_ability, :read).includes(*product_includes)
 
             scope = scope.not_deleted unless params[:show_deleted]
             scope = scope.not_discontinued unless params[:show_discontinued]
           else
-            scope = Selling::PrepaidCard.accessible_by(current_ability, :read).active.includes(*product_includes)
+            scope = Spree::Product.where(type: ['Selling::PrepaidCard', 'Selling::TimesCard']).accessible_by(current_ability, :read).active.includes(*product_includes)
           end
 
           scope
