@@ -24,7 +24,7 @@ module Spree
     # 会员卡的可用和禁用状态, 使用state代替
     enum  status:{ enabled: 1, disabled: 0 }, _prefix: true
     # 次卡 和 充值卡
-    enum  style:{ counts: 1, prepaid: 0 }, _prefix: true
+    enum  style:{ times: 1, prepaid: 0 }, _prefix: true
 
     validates :amount_used, :name, :amount, :code, :customer,  presence: true
 
