@@ -97,12 +97,7 @@ module Spree
         #  order.group_state = 'canceled'
         #end
 
-        #如果 order.group_state  是 canceled, 或者 shipped， 我们认为订单已经完结
-        #设置订单完结时间 order.completed_at
-        if ['canceled', 'shipped'].include? order.group_state
-           order.completed_at = DateTime.current
-        end
-
+        order.group_state
     end
 
     #检查是否为 客户办卡订单，会员卡充值订单

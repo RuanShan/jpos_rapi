@@ -10,7 +10,7 @@ require 'ostruct'
 
 module Spree
   class LineItemGroup < Spree::Base
-    PAYMENT_STATES = %w(balance_due credit_owed failed paid void)
+    PAYMENT_STATES = %w(unpaid balance_due credit_owed failed paid void)
 
     with_options inverse_of: :line_item_groups do
       belongs_to :store, class_name: 'Spree::Store'

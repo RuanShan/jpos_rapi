@@ -86,15 +86,23 @@ module Spree
         # for POS
         ########################################################################
         #后付款时，添加支付方式, 支付为数组
+        # params
+        #  line_item_ids: []
+        #  payments: []
         def add_payments
+          line_item_ids = params[:line_item_ids]
           @order.validate_payments_attributes(payments_params)
           @payments = @order.payments.build( payments_params )
           saved = []
           Spree::Payment.transaction do
-            saved = @payments.map( &:save)
+            saved = @payments.each( &:save).map( &:capture!)
           end
-          saved.uniq!
-          if saved.length ==1 && saved[0] == true
+          Rails.logger.debug "saved=#{saved.inspect} "
+          line_items = Spree::LineItem.find( line_item_ids )
+          line_items.each{|item|
+            item.line_item_group.update_attribute( :payment_state, :paid ) if item.line_item_group
+          }
+          if saved.present?
             respond_with(@payments, status: 201)
           else
             head :no_content

@@ -433,7 +433,7 @@ module Spree
     def create_line_item_groups
       #如果创建 line_item_groups时， payments 存在，说明客户已经付款，否则为未付款订单
       groups_map = {}
-      group_payment_state = payments.present? ? :paid : :balance_due
+      group_payment_state = payments.present? ? :paid : :unpaid
 
       line_items.each{|line_item|
         #这个line_item 可能不是一个服务，可能是充值卡，或鞋油等实物商品
@@ -451,7 +451,7 @@ module Spree
             payment_state: group_payment_state,
             name: "#{line_item.name}(#{line_item.options_text})"
           )
-          line_item.update_attributes( group_id: group.id, group_number: group_number, label_icon_name: line_item.product.label_icon_name )
+          line_item.update_attributes( group_id: group.id, group_number: group_number)
           groups_map[line_item.group_position] = group
         else
           line_item.update_attributes( group_id: line_item_group.id, group_number: line_item_group.number )

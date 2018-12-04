@@ -40,6 +40,9 @@ class LocalDevise::SessionsController < DeviseController
 
   # POST /resource/sign_in
   def create
+    # sign_out first before sign_in, or devise would not sign params in.
+    reset_session
+
     self.resource = warden.authenticate!(auth_options)
     set_flash_message!(:notice, :signed_in)
     sign_in(resource_name, resource)
