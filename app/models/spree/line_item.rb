@@ -112,17 +112,12 @@ module Spree
       if self.card_code.present?
         card = create_card!( variant: variant, customer: self.user) do |new_card|
           new_card.code = self.card_code
-          new_card.amount = 0
-          new_card.name = variant.name #产品名字
           new_card.store = order.store
           new_card.creator = order.creator
-          new_card.style = variant.product.card_style #卡的种类
-          if variant.card_expire_in > 0
-            new_card.expire_in =  DateTime.current.in( card_expire_in.day )
-          end
-          new_card.discount_percent = variant.card_discount_percent
-          new_card.discount_amount = variant.card_discount_amount
-          new_card.status = :enabled
+          #new_card.amount = 0
+          #new_card.name = variant.name #产品名字
+          #new_card.style = variant.product.card_style #卡的种类
+          #new_card.status = :enabled
         end
         self.update_attribute :card_id, card.id
       end

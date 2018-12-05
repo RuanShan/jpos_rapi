@@ -65,6 +65,10 @@ module Spree
       amount - amount_used
     end
 
+    def card_times_remaining
+      card_times - card_times_used
+    end
+
     # Calculate the amount to be used when creating an adjustment
     def compute_amount(calculable)
       0
@@ -113,7 +117,13 @@ module Spree
     #充值
     def deposit!( line_item )
       #当为position = 1， 表示为新增卡的充值记录
-      card_transaction = self.card_transactions.create!( order: line_item.order, amount: line_item.price, amount_left: self.amount, reason: 'deposit')
+      if style_times? # 次卡 TimesCard
+        card_times = line_item.variant.cart_times
+        card_transaction = self.card_transactions.create!( order: line_item.order, amount: card_times, amount_left: self.card_times_remaining, reason: 'deposit')
+      else
+        card_transaction = self.card_transactions.create!( order: line_item.order, amount: line_item.price, amount_left: self.amount_remaining, reason: 'deposit')
+      end
+
       card_transaction.deposit
     end
 
@@ -121,7 +131,12 @@ module Spree
     def capture( amount, auth_code, gateway_options )
 
       order = Spree::Order.find_by_number gateway_options[:order_number]
-      card_transaction = self.card_transactions.create!( order:order,  amount: -amount, amount_left: self.amount, reason: 'consume'  )
+      payment = Spree::Payment.find_by_number gateway_options[:payment_number]
+      if style_times? # 次卡 TimesCard
+        card_transaction = self.card_transactions.create!( order:order,  amount: -payment.card_times, amount_left: self.card_times_remaining, reason: 'consume'  )
+      else
+        card_transaction = self.card_transactions.create!( order:order,  amount: -amount, amount_left: self.amount_remaining, reason: 'consume'  )
+      end
       card_transaction.capture
       card_transaction.id
     end
@@ -129,7 +144,11 @@ module Spree
     #取消订单，取消相应的支付
     def cancel( auth_code )
       card_transaction = self.card_transactions.find_by( id: auth_code)
-      new_card_transaction = self.card_transactions.create!( order: card_transaction.order,  amount: -card_transaction.amount, amount_left: self.amount, reason: 'canceled', auth_code: id.to_s   )
+      if style_times? # 次卡 TimesCard
+        new_card_transaction = self.card_transactions.create!( order: card_transaction.order,  amount: -card_transaction.amount, amount_left: self.card_times_remaining, reason: 'canceled'  )
+      else
+        new_card_transaction = self.card_transactions.create!( order: card_transaction.order,  amount: -card_transaction.amount, amount_left: self.amount, reason: 'canceled'  )
+      end
       new_card_transaction.capture
       new_card_transaction.id
     end
@@ -171,15 +190,16 @@ module Spree
       self.amount ||= 0
       if variant
         self.style = product.try(:card_style) #卡的种类
-
         if variant.card_expire_in > 0
-          self.expire_in =  DateTime.current.in( variant.card_expire_in.day )
+          self.expire_at =  DateTime.current.in( variant.card_expire_in.day )
         end
-        self.discount_percent = variant.card_discount_percent
-        self.discount_amount = variant.card_discount_amount
-
+        if product.is_a? Selling::PrepaidCard
+          self.discount_percent = variant.card_discount_percent
+          self.discount_amount = variant.card_discount_amount
+        elsif product.is_a? Selling::TimesCard
+          self.card_times = variant.card_times
+        end
       end
-
       self.amount_used = 0
     end
 

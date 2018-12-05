@@ -1,8 +1,7 @@
 module Selling
   class PrepaidCard < Spree::Product
     extend DisplayEnum
-   #     enum status:[ created, approved, disapproved]
-
+    # enum status:[ created, approved, disapproved]
     default_scope { where( card_style: 0 ) }
     enum card_expire_in: { year: 0, month: 30, week: 7 }, _suffix: true
 

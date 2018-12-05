@@ -6,3 +6,4 @@ node(:product_id) do |c|
 end
 
 node(:amount_remaining, &:amount_remaining)
+node(:card_times_remaining, &:card_times_remaining)

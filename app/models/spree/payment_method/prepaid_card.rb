@@ -16,7 +16,7 @@ module Spree
       ['checkout', 'pending'].include?(payment.state)
     end
 
-    def authorize(amount_in_cents, prepaid_card, gateway_options = {})
+    def authorize(amount_in_cents, card, gateway_options = {})
       simulated_successful_billing_response
     end
 
@@ -24,20 +24,20 @@ module Spree
       order_number = get_order_number(gateway_options)
       order = Spree::Order.find_by_number( order_number )
       payment = order.payments.where(payment_method: self).first
-      prepaid_card = payment.source
-      authorize_code = payment.number
+      card = payment.source # PrepaidCard or TimesCard
+      payment_number = payment.number
 
-      action = -> (prepaid_card) do
+      action = -> (card) do
         purchase_amount = amount_in_cents / 100.0.to_d
         # authorize_code is required for cancel order
-        prepaid_card.capture(purchase_amount, authorize_code, order_number: order_number)
+        card.capture(purchase_amount, authorize_code, { order_number: order_number, payment_number: payment_number })
       end
-      handle_action_call(prepaid_card, action, :capture)
+      handle_action_call(card, action, :capture)
     end
 
     def void(auth_code, gateway_options = {})
-      action = -> (prepaid_card) do
-        prepaid_card.void(auth_code, order_number: get_order_number(gateway_options))
+      action = -> (card) do
+        card.void(auth_code, order_number: get_order_number(gateway_options))
       end
       handle_action(action, :void, auth_code)
     end
@@ -52,9 +52,9 @@ module Spree
 
     #整个订单被取消时，每个支付方式被设置为 void
     def cancel(auth_code)
-      Rails.logger.debug "prepaid_card cancel #{auth_code}"
-      action = lambda do |prepaid_card|
-        prepaid_card.cancel(auth_code)
+      Rails.logger.debug "card cancel #{auth_code}"
+      action = lambda do |card|
+        card.cancel(auth_code)
       end
       handle_action(action, :cancel, auth_code)
     end
@@ -65,33 +65,33 @@ module Spree
 
     private
 
-    def handle_action_call(prepaid_card, action, action_name, auth_code = nil)
-      prepaid_card.with_lock do
-        if response = action.call(prepaid_card)
+    def handle_action_call(card, action, action_name, auth_code = nil)
+      card.with_lock do
+        if response = action.call(card)
           ActiveMerchant::Billing::Response.new(
             true,
-            Spree.t('prepaid_card_payment_method.successful_action', action: action_name),
+            Spree.t('card_payment_method.successful_action', action: action_name),
             {},
             authorization: auth_code || response
           )
         else
-          ActiveMerchant::Billing::Response.new(false, prepaid_card.errors.full_messages.join, {}, {})
+          ActiveMerchant::Billing::Response.new(false, card.errors.full_messages.join, {}, {})
         end
       end
     end
 
     def handle_action(action, action_name, auth_code)
-      prepaid_card = CardTransaction.find_by( id: auth_code).try(:card)
+      card = CardTransaction.find_by( id: auth_code).try(:card)
 
-      if prepaid_card.nil?
+      if card.nil?
         ActiveMerchant::Billing::Response.new(
           false,
-          Spree.t('prepaid_card_payment_method.unable_to_find_for_action', auth_code: auth_code, action: action_name),
+          Spree.t('card_payment_method.unable_to_find_for_action', auth_code: auth_code, action: action_name),
           {},
           {}
         )
       else
-        handle_action_call(prepaid_card, action, action_name, auth_code)
+        handle_action_call(card, action, action_name, auth_code)
       end
     end
 
