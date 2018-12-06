@@ -55,7 +55,7 @@ class MpMsgJob < ApplicationJob
   def send_deposit_success_message( order, template )
     wx_follower = order.customer.wx_follower
     if wx_follower
-      template['url'] = "#{Rails.configuration.application['wx_url']}/mp/order/#{order.id}"
+      template['url'] = "#{Rails.configuration.application['wx_url']}/mp/orders/#{order.id}"
       template['data']['keyword1']['value'] = "#{order.total.to_i}元"
       template['data']['keyword2']['value'] = order.card_transactions.sum(&:amount_remaining)
       template['data']['keyword3']['value'] = order.store_name
