@@ -21,6 +21,7 @@ module Spree
             @order.complete_via_pos
             # update card other attributes
             if @order.order_type_card_or_deposit? && params[:card].present?
+              # card { payment_password, expire_at, memo }
               permitted_card_params = card_params
               code = permitted_card_params.delete :code
               card = Spree::Card.find_by( code: code ).update_attributes( permitted_card_params )

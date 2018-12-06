@@ -1,4 +1,4 @@
-class AddCardTimesIntoLineItmes < ActiveRecord::Migration[5.1]
+class AddCardTimesIntoPayments < ActiveRecord::Migration[5.1]
   # support inventory management
   def change
     change_table(:spree_variants) do |t|
