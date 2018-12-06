@@ -10,8 +10,8 @@ class MpMsgJob < ApplicationJob
 
       template = YAML.load(File.read(template_yaml_path))
 
+      template_name = "#{Rails.env}_#{template_type}"
       if template_type == TemplateTypeEnum.new_order_created
-        template_name = "#{Rails.env}_#{template_type}"
         send_new_order_created_message( order, template[template_name])
       elsif template_type == TemplateTypeEnum.deposit_success
         send_deposit_success_message( order, template[template_name])
