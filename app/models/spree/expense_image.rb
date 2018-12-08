@@ -7,10 +7,10 @@ module Spree
     end
 
     has_attached_file :attachment,
-                      styles: { mini: '48x48>',  big: '600x600>' },
-                      default_style: :product,
-                      url: ':images_host/images/spree/groups/:id/:style/:basename.:extension',
-                      path: ':rails_root/public/images/spree/groups/:id/:style/:basename.:extension',
+                      styles: { mini: '48x48>',  large: '600x600>' },
+                      default_style: :large,
+                      url: ':images_host/images/spree/expenses/:id/:style/:basename.:extension',
+                      path: ':rails_root/public/images/spree/expenses/:id/:style/:basename.:extension',
                       convert_options: { all: '-strip -auto-orient -colorspace sRGB' }
     validates_attachment :attachment,
                          presence: true,
