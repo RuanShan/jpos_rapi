@@ -56,6 +56,7 @@ module Spree
           can :manage, Image
           can :manage, UserEntry
           can :manage, ExpenseItem
+          can :manage, ExpenseImage
           can :manage, Store
           can :manage, StockMovement
         else
