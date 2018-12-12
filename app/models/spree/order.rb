@@ -49,7 +49,8 @@ module Spree
     belongs_to :approver, class_name: "User", optional: true
     belongs_to :canceler, class_name: "User", optional: true
     belongs_to :store, class_name: 'Spree::Store', required: true
-    belongs_to :sale_today, ->{ today }, class_name: 'SaleDay', counter_cache: 'new_orders_count',
+    # sale_day should be day of order created
+    belongs_to :sale_day, ->(order){ where( day: order.created_at.to_date ) }, class_name: 'SaleDay', counter_cache: 'new_orders_count',
       primary_key: 'user_id', foreign_key: 'created_by_id', inverse_of: 'new_orders'
 
     with_options dependent: :destroy do
@@ -545,21 +546,38 @@ module Spree
       #send_cancel_email
       update_with_updater!
       Rails.logger.debug "after_cancel3... "
+
+      update_sale_day_fields
     end
 
     def update_sale_day_fields
+      # new order or canceled
       # => service_total,  deposit_total
-      if self.sale_today
+      if self.sale_day
         if order_type_normal?
-          self.sale_today.service_order_count+=1
-          self.sale_today.service_total+= self.total
+          if canceled?
+            self.sale_day.service_order_count -= 1
+            self.sale_day.service_total -= self.total
+          else
+            self.sale_day.service_order_count += 1
+            self.sale_day.service_total += self.total
+          end
         elsif order_type_card?
-          self.sale_today.new_cards_count+=1
-          self.sale_today.deposit_total+= self.total
+          if canceled?
+            self.sale_day.new_cards_count -= 1
+            self.sale_day.deposit_total -= self.total
+          else
+            self.sale_day.new_cards_count+=1
+            self.sale_day.deposit_total+= self.total
+          end
         else
-          self.sale_today.deposit_total+= self.total
+          if canceled?
+            self.sale_day.deposit_total -= self.total
+          else
+            self.sale_day.deposit_total+= self.total
+          end
         end
-        self.sale_today.save!
+        self.sale_day.save!
       end
     end
 
