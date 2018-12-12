@@ -82,7 +82,7 @@ production_deposit_success:
   topcolor: "#FF0000"
   data:
     first:
-      value: "杨小姐，充值成功。"
+      value: "您好，充值成功。"
       color: "#0A0A0A"
     keyword1:
       value: "本次充值金额：1500"
@@ -94,5 +94,5 @@ production_deposit_success:
       value: "充值门店：武林广场店"
       color: "#173177"
     remark:
-      value: "武林广场店(0512-88888888)感谢您的一贯支持。"
+      value: "汪永峰皮具养护中心(400-0588-222)感谢您的一贯支持。"
       color: "#173177"
