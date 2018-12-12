@@ -117,19 +117,16 @@ module Spree
         # params
         #  order_id
         #  payments: []
-        def checkout
-          line_item_ids = params[:line_item_ids]
+        def repay
+
+          @order.payments.completed.each(&:cancel!)
           @order.validate_payments_attributes(payments_params)
           @payments = @order.payments.build( payments_params )
           saved = []
           Spree::Payment.transaction do
             saved = @payments.each( &:save).map( &:capture!)
           end
-          Rails.logger.debug "saved=#{saved.inspect} "
-          line_items = Spree::LineItem.find( line_item_ids )
-          line_items.each{|item|
-            item.line_item_group.update_attribute( :payment_state, :paid ) if item.line_item_group
-          }
+
           if saved.present?
             respond_with(@payments, status: 201)
           else

@@ -11,6 +11,7 @@ module Spree
       :image_attributes,
       :inventory_unit_attributes,
       :line_item_attributes,
+      :line_item_group_attributes,
       :option_type_attributes,
       :option_value_attributes,
       :payment_attributes,
@@ -65,6 +66,8 @@ module Spree
 
     # code: 新创建的会员卡号,  group_position: 根据group_position创建group_number
     @@line_item_attributes = [:id, :variant_id, :quantity, :group_position, :group_number, :card_id, :sale_unit_price, :sale_price, :price, :discount_percent, :memo, :cname, :card_code, :card_expire_at ]
+
+    @@line_item_group_attributes = [:id, :returned_memo, :name]
 
     @@option_type_attributes = [:name, :presentation, :option_values_attributes]
 
