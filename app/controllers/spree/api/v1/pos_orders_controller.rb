@@ -118,9 +118,11 @@ module Spree
         #  order_id
         #  payments: []
         def repay
-
           @order.payments.completed.each(&:cancel!)
           @order.validate_payments_attributes(payments_params)
+
+          #rebuild price of line_items
+
           @payments = @order.payments.build( payments_params )
           saved = []
           Spree::Payment.transaction do
@@ -128,7 +130,7 @@ module Spree
           end
 
           if saved.present?
-            respond_with(@payments, status: 201)
+            respond_with(@order, default_template: :show)
           else
             head :no_content
           end

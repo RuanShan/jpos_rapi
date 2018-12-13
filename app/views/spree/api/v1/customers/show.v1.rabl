@@ -4,7 +4,7 @@ object @customer
 attributes *customer_attributes
 
 child(cards: :cards) do
-  extends 'spree/api/v1/customers/card'
+  extends 'spree/api/v1/cards/show'
 end
 
 
