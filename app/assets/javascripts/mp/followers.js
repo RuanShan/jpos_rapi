@@ -78,7 +78,7 @@ $(document).on("turbolinks:load", function() {
       'wx_follower[mobile]': {
         required: "请输入手机号码",
         rangelength: "手机号码由11个数字组成",
-        remote: "会员手机号码不存在，请咨询门店"
+        remote: "客户手机号码不存在，请咨询门店"
       },
       'wx_follower[verify_code]': {
         required: "请输入短信验证码",
