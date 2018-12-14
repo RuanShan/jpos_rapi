@@ -40,7 +40,7 @@ module Spree
 
     #enum state: { done: 1, pending: 0 }
 
-    self.whitelisted_ransackable_associations = %w[variant, line_item_group]
+    self.whitelisted_ransackable_associations = %w[variant line_item_group order]
     self.whitelisted_ransackable_attributes = %w[store_id variant_id price card_id work_at]
 
     #初始化为待处理， 当确认工作量后 转为 done
@@ -125,7 +125,10 @@ module Spree
       if self.card_id > 0
         # 充值
         #self.card.transactions.create!( order: order, amount: self.price)
-        Spree::Card.find(card_id).deposit!( self )
+        card = Spree::Card.find(card_id)
+        # update card.variant_id, use may upgrade card
+        card.update_attributes( variant_id: self.variant_id, name: self.variant.name )
+        card.deposit!( self )
       end
     end
 

@@ -79,6 +79,7 @@ module Spree
 
     before_create :create_token
     before_create :link_by_email
+    after_destroy :update_sale_day_fields
 
     with_options presence: true do
       validates :number, length: { maximum: 32, allow_blank: true }, uniqueness: { allow_blank: true }
@@ -555,7 +556,7 @@ module Spree
       # => service_total,  deposit_total
       if self.sale_day
         if order_type_normal?
-          if canceled?
+          if (destroyed? && !canceled?) || canceled?
             self.sale_day.service_order_count -= 1
             self.sale_day.service_total -= self.total
           else
@@ -563,7 +564,7 @@ module Spree
             self.sale_day.service_total += self.total
           end
         elsif order_type_card?
-          if canceled?
+          if (destroyed? && !canceled?) || canceled?
             self.sale_day.new_cards_count -= 1
             self.sale_day.deposit_total -= self.total
           else
@@ -571,7 +572,7 @@ module Spree
             self.sale_day.deposit_total+= self.total
           end
         else
-          if canceled?
+          if (destroyed? && !canceled?) || canceled?
             self.sale_day.deposit_total -= self.total
           else
             self.sale_day.deposit_total+= self.total
