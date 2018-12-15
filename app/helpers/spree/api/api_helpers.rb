@@ -104,10 +104,9 @@ module Spree
       @@order_attributes = [
         :id, :number, :item_total, :total, :ship_total, :state, :adjustment_total,
         :user_id, :created_at, :updated_at, :completed_at, :payment_total,
-        :shipment_state, :payment_state, :email, :special_instructions, :channel,
-        :included_tax_total, :additional_tax_total, :display_included_tax_total,
-        :display_additional_tax_total, :tax_total, :currency, :considered_risky,
-        :created_by_id, :canceler_id, :store_id, :group_state, :sale_total, :order_type
+        :shipment_state, :payment_state, :email, :special_instructions, :channel,        
+        :created_by_id, :canceler_id, :store_id, :group_state, :sale_total, :order_type,
+        :memo
       ]
 
       #   price：实收价格   sale_price：应收价格, label_icon_name: 标签图标

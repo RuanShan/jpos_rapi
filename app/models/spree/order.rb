@@ -548,6 +548,9 @@ module Spree
       update_with_updater!
       Rails.logger.debug "after_cancel3... "
 
+      #如果是会员卡订单， 购买，充值等
+      associate_card_if_needed if self.order_type_card_or_deposit?
+
       update_sale_day_fields
     end
 

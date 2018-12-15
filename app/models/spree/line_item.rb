@@ -108,6 +108,11 @@ module Spree
     end
 
     def associate_with_card
+      # use cancel a deposit
+      if self.order.canceled?
+        card.deposit!( self )
+        return
+      end
       #客户没有卡，创建新卡
       if self.card_code.present?
         card = create_card!( variant: variant, customer: self.user) do |new_card|

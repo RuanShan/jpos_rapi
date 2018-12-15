@@ -119,13 +119,24 @@ module Spree
     # end
 
     #充值
+    # params:
+    #  undo: user cancel order
     def deposit!( line_item )
       #当为position = 1， 表示为新增卡的充值记录
+      card_times = line_item.variant.card_times
+      price = line_item.price
+      reason = 'deposit'
+
+      if line_item.order.canceled?
+        price = - price
+        card_times = -card_times
+        reason = 'undeposit'
+      end
+
       if style_times? # 次卡 TimesCard
-        card_times = line_item.variant.cart_times
-        card_transaction = self.card_transactions.create!( order: line_item.order, amount: card_times, amount_left: self.card_times_remaining, reason: 'deposit')
+        card_transaction = self.card_transactions.create!( order: line_item.order, amount: card_times, amount_left: self.card_times_remaining, reason: reason)
       else
-        card_transaction = self.card_transactions.create!( order: line_item.order, amount: line_item.price, amount_left: self.amount_remaining, reason: 'deposit')
+        card_transaction = self.card_transactions.create!( order: line_item.order, amount: price, amount_left: self.amount_remaining, reason: reason)
       end
 
       card_transaction.deposit
