@@ -33,9 +33,12 @@ module Spree
 
         end
 
-
+        # 取消订单，并更新取消理由
         def cancel
           @order.canceled_by(current_api_user)
+          if( params['order'])
+            @order.update_attributes( order_params.slice(:memo) )
+          end
           respond_with(@order, default_template: :show)
         end
 
