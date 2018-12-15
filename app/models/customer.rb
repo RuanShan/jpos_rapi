@@ -42,13 +42,13 @@ class Customer <  ApplicationRecord
   # sms对象，创建用户时检查短信验证码, :verify_code, 用户输入的验证码
   attr_accessor :sms,:verify_code
 
-  #总共消费金额
+  #总共消费金额, 去除取消的订单
   def normal_order_total
     orders.where( order_type: :normal ).sum(:total)
   end
-  #总共消费次数
+  #总共消费次数, 去除取消的订单
   def normal_order_count
-    orders.where( order_type: :normal ).count
+    orders.where( order_type: :normal, state: :cart ).count
   end
 
   # 客户当前使用的充值卡

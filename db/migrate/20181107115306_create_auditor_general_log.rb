@@ -1,6 +1,7 @@
 class CreateAuditorGeneralLog < ActiveRecord::Migration[5.1]
   def change
-    create_table :auditor_general_logs do |t|
+    # ALTER TABLE auditor_general_logs CHANGE alterations alterations TEXT CHARACTER SET utf8 COLLATE utf8_general_ci;
+    create_table :auditor_general_logs, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
 
       t.string :model_type
       t.integer :model_id
