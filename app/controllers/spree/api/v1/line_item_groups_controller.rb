@@ -54,7 +54,7 @@ module Spree
 
         def update
           @line_item_group = Spree::LineItemGroup.accessible_by(current_ability, :update).readonly(false).find_by!(number: params[:id])
-          @line_item_group.update_attributes_and_order(shipment_params)
+          @line_item_group.update_attributes(line_item_group_params)
 
           respond_with(@line_item_group.reload, default_template: :show)
         end
@@ -74,12 +74,18 @@ module Spree
         #物品订单取消
         def cancel
           @line_item_group.canceled_by(current_api_user)
+          #update returned_memo
+          @line_item_group.update_attributes(line_item_group_params)
+
           respond_with(@line_item_group, default_template: :show)
         end
 
         #物品订单返工
         def rework
           @line_item_group.returned_by(current_api_user)
+          
+          @line_item_group.update_attributes(line_item_group_params)
+
           respond_with(@line_item_group, default_template: :show)
         end
 
@@ -96,6 +102,11 @@ module Spree
             scope = scope.reverse_chronological
 
         end
+
+        def line_item_group_params
+          params.require(:line_item_group).permit(permitted_line_item_group_attributes)
+        end
+
 
       end
     end

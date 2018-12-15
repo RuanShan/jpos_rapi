@@ -48,7 +48,7 @@ module Spree
 
         def index
           #authorize! :index, Order
-          @q = Order.ransack(params[:q]).result(distinct: true)
+          @q = Order.ransack(params[:q]).result( )
           @total_count = @q.count
           # 订单列表需要显示订单 物品和活的信息
           @orders = @q.includes( :creator, :payments, user: :cards, line_item_groups: :images, line_items: :variant ).page(params[:page]).per(params[:per_page])
@@ -57,7 +57,8 @@ module Spree
 
         # 基于index的查询条件，统计订单数量和金额
         def count
-          @q = Order.ransack(params[:q]).result(distinct: true)
+          # never use distinct: true, it would cause distinct total
+          @q = Order.ransack(params[:q]).result( )
           @total_count = @q.count
           @total_sum = @q.sum(:total)
         end
@@ -105,6 +106,32 @@ module Spree
           }
           if saved.present?
             respond_with(@payments, status: 201)
+          else
+            head :no_content
+          end
+        end
+
+        ########################################################################
+        # for POS
+        ########################################################################
+        #后付款时，重新支付, 支付为数组, 上一个支付退款,如会员卡支付, 用于退卡转现金
+        # params
+        #  order_id
+        #  payments: []
+        def repay
+          @order.payments.completed.each(&:cancel!)
+          @order.validate_payments_attributes(payments_params)
+
+          #rebuild price of line_items
+
+          @payments = @order.payments.build( payments_params )
+          saved = []
+          Spree::Payment.transaction do
+            saved = @payments.each( &:save).map( &:capture!)
+          end
+
+          if saved.present?
+            respond_with(@order, default_template: :show)
           else
             head :no_content
           end

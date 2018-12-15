@@ -135,8 +135,9 @@ module Spree
       elsif order.canceled? && order.payment_total == 0
         order.payment_state = 'void'
       else
-        order.payment_state = 'balance_due' if order.outstanding_balance > 0
-        order.payment_state = 'credit_owed' if order.outstanding_balance < 0
+        # no balance_due, credit_owed any more, we repay with /without card,
+        order.payment_state = 'paid' if order.outstanding_balance > 0 #balance_due
+        order.payment_state = 'paid' if order.outstanding_balance < 0 #credit_owed
         order.payment_state = 'paid' unless order.outstanding_balance?
         order.payment_state = 'unpaid' if order.payments.blank?
       end

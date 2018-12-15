@@ -115,6 +115,7 @@ RailsStarter::Application.routes.draw do
         post '/pos_orders/count', to: 'pos_orders#count'
         put '/pos_orders/:id/cancel', to: 'pos_orders#cancel'
         post '/pos_orders/:id/add_payments', to: 'pos_orders#add_payments'
+        post '/pos_orders/:id/repay', to: 'pos_orders#repay'
         delete '/pos_orders/:id', to: 'pos_orders#destroy'
 
         resources :line_item_groups do

@@ -52,6 +52,10 @@ module Spree
         transition from: any, to: :replaced
       end
 
+      event :refund do
+        transition from: any, to: :returned
+      end
+
       after_transition do |card, transition|
         card.state_changes.create!(
           previous_state: transition.from,
