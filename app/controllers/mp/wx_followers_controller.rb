@@ -45,9 +45,9 @@ class Mp::WxFollowersController < Mp::BaseController
     #我的充值金额
     @card_total = @customer.orders.type_card.sum(:total)
     #最近订单及物品
-    @incomplete_orders  = @customer.orders.incomplete.includes(:payments, :line_item_groups)
+    @inprogress_groups_orders  = @customer.orders.inprogress_groups.includes(:payments, :line_item_groups)
     #最近订单物品
-    @line_item_groups = @incomplete_orders.map(&:line_item_groups).flatten
+    @line_item_groups = @inprogress_groups_orders.map(&:line_item_groups).flatten
     #新订单数量
     @pending_line_item_group_count = @line_item_groups.select{|group| group.pending? }.count
     #待领取数量

@@ -57,7 +57,8 @@ Rails.application.configure do
 end
 
 Paperclip.interpolates :images_host  do |attachment, style|
-  "http://localhost:3001"
+  # http://localhost:3001"
+  "http://localhost"
 end
 
 Ransack.configure do |c|

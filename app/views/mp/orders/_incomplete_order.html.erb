@@ -4,40 +4,28 @@
 %>
 
   <div class="weui-panel ">
-    <div class="weui-panel__hd"> <span>订单编号 R918074680</span>    <span style="float:right;"> 订单日期 07-27 11:56 </span></div>
+    <div class="weui-panel__hd"> <span>订单编号 <%=order.number %></span>    <span style="float:right;"> 订单日期 <%=order.display_created_at %> </span></div>
     <div class="weui-panel__bd">
-                <div class="weui-media-box weui-media-box_appmsg">
-                    <div class="weui-media-box__hd">
-                        <%=image_tag 'mp/pic_160.png', size: "50" %>
-                    </div>
-                    <div class="weui-media-box__bd">
-                        <h4 class="weui-media-box__title"></h4>
-                        <div class="weui-media-box__desc">
-                          <div> 1 保养鞋低规	 </div>
-                          <div> 2 保养鞋低规	 </div>
-                        </div>
-                    </div>
-
-
-                </div>
-
+      <% order.line_item_groups.each{|group| %>
 
                 <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg">
                     <div class="weui-media-box__hd">
-                        <%=image_tag 'mp/pic_160.png', size: "50" %>
+                        <%=image_tag group_first_image_url(group), size: "50" %>
                     </div>
                     <div class="weui-media-box__bd">
                         <h4 class="weui-media-box__title"></h4>
                         <div class="weui-media-box__desc">
-                          <div> 1 保养鞋低规	 </div>
-                          <div> 2 保养鞋低规	 </div>
+                            <% group.line_items.each_with_index{|item, i| %>
+                              <div> <%= "#{i+1} #{item.cname}" %> </div>
+                            <% } %>
                         </div>
                         <ul class="weui-media-box__info">
-                            <li class="weui-media-box__info__meta">物品编号：072701008153</li>
-                            <li class="weui-media-box__info__meta">状态：新订单</li>
+                            <li class="weui-media-box__info__meta">物品编号：<%= group.number %></li>
+                            <li class="weui-media-box__info__meta">状态：<%= t( "activerecord.attributes.spree/line_item_group.states."+group.state ) %></li>
                         </ul>
                     </div>
                 </a>
+      <% } %>
     </div>
     <div class="weui-panel__ft">
                     <a href="javascript:void(0);" class="weui-cell weui-cell_access weui-cell_link">

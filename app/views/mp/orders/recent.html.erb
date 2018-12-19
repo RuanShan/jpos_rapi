@@ -23,8 +23,8 @@
             </div>
             <div class="weui-tab__panel">
               <div class="weui-tab__content">
-                <% if @incomplete_orders.present? %>
-                  <%= render partial: 'mp/orders/incomplete_order', collection: @incomplete_orders, as: 'order' %>
+                <% if @pending_orders.present? %>
+                  <%= render partial: 'mp/orders/incomplete_order', collection: @pending_orders, as: 'order' %>
                 <% else %>
                   <p class="mod-null"> 暂无数据</p>
                 <% end %>

@@ -11,13 +11,16 @@ class Mp::OrdersController < Mp::BaseController
     @group_state = params[:group_state] || 'pending'
 
 
-    incomplete = @customer.orders.incomplete
+    inprogress_groups_orders = @customer.orders.includes(line_item_groups: :images).inprogress_groups
     #新订单
-    @pending_orders = incomplete.select{|o| o.group_state.blank? }
-    #工作中
-    @working_orders = incomplete.select{|o| o.group_state.present? && o.group_state!='ready' }
+    @pending_orders = inprogress_groups_orders.select{|o| o.group_state=='pending' }
     #待领取
-    @ready_orders = incomplete.select{|o|  o.group_state =='ready' }
+    @ready_orders = inprogress_groups_orders.select{|o|  o.group_state =='ready' }
+
+    #工作中
+    @working_orders = inprogress_groups_orders - @pending_orders - @ready_orders
+
+    Rails.logger.debug "@pending_orders= #{@pending_orders.length}, @ready_orders= #{@ready_orders.length}, @working_orders=#{ @working_orders.length}"
   end
 
   # 物品维修订单

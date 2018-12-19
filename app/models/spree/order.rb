@@ -113,6 +113,9 @@ module Spree
 
     scope :type_normal, -> { where( order_type: :normal ) }
     scope :type_card, -> { where.not( order_type: :normal ) }
+
+
+    scope :inprogress_groups, -> { type_normal.where( state: :cart, group_state: [:pending, :ready_for_factory, :processing,  :processed, :ready_for_store, :ready] ) }
     # 0： 服务订单， 1：买卡订单， 2：二次充值订单
     enum order_type: { normal: 0,  card: 1,  deposit: 2 }, _prefix: true
 
