@@ -24,21 +24,21 @@
             <div class="weui-tab__panel">
               <div class="weui-tab__content">
                 <% if @pending_orders.present? %>
-                  <%= render partial: 'mp/orders/incomplete_order', collection: @pending_orders, as: 'order' %>
+                  <%= render partial: 'mp/orders/incomplete_order', collection: @pending_orders, as: 'order', locals: { group_state_filters: ['pending']} %>
                 <% else %>
                   <p class="mod-null"> 暂无数据</p>
                 <% end %>
               </div>
               <div class="weui-tab__content" style="display:none">
                 <% if @working_orders.present? %>
-                  <%= render partial: 'mp/orders/incomplete_order', collection: @working_orders, as: 'order' %>
+                  <%= render partial: 'mp/orders/incomplete_order', collection: @working_orders, as: 'order' , locals: { group_state_filters: Spree::LineItemGroup::INPROGRESS_STATES }%>
                 <% else %>
                     <p class="mod-null"> 暂无数据</p>
                 <% end %>
               </div>
               <div class="weui-tab__content" style="display:none">
                 <% if @ready_orders.present? %>
-                  <%= render partial: 'mp/orders/incomplete_order', collection: @ready_orders, as: 'order' %>
+                  <%= render partial: 'mp/orders/incomplete_order', collection: @ready_orders, as: 'order' , locals: { group_state_filters: ['ready']}%>
                 <% else %>
                   <p class="mod-null"> 暂无数据</p>
                 <% end %>

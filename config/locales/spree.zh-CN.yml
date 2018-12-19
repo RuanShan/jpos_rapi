@@ -69,6 +69,8 @@ zh-CN:
         shipment_state: "物流状态"
         special_instructions: "特别说明"
         state: "状态"
+        states:
+          canceled: 取消
         total: "总计"
       spree/order/bill_address:
         address1: "地址"

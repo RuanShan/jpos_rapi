@@ -11,7 +11,7 @@ require 'ostruct'
 module Spree
   class LineItemGroup < Spree::Base
     PAYMENT_STATES = %w(unpaid balance_due credit_owed failed paid void)
-
+    INPROGRESS_STATES = %w( pending ready_for_factory processing processed ready_for_store ready)
     with_options inverse_of: :line_item_groups do
       belongs_to :store, class_name: 'Spree::Store'
       belongs_to :order, class_name: 'Spree::Order', touch: true
@@ -38,7 +38,7 @@ module Spree
     scope :with_state, ->(*s) { where(state: s) }
     # sort by most recent shipped_at, falling back to created_at. add "id desc" to make specs that involve this scope more deterministic.
     scope :reverse_chronological, -> { order(Arel.sql('coalesce(spree_line_item_groups.shipped_at, spree_line_item_groups.created_at) desc'), id: :desc) }
-    scope :inprogress, ->{ with_state([:pending, :ready_for_factory, :processing,  :processed, :ready_for_store, :ready])}
+    scope :inprogress, ->{ with_state(INPROGRESS_STATES)}
 
     # shipment state machine (see http://github.com/pluginaweek/state_machine/tree/master for details)
     state_machine initial: :pending, use_transactions: false do

@@ -6,7 +6,11 @@
     <div class="weui-form-preview__item">
       <div class="weui-form-preview__label"> <%= order.store.name %> </div>
       <div class="weui-form-preview__value">
-        <%=I18n.t  order.group_state, scope: "activerecord.attributes.spree/line_item_group.states" %>
+        <% if order.canceled? %>
+          <%=I18n.t  order.state, scope: "activerecord.attributes.spree/order.states" %>
+        <% else %>
+          <%=I18n.t  order.group_state, scope: "activerecord.attributes.spree/line_item_group.states" %>
+        <% end %>
       </div>
     </div>
     <div class="weui-form-preview__item">
@@ -15,8 +19,8 @@
     <div class="weui-form-preview__item">
       <div class="weui-form-preview__label"> 订单金额 <%= order.total.to_i %></div>
         <div class="weui-form-preview__value">
-          <% if order.payments.present? %>
-            <% order.payments.each { |payment|  %>
+          <% if order.payments.completed.present? %>
+            <% order.payments.completed.each { |payment|  %>
               <p> <%= payment.cname %> <%= payment.amount.to_i %> </p>
             <% }%>
           <% else %>
