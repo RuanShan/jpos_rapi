@@ -1,5 +1,6 @@
 module Spree
   class Image < Asset
+
     validate :no_attachment_errors
 
     def self.accepted_image_types
@@ -16,6 +17,7 @@ module Spree
                          presence: true,
                          content_type: { content_type: accepted_image_types }
 
+    #extend PaperclipAliyunOssBinding
     # save the w,h of the original image (from which others can be calculated)
     # we need to look at the write-queue for images which have not been saved yet
     before_save :find_dimensions, if: :attachment_updated_at_changed?

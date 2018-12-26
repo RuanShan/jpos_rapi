@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181226115319) do
+ActiveRecord::Schema.define(version: 20181226115320) do
 
   create_table "auditor_general_logs", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.string "model_type"
@@ -508,6 +508,7 @@ ActiveRecord::Schema.define(version: 20181226115319) do
     t.integer "site_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer "store_id", default: 0, null: false
     t.index ["position"], name: "index_spree_assets_on_position"
     t.index ["viewable_id"], name: "index_assets_on_viewable_id"
     t.index ["viewable_type", "type"], name: "index_assets_on_viewable_type_and_type"
