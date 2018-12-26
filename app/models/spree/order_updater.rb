@@ -22,7 +22,7 @@ module Spree
         update_payment_state
       end
       update_order_type
-      update_odd_card_paid
+      update_odd_store_id
       update_sale_total
 
       #run_hooks
@@ -76,7 +76,7 @@ module Spree
         item_count: order.item_count,
         payment_total: order.payment_total,
         total: order.total,
-        odd_card_paid: order.odd_card_paid,
+        odd_store_id: order.odd_store_id,
         updated_at: Time.current
       )
     end
@@ -109,12 +109,14 @@ module Spree
       end
     end
 
-    def update_odd_card_paid
+    def update_odd_store_id
       payments.each{| payment |
         Rails.logger.debug payment.source.inspect
         if payment.source.is_a? Spree::Card
           Rails.logger.debug( ( payment.source.store_id != order.store_id ) )
-          order.odd_card_paid = ( payment.source.store_id != order.store_id )
+          if payment.source.store_id != order.store_id
+            order.odd_store_id = payment.source.store_id
+          end
         end
       }
     end

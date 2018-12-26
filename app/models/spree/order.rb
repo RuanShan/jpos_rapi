@@ -39,7 +39,7 @@ module Spree
     date_time_methods :created_at
 
     self.whitelisted_ransackable_associations = %w[shipments user promotions bill_address ship_address line_items line_item_groups payments store]
-    self.whitelisted_ransackable_attributes = %w[store_id completed_at email number state payment_state group_state shipment_state total order_type created_at user_id odd_card_paid]
+    self.whitelisted_ransackable_attributes = %w[store_id completed_at email number state payment_state group_state shipment_state total order_type created_at user_id odd_card_paid odd_store_id]
 
     attr_reader :coupon_code
     attr_accessor :temporary_address, :temporary_credit_card
