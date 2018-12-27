@@ -22,6 +22,8 @@ module PaperclipAliyunOssBinding
     attachment_definitions[attachment_key][:path] = path
     attachment_definitions[attachment_key][:url] = 'http://:aliyun_host'+path+':aliyun_style'
     attachment_definitions[attachment_key][:styles] = {} #no need styles anymore. it is supproted by oss style
+    attachment_definitions[attachment_key][:use_timestamp] = false # no timestamp end of url
+    attachment_definitions[attachment_key][:escape_url] = false
   end
 
   def storage_aliyun?

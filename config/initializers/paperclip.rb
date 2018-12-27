@@ -13,3 +13,7 @@ Paperclip.interpolates :aliyun_host do |attachment, style_name|
       Paperclip::Attachment.default_options[:aliyun][:img_host]
   end
 end
+
+Paperclip.interpolates :aliyun_style do |attachment, style_name|
+  "?x-oss-process=style/#{style_name}"
+end
