@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181226115320) do
+ActiveRecord::Schema.define(version: 20181227115306) do
 
   create_table "auditor_general_logs", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.string "model_type"
@@ -1655,6 +1655,7 @@ ActiveRecord::Schema.define(version: 20181226115320) do
     t.string "currency_decimal_mark", default: "."
     t.string "currency_thousands_separator", default: ","
     t.integer "status", default: 0
+    t.text "sms_templates"
   end
 
   create_table "spree_state_changes", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|

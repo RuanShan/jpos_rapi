@@ -1,6 +1,7 @@
 module Spree
   class Store < Spree::Base
     thread_mattr_accessor :current
+    belongs_to :site, class_name: 'Spree::Site'
 
     has_many :orders, class_name: 'Spree::Order'
     has_many :line_item_groups, class_name: 'Spree::LineItemGroup'
@@ -19,6 +20,7 @@ module Spree
 
     after_commit :clear_cache
 
+    delegate :sms_templates, to: :site, prefix: true
 
     private
 
