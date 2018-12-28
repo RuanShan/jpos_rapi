@@ -1,7 +1,7 @@
 class SmsService
   class << self
 
-    def sendto(phone_numbers, template_code, template_param )
+    def sendto(phone_numbers, template_code, template_param={} )
 
       initialize_configuration()
 
