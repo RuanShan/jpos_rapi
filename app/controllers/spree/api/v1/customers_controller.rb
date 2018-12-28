@@ -76,6 +76,15 @@ module Spree
           render json: json
         end
 
+        def send_sms
+          @customer_scope = Customer.accessible_by(current_ability, :read)
+          @customers = @customer_scope.find(  params[:ids].split(','))
+          mobiles = @customer.map(&:mobile).join(',')
+          template_code = params[:template_code]
+          ret = SmsService.sendto( mobiles, template_code )
+          render json: { ret: ret}
+        end
+
         private
         def user
           @customer ||= Customer.accessible_by(current_ability, :read).find(params[:id])

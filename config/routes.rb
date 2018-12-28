@@ -195,6 +195,7 @@ RailsStarter::Application.routes.draw do
           end
           collection do
             get :validate_mobile
+            post :send_sms
           end
         end
         post '/customers/search', to: 'customers#index'
