@@ -6,7 +6,7 @@ module Mp::BaseHelper
 
     image = group.first_image
     if image.present?
-      image.attachment.url
+      image.attachment.url(:mini)
     else
       image_url( group.missing_image_path )
     end
