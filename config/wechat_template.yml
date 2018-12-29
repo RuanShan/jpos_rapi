@@ -76,6 +76,7 @@ production_new_order_created:
 # 充值后余额：{{keyword2.DATA}}
 # 充值门店：{{keyword3.DATA}}
 # {{remark.DATA}}
+
 production_deposit_success:
   template_id: "gpUXAH5S_ORUXbScXCucGjQFpvU8A-iru4-yL5Q311Y"
   url: "http://weixin.qq.com/download"
@@ -92,6 +93,49 @@ production_deposit_success:
       color: "#173177"
     keyword3:
       value: "充值门店：武林广场店"
+      color: "#173177"
+    remark:
+      value: "汪永峰皮具养护中心(400-0588-222)感谢您的一贯支持。"
+      color: "#173177"
+
+# 订单取消
+# 订单编号：whx67890654fix
+# 订单状态：已取消
+# 如有疑问，请致电4000105678
+# {{first.DATA}}
+# 订单编号：{{keyword1.DATA}}
+# 订单状态：{{keyword2.DATA}}
+# {{remark.DATA}}
+development_order_canceled:
+  template_id: "X-af-9Mpc7TwrGYSl12B9vqcqWF8i_6g-G9NhcMaTTI"
+  url: "http://weixin.qq.com/download"
+  topcolor: "#FF0000"
+  data:
+    first:
+      value: "订单取消"
+      color: "#0A0A0A"
+    keyword1:
+      value: "whx67890654fix"
+      color: "#173177"
+    keyword2:
+      value: "取消"
+      color: "#173177"
+    remark:
+      value: "汪永峰皮具养护中心(400-0588-222)感谢您的一贯支持。"
+      color: "#173177"
+production_order_canceled:
+  template_id: "k89QOKxolGlacj1vPFOk8ri3kFgsFy5saY8ofJ3cCmQ"
+  url: "http://weixin.qq.com/download"
+  topcolor: "#FF0000"
+  data:
+    first:
+      value: "订单取消"
+      color: "#0A0A0A"
+    keyword1:
+      value: "whx67890654fix"
+      color: "#173177"
+    keyword2:
+      value: "取消"
       color: "#173177"
     remark:
       value: "汪永峰皮具养护中心(400-0588-222)感谢您的一贯支持。"

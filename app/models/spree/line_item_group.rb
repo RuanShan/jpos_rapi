@@ -171,7 +171,7 @@ module Spree
       end
     end
 
-
+    #发送取单短信
     def finalize!
       complete!
       order.updater.update_group_state
