@@ -17,6 +17,7 @@ module Spree
         def create
           authorize! :create, Image
           @image = scope.images.new(image_params)
+          @image.store_id = scope.store_id if scope.respond_to? :store_id
           if @image.save
             respond_with(@image, status: 201, default_template: :show)
           else
