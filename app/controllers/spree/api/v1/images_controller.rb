@@ -1,3 +1,5 @@
+require "webrick"
+
 module Spree
   module Api
     module V1

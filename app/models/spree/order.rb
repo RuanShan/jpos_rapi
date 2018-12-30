@@ -503,12 +503,16 @@ module Spree
     def notify_customer
       SmsJob.perform_later(self) if enable_sms
       if enable_mp_msg
-        if order_type_normal?
-          MpMsgJob.perform_later(self,  MpMsgJob::TemplateTypeEnum.new_order_created )
-        elsif order_type_card?
-          MpMsgJob.perform_later(self,  MpMsgJob::TemplateTypeEnum.deposit_success )
+        if canceled?
+            MpMsgJob.perform_later(self,  MpMsgJob::TemplateTypeEnum.order_canceled )         
         else
-          MpMsgJob.perform_later(self,  MpMsgJob::TemplateTypeEnum.deposit_success )
+          if order_type_normal?
+            MpMsgJob.perform_later(self,  MpMsgJob::TemplateTypeEnum.new_order_created )
+          elsif order_type_card?
+            MpMsgJob.perform_later(self,  MpMsgJob::TemplateTypeEnum.deposit_success )
+          else
+            MpMsgJob.perform_later(self,  MpMsgJob::TemplateTypeEnum.deposit_success )
+          end
         end
       end
     end
@@ -555,6 +559,8 @@ module Spree
       associate_card_if_needed if self.order_type_card_or_deposit?
 
       update_sale_day_fields
+      # send sms, mp message
+      notify_customer
     end
 
     def update_sale_day_fields
