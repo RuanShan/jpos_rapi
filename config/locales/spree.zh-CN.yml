@@ -979,7 +979,7 @@ zh-CN:
     metadata: 元数据
     minimal_amount: "少量"
     missing_required_information: 缺少必须的信息
-    mobile: Mobile
+    mobile: "手机"
     month: "月"
     more: "更多"
     move_stock_between_locations:
@@ -1146,6 +1146,7 @@ zh-CN:
     out_of_stock_products: 没有库存的产品
     over_paid: Over Paid
     overview: "首页"
+    roles: "角色"
     package_from: "包裹来自"
     pagination:
       next_page: ! '下一页 &raquo;'
@@ -1761,6 +1762,7 @@ zh-CN:
     user: "用户"
     user_rule:
       choose_users: "选择用户"
+    username: "用户名"
     users: "用户详情"
     validation:
       cannot_be_less_than_shipped_units: "不能少于已配送的单位数。"

@@ -34,13 +34,13 @@
     <thead>
       <tr data-hook="admin_users_index_headers">
         <th>
-          <%= sort_link @search,:username, t(  'activerecord.attributes.user.username'), {}, {title: 'users_username_title'} %>
+          <%= sort_link @search,:username, Spree.t(:username), {}, {title: 'users_username_title'} %>
         </th>
         <th>
-          <%= t('activerecord.attributes.user.roles') %>
+          Spree.t(:roles)
         </th>
         <th>
-          <%= sort_link @search,:mobile,   t('activerecord.attributes.user.mobile'), {}, {title: 'users_mobile_title'} %>
+          <%= sort_link @search,:mobile, Spree.t(:mobile), {}, {title: 'users_mobile_title'} %>
         </th>
         <th>
           <%= sort_link @search,:email, Spree.t(:user), {}, {title: 'users_email_title'} %>
