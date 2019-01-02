@@ -425,6 +425,7 @@ zh-CN:
           error: ! '测试邮件错误: %{e}'
       tab:
         configuration: "配置"
+        card_transactions: "充值"
         expense_categories: "费用分类"
         expense_items: "费用"
         option_types: "产品选项"
