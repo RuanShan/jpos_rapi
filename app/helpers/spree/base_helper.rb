@@ -62,14 +62,14 @@ module Spree
       end.join("\n")
     end
 
-    # def method_missing(method_name, *args, &block)
-    #   if image_style = image_style_from_method_name(method_name)
-    #     define_image_method(image_style)
-    #     send(method_name, *args)
-    #   else
-    #     super
-    #   end
-    # end
+    def method_missing(method_name, *args, &block)
+      if image_style = image_style_from_method_name(method_name)
+        define_image_method(image_style)
+        send(method_name, *args)
+      else
+        super
+      end
+    end
 
     def pretty_time(time)
       [I18n.l(time.to_date, format: :long), time.strftime('%l:%M %p')].join(' ')
