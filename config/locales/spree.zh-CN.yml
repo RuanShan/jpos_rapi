@@ -440,6 +440,7 @@ zh-CN:
         selling_services: "服务"
         selling_prepaid_cards: "会员卡"
         selling_counters: "销售物品"
+        stores: "店铺"
         taxonomies: "分类树"
         taxons: "产品与分类"
         users: "用户"
@@ -1639,7 +1640,7 @@ zh-CN:
         must_have_variant: You must add atleast one variant.
     stock_transfers: "库存转移"
     stop: "结束"
-    store: "商城"
+    store: "店铺"
     store_credit_name: Store Credit
     store_credit:
       credit: "Credit"
