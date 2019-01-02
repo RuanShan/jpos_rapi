@@ -96,7 +96,7 @@ module Spree
       end
 
       def location_after_save
-        spree.edit_admin_selling_prepaid_card_url(@object)
+        edit_admin_selling_prepaid_card_url(@object)
       end
 
       def load_data
