@@ -1,6 +1,10 @@
 zh-CN:
   activerecord:
     attributes:
+      administrator:
+        email: 电子邮箱
+        password: 密码
+        password_confirmation: 密码确认
       campaign:
         name: '活动名称'
         desc: '活动说明'
@@ -12,6 +16,9 @@ zh-CN:
           event: '节日活动'
           runlin_car_game: "润霖汽车游戏"
           yuhe_photo_contest: "语禾摄影比赛"
+      customer:
+        username: 用户名
+        mobile: 手机
       game:
         name: '活动标题'
         preferences: '配置'
@@ -113,10 +120,6 @@ zh-CN:
         title: 主题
         content: 内容
         message_type: 消息类型
-      administrator:
-        email: 电子邮箱
-        password: 密码
-        password_confirmation: 密码确认
       selling/prepaid_card:
         card_expire_ins:
            year: year

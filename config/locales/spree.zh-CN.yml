@@ -59,8 +59,8 @@ zh-CN:
         coupon_code: "优惠券号码"
         created_at: "下单日期"
         email: "电子邮箱"
-        group_count: "GroupCount"
-        group_state: "GroupState"
+        group_count: "物品数量"
+        group_state: "物品状态"
         ip_address: IP地址
         item_total: "小记"
         mobile: "Mobile"
@@ -236,6 +236,9 @@ zh-CN:
       spree/credit_card:
         one: "信用卡"
         other: "信用卡"
+      spree/card_transaction:
+        one: 充值
+        other: 充值
       spree/customer_return:
         one: 客户退货
         other: 客户退货
@@ -324,6 +327,9 @@ zh-CN:
       spree/stock_transfer:
         one: 库存转储
         other: 库存转储记录
+      spree/store:
+        one: 店铺
+        other: 店铺
       spree/store_credit:
         one: Store Credit
         other: Store Credits
@@ -419,6 +425,8 @@ zh-CN:
           error: ! '测试邮件错误: %{e}'
       tab:
         configuration: "配置"
+        expense_categories: "费用分类"
+        expense_items: "费用"
         option_types: "产品选项"
         orders: "订单"
         overview: "概览"
@@ -428,9 +436,9 @@ zh-CN:
         properties: "产品属性"
         prototypes: "产品原型"
         reports: "报告"
-        selling_services: "Service"
-        selling_prepaid_cards: "PrepaidCards"
-        selling_counters: "Products"
+        selling_services: "服务"
+        selling_prepaid_cards: "会员卡"
+        selling_counters: "销售物品"
         taxonomies: "分类树"
         taxons: "产品与分类"
         users: "用户"
