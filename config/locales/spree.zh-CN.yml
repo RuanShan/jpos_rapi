@@ -1641,6 +1641,7 @@ zh-CN:
     stock_transfers: "库存转移"
     stop: "结束"
     store: "店铺"
+    stores: "店铺"
     store_credit_name: Store Credit
     store_credit:
       credit: "Credit"
