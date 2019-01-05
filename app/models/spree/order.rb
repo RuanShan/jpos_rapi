@@ -501,7 +501,6 @@ module Spree
     private
 
     def notify_customer
-      SmsJob.perform_later(self) if enable_sms
       if enable_mp_msg
         if canceled?
             MpMsgJob.perform_later(self,  MpMsgJob::TemplateTypeEnum.order_canceled )
