@@ -98,8 +98,10 @@ class Mp::WxFollowersController < Mp::BaseController
             @prepaid_card = @wx_follower.customer.prepaid_card
             redirect_to  mp_wx_follower_path( @wx_follower ), notice: 'wx_follower was successfully created.'
           }
+          format.html { render :show }
           format.json { render :show, status: :created}
         else
+          format.html { render :order_entry }
           format.json { render json: @wx_follower.errors, status: :unprocessable_entity }
         end
       end
