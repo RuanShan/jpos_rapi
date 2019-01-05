@@ -91,7 +91,7 @@ class Mp::WxFollowersController < Mp::BaseController
       # 检查手机号码对应的客户是否存在
 
       respond_to do |format|
-        if @wx_follower.save
+        if @sms.errors.blank? && @wx_follower.save
           format.html {
             #@orders = @wx_follower.customer.orders
             @customer = @wx_follower.customer
