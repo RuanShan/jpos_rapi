@@ -514,7 +514,7 @@ module Spree
           end
         end
       end
-      if enable_sms_msg
+      if enable_sms
         if order_type_normal?
           SmsJob.perform_later(self,  SmsJob::TemplateTypeEnum.new_order_created )
         end
