@@ -1,6 +1,6 @@
 module Spree
   module Admin
-    class FactoryController < StoreController
+    class FactoryController < StoresController
       before_action :load_store, only: [:new, :edit, :update]
 
       def index
