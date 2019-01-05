@@ -504,7 +504,7 @@ module Spree
       SmsJob.perform_later(self) if enable_sms
       if enable_mp_msg
         if canceled?
-            MpMsgJob.perform_later(self,  MpMsgJob::TemplateTypeEnum.order_canceled )         
+            MpMsgJob.perform_later(self,  MpMsgJob::TemplateTypeEnum.order_canceled )
         else
           if order_type_normal?
             MpMsgJob.perform_later(self,  MpMsgJob::TemplateTypeEnum.new_order_created )
@@ -513,6 +513,11 @@ module Spree
           else
             MpMsgJob.perform_later(self,  MpMsgJob::TemplateTypeEnum.deposit_success )
           end
+        end
+      end
+      if enable_sms_msg
+        if order_type_normal?
+          SmsJob.perform_later(self,  SmsJob::TemplateTypeEnum.new_order_created )
         end
       end
     end

@@ -6,6 +6,7 @@ development:
   aliyun_sms_sign_name: <%= ENV['JPOS_SMS_SIGN_NAME'] %>
   aliyun_sms_template_code_verification: SMS_144151564
   aliyun_sms_template_send_password: SMS_151772113
+  aliyun_sms_template_order_created: SMS_154587860
   wx_url: 'http://testwx.getstore.cn'
 production:
   icc_app_code: <%= ENV['JPOS_ICC_APP_CODE'] %>
@@ -13,5 +14,5 @@ production:
   aliyun_sms_access_key_id: <%= ENV['JPOS_SMS_ACCESS_KEY_ID'] %>
   aliyun_sms_sign_name: <%= ENV['JPOS_SMS_SIGN_NAME'] %>
   aliyun_sms_template_code_verification: SMS_152508655
-  aliyun_sms_template_send_password: SMS_154592709
+  aliyun_sms_template_order_created: SMS_154592696
   wx_url: 'http://wx.wyfpj.com'
