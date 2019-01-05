@@ -96,7 +96,7 @@ module Spree
       end
 
       def location_after_save
-        spree.edit_admin_selling_service_url(@selling_service)
+        edit_admin_selling_service_url(@selling_service)
       end
 
       def load_data

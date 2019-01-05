@@ -373,6 +373,8 @@ RailsStarter::Application.routes.draw do
         end
       end
 
+      resources :factories
+
       resources :countries do
         resources :states
       end

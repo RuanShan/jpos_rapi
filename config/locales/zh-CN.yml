@@ -94,6 +94,7 @@ zh-CN:
         gender: 性别
         id_number: 身份证号
         last_name: 姓
+        mobile: 手机
         nickname: 昵称
         password: 密码
         password_confirmation: 密码确认
@@ -105,6 +106,7 @@ zh-CN:
         postcode: 邮编
         realname: 真实姓名
         role: 角色
+        roles: 角色
         lang: 语言
         website: 网站
       product:

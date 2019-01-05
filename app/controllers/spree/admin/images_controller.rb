@@ -41,11 +41,11 @@ module Spree
       end
 
       def new_object_url( options={} )
-        spree.new_polymorphic_url([:admin, @product, model_class], options)
+        new_polymorphic_url([:admin, @product, model_class], options)
       end
 
       def collection_url(options = {})
-        spree.polymorphic_url([:admin, @product, model_class], options)
+        polymorphic_url([:admin, @product, model_class], options)
       end
 
       def get_belongs_to_id
