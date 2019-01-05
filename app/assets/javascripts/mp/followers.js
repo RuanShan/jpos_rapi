@@ -70,7 +70,7 @@ $(document).on("turbolinks:load", function() {
       },
       'wx_follower[verify_code]': {
         required: true,
-        rangelength:[6,6]
+        rangelength:[4,6] // 短信验证码有时是5位，有时6位
       },
 
     },
@@ -82,7 +82,7 @@ $(document).on("turbolinks:load", function() {
       },
       'wx_follower[verify_code]': {
         required: "请输入短信验证码",
-        rangelength: "请输入6位短信验证码"
+        rangelength: "请输入4-6位短信验证码"
       },
     },
     showErrors:function(errorMap,errorList) {
