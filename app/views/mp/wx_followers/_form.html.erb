@@ -7,7 +7,7 @@
         <label for="wx_follower_mobile" class="weui-label">手机号</label>
       </div>
       <div class="weui-cell__bd ">
-        <input id="wx_follower_mobile" class="weui-input" name="wx_follower[mobile]"  type="tel" placeholder="请输入手机号" required pattern="[0-9]{11}" emptyTips="请输入手机号" remoteTips="会员手机号码不存在，请咨询门店">
+        <input id="wx_follower_mobile" class="weui-input" name="wx_follower[mobile]"  type="tel" placeholder="请输入手机号" required pattern="[0-9]{11}" emptyTips="请输入手机号" remoteTips="会员手机号码不存在，请咨询门店" value="<%=@wx_follower.mobile%>">
       </div>
       <div class="weui-cell__ft">
         <button id="b_get_verify_code" type="button" class="weui-vcode-btn">获取验证码</button>

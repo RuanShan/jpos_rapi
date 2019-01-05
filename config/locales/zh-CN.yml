@@ -127,6 +127,8 @@ zh-CN:
            year: year
            month: month
            week: week
+      wx_follower:
+        verify_code: 验证码
     models:
       campaign:
         one: 活动

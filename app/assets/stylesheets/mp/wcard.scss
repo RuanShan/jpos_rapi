@@ -535,3 +535,15 @@ transform-origin: left top; height: 0px;}
 .scroller-status{
   display: none;
 }
+
+.alert-error {
+    color: #E9EDEF;
+    background-color: rgba(231, 76, 60, 0.88);
+    border-color: rgba(231, 76, 60, 0.88);
+}
+.errorExplanation{
+  padding: 8px 15px;
+}
+.errorExplanation ul{
+  list-style-type: none;
+}

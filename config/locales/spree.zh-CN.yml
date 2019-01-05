@@ -35,6 +35,13 @@ zh-CN:
       spree/expense_category:
         name: "Name"
         description: "description"
+      spree/expense_item:
+        store_id: "store"
+        day: "day"
+        expense_category_id: "expense_category_id"
+        cname: "canme"
+        price: "price"
+        user_id: "user_id"
       spree/inventory_unit:
         state: "状态"
       spree/line_item:
