@@ -12,6 +12,6 @@ production:
   aliyun_sms_access_key_secret: <%= ENV['JPOS_SMS_ACCESS_KEY_SECRET'] %>
   aliyun_sms_access_key_id: <%= ENV['JPOS_SMS_ACCESS_KEY_ID'] %>
   aliyun_sms_sign_name: <%= ENV['JPOS_SMS_SIGN_NAME'] %>
-  aliyun_sms_template_code_verification: SMS_144151564
-  aliyun_sms_template_send_password: SMS_151772113
+  aliyun_sms_template_code_verification: SMS_152508655
+  aliyun_sms_template_send_password: SMS_152508643
   wx_url: 'http://wx.wyfpj.com'
