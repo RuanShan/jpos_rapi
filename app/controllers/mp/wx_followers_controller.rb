@@ -100,7 +100,6 @@ class Mp::WxFollowersController < Mp::BaseController
           }
           format.json { render :show, status: :created}
         else
-          format.html { render :new }
           format.json { render json: @wx_follower.errors, status: :unprocessable_entity }
         end
       end
