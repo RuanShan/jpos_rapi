@@ -42,7 +42,7 @@ gem 'spree_backend',   path: './spree/backend'
   #gem 'cancancan'
   #gem 'classy_enum', '~> 3.4'
   # spree require 5.1.0
-  gem 'paperclip', '~> 5.2.0'
+  gem 'paperclip', '~> 5.2.1'
   gem 'paperclip_oss_storage',   github: 'RuanShan/paperclip_oss_storage', branch: 'master'
 
   #gem "friendly_id"
