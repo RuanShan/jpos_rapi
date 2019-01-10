@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181227115306) do
+ActiveRecord::Schema.define(version: 20190110115306) do
 
   create_table "auditor_general_logs", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.string "model_type"
@@ -2141,7 +2141,7 @@ ActiveRecord::Schema.define(version: 20181227115306) do
     t.string "image_url"
     t.string "role", default: "guest"
     t.string "username", limit: 64, default: "", null: false
-    t.string "api_key", limit: 48, default: "", null: false
+    t.string "api_key", limit: 48
     t.integer "company_id"
     t.string "password_salt", limit: 128
     t.string "remember_token"

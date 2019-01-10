@@ -60,6 +60,7 @@ module Spree
           #postman 测试需要
           @current_api_user = Spree.user_class.find_by(spree_api_key: api_key.to_s)
         end
+
         #设置当前user,store 以便审计信息使用
         if @current_api_user
           User.current = @current_api_user
@@ -72,6 +73,13 @@ module Spree
       def authenticate_user
         #检查用户session是否过期, jpos 每个API请求都需要检查
         if @current_api_user.blank?
+          session_expired
+          return
+        end
+        # make sure cookies and api_key both right. in case user open multi window, login with vary account
+        # check current_api_user.api_key  is same with api_key,
+        if @current_api_user.try(:api_key) != api_key
+          reset_session
           session_expired
         end
 
@@ -131,7 +139,7 @@ module Spree
       end
 
       def api_key
-        request.headers['X-Spree-Token'] || params[:token]
+        request.headers['X-Jpos-User-Token'] || params[:token]
       end
       helper_method :api_key
 

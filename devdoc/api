@@ -30,6 +30,10 @@ API
     数据列表
     非数据列表
 
+devise  required  _jpos_session
+cookies  _jpos_session_uid  logged user uid
+
+
 
 API接口
 --------------------------------------------------------------------------------
