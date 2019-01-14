@@ -6,7 +6,7 @@
 
   <div class="weui-panel ">
     <% order.line_item_groups.each{|group| %>
-    <% if group.state == group_state_filters.include?( group.state ) %>
+    <% if group_state_filters.include?( group.state ) %>
     <div class="weui-panel__hd"> <span>物品编号：<%= group.number %></span>    <span style="float:right;"> 订单日期 <%=order.display_created_at %> </span></div>
     <div class="weui-panel__bd">
 
