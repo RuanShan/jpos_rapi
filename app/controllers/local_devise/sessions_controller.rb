@@ -20,7 +20,7 @@ class LocalDevise::SessionsController < DeviseController
   #检查用户是否有签到记录， 如果有签到记录，则登录，否则不允许登录，IPAD使用
   def create_by_entry
     #先清空session，以免使用session中数据，忽略params
-    #reset_session
+    reset_session
     #Rails.logger.debug( "create_by_entry - auth_options=#{auth_options.inspect}")
     self.resource = warden.authenticate!(auth_options)
 
