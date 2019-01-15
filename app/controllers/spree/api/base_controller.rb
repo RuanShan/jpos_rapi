@@ -79,6 +79,7 @@ module Spree
         # make sure cookies and api_key both right. in case user open multi window, login with vary account
         # check current_api_user.api_key  is same with api_key,
         if @current_api_user.try(:api_key) != api_key
+Rails.logger.debug "@current_api_user.try(:api_key)=#{@current_api_user.try(:api_key)}, api_key=#{api_key}"          
           reset_session
           session_expired
         end
