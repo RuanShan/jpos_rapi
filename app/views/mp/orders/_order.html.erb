@@ -8,8 +8,6 @@
       <div class="weui-form-preview__value">
         <% if order.canceled? %>
           <%=I18n.t  order.state, scope: "activerecord.attributes.spree/order.states" %>
-        <% else %>
-          <%=I18n.t  order.group_state, scope: "activerecord.attributes.spree/line_item_group.states" %>
         <% end %>
       </div>
     </div>
