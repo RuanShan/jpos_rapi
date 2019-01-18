@@ -109,6 +109,7 @@ module Spree
           next_state:     transition.to,
           name:           'payment'
         )
+        payment.update_sale_day_fields( transition.from, transition.to)
       end
     end
 
@@ -181,6 +182,18 @@ module Spree
 
     def editable?
       checkout? || pending?
+    end
+
+
+    # update sale_day depend on payment state
+    def update_sale_day_fields( transition_from, transition_to)
+      # new order or canceled
+      # => service_total,  deposit_total
+
+      if transition_to== "completed" && order.order_type_normal? && order.sale_day
+        order.sale_day.service_total += self.amount
+        order.sale_day.save!
+      end
     end
 
     private

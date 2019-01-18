@@ -44,7 +44,7 @@ class Customer <  ApplicationRecord
 
   #总共消费金额, 去除取消的订单
   def normal_order_total
-    orders.where( order_type: :normal, state: :cart ).sum(:total)
+    orders.where( order_type: :normal, state: :cart ).sum(:payment_total)
   end
   #总共消费次数, 去除取消的订单
   def normal_order_count

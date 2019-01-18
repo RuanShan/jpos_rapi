@@ -39,11 +39,11 @@ module Spree
         def statis
           @customer = user
           @statis = { order_total: 0, normal_order_total: 0, card_order_total: 0 }
-          @statis[:normal_order_total] = @customer.orders.type_normal.sum(:total)
-          @statis[:card_order_total] = @customer.orders.type_card.sum(:total)
+          @statis[:normal_order_total] = @customer.orders.type_normal.sum(:payment_total)
+          @statis[:card_order_total] = @customer.orders.type_card.sum(:payment_total)
           @statis[:nocard_order_total] = @customer.orders.type_normal.includes(:payments).
             where( spree_payments: {  state: 'completed', source_type: nil}).
-            sum(:total)
+            sum(:payment_total)
         end
 
         # params

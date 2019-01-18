@@ -574,10 +574,12 @@ module Spree
         if order_type_normal?
           if (destroyed? && !canceled?) || canceled?
             self.sale_day.service_order_count -= 1
-            self.sale_day.service_total -= self.total
+            # this order may be unpaid or parital
+            self.sale_day.service_total -= self.payment_total
           else
             self.sale_day.service_order_count += 1
-            self.sale_day.service_total += self.total
+            # add totle when payment is completed
+            #self.sale_day.service_total += self.total
           end
         elsif order_type_card?
           if (destroyed? && !canceled?) || canceled?
@@ -587,7 +589,7 @@ module Spree
             self.sale_day.new_cards_count+=1
             self.sale_day.deposit_total+= self.total
           end
-        else
+        else # order_type_deposit
           if (destroyed? && !canceled?) || canceled?
             self.sale_day.deposit_total -= self.total
           else
