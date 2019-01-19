@@ -64,9 +64,10 @@ class MpMsgJob < ApplicationJob
   def send_deposit_success_message( order, template )
     wx_follower = order.customer.wx_follower
     if wx_follower
+      remaining = order.card_transactions.sum(&:amount_remaining)
       template['url'] = "#{Rails.configuration.application['wx_url']}/mp/orders/#{order.id}"
       template['data']['keyword1']['value'] = "#{order.total.to_i}元"
-      template['data']['keyword2']['value'] = order.card_transactions.sum(&:amount_remaining)
+      template['data']['keyword2']['value'] = "#{remaining.to_i}元"
       template['data']['keyword3']['value'] = order.store_name
       Wechat.api.template_message_send Wechat::Message.to(wx_follower.openid).template( template )
     end
@@ -84,7 +85,6 @@ class MpMsgJob < ApplicationJob
       template['data']['first']['value'] = (order.order_type_normal? ? "订单取消成功" : "充值取消成功")
       template['data']['keyword1']['value'] = "#{order.number}"
       template['data']['keyword2']['value'] = "已取消"
-Rails.logger.debug " template=#{template.inspect}"
       Wechat.api.template_message_send Wechat::Message.to(wx_follower.openid).template( template )
     end
 

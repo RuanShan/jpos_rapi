@@ -66,6 +66,7 @@ production_new_order_created:
       value: "感谢您的使用，如有疑问，可联系我们的客服人员。"
       color: "#173177"
 
+
 # 杨小姐，充值成功。
 # 本次充值金额：1500
 # 充值后余额：1850
@@ -76,7 +77,26 @@ production_new_order_created:
 # 充值后余额：{{keyword2.DATA}}
 # 充值门店：{{keyword3.DATA}}
 # {{remark.DATA}}
-
+development_deposit_success:
+  template_id: "pp--6CARhGyoz328LUB-6Qz-wDw_atTHjaGSZ5c92I8"
+  url: "http://weixin.qq.com/download"
+  topcolor: "#FF0000"
+  data:
+    first:
+      value: "您好，充值成功。"
+      color: "#0A0A0A"
+    keyword1:
+      value: "本次充值金额：1500"
+      color: "#173177"
+    keyword2:
+      value: "充值后余额：1850"
+      color: "#173177"
+    keyword3:
+      value: "充值门店：武林广场店"
+      color: "#173177"
+    remark:
+      value: "汪永峰皮具养护中心(400-0588-222)感谢您的一贯支持。"
+      color: "#173177"
 production_deposit_success:
   template_id: "gpUXAH5S_ORUXbScXCucGjQFpvU8A-iru4-yL5Q311Y"
   url: "http://weixin.qq.com/download"
