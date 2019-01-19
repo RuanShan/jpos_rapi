@@ -108,7 +108,7 @@ module Spree
             item.line_item_group.update_attribute( :payment_state, :paid ) if item.line_item_group
           }
           if saved.present?
-            respond_with(@payments, status: 201)
+            respond_with(@order, default_template: :show)
           else
             head :no_content
           end
