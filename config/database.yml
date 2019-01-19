@@ -12,9 +12,9 @@
 development:
   adapter: mysql2
   encoding: utf8mb4
-  reconnect: false
+  reconnect: true
   database: jpos_rapi_dev
-  pool: 5
+  pool: 8
   username: root
   password: root
   socket: /var/lib/mysql/mysql.sock
@@ -22,9 +22,9 @@ development:
 development_aliyun:
   adapter: mysql2
   encoding: utf8mb4
-  reconnect: false
+  reconnect: true
   database: jpos_rapi_dev
-  pool: 5
+  pool: 8
   username: root
   password: root
   socket: /var/lib/mysql/mysql.sock
@@ -34,9 +34,9 @@ development_aliyun:
 test:
   adapter: mysql2
   encoding: utf8mb4
-  reconnect: false
+  reconnect: true
   database: jpos_rapi_test
-  pool: 5
+  pool: 8
   username: root
   password:
   socket: /var/lib/mysql/mysql.sock
@@ -44,9 +44,9 @@ test:
 production:
   adapter: mysql2
   encoding: utf8mb4
-  reconnect: false
+  reconnect: true
   database: jpos_rapi_prod
-  pool: 5
+  pool: 8
   username: root
   password: root
   socket: /tmp/mysql.sock
