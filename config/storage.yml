@@ -1,0 +1,24 @@
+
+local:
+  service: Disk
+  root: <%= Rails.root.join("storage") %>
+
+test:
+  service: Disk
+  root: <%= Rails.root.join("tmp/storage") %>
+
+amazon:
+  service: S3
+  access_key_id: ""
+  secret_access_key: ""
+
+aliyun:
+  service: Aliyun
+  access_key_id: <%= ENV['JPOS_OSS_ACCESS_ID'] %>
+  access_key_secret: <%= ENV['JPOS_OSS_ACCESS_SECRET'] %>
+  bucket: "jpos-img"
+  endpoint: "https://oss-cn-beijing.aliyuncs.com"
+  # path prefix, default: /
+  path: "my-app-files"
+  # Bucket mode: [public, private], default: public
+  mode: "public"

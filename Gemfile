@@ -8,7 +8,7 @@ gem 'spree_backend',   path: './spree/backend'
 
 
 ################################################################################
-  gem 'rails', '~> 5.1'
+  gem 'rails', '~> 5.2.0'
   gem 'rack-cors', :require => 'rack/cors'
 
   gem 'mysql2', '~> 0.4.10'
@@ -16,7 +16,7 @@ gem 'spree_backend',   path: './spree/backend'
   # Use Puma as the app server
   gem 'puma', '~> 3.0'
 
-  gem 'sass-rails', '~> 5.0'
+  gem 'sass-rails', '~> 5.0.7'
   gem 'uglifier', '>= 1.3.0'
   gem 'coffee-rails', '~> 4.2'
   #gem 'therubyracer', platforms: :ruby
@@ -42,7 +42,7 @@ gem 'spree_backend',   path: './spree/backend'
   #gem 'cancancan'
   #gem 'classy_enum', '~> 3.4'
   # spree require 5.1.0
-  gem 'paperclip', '~> 5.2.1'
+  gem 'paperclip', '~> 6.0.0'
   gem 'paperclip_oss_storage',   github: 'RuanShan/paperclip_oss_storage', branch: 'master'
 
   #gem "friendly_id"
@@ -62,7 +62,7 @@ gem 'spree_backend',   path: './spree/backend'
 
   gem 'sidekiq'
   #字段搜索
-  gem 'ransack'
+  #gem 'ransack'
   #验证码
   #gem 'rucaptcha'
   #https://github.com/nesquena/rabl/wiki/Rabl-In-Production
