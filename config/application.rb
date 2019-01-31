@@ -8,6 +8,7 @@ Bundler.require(*Rails.groups)
 
 module RailsStarter
   class Application < Rails::Application
+    require "active_storage/engine"
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
@@ -15,16 +16,6 @@ module RailsStarter
     # Serve websocket cable requests in-process
     config.application = config_for(:application)
 
-    config.generators do |generator|
-      generator.test_framework :rspec,
-                               fixtures: true,
-                               view_specs: false,
-                               helper_specs: true,
-                               routing_specs: false,
-                               controller_specs: true,
-                               request_specs: false
-      generator.fixture_replacement :factory_girl, dir: 'spec/factories'
-    end
 
 
     # Custom directories with classes and modules you want to be autoloadable.

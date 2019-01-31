@@ -19,7 +19,7 @@ module Spree
             }
           end
 
-           def default_style
+          def default_style
             :product
           end
 

@@ -88,7 +88,36 @@ module Spree
       Spree::Core::Engine.frontend_available?
     end
 
+    def original_url( image )
+      if active_storage_aliyun?
+        image.attachment.service_url
+      else
+        url_for(image.url(:mini))
+      end
+    end
+
+    def mini_url( image )
+      if active_storage_aliyun?
+        image.attachment.service_url(params: { "x-oss-process=style/" => 'mini' })
+      else
+        url_for(image.url(:mini))
+      end
+    end
+
+    def large_url( image )
+      Rails.logger.debug( "image=#{image.inspect}, "+image.attachment.variant(resize: "100x100").inspect)
+      if active_storage_aliyun?
+        image.attachment.service_url(params: { "x-oss-process=style/" => 'large' })
+      else
+        app.url_for(image.attachment.variant(resize: "100x100"))
+      end
+    end
+
+
     private
+    def active_storage_aliyun?
+      Rails.application.config.active_storage.service == :aliyun
+    end
 
     def create_product_image_tag(image, product, options, style)
       options.reverse_merge! alt: image.alt.blank? ? product.name : image.alt
@@ -118,8 +147,7 @@ module Spree
     # Returns style of image or nil
     def image_style_from_method_name(method_name)
       if method_name.to_s.match(/_image$/) && style = method_name.to_s.sub(/_image$/, '')
-        possible_styles = Spree::Image.attachment_definitions[:attachment][:styles]
-        style if style.in? ['mini','large']  # compatible with aliyun oss
+        style if style.in? Spree::Image.styles.with_indifferent_access
       end
     end
   end
