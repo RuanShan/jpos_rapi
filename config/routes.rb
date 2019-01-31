@@ -12,6 +12,8 @@ RailsStarter::Application.routes.draw do
       namespace :v1 do
         resource :wechat, only: [:show, :create]
 
+        post '/custom_direct_uploads', to: 'custom_direct_uploads#create'
+
         resources :expense_categories
         resources :expense_items do
           resources :images
