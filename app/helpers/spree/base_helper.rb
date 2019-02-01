@@ -120,8 +120,9 @@ module Spree
     end
 
     def create_product_image_tag(image, product, options, style)
+      #Rails.logger.debug "product = #{product.inspect}, image=#{image.inspect}, #{main_app.url_for(image.url(style))}"
       options.reverse_merge! alt: image.alt.blank? ? product.name : image.alt
-      image_tag image.attachment.url(style), options
+      image_tag main_app.url_for(image.url(style)), options
     end
 
     def define_image_method(style)
