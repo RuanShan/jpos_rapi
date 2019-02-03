@@ -27,7 +27,7 @@ gem 'spree_backend',   path: './spree/backend'
   gem 'turbolinks'
   #gem 'jquery-turbolinks'
   gem 'mini_magick'
-  
+
   gem 'jbuilder', '~> 2.0'
 
   gem 'bootstrap-sass', '~> 3.3.7'
@@ -45,6 +45,7 @@ gem 'spree_backend',   path: './spree/backend'
   # spree require 5.1.0
   gem 'paperclip', '~> 6.0.0'
   gem 'paperclip_oss_storage',   github: 'RuanShan/paperclip_oss_storage', branch: 'master'
+  gem 'activestorage-aliyun'
 
   #gem "friendly_id"
   #gem 'figaro'

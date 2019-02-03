@@ -55,7 +55,7 @@ Rails.application.configure do
   #compile assets for production locally
 
   # Store files locally.
-  config.active_storage.service = :local
+  config.active_storage.service = :aliyun
 
 end
 
