@@ -87,7 +87,7 @@ module Spree
     after_restore :update_slug_history
     # When a Spree::Product is destroyed, we also want to destroy all Spree::Relations
     # "from" it as well as "to" it.
-    after_destroy :destroy_product_relations
+    before_destroy :destroy_product_relations
 
 
     after_initialize :ensure_master
@@ -419,10 +419,10 @@ module Spree
     end
 
     def destroy_product_relations
-      # First we destroy relationships "from" this Product to others.
-      relations.destroy_all
-      # Next we destroy relationships "to" this Product.
-      Spree::Relation.where(related_to_type: self.class.to_s).where(related_to_id: id).destroy_all
+    #  # First we destroy relationships "from" this Product to others.
+    #  relations.delete_all
+    #  # Next we destroy relationships "to" this Product.
+    #  Spree::Relation.where(related_to_type: self.class.to_s, related_to_id: id).delete_all
     end
 
   end
