@@ -102,6 +102,8 @@ Rails.application.configure do
       upload_host: "jpos-img-prod.oss-cn-beijing-internal.aliyuncs.com"
     }
   }
+  config.active_storage.service = :aliyun
+
 end
 
 Paperclip.interpolates :images_host  do |attachment, style|
