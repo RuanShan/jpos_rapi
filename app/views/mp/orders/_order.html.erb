@@ -31,7 +31,7 @@
 
   <div   class="weui-media-box weui-media-box_appmsg">
       <div class="weui-media-box__hd">
-          <%=image_tag group_first_image_url(group), size: "50" %>
+          <%=image_tag group_first_image_url(group), size: "50", click: "handleGroupImageClick(#{group.id})" %>
       </div>
       <div class="weui-media-box__bd">
           <h4 class="weui-media-box__title"></h4>
@@ -46,6 +46,23 @@
           </ul>
       </div>
   </div>
+
+  <script>
+  groupImagesHandlers||={};
+  groupImagesHandlers[<%=group.id %>] = <%== group_image_urls(group).to_json %>;
+  if( groupImagesHandlers[<%=group.id %>].length>0){
+    groupImagesHandlers["handler<%=group.id %>"] = $.photoBrowser({
+      items:groupImagesHandlers[<%=group.id %>]
+    });
+  }
+
+  function handleGroupImageClick( groupId){
+    let handler = groupImagesHandlers['handler'+groupId]
+    if( handler ){
+      handler.open();
+    }
+  }
+  </script>
   <% } %>
 
 </div>
