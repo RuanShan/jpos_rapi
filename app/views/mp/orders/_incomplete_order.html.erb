@@ -3,16 +3,25 @@
    #          group_state_filters = []
    #
 %>
-
+<script>
+groupImagesHandlers={};
+function handleGroupImageClick( groupId){
+  var handler = groupImagesHandlers['handler'+groupId];
+  console.log( "hello world!", handler );
+  if( handler ){
+    handler.open();
+  }
+}
+</script>
   <div class="weui-panel ">
     <% order.line_item_groups.each{|group| %>
     <% if group_state_filters.include?( group.state ) %>
     <div class="weui-panel__hd"> <span>物品编号：<%= group.number %></span>    <span style="float:right;"> 订单日期 <%=order.created_at.to_date %> </span></div>
     <div class="weui-panel__bd">
 
-                <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg">
+                <div class="weui-media-box weui-media-box_appmsg">
                     <div class="weui-media-box__hd">
-                        <%=image_tag group_first_image_url(group), size: "50" %>
+                      <%=image_tag group_first_image_url(group), size: "50", onclick: "handleGroupImageClick(#{group.id})" %>
                     </div>
                     <div class="weui-media-box__bd">
                         <h4 class="weui-media-box__title"></h4>
@@ -26,8 +35,19 @@
                             <li class="weui-media-box__info__meta">状态：<%= t( "activerecord.attributes.spree/line_item_group.states."+group.state ) %></li>
                         </ul>
                     </div>
-                </a>
+                </div>
     </div>
+
+    <script>
+    groupImagesHandlers[<%=group.id %>] = <%== group_image_urls(group).to_json %>;
+    if( groupImagesHandlers[<%=group.id %>].length>0){
+      groupImagesHandlers["handler<%=group.id %>"] = $.photoBrowser({
+        items:groupImagesHandlers[<%=group.id %>]
+      });
+    }
+
+
+    </script>
     <% end %>
     <% } %>
 

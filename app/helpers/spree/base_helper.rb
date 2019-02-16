@@ -107,7 +107,7 @@ module Spree
     def large_url( image )
       Rails.logger.debug( "image=#{image.inspect}, "+image.attachment.variant(resize: "100x100").inspect)
       if active_storage_aliyun?
-        image.attachment.service_url(params: { "x-oss-process=style/" => 'large' })
+        image.attachment.service_url(params: { "x-oss-process" => 'style/large' })
       else
         app.url_for(image.attachment.variant(resize: "100x100"))
       end
