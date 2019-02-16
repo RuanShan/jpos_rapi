@@ -12,7 +12,7 @@ module Spree
     belongs_to :store, class_name: 'Spree::Store'
     # 一张卡可能多次充值，所以一张卡可能有多个line_item
     belongs_to :card, dependent: :destroy, required: false
-    belongs_to :worker, class_name: 'User', dependent: :destroy, required: false
+    belongs_to :worker, class_name: 'User', required: false
     belongs_to :line_item_group, foreign_key: 'group_id', required: false, touch: true
 
     before_validation :copy_price
