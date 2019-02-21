@@ -13,6 +13,13 @@ module Selling
 
     display_enum_methods :card_expire_in
 
+    # Returns all the Spree::RelationType's which apply_to this class.
+    def relation_types
+      Spree::RelationType.where(applies_to: to_relation_name).order(:name)
+    end
 
+    def to_relation_name
+      "#{self.type}##{self.id}"
+    end
   end
 end

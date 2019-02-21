@@ -1,46 +1,54 @@
 module Spree
-  module Api
-    class RelationsController < Spree::Api::BaseController
+  module Admin
+    class RelationsController < BaseController
       before_action :load_data, only: [:create, :destroy]
-      before_action :find_relation, only: [:update, :destroy]
+
+      respond_to :js, :html
 
       def create
-        authorize! :create, Relation
-        @relation = @product.relations.new(relation_params)
+        @relation = Relation.new(relation_params)
         @relation.relatable = @product
         @relation.related_to = Spree::Variant.find(relation_params[:related_to_id]).product
-        if @relation.save
-          respond_with(@relation, status: 201, default_template: :show)
-        else
-          invalid_resource!(@relation)
-        end
+        @relation.save
+
+        respond_with(@relation)
       end
 
       def update
-        authorize! :update, Relation
-        if @relation.update_attributes(relation_params)
-          respond_with(@relation, status: 200, default_template: :show)
-        else
-          invalid_resource!(@relation)
-        end
+        @relation = Relation.find(params[:id])
+        discount_amount = relation_params[:discount_amount] || 0
+        discount_percent = relation_params[:discount_percent] || 0
+        @relation.update_attributes discount_amount: discount_amount, discount_percent: discount_percent
+
+        redirect_to(related_admin_product_url(@relation.relatable))
       end
 
       def update_positions
-        authorize! :update, Relation
         params[:positions].each do |id, index|
           model_class.where(id: id).update_all(position: index)
         end
 
         respond_to do |format|
-          format.json { render nothing: true, status: 200 }
-          format.js { render text: 'Ok' }
+          format.js { render plain: 'Ok' }
         end
       end
 
       def destroy
-        authorize! :destroy, Relation
+        @relation = Relation.find(params[:id])
         @relation.destroy
-        respond_with(@relation, status: 204)
+
+        if @relation.destroy
+          flash[:success] = flash_message_for(@relation, :successfully_removed)
+
+          respond_with(@relation) do |format|
+            format.html { redirect_to location_after_destroy }
+            format.js   { render_js_for_destroy }
+          end
+        else
+          respond_with(@relation) do |format|
+            format.html { redirect_to location_after_destroy }
+          end
+        end
       end
 
       private
@@ -65,10 +73,6 @@ module Spree
 
       def load_data
         @product = Spree::Product.friendly.find(params[:product_id])
-      end
-
-      def find_relation
-        @relation = Relation.find(params[:id])
       end
 
       def model_class

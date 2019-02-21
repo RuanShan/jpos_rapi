@@ -89,6 +89,12 @@ module Spree
 
         end
 
+        # compute variant price for current card
+        # params
+        #   variant_id
+        
+        def compute_price
+        end
 
         private
 

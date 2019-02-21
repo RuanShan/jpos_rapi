@@ -88,6 +88,11 @@ module Spree
         end
       end
 
+      def related
+        load_resource
+        @relation_types = @object.relation_types
+      end
+
       protected
 
       def find_resource

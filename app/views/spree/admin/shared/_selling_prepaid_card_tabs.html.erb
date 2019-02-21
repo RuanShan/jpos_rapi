@@ -11,5 +11,9 @@
     <%= content_tag :li, class: ('active' if current == :images) do %>
       <%= link_to_with_icon 'picture', Spree.t(:images), admin_selling_prepaid_card_images_url(@product) %>
     <% end if can?(:admin, Spree::Image) && !@product.deleted? %>
+    <%= content_tag :li, class: ('active' if current == :related_products) do %>
+      <%= link_to_with_icon 'resize-small', Spree.t(:related_products), related_admin_product_url(@product) %>
+    <% end if can?(:admin, Spree::Variant) && !@product.deleted? %>
+
   </ul>
 <% end %>

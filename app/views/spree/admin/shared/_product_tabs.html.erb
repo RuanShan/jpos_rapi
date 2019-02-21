@@ -14,5 +14,10 @@
     <%= content_tag :li, class: ('active' if current == :variants) do %>
       <%= link_to_with_icon 'th-large', Spree.t(:variants),  admin_product_variants_url(@product) %>
     <% end if can?(:admin, Spree::Variant) && !@product.deleted? %>
+
+    <%= content_tag :li, class: ('active' if current == :related_products) do %>
+      <%= link_to_with_icon 'resize-small', Spree.t(:related_products), related_admin_product_url(@product) %>
+    <% end if can?(:admin, Spree::Variant) && !@product.deleted? %>
+
   </ul>
 <% end %>

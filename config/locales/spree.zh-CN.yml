@@ -724,6 +724,7 @@ zh-CN:
     destroy: "删除"
     details: "详情"
     discount_amount: "折扣金额"
+    discount_percent: "折扣率"
     discontinue_on: '下架日期'
     discontinued: Discontinued
     dismiss_banner: "不，谢谢！我对此不感兴趣，请不要再显示此信息。"
@@ -1800,3 +1801,10 @@ zh-CN:
     zone_based: 根据区域
     zone_setting_description: 在各种计算中使用到的国家、省份、区域.
     zones: "区域"
+    new_relation_type: New Relation Type
+    related_product_discount: Related Product Discount
+    applies_to: Applies To
+    related_products: 相关产品
+    add_related_product: 添加相关产品
+    name_or_sku_short: 产品名称
+    no_relation_types: You need to configure Relation Types before you can use this feature.

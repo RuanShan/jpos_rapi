@@ -74,7 +74,16 @@ Spree::Core::Engine.add_routes do
     resources :selling_prepaid_cards, concerns: [:saleable]
     resources :selling_counters, concerns: [:saleable]
 
-
+    resources :relation_types
+    resources :products, only: [] do
+      get :related, on: :member
+      resources :relations do
+        collection do
+          post :update_positions
+        end
+      end
+    end
+    
     resources :customers do
       member do
         get :addresses
