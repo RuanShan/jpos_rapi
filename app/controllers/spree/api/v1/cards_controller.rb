@@ -2,7 +2,7 @@ module Spree
   module Api
     module V1
       class CardsController < Spree::Api::BaseController
-        before_action :find_card, only: [ :replace, :update, :transactions, :send_password_sms]
+        before_action :find_card, only: [ :replace, :update, :transactions, :send_password_sms, :get_discounts]
 
         def index
           @cards = user.
@@ -92,8 +92,35 @@ module Spree
         # compute variant price for current card
         # params
         #   variant_id
-        
-        def compute_price
+        #   variant_ids
+        # return
+        #   { variant_id: discount_percent, "pid"+product_id: discount_percent}
+        #   ex. { "17": 70,    "20": 70 }
+
+        def get_discounts
+          @selling_card = @card.variant.product
+          @relation_type = @selling_card.relation_types.first
+          @variants = Spree::Variant.includes(:product).find( params[:variant_ids] )
+          @vid_product_hash = @variants.reduce({}){|memo, v|
+            memo[v.id] = v.product
+            memo
+          }
+          @discounts = { }
+
+          if @vid_product_hash.present? && @relation_type.present?
+            @vid_product_hash.each_pair{| vid, product|
+              @relation_type.relations.each{| relation |
+                if relation.related_to_id == product.id
+                  @discounts[vid] = relation.discount_percent
+                  @discounts["pid#{product.id}"] = relation.discount_percent
+                  break
+                end
+              }
+            }
+          end
+
+          render json: @discounts
+
         end
 
         private

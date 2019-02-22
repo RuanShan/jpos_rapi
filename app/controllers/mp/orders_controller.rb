@@ -11,7 +11,7 @@ class Mp::OrdersController < Mp::BaseController
     @group_state = params[:group_state] || 'pending'
 
 
-    inprogress_groups_orders = @customer.orders.includes(line_item_groups: :images).inprogress_groups
+    inprogress_groups_orders = @customer.orders.includes(line_item_groups: :images).inprogress_groups.reverse_chronological
     #新订单
     @pending_orders = inprogress_groups_orders.select{|o| o.group_state=='pending' }
     #待领取

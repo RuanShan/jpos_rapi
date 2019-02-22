@@ -575,7 +575,6 @@ module Spree
           if (destroyed? && !canceled?) || canceled?
             self.sale_day.service_order_count -= 1
             # this order may be unpaid or parital
-            self.sale_day.service_total -= self.payment_total
           else
             self.sale_day.service_order_count += 1
             # add totle when payment is completed

@@ -3,7 +3,7 @@
    #          group_state_filters = []
    #
 %>
-<script>
+<script type="text/javascript">
 groupImagesHandlers={};
 function handleGroupImageClick( groupId){
   var handler = groupImagesHandlers['handler'+groupId];
@@ -32,21 +32,19 @@ function handleGroupImageClick( groupId){
                         </div>
                         <ul class="weui-media-box__info">
                             <li class="weui-media-box__info__meta"></li>
-                            <li class="weui-media-box__info__meta">状态：<%= t( "activerecord.attributes.spree/line_item_group.states."+group.state ) %></li>
+                            <li class="weui-media-box__info__meta group-state">状态：<%= t( "activerecord.attributes.spree/line_item_group.states."+group.state ) %></li>
                         </ul>
                     </div>
                 </div>
     </div>
 
-    <script>
+    <script type="text/javascript" data-turbolinks-track="reload">
     groupImagesHandlers[<%=group.id %>] = <%== group_image_urls(group).to_json %>;
     if( groupImagesHandlers[<%=group.id %>].length>0){
       groupImagesHandlers["handler<%=group.id %>"] = $.photoBrowser({
         items:groupImagesHandlers[<%=group.id %>]
       });
     }
-
-
     </script>
     <% end %>
     <% } %>

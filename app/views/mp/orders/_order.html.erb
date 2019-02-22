@@ -5,7 +5,7 @@
   <div class="weui-form-preview__bd">
     <div class="weui-form-preview__item">
       <div class="weui-form-preview__label"> <%= order.store.name %> </div>
-      <div class="weui-form-preview__value">
+      <div class="weui-form-preview__value order-state-canceled">
         <% if order.canceled? %>
           <%=I18n.t  order.state, scope: "activerecord.attributes.spree/order.states" %>
         <% end %>
@@ -42,7 +42,7 @@
           </div>
           <ul class="weui-media-box__info">
               <li class="weui-media-box__info__meta">物品编号：<%= group.number %></li>
-              <li class="weui-media-box__info__meta">状态：<%=  group.display_state %></li>
+              <li class="weui-media-box__info__meta group-state ">状态：<%=  group.display_state %></li>
           </ul>
       </div>
   </div>

@@ -194,6 +194,11 @@ module Spree
         order.sale_day.service_total += self.amount
         order.sale_day.save!
       end
+      if transition_to== "void" && order.order_type_normal? && order.sale_day
+        order.sale_day.service_total -= self.amount
+        order.sale_day.save!
+      end
+
     end
 
     private

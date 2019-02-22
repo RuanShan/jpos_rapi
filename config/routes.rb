@@ -215,6 +215,7 @@ RailsStarter::Application.routes.draw do
             get :send_password_sms
             get :transactions
             put :replace #用户换卡
+            get :get_discounts
           end
         end
 
