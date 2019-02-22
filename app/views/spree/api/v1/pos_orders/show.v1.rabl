@@ -1,5 +1,5 @@
 object @order
-cache [I18n.locale, root_object]
+
 attributes *order_attributes
 node(:user_name, &:user_name)
 node(:creator_name, &:creator_name)
