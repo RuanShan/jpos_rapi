@@ -28,11 +28,13 @@ $(document).on(" turbolinks:load", function() {
      }
   });
   // init Infinite Scroll
-  $('.my-orders .orders').infiniteScroll({
-    path: '.pagination__next',
-    append: '.order',
-    status: '.scroller-status',
-    hideNav: '.pagination',
-  });
+  if( $('.pagination__next').length>0 ){
+    $('.my-orders .orders').infiniteScroll({
+      path: '.pagination__next',
+      append: '.order',
+      status: '.scroller-status',
+      hideNav: '.pagination',
+    });    
+  }
 
 })
