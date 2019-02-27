@@ -12,3 +12,5 @@
 //= require mp/followers.js
 //= require mp/orders.js
 //= require turbolinks
+
+groupImagesHandlers={};

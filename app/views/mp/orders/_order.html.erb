@@ -1,6 +1,14 @@
 <%  # locals: { order }
 %>
-
+<script type="text/javascript">
+function handleGroupImageClick( groupId){
+  var handler = groupImagesHandlers['handler'+groupId];
+  console.log( "hello world!", handler );
+  if( handler ){
+    handler.open();
+  }
+}
+</script>
 <div class="order item-box">
   <div class="weui-form-preview__bd">
     <div class="weui-form-preview__item">
@@ -48,19 +56,11 @@
   </div>
 
   <script>
-  groupImagesHandlers||={};
   groupImagesHandlers[<%=group.id %>] = <%== group_image_urls(group).to_json %>;
   if( groupImagesHandlers[<%=group.id %>].length>0){
     groupImagesHandlers["handler<%=group.id %>"] = $.photoBrowser({
       items:groupImagesHandlers[<%=group.id %>]
     });
-  }
-
-  function handleGroupImageClick( groupId){
-    let handler = groupImagesHandlers['handler'+groupId]
-    if( handler ){
-      handler.open();
-    }
   }
   </script>
   <% } %>
