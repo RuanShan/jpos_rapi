@@ -5,6 +5,8 @@ attributes *product_attributes
 
 node(:has_variants, &:has_variants?)
 
+node(:type) { &:type }
+
 child master: :master do
   extends 'spree/api/v1/variants/card'
 end
