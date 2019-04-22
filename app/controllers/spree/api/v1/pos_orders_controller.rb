@@ -24,6 +24,7 @@ module Spree
               # card { payment_password, expire_at, memo }
               permitted_card_params = card_params
               code = permitted_card_params.delete :code
+              #会员充值时，可以修改卡的类型（即折扣数量）和所属店铺
               card = Spree::Card.find_by( code: code ).update_attributes( permitted_card_params )
             end
             respond_with(@order, default_template: :show, status: 201)

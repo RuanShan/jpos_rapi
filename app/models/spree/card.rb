@@ -37,6 +37,8 @@ module Spree
 
     before_validation :generate_code, on: :create
     before_validation :set_values, on: :create
+    # 当充值并改变卡类型时，需要更新卡对应的折扣
+    before_update :correct_discount
 
     delegate :product, to: :variant
     delegate :name, to: :store, prefix: true
@@ -221,6 +223,13 @@ module Spree
     def amount_remaining_is_positive
       unless amount_remaining >= 0.0
         errors.add(:authorized_amount, Spree.t('errors.gift_card.greater_than_amount_used'))
+      end
+    end
+
+    def correct_discount
+      if variant_id_changed?
+        self.discount_amount = variant.card_discount_amount
+        self.discount_percent = variant.card_discount_percent
       end
     end
 
