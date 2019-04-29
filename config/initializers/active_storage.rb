@@ -1,4 +1,4 @@
-require "activestorage-aliyun"
+require "active_storage/service/aliyun_service"
 
 class ActiveStorage::PurgeJob < ActiveStorage::BaseJob
   def perform(blob)
