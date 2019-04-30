@@ -101,7 +101,7 @@ GEM
       actionpack (= 5.2.2)
       activerecord (= 5.2.2)
       marcel (~> 0.3.1)
-    activestorage-aliyun (0.6.1)
+    activestorage-aliyun (0.6.4)
       aliyun-sdk (>= 0.6.0)
       rails (>= 5.2.0)
     activesupport (5.2.2)
@@ -478,7 +478,7 @@ PLATFORMS
 
 DEPENDENCIES
   aasm!
-  activestorage-aliyun!
+  activestorage-aliyun (~> 0.6.4)!
   aliyun-sms!
   bootstrap-sass (~> 3.3.7)!
   capistrano (~> 3.2.0)!

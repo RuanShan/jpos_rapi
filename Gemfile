@@ -45,7 +45,7 @@ gem 'spree_backend',   path: './spree/backend'
   # spree require 5.1.0
   gem 'paperclip', '~> 6.0.0'
   gem 'paperclip_oss_storage',   github: 'RuanShan/paperclip_oss_storage', branch: 'master'
-  gem 'activestorage-aliyun'
+  gem 'activestorage-aliyun', '~> 0.6.4'
 
   #gem "friendly_id"
   #gem 'figaro'
