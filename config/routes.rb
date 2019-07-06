@@ -118,6 +118,8 @@ RailsStarter::Application.routes.draw do
         put '/pos_orders/:id/cancel', to: 'pos_orders#cancel'
         post '/pos_orders/:id/add_payments', to: 'pos_orders#add_payments'
         post '/pos_orders/:id/repay', to: 'pos_orders#repay'
+        post '/pos_orders/:id/repay_by_newcard', to: 'pos_orders#repay_by_newcard'
+
         delete '/pos_orders/:id', to: 'pos_orders#destroy'
 
         resources :line_item_groups do

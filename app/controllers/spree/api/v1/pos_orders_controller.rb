@@ -121,7 +121,9 @@ module Spree
         # 创建会员卡，更新会员信息重新支付订单
         # params
         #  order_id
-        #  order: same as create
+        #  order: :user_id, :store_id
+        #         :line_items_attributes [ { :variant_id, :price, :quantity, :card_code }]
+        #  card: {code}
         def repay_by_newcard
           # 创建会员卡订单
           order_total = params['order_total']
@@ -137,23 +139,28 @@ module Spree
             permitted_card_params = card_params
             code = permitted_card_params.delete :code
             #设置会员过期时间，支付密码, 备注
-            @card = Spree::Card.find_by( code: code ).update_attributes( permitted_card_params )
+            @card = Spree::Card.find_by( code: code )
+            @card.update_attributes( permitted_card_params )
           end
+          #cancel all payments
+          @order.payments.completed.each(&:cancel!)
 
           #更新 order 价格做为新的支付价格
-          @order.update_totals
-          @order.persist_totals
+          @order.update_prices( @card )
+
+          #@order.update_totals
+          #@order.persist_totals
           # 使用会员卡重新支付
-          @order.payments.completed.each(&:cancel!)
+
           payment_method = Spree::PaymentMethod::PrepaidCard.first
           card_payments_params= [{ source_id: @card.id, source_type: "Spree::Card",
            amount: @order.total, payment_method_id: payment_method.id }]
 
-          @order.validate_payments_attributes(payments_params)
+          @order.validate_payments_attributes(card_payments_params)
 
           #rebuild price of line_items
 
-          @payments = @order.payments.build( payments_params )
+          @payments = @order.payments.build( card_payments_params )
           saved = []
           Spree::Payment.transaction do
             saved = @payments.each( &:save).map( &:capture!)

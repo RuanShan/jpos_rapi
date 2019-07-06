@@ -62,6 +62,9 @@ module Spree
       self.price = variant.price
     end
 
+    def update_discount_percent( discount )
+      update_attributes(  discount_percent: discount, price: sale_unit_price* discount * 0.01 )
+    end
 
     extend DisplayMoney
     money_methods :amount, :subtotal, :discounted_amount, :final_amount, :total, :price
@@ -103,9 +106,9 @@ module Spree
     end
 
     #应收价格
-    def sale_price
-      sale_unit_price * quantity * discount_percent / 100
-    end
+    # def sale_price
+    #   sale_unit_price * quantity * discount_percent / 100
+    # end
 
     def associate_with_card
       # use cancel a deposit

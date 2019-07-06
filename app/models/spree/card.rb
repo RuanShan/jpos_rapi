@@ -187,6 +187,13 @@ module Spree
       new_card.reload
     end
 
+    # get discount for a product
+    def get_discount_percent( product )
+      relation = self.product.relations.where( related_to: product ).first
+
+      relation.try( :discount_percent) || 100
+    end
+
     private
     def validate_authorization(amount, order_currency)
       if amount_remaining.to_d < amount.to_d

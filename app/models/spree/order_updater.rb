@@ -23,7 +23,7 @@ module Spree
       end
       update_order_type
       update_odd_store_id
-      update_sale_total
+      #update_sale_total
 
       #run_hooks
       persist_totals
@@ -147,8 +147,19 @@ module Spree
       order.payment_state
     end
 
-    def update_sale_total
-      order.sale_total = line_items.sum(&:sale_price)
+    # def update_sale_total
+    #   order.sale_total = line_items.sum(&:sale_price)
+    # end
+
+    # user buy a new prepaid card, use it checkout
+    def update_prices( card )
+      #更新 order 价格做为新的支付价格
+      order.line_items.each{|item|
+        discount =  card.get_discount_percent( item.product )
+        item.update_discount_percent( discount )
+      }
+      update_totals
+      persist_totals
     end
   end
 end

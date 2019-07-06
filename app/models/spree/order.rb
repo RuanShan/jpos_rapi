@@ -91,7 +91,7 @@ module Spree
     validates :payment_total,        MONEY_VALIDATION
     validates :total,                MONEY_VALIDATION
 
-    delegate :update_totals, :persist_totals, to: :updater
+    delegate :update_totals, :persist_totals, :update_prices,  to: :updater
     delegate :merge!, to: :merger
     delegate :name, to: :creator, prefix: true, allow_nil: true
     delegate :name, to: :user, prefix: true, allow_nil: true
