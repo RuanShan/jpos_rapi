@@ -118,6 +118,58 @@ module Spree
         ########################################################################
         # for POS
         ########################################################################
+        # 创建会员卡，更新会员信息重新支付订单
+        # params
+        #  order_id
+        #  order: same as create
+        def repay_by_newcard
+          # 创建会员卡订单
+          order_total = params['order_total']
+          order_attributes = order_params
+          order_attributes[:creator] = current_api_user
+          # get store_id from client
+          # order_attributes[:store] = current_store
+          order_attributes[:channel] = 'pos'
+          order_attributes[:order_type] = :card
+          @card_order = Spree::Order.new(order_attributes)
+          if @card_order.save
+            @card_order.complete_via_pos
+            permitted_card_params = card_params
+            code = permitted_card_params.delete :code
+            #设置会员过期时间，支付密码, 备注
+            @card = Spree::Card.find_by( code: code ).update_attributes( permitted_card_params )
+          end
+
+          #更新 order 价格做为新的支付价格
+          @order.update_totals
+          @order.persist_totals
+          # 使用会员卡重新支付
+          @order.payments.completed.each(&:cancel!)
+          payment_method = Spree::PaymentMethod::PrepaidCard.first
+          card_payments_params= [{ source_id: @card.id, source_type: "Spree::Card",
+           amount: @order.total, payment_method_id: payment_method.id }]
+
+          @order.validate_payments_attributes(payments_params)
+
+          #rebuild price of line_items
+
+          @payments = @order.payments.build( payments_params )
+          saved = []
+          Spree::Payment.transaction do
+            saved = @payments.each( &:save).map( &:capture!)
+          end
+
+          if saved.present?
+            respond_with(@order, default_template: :show)
+          else
+            head :no_content
+          end
+        end
+
+        ########################################################################
+        # for POS
+        ########################################################################
+        # 如果包括会员卡订单，创建会员卡
         # 后付款时，重新支付, 支付为数组, 上一个支付退款,如会员卡支付, 用于退卡转现金
         # params
         #  order_id

@@ -4,6 +4,14 @@ module Spree
       before_action :load_data, only: [:create, :destroy]
       before_action :find_relation, only: [:update, :destroy]
 
+      # 查找 relation信息，即折扣信息
+      def index
+        @relations = @product.relations
+        @relations = @relations.page(params[:page]).per(params[:per_page])
+
+        respond_with(@relations)
+      end
+
       def create
         authorize! :create, Relation
         @relation = @product.relations.new(relation_params)
