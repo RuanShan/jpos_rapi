@@ -264,6 +264,22 @@ module Spree
           respond_with(@order, status: 204)
         end
 
+        # 当前订单是否可以重新支付，即购买会员卡支付
+        def repayable
+          # customerData 是否有会员卡，订单状态是否正常，是否取消，
+          # 无卡消费的订单，最新的订单可以购买新卡结账
+          valid = false
+          if @order
+             customer = @order.user
+
+             if customer.prepaid_card.nil?
+               #customer.orders.
+             end
+          end
+          json = { ret: valid }
+          render json: json
+
+        end
 
         private
 
