@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_02_02_120525) do
+ActiveRecord::Schema.define(version: 2019_07_16_120525) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.string "name", null: false
@@ -593,6 +593,7 @@ ActiveRecord::Schema.define(version: 2019_02_02_120525) do
     t.string "payment_password", limit: 24
     t.integer "card_times", default: 0, null: false
     t.integer "card_times_used", default: 0, null: false
+    t.integer "money", default: 0, null: false
     t.index ["replaced_with_id"], name: "index_spree_cards_on_replaced_with_id"
     t.index ["user_id"], name: "index_spree_cards_on_user_id"
   end
