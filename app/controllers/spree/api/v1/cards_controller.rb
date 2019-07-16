@@ -2,7 +2,7 @@ module Spree
   module Api
     module V1
       class CardsController < Spree::Api::BaseController
-        before_action :find_card, only: [ :replace, :update, :transactions, :send_password_sms, :get_discounts]
+        before_action :find_card, only: [ :show, :replace, :update, :transactions, :send_password_sms, :get_discounts]
 
         def index
           @cards = user.
@@ -121,6 +121,9 @@ module Spree
 
           render json: @discounts
 
+        end
+
+        def show
         end
 
         private
