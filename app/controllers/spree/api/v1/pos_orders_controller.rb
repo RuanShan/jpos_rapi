@@ -273,7 +273,9 @@ module Spree
              customer = @order.user
 
              if customer.prepaid_card.nil?
-               #customer.orders.
+               first_order = customer.orders.with_state(:cart).type_normal.order(created_at: :desc).first
+
+               valid = (@order == first_order )
              end
           end
           json = { ret: valid }

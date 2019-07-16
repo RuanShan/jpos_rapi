@@ -119,6 +119,7 @@ RailsStarter::Application.routes.draw do
         post '/pos_orders/:id/add_payments', to: 'pos_orders#add_payments'
         post '/pos_orders/:id/repay', to: 'pos_orders#repay'
         post '/pos_orders/:id/repay_by_newcard', to: 'pos_orders#repay_by_newcard'
+        get '/pos_orders/:id/repayable', to: 'pos_orders#repayable'
 
         delete '/pos_orders/:id', to: 'pos_orders#destroy'
 
