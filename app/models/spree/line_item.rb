@@ -106,9 +106,9 @@ module Spree
     end
 
     #应收价格
-    # def sale_price
-    #   sale_unit_price * quantity * discount_percent / 100
-    # end
+    def sale_price
+      sale_unit_price * quantity
+    end
 
     def associate_with_card
       # use cancel a deposit

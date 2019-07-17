@@ -23,7 +23,7 @@ module Spree
       end
       update_order_type
       update_odd_store_id
-      #update_sale_total
+      update_sale_total # for card deposit
 
       #run_hooks
       persist_totals
@@ -76,6 +76,7 @@ module Spree
         item_count: order.item_count,
         payment_total: order.payment_total,
         total: order.total,
+        sale_total: order.sale_total,
         odd_store_id: order.odd_store_id,
         updated_at: Time.current
       )
@@ -147,9 +148,9 @@ module Spree
       order.payment_state
     end
 
-    # def update_sale_total
-    #   order.sale_total = line_items.sum(&:sale_price)
-    # end
+    def update_sale_total
+       order.sale_total = line_items.sum(&:sale_price)
+    end
 
     # user buy a new prepaid card, use it checkout
     def update_prices( card )
