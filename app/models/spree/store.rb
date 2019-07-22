@@ -7,6 +7,7 @@ module Spree
     has_many :line_item_groups, class_name: 'Spree::LineItemGroup'
     has_one :address, class_name: 'Spree::Address'
     belongs_to :stock_location, class_name: 'Spree::StockLocation'
+    has_many :customers, class_name: 'Customer'
 
     with_options presence: true do
       validates :code, uniqueness: { case_sensitive: false, allow_blank: true }
