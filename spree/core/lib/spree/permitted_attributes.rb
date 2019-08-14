@@ -64,8 +64,8 @@ module Spree
 
     @@inventory_unit_attributes = [:shipment, :shipment_id, :variant_id]
 
-    # code: 新创建的会员卡号,  group_position: 根据group_position创建group_number
-    @@line_item_attributes = [:id, :variant_id, :quantity, :group_position, :group_number, :card_id, :sale_unit_price, :sale_price, :price, :discount_percent, :memo, :cname, :card_code, :card_expire_at ]
+    # code: 新创建的会员卡号,  group_position: 根据group_position创建group_number, card_amount: card amount
+    @@line_item_attributes = [:id, :variant_id, :quantity, :group_position, :group_number, :card_id, :sale_unit_price, :sale_price, :price, :discount_percent, :memo, :cname, :card_code, :card_expire_at, :card_amount ]
 
     @@line_item_group_attributes = [:id, :returned_memo, :name]
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_16_120525) do
+ActiveRecord::Schema.define(version: 2019_08_16_120525) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.string "name", null: false
@@ -870,6 +870,7 @@ ActiveRecord::Schema.define(version: 2019_07_16_120525) do
     t.bigint "store_id"
     t.string "product_type", limit: 32
     t.bigint "group_id"
+    t.integer "card_amount", default: 0, null: false
     t.index ["group_id"], name: "index_spree_line_items_on_group_id"
     t.index ["order_id"], name: "index_spree_line_items_on_order_id"
     t.index ["store_id"], name: "index_spree_line_items_on_store_id"
