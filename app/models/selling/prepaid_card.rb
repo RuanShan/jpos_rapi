@@ -21,5 +21,31 @@ module Selling
     def to_relation_name
       "#{self.type}##{self.id}"
     end
+
+    #取得当前类型会员卡对各种商品的折扣
+    def get_discounts
+      relation_type = relation_types.first
+      variants = Spree::Variant.includes(:product).find( params[:variant_ids] )
+      vid_product_hash = variants.reduce({}){|memo, v|
+        memo[v.id] = v.product
+        memo
+      }
+      discounts = { }
+
+      if vid_product_hash.present? && @relation_type.present?
+        vid_product_hash.each_pair{| vid, product|
+          relation_type.relations.each{| relation |
+            if relation.related_to_id == product.id
+              discounts[vid] = relation.discount_percent
+              discounts["pid#{product.id}"] = relation.discount_percent
+              break
+            end
+          }
+        }
+      end
+      discounts
+    end
+
+
   end
 end

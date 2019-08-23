@@ -50,7 +50,8 @@ function handleGroupImageClick( groupId){
           </div>
           <ul class="weui-media-box__info">
               <li class="weui-media-box__info__meta">物品编号：<%= group.number %></li>
-              <li class="weui-media-box__info__meta group-state ">状态：<%=  group.display_state %></li>
+              <li class="weui-media-box__info__meta group-state ">状态：<%= order.canceled? ? '取消' : group.display_state %>
+              </li>
           </ul>
       </div>
   </div>
