@@ -142,10 +142,11 @@ module Spree
             @card = Spree::Card.find_by( code: code )
             @card.update_attributes( permitted_card_params )
           end
-          #cancel all payments
-          @order.payments.completed.each(&:cancel!)
-          #删除所有支付信息, 否则影响会员订单查询，如新购会员卡支付的，在会员卡消费和无卡消费中都显示
-          @order.payments.destroy_all
+          # no need cancel payment anymore
+          # #cancel all payments
+          # @order.payments.completed.each(&:cancel!)
+          # #删除所有支付信息, 否则影响会员订单查询，如新购会员卡支付的，在会员卡消费和无卡消费中都显示
+          # @order.payments.destroy_all
           #更新 order 价格做为新的支付价格
           @order.update_prices( @card )
 
