@@ -8,7 +8,7 @@ module Spree
     has_one :address, class_name: 'Spree::Address'
     belongs_to :stock_location, class_name: 'Spree::StockLocation'
     has_many :customers, class_name: 'Customer'
-    has_many :SaleDay, class_name: 'SaleDay'
+    has_many :sale_days, class_name: 'SaleDay'
 
     with_options presence: true do
       validates :code, uniqueness: { case_sensitive: false, allow_blank: true }
