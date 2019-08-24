@@ -284,6 +284,12 @@ module Spree
 
         end
 
+        # 根据会员卡类型取得订单的总价
+        # card_type_id
+        def get_total_by_card_type
+          
+        end
+
         private
 
         def order_params
