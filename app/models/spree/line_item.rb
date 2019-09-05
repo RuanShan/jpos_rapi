@@ -41,7 +41,7 @@ module Spree
     #enum state: { done: 1, pending: 0 }
 
     self.whitelisted_ransackable_associations = %w[variant line_item_group order]
-    self.whitelisted_ransackable_attributes = %w[store_id variant_id price card_id work_at]
+    self.whitelisted_ransackable_attributes = %w[store_id variant_id price card_id work_at worker_id]
 
     #初始化为待处理， 当确认工作量后 转为 done
     state_machine initial: :pending, use_transactions: false do
