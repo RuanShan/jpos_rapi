@@ -64,7 +64,17 @@ module Spree
           # never use distinct: true, it would cause distinct total
           @q = Order.ransack(params[:q]).result( )
           @total_count = @q.count
+          # 订单总额
           @total_sum = @q.sum(:total)
+          # 支付总额，有的订单没有付款
+          @payment_total_sum = @q.sum(:payment_total)
+          @payment_total_sum_by_method = @payment_total_sum
+          # 查询某一种支付方式金额汇总
+          payments_payment_method_id = params[:q].try(:[], 'payments_payment_method_id_eq')
+          if payments_payment_method_id.present?
+            orderids = @q.pluck(:id)
+            @payment_total_sum_by_method = Spree::Payment.completed.where( { order_id: orderids, payment_method_id: payments_payment_method_id } ).sum(:amount)
+          end
         end
 
         def show
@@ -287,7 +297,7 @@ module Spree
         # 根据会员卡类型取得订单的总价
         # card_type_id
         def get_total_by_card_type
-          
+
         end
 
         private
