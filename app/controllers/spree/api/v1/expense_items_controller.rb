@@ -6,14 +6,12 @@ module Spree
 
         def index
           @expense_items = Spree::ExpenseItem.accessible_by(current_ability, :read)
-          @expense_items = @expense_items.includes([:store, :user, :images])
-          @expense_items = if params[:ids]
-                          @expense_items.where(id: params[:ids].split(',').flatten)
-                        else
-                          @expense_items.ransack(params[:q]).result
-                        end
 
-          @expense_items = @expense_items.page(params[:page]).per(params[:per_page])
+          @q = @expense_items.ransack(params[:q]).result( distinct: true)
+          @total_count = @q.count
+          @total_sum = @q.sum(:price).to_i
+
+          @expense_items = @q.includes([:store, :user, :images]).page(params[:page]).per(params[:per_page])
           respond_with(@expense_items)
         end
 
