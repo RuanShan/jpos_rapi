@@ -7,7 +7,6 @@
   <% end %>
 <% end %>
 
-<%= render partial: 'spree/admin/shared/selling_counter_tabs', locals: {current: :details} %>
 <%= render partial: 'spree/admin/shared/error_messages', locals: { target: @object } %>
 
 <%= form_for [:admin, @object], method: :put, html: { multipart: true } do |f| %>
