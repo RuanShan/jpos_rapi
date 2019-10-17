@@ -112,12 +112,13 @@ module Spree
     scope :reverse_chronological, -> { order(Arel.sql('spree_orders.completed_at IS NULL'), completed_at: :desc, created_at: :desc) }
 
     scope :type_normal, -> { where( order_type: :normal ) }
-    scope :type_card, -> { where.not( order_type: :normal ) }
+    scope :type_card, -> { where( order_type: [:card, :deposit] ) }
+    scope :type_counter, -> { where( order_type: :counter ) }
 
 
     scope :inprogress_groups, -> { type_normal.where( state: :cart, group_state: [:pending, :ready_for_factory, :processing,  :processed, :ready_for_store, :ready] ) }
-    # 0： 服务订单， 1：买卡订单， 2：二次充值订单
-    enum order_type: { normal: 0,  card: 1,  deposit: 2 }, _prefix: true
+    # 0： 服务订单， 1：买卡订单， 2：二次充值订单, 3: 商品订单
+    enum order_type: { normal: 0,  card: 1,  deposit: 2, counter: 3 }, _prefix: true
 
     alias_attribute :customer_id, :user_id
     alias_attribute :customer, :user
@@ -515,7 +516,7 @@ module Spree
         end
       end
       if enable_sms
-        unless canceled?        
+        unless canceled?
           if order_type_normal?
             SmsJob.perform_later(self,  SmsJob::TemplateTypeEnum.new_order_created )
           end

@@ -103,10 +103,15 @@ module Spree
 
     #检查是否为 客户办卡订单，会员卡充值订单
     def update_order_type
-      if line_items.count  == 1
+      if line_items.count>0
         if line_items.first.product.is_a? Selling::PrepaidCard
           order.order_type = Spree::Order.order_types[:card]
         end
+
+        if line_items.first.product.is_a? Selling::Counter
+          order.order_type = Spree::Order.order_types[:counter]
+        end
+
       end
     end
 
