@@ -41,7 +41,7 @@ class Mp::WxFollowersController < Mp::BaseController
     #我的订单数量
     @order_count = @customer.orders.type_normal.count
     #我的订单金额
-    @order_total = @customer.orders.type_normal.sum(:total)
+    @order_total = @customer.orders.type_normal.sum(:payment_total)
     #我的充值金额
     @card_total = @customer.orders.type_card.sum(:total)
     #最近订单及物品
