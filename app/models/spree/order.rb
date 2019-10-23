@@ -511,7 +511,7 @@ module Spree
           elsif order_type_card?
             MpMsgJob.perform_later(self,  MpMsgJob::TemplateTypeEnum.deposit_success )
           else
-            MpMsgJob.perform_later(self,  MpMsgJob::TemplateTypeEnum.deposit_success )
+            MpMsgJob.perform_later(self,  MpMsgJob::TemplateTypeEnum.new_order_created )
           end
         end
       end
