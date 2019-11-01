@@ -104,9 +104,12 @@ module Spree
     #检查是否为 客户办卡订单，会员卡充值订单
     def update_order_type
       if line_items.count>0
-        Rails.logger.debug('update_order_type=' + line_items.first.product.type)
+
         if line_items.first.product.is_a? Selling::PrepaidCard
-          order.order_type = Spree::Order.order_types[:card]
+          # 如果订单类型不正确再纠正，取消订单时也会调用这个方法。
+          if !(order.order_type == Spree::Order.order_types[:card] || order.order_type == Spree::Order.order_types[:deposit] )
+            order.order_type = Spree::Order.order_types[:card]
+          end
         end
 
         if line_items.first.product.is_a? Selling::Counter
