@@ -34,7 +34,7 @@ module Spree
           }
           #改变订单状态
           @line_items.each{ |li|
-            states = li.order.line_items.pluck(:state)
+            states = li.line_item_group.line_items.pluck(:state)
             #无需判断 状态为:done， 前一步已经更新为 done 了
             if states.uniq.size == 1
               li.line_item_group.fulfill
