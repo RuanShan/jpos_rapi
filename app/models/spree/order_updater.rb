@@ -55,7 +55,8 @@ module Spree
 
 
     def update_order_total
-      order.total = order.item_total + order.shipment_total + order.adjustment_total
+      # 这里需要4舍5入，以免通过办 会员卡重新结账时，出现小数。
+      order.total = (order.item_total + order.shipment_total + order.adjustment_total).to_i
     end
 
 
