@@ -543,7 +543,10 @@ module Spree
             # end
             # payment_at in day
             count = Spree::Order.in_day(  self.created_at ).where( created_by_id: self.created_by_id, store_id: self.store_id ).type_normal.with_state(:cart).count
+            service_total =  Spree::Order.in_day( self.created_at ).where( created_by_id: self.created_by_id, store_id: self.store_id, order_type: [:normal] ).with_state(:cart).sum(:payment_total)
+
             self.sale_day.service_order_count = count
+            self.sale_day.service_total = service_total
         end
         self.sale_day.save!
       end

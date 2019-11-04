@@ -156,9 +156,7 @@ module Spree
         order.payment_state = 'unpaid' if order.payments.blank?
       end
       order.state_changed('payment') if last_state != order.payment_state
-      if order.payment_state == 'paid'
-        order.payment_at = DateTime.current
-      end
+      order.payment_at = DateTime.current if order.payment_state == 'paid'
       order.payment_state
     end
 
