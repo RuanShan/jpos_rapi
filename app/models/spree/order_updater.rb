@@ -73,6 +73,7 @@ module Spree
       order.update_columns(
         group_state: order.group_state,
         payment_state: order.payment_state,
+        payment_at: order.payment_at,
         item_total: order.item_total,
         item_count: order.item_count,
         payment_total: order.payment_total,
@@ -155,6 +156,9 @@ module Spree
         order.payment_state = 'unpaid' if order.payments.blank?
       end
       order.state_changed('payment') if last_state != order.payment_state
+      if order.payment_state == 'paid'
+        order.payment_at = DateTime.current
+      end
       order.payment_state
     end
 
