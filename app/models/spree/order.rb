@@ -517,8 +517,8 @@ module Spree
           #   self.sale_day.new_cards_count+=1
           #   self.sale_day.deposit_total+= self.total
           # end
-          new_cards_count = Spree::Order.in_day( self.created_at ).where( user_id: self.user_id, store_id: self.store_id, order_type: [:card] ).with_state(:cart).count
-          deposit_total =  Spree::Order.in_day( self.created_at   ).where( user_id: self.user_id, store_id: self.store_id, order_type: [:card, :deposit] ).with_state(:cart).sum(:payment_total)
+          new_cards_count = Spree::Order.in_day( self.created_at ).where( user_id: self.created_by_id, store_id: self.store_id, order_type: [:card] ).with_state(:cart).count
+          deposit_total =  Spree::Order.in_day( self.created_at   ).where( user_id: self.created_by_id, store_id: self.store_id, order_type: [:card, :deposit] ).with_state(:cart).sum(:payment_total)
 
           self.sale_day.new_cards_count = new_cards_count
           self.sale_day.deposit_total = deposit_total
@@ -529,7 +529,7 @@ module Spree
           # else
           #   self.sale_day.deposit_total+= self.total
           # end
-          deposit_total =  Spree::Order.in_day( self.created_at ).where( user_id: self.user_id, store_id: self.store_id, order_type: [:card, :deposit] ).with_state(:cart).sum(:payment_total)
+          deposit_total =  Spree::Order.in_day( self.created_at ).where( user_id: self.created_by_id, store_id: self.store_id, order_type: [:card, :deposit] ).with_state(:cart).sum(:payment_total)
           self.sale_day.deposit_total = deposit_total
 
         elsif order_type_normal?
@@ -542,7 +542,7 @@ module Spree
             #   #self.sale_day.service_total += self.total
             # end
             # payment_at in day
-            count = Spree::Order.in_day(  self.created_at ).where( user_id: self.user_id, store_id: self.store_id ).type_normal.with_state(:cart).count
+            count = Spree::Order.in_day(  self.created_at ).where( user_id: self.created_by_id, store_id: self.store_id ).type_normal.with_state(:cart).count
             self.sale_day.service_order_count = count
         end
         self.sale_day.save!
