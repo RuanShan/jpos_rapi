@@ -103,8 +103,9 @@ module Spree
     class_attribute :line_item_comparison_hooks
     self.line_item_comparison_hooks = Set.new
 
-    extend BetterDateScope
-    better_date_scope payment_at: [:today]
+
+    scope :payment_in_day, ->(datetime){ where( ["payment_at>? and payment_at<?",  datetime.beginning_of_day, datetime.end_of_day] )}
+    scope :in_day, ->(datetime){ where( ["created_at>? and created_at<?",  datetime.beginning_of_day, datetime.end_of_day] )}
 
     scope :created_between, ->(start_date, end_date) { where(created_at: start_date..end_date) }
     scope :completed_between, ->(start_date, end_date) { where(completed_at: start_date..end_date) }
@@ -516,12 +517,13 @@ module Spree
           #   self.sale_day.new_cards_count+=1
           #   self.sale_day.deposit_total+= self.total
           # end
-          new_cards_count = Spree::Order.in_day( self.sale_day.created_at ).where( user_id: self.user_id, store_id: self.store_id, order_type: [:card] ).with_state(:cart).count
-          deposit_total =  Spree::Order.in_day( self.sale_day.created_at ).where( user_id: self.user_id, store_id: self.store_id, order_type: [:card, :deposit] ).with_state(:cart).sum(:payment_total)
+          new_cards_count = Spree::Order.in_day( self.created_at ).where( user_id: self.user_id, store_id: self.store_id, order_type: [:card] ).with_state(:cart).count
+          deposit_total =  Spree::Order.in_day(self.created_at   ).where( user_id: self.user_id, store_id: self.store_id, order_type: [:card, :deposit] ).with_state(:cart).sum(:payment_total)
+
           self.sale_day.new_cards_count = new_cards_count
           self.sale_day.deposit_total = deposit_total
 
-        elsif order_type_deposit
+        elsif order_type_deposit?
           # if (destroyed? && !canceled?) || canceled?
           #   self.sale_day.deposit_total -= self.total
           # else
