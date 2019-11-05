@@ -121,7 +121,7 @@ module Spree
         card = create_card!( variant: variant, customer: self.user) do |new_card|
           new_card.code = self.card_code
           new_card.store = order.store
-          new_card.creator = order.creator
+          new_card.created_by_id = order.created_by_id
           #new_card.amount = 0
           #new_card.name = variant.name #产品名字
           #new_card.style = variant.product.card_style #卡的种类
