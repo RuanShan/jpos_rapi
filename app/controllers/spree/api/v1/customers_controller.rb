@@ -94,8 +94,14 @@ module Spree
         end
 
         def user_params
-          params.require(:user).permit(permitted_customer_attributes |
+          permitted_params= params.require(:user).permit(permitted_customer_attributes |
                                          [cards_attributes: permitted_card_attributes])
+
+          if permitted_params[:cards_attributes]
+            permitted_params[:cards_attributes].each{|card|  card[:created_by_id] = current_api_user.id }
+          end
+          permitted_params
+
         end
 
         def deposit_order_params( user  )
