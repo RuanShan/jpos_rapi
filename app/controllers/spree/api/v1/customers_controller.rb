@@ -120,6 +120,7 @@ module Spree
           permitted_params[:user] = user
           permitted_params[:creator] = current_api_user
           permitted_params[:order_type] = :card
+          permitted_params[:payment_at] = DateTime.current
 
           permitted_params
         end
