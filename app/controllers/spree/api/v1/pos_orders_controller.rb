@@ -16,6 +16,9 @@ module Spree
           # get store_id from client
           # order_attributes[:store] = current_store
           order_attributes[:channel] = 'pos'
+          if order_attributes[:payments_attributes].present?
+            order_attributes[:payment_at] = DateTime.current
+          end
           @order = Spree::Order.new(order_attributes)
           if @order.save
             @order.complete_via_pos
