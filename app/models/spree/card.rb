@@ -19,6 +19,7 @@ module Spree
 
     has_many :state_changes, as: :stateful
 
+    scope :in_day, ->(datetime){ where( ["created_at>? and created_at<?",  datetime.beginning_of_day, datetime.end_of_day] )}
     scope :with_state, ->(s) { where(state: s.to_s) }
 
     # 会员卡的可用和禁用状态, 使用state代替

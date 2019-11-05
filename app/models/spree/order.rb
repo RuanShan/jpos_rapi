@@ -517,7 +517,8 @@ module Spree
           #   self.sale_day.new_cards_count+=1
           #   self.sale_day.deposit_total+= self.total
           # end
-          new_cards_count = Spree::Order.in_day( self.created_at ).where( created_by_id: self.created_by_id, store_id: self.store_id, order_type: [:card] ).with_state(:cart).count
+          # 新卡数需要统计card表
+          new_cards_count = Spree::Card.in_day( self.created_at ).where( created_by_id: self.created_by_id).status_enabled.count
           deposit_total =  Spree::Order.in_day( self.created_at   ).where( created_by_id: self.created_by_id, store_id: self.store_id, order_type: [:card, :deposit] ).with_state(:cart).sum(:payment_total)
 
           self.sale_day.new_cards_count = new_cards_count
