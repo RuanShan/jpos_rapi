@@ -65,6 +65,9 @@ module Spree
     scope :store_credits, -> { where(source_type: Spree::StoreCredit.to_s) }
     scope :not_store_credits, -> { where(arel_table[:source_type].not_eq(Spree::StoreCredit.to_s).or(arel_table[:source_type].eq(nil))) }
 
+    scope :in_day, ->(datetime){ where( arel_table['created_at'].gt(datetime.beginning_of_day).and( arel_table['created_at'].lt(datetime.end_of_day) ))}
+    #scope :in_day, ->(datetime){ where( ["spree_payments.created_at>? and spree_payments.created_at<?",  datetime.beginning_of_day, datetime.end_of_day] )}
+
     self.whitelisted_ransackable_attributes = %w[source_id payment_method_id state]
     # transaction_id is much easier to understand
     def transaction_id
@@ -109,7 +112,8 @@ module Spree
           next_state:     transition.to,
           name:           'payment'
         )
-        payment.update_sale_day_fields( transition.from, transition.to)
+        # 无需计算，订单状态改变，统一处理，没有取消某一个支付方式的操作。 办卡支付也不会。
+        #payment.update_sale_day_fields( transition.from, transition.to)
       end
     end
 

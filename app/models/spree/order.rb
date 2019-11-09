@@ -543,12 +543,17 @@ module Spree
             #   # add totle when payment is completed
             #   #self.sale_day.service_total += self.total
             # end
-            # payment_at in day
+            # payment_at in day, 如果没有支付 payment_at is null
             count = Spree::Order.in_day(  self.created_at ).where( created_by_id: self.created_by_id, store_id: self.store_id ).type_normal.with_state(:cart).count
-            service_total =  Spree::Order.in_day( self.created_at ).where( created_by_id: self.created_by_id, store_id: self.store_id, order_type: [:normal] ).with_state(:cart).sum(:payment_total)
-
             self.sale_day.service_order_count = count
-            self.sale_day.service_total = service_total
+            if self.payment_at.present?
+              service_total =  Spree::Order.in_day( self.created_at ).where( created_by_id: self.created_by_id, store_id: self.store_id, order_type: [:normal] ).with_state(:cart).sum(:payment_total)
+              # 当天收入是多少, 包括现金、支付宝、微信、pos？
+              method_ids = Spree::PaymentMethod.where( posable: true ).pluck(:id)
+              service_posable_total = Spree::Payment.completed.in_day(self.payment_at).joins(:order).where( payment_method_id: method_ids, spree_orders:{ created_by_id: self.created_by_id, store_id: self.store_id, order_type: [:normal], state: :cart }).sum(:amount)
+              self.sale_day.service_total = service_total
+              self.sale_day.service_posable_total = service_posable_total
+            end
         end
         self.sale_day.save!
       end

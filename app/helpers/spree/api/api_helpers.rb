@@ -218,7 +218,7 @@ module Spree
         :id, :relation_type_id, :relatable_id, :related_to_id, :discount_amount, :discount_percent
       ]
       @@sale_day_attributes = [
-        :day, :service_total, :deposit_total, :service_order_count, :new_orders_count, :new_customers_count, :new_cards_count
+        :day, :service_total, :deposit_total, :service_order_count, :new_orders_count, :new_customers_count, :new_cards_count, :service_posable_total
       ]
 
       def variant_attributes
