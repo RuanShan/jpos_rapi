@@ -128,7 +128,7 @@ module Spree
         end
 
         def get_stat_cols
-          return  [:service_total, :deposit_total, :service_order_count, :new_orders_count,:new_customers_count,:new_cards_count]
+          return  [:service_total, :deposit_total, :service_order_count, :new_orders_count,:new_customers_count,:new_cards_count, :service_posable_total]
         end
 
       end
