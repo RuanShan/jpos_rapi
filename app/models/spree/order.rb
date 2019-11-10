@@ -432,9 +432,12 @@ module Spree
       #不能 touch completed_at, 删除时会导致 OrderInventory.verify 异常
       touch :completed_at
 
-      update_sale_day_fields
       #如果是会员卡订单， 购买，充值等
       associate_card_if_needed if self.order_type_card_or_deposit?
+
+      #在创建会员卡后再统计
+      update_sale_day_fields
+
       #根据配置，发出公众号、短信，或邮件通知
       notify_customer
     end
