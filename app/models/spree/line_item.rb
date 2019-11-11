@@ -134,8 +134,9 @@ module Spree
         # 充值
         #self.card.transactions.create!( order: order, amount: self.price)
         card = Spree::Card.find(card_id)
-        # update card.variant_id, use may upgrade card
-        card.update_attributes( variant_id: self.variant_id, name: self.variant.name )
+        # 充值后，会员卡属于当前店铺，可能是异店办卡
+        # update store_id, card.variant_id, use may upgrade card
+        card.update_attributes( store_id: order.store_id, variant_id: self.variant_id, name: self.variant.name )
         card.deposit!( self )
       end
     end
