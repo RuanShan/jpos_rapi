@@ -44,7 +44,7 @@ class Mp::WxFollowersController < Mp::BaseController
     @order_total = @customer.orders.with_state(:cart).type_normal.sum(:payment_total)
     #我的充值金额, 需要读取card_tranactions, orders 中保存的是付款金额，
     #@card_total = @customer.orders.with_state(:cart).type_card.sum(:total)
-    @card_total = @prepaid_card.card_transactions.deposit.sum(:amount)
+    @card_total = @prepaid_card.card_transactions.where(reason:['deposit', 'undeposit']).sum(:amount)
     #最近订单及物品
     @inprogress_groups_orders  = @customer.orders.inprogress_groups.includes(:payments, :line_item_groups)
     #最近订单物品
