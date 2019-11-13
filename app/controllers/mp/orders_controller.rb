@@ -30,7 +30,8 @@ class Mp::OrdersController < Mp::BaseController
 
   # 充值卡订单
   def card
-    @orders = @customer.orders.type_card.reverse_chronological.page params[:page]
+    #只显示充值成功的
+    @orders = @customer.orders.with_state(:cart).type_card.reverse_chronological.page params[:page]
 
   end
 
