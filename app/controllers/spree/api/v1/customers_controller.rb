@@ -55,7 +55,7 @@ module Spree
         def validate_mobile
           mobile = params[:mobile]
           id = params[:id]
-          valid_mobile = !!( mobile =~/^1[3,4,5,7,8]\d{9}$/ )
+          valid_mobile = !!( mobile =~/^1\d{10}$/ )
           if valid_mobile
             if id.present?
               valid_mobile = !Customer.where.not(id: id).exists?( mobile: mobile )
