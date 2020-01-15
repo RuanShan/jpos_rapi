@@ -121,6 +121,8 @@ module Spree
           line_items.each{|item|
             item.line_item_group.update_attribute( :payment_state, :paid ) if item.line_item_group
           }
+          # 添加支付方式后，更新数据统计
+          @order.update_sale_day_fields
           if saved.present?
             respond_with(@order, default_template: :show)
           else
