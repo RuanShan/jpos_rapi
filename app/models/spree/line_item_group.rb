@@ -26,7 +26,7 @@ module Spree
 
     before_validation :set_price_zero_when_nil
 
-    validates :number, uniqueness: true
+    #validates :number, uniqueness: true  无需限制，number中没有年份，可能会和去年的重复。
     validates :payment_state,        inclusion:    { in: PAYMENT_STATES, allow_blank: true }
 
     attr_accessor :special_instructions
