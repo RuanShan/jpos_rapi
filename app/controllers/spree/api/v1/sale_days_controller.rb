@@ -90,6 +90,14 @@ module Spree
           @sale_day = SaleDay.new(day: Date.current)
 
           if params[:q]
+            # day_gteq: "2020-02-24T16:00:00.000Z", day_lteq: "2020-02-25T15:59:59.000Z"
+            # 这里需要把时间转为日期，否则统计数据不准
+            if params[:q][:day_gteq]
+              params[:q][:day_gteq] = Time.parse( params[:q][:day_gteq] ).to_date()
+            end
+            if params[:q][:day_lteq]
+              params[:q][:day_lteq] = Time.parse( params[:q][:day_lteq] ).to_date()
+            end
             sale_days = get_selected_sale_days
           else
             sale_days = SaleDay.all
