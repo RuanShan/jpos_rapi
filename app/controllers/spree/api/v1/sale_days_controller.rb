@@ -98,6 +98,7 @@ module Spree
             if params[:q][:day_lteq]
               params[:q][:day_lteq] = Time.parse( params[:q][:day_lteq] ).to_date()
             end
+            Rails.logger.debug "params[:q] =#{params[:q].inspect}"
             sale_days = get_selected_sale_days
           else
             sale_days = SaleDay.all
