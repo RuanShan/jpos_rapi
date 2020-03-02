@@ -13,7 +13,13 @@ module Spree
           respond_with(@line_item_groups)
         end
 
+        # 扫码时访问，由于条码不包括年份，可能会重复，添加默认条件，没有取走的物品，即状态补位completed的物品
+        #
         def show
+          basescope = Spree::LineItemGroup.accessible_by(current_ability, :update).readonly(false).inprogress
+
+          @line_item_group = basescope.find_by!(number: params[:id])
+          
           respond_with(@line_item_group, default_template: :show)
         end
 
@@ -83,7 +89,7 @@ module Spree
         #物品订单返工
         def rework
           @line_item_group.returned_by(current_api_user)
-          
+
           @line_item_group.update_attributes(line_item_group_params)
 
           respond_with(@line_item_group, default_template: :show)
@@ -92,6 +98,7 @@ module Spree
         private
 
         def fine_line_item_group
+
           @line_item_group = Spree::LineItemGroup.accessible_by(current_ability, :update).readonly(false).find_by!(number: params[:id])
         end
 
