@@ -24,6 +24,8 @@ module Spree
 
     delegate :sms_templates, to: :site, prefix: true
 
+    self.whitelisted_ransackable_attributes = %w[site_id]
+
     private
 
     def ensure_default_exists_and_is_unique

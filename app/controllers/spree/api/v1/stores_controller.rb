@@ -6,7 +6,10 @@ module Spree
 
         def index
           authorize! :read, Store
-          @stores = Store.accessible_by(current_ability, :read).all
+          @stores = Store.accessible_by(current_ability, :read)
+          @stores = @stores.ransack(params[:q])
+          @stores = @stores.result(distinct: true) 
+
           respond_with(@stores)
         end
 
