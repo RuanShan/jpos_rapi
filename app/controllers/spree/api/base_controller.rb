@@ -67,7 +67,9 @@ module Spree
           # 店员可能到其它店替班，这里需要使用X-Jpos-Site-Id, 
           store_id = request.headers['X-Jpos-Site-Id'] 
           # 为了便于测试 添加缺省当前用户的store_id
-          store_id ||= User.current.store_id 
+          if store_id.to_i == 0
+            store_id = User.current.store_id 
+          end
           Spree::Store.current = Spree::Store.where( id: store_id).first
           Spree::Site.current = Spree::Store.current.site
         end
