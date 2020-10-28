@@ -65,9 +65,12 @@ module Spree
           respond_with(@line_item_group.reload, default_template: :show)
         end
 
-        # count order on param states
+        # 查询店铺的数据
         # states - is an array of state
         def counts
+          # 如果 params[:q] 为空，需要加上店铺条件 in
+          fixRansackQuery()
+          
           @q = LineItemGroup.ransack(params[:q]).result
 
           @counts = {}
@@ -77,6 +80,7 @@ module Spree
           @counts
         end
 
+ 
         #物品订单取消
         def cancel
           @line_item_group.canceled_by(current_api_user)

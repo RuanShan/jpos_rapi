@@ -4,6 +4,8 @@ module Spree
       class CustomersController < UsersController
 
         def index
+          fixRansackQuery()
+
           @customers = Customer.accessible_by(current_ability, :read)
           @customers = @customers.includes(:cards,:wx_follower)
           @customers = if params[:ids]

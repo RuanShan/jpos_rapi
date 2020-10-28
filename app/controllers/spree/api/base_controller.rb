@@ -64,8 +64,12 @@ module Spree
         #设置当前user,store 以便审计信息使用
         if @current_api_user
           User.current = @current_api_user
-          store_id = request.headers['X-Jpos-Site-Id']
+          # 店员可能到其它店替班，这里需要使用X-Jpos-Site-Id, 
+          store_id = request.headers['X-Jpos-Site-Id'] 
+          # 为了便于测试 添加缺省当前用户的store_id
+          store_id ||= User.current.store_id 
           Spree::Store.current = Spree::Store.where( id: store_id).first
+          Spree::Site.current = Spree::Store.current.site
         end
 
       end
@@ -189,6 +193,15 @@ module Spree
         #cookies['_jpos_api_timestamp'] =  DateTime.current.to_i
         #@current_api_user.update_attributes last_request_at: DateTime.current
       end
+
+      # 查询时，如果没有添加 store_id_eq, 自动补充为当前Site的所有店铺
+      def fixRansackQuery
+        params[:q] ||= {}
+        if params[:q]['store_id_eq'].blank?
+          params[:q]['store_id_in'] = Spree::Site.current.store_ids
+        end        
+      end
+
     end
   end
 end

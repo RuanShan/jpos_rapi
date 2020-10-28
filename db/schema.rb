@@ -10,20 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_16_120525) do
+ActiveRecord::Schema.define(version: 2020_10_28_120525) do
 
-  create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
-    t.string "name", null: false
+  create_table "active_storage_attachments", options: "ENGINE=MyISAM DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+    t.string "name", limit: 128, null: false
     t.string "record_type", null: false
     t.bigint "record_id", null: false
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
     t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
-    t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
+    t.index ["record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
   end
 
-  create_table "active_storage_blobs", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
-    t.string "key", null: false
+  create_table "active_storage_blobs", options: "ENGINE=MyISAM DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+    t.string "key", limit: 64, null: false
     t.string "filename", null: false
     t.string "content_type"
     t.text "metadata"
@@ -391,6 +391,7 @@ ActiveRecord::Schema.define(version: 2019_08_16_120525) do
     t.integer "service_order_count", default: 0, null: false
     t.integer "service_total", default: 0, null: false
     t.integer "deposit_total", default: 0, null: false
+    t.integer "service_posable_total", default: 0, null: false
     t.index ["seller_type", "user_id", "day"], name: "index_sale_days_on_seller_type_and_user_id_and_day"
     t.index ["store_id"], name: "index_sale_days_on_store_id"
   end
@@ -569,7 +570,7 @@ ActiveRecord::Schema.define(version: 2019_08_16_120525) do
   create_table "spree_cards", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.bigint "user_id"
     t.integer "store_id"
-    t.integer "created_by_id"
+    t.integer "created_by_id", default: 0
     t.string "code", null: false
     t.integer "style", default: 0, null: false
     t.integer "variant_id", null: false
@@ -587,6 +588,8 @@ ActiveRecord::Schema.define(version: 2019_08_16_120525) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "deleted_at"
+    t.string "card_code", limit: 16
+    t.date "card_expire_at"
     t.bigint "replaced_with_id"
     t.datetime "replaced_at"
     t.string "state", limit: 24
@@ -740,13 +743,14 @@ ActiveRecord::Schema.define(version: 2019_08_16_120525) do
     t.integer "ad_hoc_option_value_id"
   end
 
-  create_table "spree_expense_categories", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
-    t.string "name"
-    t.string "description"
+  create_table "spree_expense_categories", options: "ENGINE=MyISAM DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+    t.string "name", limit: 128
+    t.string "description", limit: 1024
     t.boolean "is_default", default: false
     t.datetime "deleted_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "site_id", default: 0, null: false
     t.index ["deleted_at"], name: "index_spree_tax_categories_on_deleted_at"
     t.index ["is_default"], name: "index_spree_tax_categories_on_is_default"
   end
@@ -995,6 +999,8 @@ ActiveRecord::Schema.define(version: 2019_08_16_120525) do
     t.boolean "enable_mp_msg", default: false, null: false
     t.boolean "odd_card_paid", default: false, null: false
     t.integer "odd_store_id", default: 0, null: false
+    t.datetime "payment_at"
+    t.integer "card_id", default: 0, null: false
     t.index ["approver_id"], name: "index_spree_orders_on_approver_id"
     t.index ["bill_address_id"], name: "index_spree_orders_on_bill_address_id"
     t.index ["canceler_id"], name: "index_spree_orders_on_canceler_id"
@@ -1154,7 +1160,7 @@ ActiveRecord::Schema.define(version: 2019_08_16_120525) do
 
   create_table "spree_prices", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.integer "variant_id", null: false
-    t.decimal "amount", precision: 8, scale: 2
+    t.decimal "amount", precision: 10, scale: 2
     t.string "currency"
     t.datetime "deleted_at"
     t.index ["deleted_at"], name: "index_spree_prices_on_deleted_at"
@@ -1233,9 +1239,6 @@ ActiveRecord::Schema.define(version: 2019_08_16_120525) do
     t.integer "card_style", default: 0, null: false
     t.string "type", limit: 24
     t.string "label_icon_name", limit: 16
-    t.boolean "on_demand", default: false
-    t.integer "count_on_hand"
-    t.integer "integer"
     t.index ["available_on"], name: "index_spree_products_on_available_on"
     t.index ["deleted_at"], name: "index_spree_products_on_deleted_at"
     t.index ["discontinue_on"], name: "index_spree_products_on_discontinue_on"
@@ -1252,13 +1255,6 @@ ActiveRecord::Schema.define(version: 2019_08_16_120525) do
     t.index ["taxon_id"], name: "index_spree_products_global_taxons_on_taxon_id"
   end
 
-  create_table "spree_products_promotion_rules", id: false, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
-    t.integer "product_id"
-    t.integer "promotion_rule_id"
-    t.index ["product_id"], name: "index_products_promotion_rules_on_product_id"
-    t.index ["promotion_rule_id"], name: "index_products_promotion_rules_on_promotion_rule_id"
-  end
-
   create_table "spree_products_taxons", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.integer "product_id"
     t.integer "taxon_id"
@@ -1268,16 +1264,22 @@ ActiveRecord::Schema.define(version: 2019_08_16_120525) do
     t.index ["taxon_id"], name: "index_spree_products_taxons_on_taxon_id"
   end
 
-  create_table "spree_promotion_action_line_items", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+  create_table "spree_promotion_action_line_items", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.integer "promotion_action_id"
     t.integer "variant_id"
     t.integer "quantity", default: 1
+    t.index ["promotion_action_id"], name: "index_spree_promotion_action_line_items_on_promotion_action_id"
+    t.index ["variant_id"], name: "index_spree_promotion_action_line_items_on_variant_id"
   end
 
-  create_table "spree_promotion_actions", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
-    t.integer "activator_id"
+  create_table "spree_promotion_actions", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.integer "promotion_id"
     t.integer "position"
     t.string "type"
+    t.datetime "deleted_at"
+    t.index ["deleted_at"], name: "index_spree_promotion_actions_on_deleted_at"
+    t.index ["id", "type"], name: "index_spree_promotion_actions_on_id_and_type"
+    t.index ["promotion_id"], name: "index_spree_promotion_actions_on_promotion_id"
   end
 
   create_table "spree_promotion_categories", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
@@ -1301,22 +1303,18 @@ ActiveRecord::Schema.define(version: 2019_08_16_120525) do
     t.index ["user_id", "promotion_rule_id"], name: "index_promotion_rules_users_on_user_id_and_promotion_rule_id"
   end
 
-  create_table "spree_promotion_rules", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
-    t.integer "activator_id"
+  create_table "spree_promotion_rules", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.integer "promotion_id"
     t.integer "user_id"
     t.integer "product_group_id"
     t.string "type"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string "code"
+    t.text "preferences"
     t.index ["product_group_id"], name: "index_promotion_rules_on_product_group_id"
+    t.index ["promotion_id"], name: "index_spree_promotion_rules_on_promotion_id"
     t.index ["user_id"], name: "index_promotion_rules_on_user_id"
-  end
-
-  create_table "spree_promotion_rules_users", id: false, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
-    t.integer "user_id"
-    t.integer "promotion_rule_id"
-    t.index ["promotion_rule_id"], name: "index_promotion_rules_users_on_promotion_rule_id"
-    t.index ["user_id"], name: "index_promotion_rules_users_on_user_id"
   end
 
   create_table "spree_promotions", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
@@ -1687,6 +1685,8 @@ ActiveRecord::Schema.define(version: 2019_08_16_120525) do
     t.string "currency_thousands_separator", default: ","
     t.integer "status", default: 0
     t.text "sms_templates"
+    t.boolean "has_factory", default: false, null: false
+    t.integer "taxonomy_id", default: 0, null: false
   end
 
   create_table "spree_state_changes", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
@@ -2079,7 +2079,6 @@ ActiveRecord::Schema.define(version: 2019_08_16_120525) do
     t.integer "card_discount_percent", default: 0
     t.integer "card_discount_amount", default: 0
     t.integer "card_times", default: 0, null: false
-    t.boolean "on_demand", default: false
     t.index ["deleted_at"], name: "index_spree_variants_on_deleted_at"
     t.index ["discontinue_on"], name: "index_spree_variants_on_discontinue_on"
     t.index ["is_master"], name: "index_spree_variants_on_is_master"
@@ -2138,6 +2137,49 @@ ActiveRecord::Schema.define(version: 2019_08_16_120525) do
     t.string "name"
     t.integer "taggings_count", default: 0
     t.index ["name"], name: "index_tags_on_name", unique: true
+  end
+
+  create_table "think_applicant", id: :integer, options: "ENGINE=MyISAM DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "fullname", limit: 45
+    t.string "position", limit: 45, comment: "职位"
+    t.string "id_num", limit: 45
+    t.string "id_address", limit: 128
+    t.integer "gender", limit: 1, default: 0, null: false
+    t.string "address", limit: 45
+    t.integer "married", limit: 1, default: 0, null: false
+    t.string "mobile", limit: 45
+    t.string "major", limit: 45
+    t.string "degree", limit: 45
+    t.string "graduated_from"
+    t.datetime "graduated_at"
+    t.text "qualification"
+    t.text "self_evaluation"
+    t.datetime "exp1_start_at"
+    t.datetime "exp1_end_at"
+    t.string "exp1_company"
+    t.string "exp1_position", limit: 45
+    t.text "exp1_responsibility"
+    t.datetime "exp2_start_at"
+    t.datetime "exp2_end_at"
+    t.string "exp2_company"
+    t.string "exp2_position", limit: 45
+    t.text "exp2_responsibility"
+    t.datetime "exp3_start_at"
+    t.datetime "exp3_end_at"
+    t.string "exp3_company"
+    t.string "exp3_position", limit: 45
+    t.text "exp3_responsibility"
+    t.datetime "exp4_start_at"
+    t.datetime "exp4_end_at"
+    t.string "exp4_company"
+    t.string "exp4_position", limit: 45
+    t.text "exp4_responsibility"
+    t.datetime "exp5_start_at"
+    t.datetime "exp5_end_at"
+    t.string "exp5_company"
+    t.string "exp5_position", limit: 45
+    t.text "exp5_responsibility"
+    t.string "number", limit: 45
   end
 
   create_table "user_entries", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
@@ -2319,7 +2361,6 @@ ActiveRecord::Schema.define(version: 2019_08_16_120525) do
     t.integer "binds_count", default: 0
   end
 
-  add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "campaigns", "users", column: "creator_id"
   add_foreign_key "game_rounds", "campaigns"
   add_foreign_key "game_rounds", "games"

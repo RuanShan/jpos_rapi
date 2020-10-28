@@ -9,6 +9,8 @@ module Spree
         # search line_items
         def index
           authorize! :index, LineItem
+          fixRansackQuery()
+
           @q = LineItem.ransack(params[:q]).result(distinct: true)
           @total_count = @q.count
           @line_items = @q.includes(:order, :store, :worker).page(params[:page]).per(params[:per_page])

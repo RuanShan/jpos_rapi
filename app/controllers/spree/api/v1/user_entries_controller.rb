@@ -6,6 +6,8 @@ module Spree
 
         def index
           authorize! :read, UserEntry
+          fixRansackQuery
+          
           @q = UserEntry.ransack(params[:q]).result(distinct: true)
           @total_count = @q.count
 

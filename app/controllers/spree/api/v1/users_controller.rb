@@ -5,6 +5,8 @@ module Spree
         rescue_from Spree::Core::DestroyWithOrdersError, with: :error_during_processing
 
         def index
+          fixRansackQuery()
+
           @users = Spree.user_class.accessible_by(current_ability, :read)
 
           @users = if params[:ids]
@@ -27,6 +29,10 @@ module Spree
           eq = params.require(:eq).to_unsafe_hash
           uq = eq.inject({}){|h, pair| h["user_entries_#{pair[0]}"] = pair[1]; h}
           #Rails.logger.debug " eq=#{eq.inspect}, uq=#{uq.inspect}"
+          if uq['store_id_eq'].blank?
+            uq['store_id_in'] = Spree::Site.current.store_ids
+          end  
+
           @uq = User.ransack(uq).result( distinct: true )
           @total_count = @uq.count
           @users =@uq.page(params[:page]).per(params[:per_page])

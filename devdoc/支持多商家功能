@@ -1,0 +1,9 @@
+1. 执行下面的sql
+update spree_sites set has_factory=1 where id=1;
+
+update spree_sites set taxonomy_id=1 where id=1;
+
+update spree_products set site_id=1 where id>0;
+
+update spree_expense_categories set site_id=1 where id>0;
+

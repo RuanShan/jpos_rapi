@@ -55,6 +55,7 @@ module Spree
 
         def index
           #authorize! :index, Order
+          fixRansackQuery()
           @q = Order.ransack(params[:q]).result( distinct: true)
           @total_count = @q.count
           # 订单列表需要显示订单 物品和活的信息
@@ -65,6 +66,7 @@ module Spree
         # 基于index的查询条件，统计订单数量和金额
         def count
           # never use distinct: true, it would cause distinct total
+          fixRansackQuery()
           @q = Order.ransack(params[:q]).result( )
           @total_count = @q.count
           # 订单总额

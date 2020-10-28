@@ -9,6 +9,8 @@ module Spree
     #   t.integer :state, null: false, default: 0 #费用状态  :正常，:取消
     #   t.timestamps null: false
     # end
+    thread_mattr_accessor :current
+    has_many :stores, class_name: 'Spree::Store'
 
     serialize :sms_templates, JSON
   end

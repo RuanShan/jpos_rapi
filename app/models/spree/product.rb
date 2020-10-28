@@ -49,6 +49,7 @@ module Spree
 
     belongs_to :tax_category, class_name: 'Spree::TaxCategory'
     belongs_to :shipping_category, class_name: 'Spree::ShippingCategory', inverse_of: :products
+    belongs_to :site, class_name: 'Spree::Site'
 
     has_one :master,
             -> { where is_master: true },

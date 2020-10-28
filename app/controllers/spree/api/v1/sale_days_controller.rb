@@ -20,7 +20,7 @@ module Spree
           if params[:q]
             sale_days =get_selected_sale_days
           else
-            sale_days = SaleDay.today
+            sale_days = SaleDay.where( store: Spree::Site.current.stores ).today
           end
           get_stat_cols.each{|key|
             val = sale_days.sum(&key)
@@ -101,7 +101,7 @@ module Spree
             Rails.logger.debug "params[:q] =#{params[:q].inspect}"
             sale_days = get_selected_sale_days
           else
-            sale_days = SaleDay.all
+            sale_days = SaleDay.where( store: Spree::Site.current.stores )
           end
           get_stat_cols.each{|key|
             @sale_day.send( "#{key}=", sale_days.sum(&key) )
@@ -132,6 +132,7 @@ module Spree
           #   end_at = Date.parse(params[:end_at])
           #   sale_days =  SaleDay.where( ["day>=? AND day<=?"], start_at, end_at ).order(:day)
           # end
+          fixRansackQuery()
           sale_days = SaleDay.ransack( params[:q] ).result
 
         end

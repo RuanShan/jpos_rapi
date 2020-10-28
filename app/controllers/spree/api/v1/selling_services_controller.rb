@@ -8,7 +8,7 @@ module Spree
           if params[:ids]
             @products = product_scope.where(id: params[:ids].split(',').flatten)
           else
-            @products = product_scope.ransack(params[:q]).result
+            @products = product_scope.where(site: Spree::Site.current).ransack(params[:q]).result
           end
 
           @products = @products.distinct.page(params[:page]).per(params[:per_page])
