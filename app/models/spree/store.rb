@@ -22,7 +22,7 @@ module Spree
 
     after_commit :clear_cache
 
-    delegate :sms_templates,:has_factory, to: :site, prefix: true
+    delegate :sms_templates,:has_factory, :taxonomy_id, to: :site, prefix: true
 
     self.whitelisted_ransackable_attributes = %w[site_id]
 
