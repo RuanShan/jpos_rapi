@@ -349,7 +349,7 @@ class WechatmoreGame < ActiveRecord::Migration[5.1]
 
       t.timestamps null: false
 
-      t.index ["mobile"], unique: true
+      t.index ["mobile", "store_id"], unique: true
       t.index ["deleted_at"], name: "index_spree_users_on_deleted_at"
 
     end

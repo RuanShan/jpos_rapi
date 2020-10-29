@@ -8,7 +8,9 @@ class Customer <  ApplicationRecord
 
   after_destroy :scramble_mobile_and_password # mobile is uniqueness
 
-  validates :mobile, presence: true, uniqueness: true
+  validates :mobile, presence: true
+  validates_uniqueness_of :mobile, scope: :store_id
+
 
   belongs_to :creator, class_name: 'User', foreign_key: 'created_by_id', optional: true
   belongs_to :store, class_name: 'Spree::Store'
