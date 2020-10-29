@@ -60,9 +60,9 @@ module Spree
           valid_mobile = !!( mobile =~/^1\d{10}$/ )
           if valid_mobile
             if id.present?
-              valid_mobile = !Customer.where.not(id: id).exists?( mobile: mobile )
+              valid_mobile = !customer_default_scope.where.not(id: id).exists?( mobile: mobile )
             else
-              valid_mobile = !Customer.exists?( mobile: mobile )
+              valid_mobile = !customer_default_scope.exists?( mobile: mobile )
             end
           end
           json = { ret: valid_mobile }
@@ -125,6 +125,10 @@ module Spree
           permitted_params[:payment_at] = DateTime.current
 
           permitted_params
+        end
+
+        def customer_default_scope
+          Customer.where( store: Spree::Site.current.stores )
         end
       end
     end
