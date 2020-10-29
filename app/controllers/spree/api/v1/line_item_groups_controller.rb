@@ -6,6 +6,7 @@ module Spree
 
         def index
           authorize! :index, LineItemGroup
+          fixRansackQuery()
           @q = line_item_group_scope.ransack(params[:q]).result(distinct: true)
           #Rails.logger.debug "@q=#{LineItemGroup.reverse_chronological.ransack(params[:q]).inspect}"
           @total_count = @q.count
