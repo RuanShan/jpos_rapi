@@ -32,10 +32,13 @@ module Spree
           respond_with(@line_item_group, default_template: :show)
         end
 
+        #
+        # params: state - 快速转移到参数状态，用于没有工厂情况，物品直接到“带交付”状态
         def all_step
 
           numbers = params[:numbers]
           ids = params[:ids]
+          state = params[:state]
           forward = params[:forward].nil? || !!params[:forward]
           if ids.present?
             @line_item_groups = Spree::LineItemGroup.where id: ids
@@ -43,7 +46,11 @@ module Spree
             @line_item_groups = Spree::LineItemGroup.where number: numbers
           end
           @line_item_groups.each{ |group|
-            group.make_step_and_order forward
+            if state.present?
+              group.quick_move( state )
+            else
+              group.make_step_and_order forward
+            end
           }
           respond_with(@line_item_groups)
         end

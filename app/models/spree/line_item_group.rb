@@ -43,9 +43,7 @@ module Spree
     # shipment state machine (see http://github.com/pluginaweek/state_machine/tree/master for details)
     state_machine initial: :pending, use_transactions: false do
       event :ready do
-        transition from: :pending, to: :ready, if: lambda { |shipment|
-          # Fix for #2040
-        }
+        transition from: :pending, to: :ready 
       end
 
       event :pend do
@@ -149,6 +147,14 @@ module Spree
       forward ? next! : back!
       order.updater.update_group_state
       order.save!
+    end
+
+    def quick_move( target_state )
+      if target_state == 'ready'
+        ready!
+        order.updater.update_group_state
+        order.save!  
+      end
     end
 
     def canceled_by(user)
