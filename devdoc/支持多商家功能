@@ -7,3 +7,6 @@ update spree_products set site_id=1 where id>0;
 
 update spree_expense_categories set site_id=1 where id>0;
 
+
+mysql> insert into spree_sites( name, has_factory) values( '汪永峰皮具养护中心-新华绿洲店', 0);
+mysql> insert into spree_stores(name, site_id) values('新华绿洲店', 2);
