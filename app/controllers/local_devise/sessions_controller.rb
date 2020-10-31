@@ -19,8 +19,12 @@ class LocalDevise::SessionsController < DeviseController
 
   #检查用户是否有签到记录， 如果有签到记录，则登录，否则不允许登录，IPAD使用
   def create_by_entry
+    
+    # 因为在IPAD端是WEB，没有Config文件，所有暂时无法检测当前Site
+    
     #先清空session，以免使用session中数据，忽略params
     reset_session
+
     #Rails.logger.debug( "create_by_entry - auth_options=#{auth_options.inspect}")
     self.resource = warden.authenticate!(auth_options)
 
@@ -42,6 +46,10 @@ class LocalDevise::SessionsController < DeviseController
 
   # POST /resource/sign_in
   def create
+    unless is_username_exists_in_site
+      unauthorized and return
+    end
+
     # sign_out first before sign_in, or devise would not sign params in.
     reset_session
 
@@ -69,6 +77,18 @@ class LocalDevise::SessionsController < DeviseController
   end
 
   protected
+
+  def is_username_exists_in_site
+    username = params[resource_name]['username']
+    site_id = request.headers['X-Jpos-Config-Site-Id']
+
+    if site_id.present?
+      site = Spree::Site.find( site_id )
+      return User.where(store: site.stores).exists?( username: username )
+    else
+      return true  
+    end
+  end
 
   def sign_in_params
     devise_parameter_sanitizer.sanitize(:sign_in)

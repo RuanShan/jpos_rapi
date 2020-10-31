@@ -5,6 +5,8 @@ module Spree
         before_action :find_product, only: [:update, :show, :destroy]
 
         def index
+          fixRansackQuery()
+
           if params[:ids]
             @products = product_scope.where(id: params[:ids].split(',').flatten)
           else
