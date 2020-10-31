@@ -17,6 +17,8 @@ module Spree
       has_many :credit_cards, class_name: 'Spree::CreditCard'
     end
 
+    self.whitelisted_ransackable_attributes = %w[site_id]
+
     def self.providers
       Rails.application.config.spree.payment_methods
     end

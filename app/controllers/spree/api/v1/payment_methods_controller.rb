@@ -12,7 +12,7 @@ module Spree
         def collection(resource)
           return @collection if @collection.present?
           params[:q] ||= {}
-
+          fixRansackQuery( true )
           @collection = resource.all
           # @search needs to be defined as this is passed to search_form_for
           @search = @collection.ransack(params[:q])
