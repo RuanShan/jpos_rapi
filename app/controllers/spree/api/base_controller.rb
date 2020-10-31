@@ -197,12 +197,20 @@ module Spree
       end
 
       # 查询时，如果没有添加 store_id_eq, 自动补充为当前Site的所有店铺
-      def fixRansackQuery
+      def fixRansackQuery( siteScoped = false)
         params[:q] ||= {}
-        if params[:q]['store_id_eq'].blank?
-          params[:q]['store_id_in'] = Spree::Site.current.store_ids
-        end        
+
+        if siteScoped
+          if params[:q]['site_id_eq'].blank?
+            params[:q]['site_id_eq'] = Spree::Site.current.id
+          end 
+        else
+          if params[:q]['store_id_eq'].blank?
+            params[:q]['store_id_in'] = Spree::Site.current.store_ids
+          end 
+        end       
       end
+
 
     end
   end
