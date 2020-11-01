@@ -7,7 +7,7 @@ module Spree
         def index
           fixRansackQuery( true )
 
-          base_product_scope = product_scope.includes('classifications').order( "#{Spree::Classification.table_name}.position")
+          base_product_scope = product_scope.includes('classifications').order( "#{Spree::Classification.table_name}.taxon_id, #{Spree::Classification.table_name}.position asc")
           
           if params[:ids]
             @products = base_product_scope.where(id: params[:ids].split(',').flatten)
