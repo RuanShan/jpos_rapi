@@ -7,13 +7,16 @@ module Spree
         def index
           fixRansackQuery( true )
 
+          base_product_scope = product_scope.includes('classifications').order( "#{Spree::Classification.table_name}.position")
+          
           if params[:ids]
-            @products = product_scope.where(id: params[:ids].split(',').flatten)
+            @products = base_product_scope.where(id: params[:ids].split(',').flatten)
           else
-            @products = product_scope.where(site: Spree::Site.current).ransack(params[:q]).result
+            @products = base_product_scope.ransack(params[:q]).result
           end
 
           @products = @products.distinct.page(params[:page]).per(params[:per_page])
+
           expires_in 15.minutes, public: true
           headers['Surrogate-Control'] = "max-age=#{15.minutes}"
           respond_with(@products)
