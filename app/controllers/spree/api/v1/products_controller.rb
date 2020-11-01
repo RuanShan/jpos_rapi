@@ -5,10 +5,12 @@ module Spree
         before_action :find_product, only: [:update, :show, :destroy]
 
         def index
+          base_product_scope = product_scope.includes('classifications').order( "#{Spree::Classification.table_name}.taxon_id, #{Spree::Classification.table_name}.position asc")
+
           if params[:ids]
-            @products = product_scope.where(id: params[:ids].split(',').flatten)
+            @products = base_product_scope.where(id: params[:ids].split(',').flatten)
           else
-            @products = product_scope.where(site: Spree::Site.current).ransack(params[:q]).result
+            @products = base_product_scope.where(site: Spree::Site.current).ransack(params[:q]).result
           end
 
           @products = @products.distinct.page(params[:page]).per(params[:per_page])
