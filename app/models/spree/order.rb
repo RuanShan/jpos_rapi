@@ -4,7 +4,7 @@ module Spree
   class Order < Spree::Base
     #pending: 未付款， paid: 已付款
     PAYMENT_STATES = %w(unpaid balance_due credit_owed pending failed paid void)
-    GROUP_STATES = %w(pending ready_for_factory processing processed ready_for_store ready)
+    GROUP_STATES = %w(pending ready_for_factory processing processed ready_for_store ready canceled)
     SHIPMENT_STATES = %w(backorder canceled partial pending ready shipped ready_for_factory processing ready_for_store)
     include Spree::Order::Checkout
 
@@ -342,6 +342,8 @@ module Spree
           canceler_id: user.id,
           canceled_at: Time.current
         )
+        line_item_groups.each { |item| item.cancel! }
+
       end
     end
 
