@@ -219,8 +219,10 @@ module Spree
           end
         end
 
+        # group_number 可能会重复里面没有年份 只有月日。
+        # 根据number查找 lineItemGroup, 通常是查找最新的， 这是按照id倒序查询
         def find_by_group_number
-          @line_item_group = Spree::LineItemGroup.find_by!(number: params[:group_number])
+          @line_item_group = Spree::LineItemGroup.order("id DESC").find_by!(number: params[:group_number])
           @order = @line_item_group.order
           respond_with(@order, default_template: :show)
         end
