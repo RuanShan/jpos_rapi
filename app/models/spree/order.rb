@@ -4,7 +4,7 @@ module Spree
   class Order < Spree::Base
     #pending: 未付款， paid: 已付款
     PAYMENT_STATES = %w(unpaid balance_due credit_owed pending failed paid void)
-    GROUP_STATES = %w(pending ready_for_factory processing processed ready_for_store ready)
+    GROUP_STATES = %w(pending ready_for_factory processing processed ready_for_store ready canceled)
     SHIPMENT_STATES = %w(backorder canceled partial pending ready shipped ready_for_factory processing ready_for_store)
     include Spree::Order::Checkout
 
@@ -342,6 +342,7 @@ module Spree
           canceler_id: user.id,
           canceled_at: Time.current
         )
+
       end
     end
 
@@ -620,6 +621,9 @@ module Spree
       # 订单取消，不需要每个物品再分别取消
       # line_item_groups.uncanceled.each(&:cancel!)
       payments.completed.each(&:cancel!)
+
+      # 需要设置物品状态，为cancel，以免工厂扫码number查询时，查到以前的重复订单
+      line_item_groups.update_all( state: :cancelled)
 
       Rails.logger.debug "after_cancel2... "
       # Free up authorized store credits
