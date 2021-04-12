@@ -17,7 +17,8 @@ module Spree
         # 扫码时访问，由于条码不包括年份，可能会重复，添加默认条件，没有取走的物品，即状态补位completed的物品
         #
         def show
-          basescope = Spree::LineItemGroup.accessible_by(current_ability, :update).readonly(false).inprogress
+          # 还是有可能 重复 pending，ready，按照id倒序，保证 pending 排前面，
+          basescope = Spree::LineItemGroup.accessible_by(current_ability, :update).readonly(false).inprogress.order('id DESC')
 
           @line_item_group = basescope.find_by!(number: params[:id])
           
