@@ -1,5 +1,5 @@
 GIT
-  remote: git://github.com/RuanShan/paperclip_oss_storage.git
+  remote: https://github.com/RuanShan/paperclip_oss_storage.git
   revision: c2df34ed4fc242bea415c9eceaf999e46bc650da
   branch: master
   specs:
@@ -213,8 +213,8 @@ GEM
       domain_name (~> 0.5)
     http-form_data (2.1.1)
     http_parser.rb (0.6.0)
-    httparty (0.16.3)
-      mime-types (~> 3.0)
+    httparty (0.21.0)
+      mini_mime (>= 1.0.0)
       multi_xml (>= 0.5.2)
     i18n (1.5.3)
       concurrent-ruby (~> 1.0)
@@ -251,10 +251,12 @@ GEM
     marcel (0.3.3)
       mimemagic (~> 0.3.2)
     method_source (0.9.2)
-    mime-types (3.2.2)
+    mime-types (3.4.1)
       mime-types-data (~> 3.2015)
-    mime-types-data (3.2018.0812)
-    mimemagic (0.3.3)
+    mime-types-data (3.2022.0105)
+    mimemagic (0.3.10)
+      nokogiri (~> 1)
+      rake
     mini_magick (4.8.0)
     mini_mime (1.0.1)
     mini_portile2 (2.4.0)
